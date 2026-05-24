@@ -5,17 +5,21 @@
   "type": "module",
   "scripts": {
     "upload-pdfs": "tsx upload-pdfs.ts",
-    "list-pdfs": "tsx list-pdfs.ts"
+    "list-pdfs": "tsx list-pdfs.ts",
+    "embed-pdfs": "tsx embed-pdfs.ts"
   },
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1053.0",
     "dotenv": "^17.4.2",
-    "mime-types": "^3.0.2"
+    "mime-types": "^3.0.2",
+    "openai": "^6.39.0",
+    "pdf-parse": "^2.4.5"
   },
   "devDependencies": {
     "@types/mime-types": "^3.0.1",
     "@types/node": "^20.19.41",
+    "@types/pdf-parse": "^1.1.5",
     "tsx": "^4.22.3"
   }
 }
