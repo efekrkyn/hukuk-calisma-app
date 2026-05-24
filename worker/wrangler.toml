@@ -2,19 +2,18 @@ name = "hukuk-worker"
 main = "src/index.ts"
 compatibility_date = "2026-05-01"
 compatibility_flags = ["nodejs_compat"]
+workers_dev = true
 
 [observability]
 enabled = true
 
-# R2 bucket — production'da Cloudflare hukuk-pdf bucket'ına bağlanır,
-# local dev'de Miniflare otomatik lokal mock yaratır
+# R2 bucket — Cloudflare hukuk-pdf bucket'ına bağlı
 [[r2_buckets]]
 binding = "PDF_BUCKET"
 bucket_name = "hukuk-pdf"
 
-# D1 binding — `wrangler login` + `wrangler d1 create hukuk-db` sonrası
-# database_id'yi yapıştır ve yorumu kaldır:
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "hukuk-db"
-# database_id = "ABCD-1234-EFGH-5678"
+# D1 — production
+[[d1_databases]]
+binding = "DB"
+database_name = "hukuk-db"
+database_id = "9c7cb485-5daa-44c7-829a-5bdfe75f30d2"
