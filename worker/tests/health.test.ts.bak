@@ -1,0 +1,22 @@
+import { SELF } from "cloudflare:test";
+import { describe, it, expect } from "vitest";
+
+describe("/health", () => {
+  it("returns status ok", async () => {
+    const r = await SELF.fetch("https://example.com/health");
+    expect(r.status).toBe(200);
+    const j = (await r.json()) as { status: string; ts: string; region: string };
+    expect(j.status).toBe("ok");
+    expect(typeof j.ts).toBe("string");
+    expect(new Date(j.ts).toString()).not.toBe("Invalid Date");
+  });
+});
+
+describe("/", () => {
+  it("returns worker name", async () => {
+    const r = await SELF.fetch("https://example.com/");
+    expect(r.status).toBe(200);
+    const text = await r.text();
+    expect(text).toBe("Hukuk Worker");
+  });
+});

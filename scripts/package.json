@@ -1,0 +1,21 @@
+{
+  "name": "scripts",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "upload-pdfs": "tsx upload-pdfs.ts",
+    "list-pdfs": "tsx list-pdfs.ts"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1053.0",
+    "dotenv": "^17.4.2",
+    "mime-types": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/mime-types": "^3.0.1",
+    "@types/node": "^20.19.41",
+    "tsx": "^4.22.3"
+  }
+}
