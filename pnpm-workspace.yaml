@@ -2,3 +2,6 @@ packages:
   - "frontend"
   - "worker"
   - "scripts"
+
+onlyBuiltDependencies:
+  - sharp
