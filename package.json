@@ -1,0 +1,15 @@
+{
+  "name": "hukuk-calisma",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter ./frontend --filter ./worker dev",
+    "dev:frontend": "pnpm --filter ./frontend dev",
+    "dev:worker": "pnpm --filter ./worker dev",
+    "build": "pnpm --filter ./frontend build && pnpm --filter ./worker typecheck",
+    "test": "pnpm --filter ./worker test",
+    "deploy:frontend": "pnpm --filter ./frontend deploy",
+    "deploy:worker": "pnpm --filter ./worker deploy"
+  }
+}

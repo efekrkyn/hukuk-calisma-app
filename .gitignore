@@ -1,0 +1,40 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+
+# Builds
+.next/
+.vercel/
+dist/
+build/
+
+# Cloudflare
+.wrangler/
+.dev.vars
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Generated data (large, regeneratable)
+data/embeddings/
+data/*.bin
+
+# PDFs (in R2, not in repo)
+*.pdf
+
+# Test coverage
+coverage/
+
+# Logs
+*.log
