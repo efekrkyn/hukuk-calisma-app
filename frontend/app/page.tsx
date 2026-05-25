@@ -35,11 +35,19 @@ export default function Home() {
 
   return (
     <main className="min-h-screen p-6 md:p-12 lg:p-24 bg-background">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Side: Navigation & Stats */}
-        <Card className="w-full lg:col-span-4">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Sweet Greeting Banner */}
+        <div className="glass rounded-xl p-4 md:p-6 border-primary/20 bg-primary/5 flex items-center justify-center text-center animate-in fade-in slide-in-from-top-4 duration-700">
+          <p className="text-lg md:text-xl font-medium text-gradient flex items-center gap-2">
+            <span>✨</span> İyi çalışmalar sevgilim, her zaman yanındayım seni çok seviyorum <span>❤️</span>
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Side: Navigation & Stats */}
+          <Card className="w-full lg:col-span-4 glass">
         <CardHeader>
-          <CardTitle>Hukuk Çalışma 📚</CardTitle>
+          <CardTitle className="text-xl">İrem'in Hukuk Uygulaması 📚</CardTitle>
         </CardHeader>
         <CardContent className="space-y-3 text-sm">
           <p className="text-muted-foreground">
@@ -112,7 +120,8 @@ export default function Home() {
       <div className="w-full lg:col-span-8 h-full min-h-[600px] flex items-stretch">
         <GlobalAiAssistant />
       </div>
-    </div>
-  </main>
+        </div>
+      </div>
+    </main>
   );
 }

@@ -48,12 +48,15 @@ export default function LoginPage() {
           <div className="w-12 h-12 bg-primary/15 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-primary/20 shadow-inner">
             <ShieldCheck className="w-6 h-6 text-primary" />
           </div>
-          <CardTitle className="text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground/90 to-muted-foreground bg-clip-text text-transparent">
-            Hukuk Çalışma
-          </CardTitle>
-          <CardDescription className="text-zinc-400 text-xs mt-1">
-            Efe Karakoyun — Hazırlık Platformu Portal Girişi
-          </CardDescription>
+          <div
+            data-slot="card-title"
+            className="font-heading group-data-[size=sm]/card:text-sm text-2xl font-bold tracking-tight bg-gradient-to-r from-foreground via-foreground/90 to-muted-foreground bg-clip-text text-transparent"
+          >
+            İrem'in Hukuk Uygulaması
+          </div>
+          <div data-slot="card-description" className="text-zinc-400 text-xs mt-1">
+            Bu uygulama İrem Türk için sevgilisi Efe Karakoyun tarafından yapılmıştır
+          </div>
         </CardHeader>
         <CardContent className="pt-4">
           <form onSubmit={handleSubmit} className="space-y-4">
