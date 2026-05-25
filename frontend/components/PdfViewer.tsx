@@ -15,6 +15,7 @@ type Props = {
 export function PdfViewer({ url, initialPage = 1, onSelection }: Props) {
   const [pages, setPages] = useState(0);
   const [page, setPage] = useState(initialPage);
+  const [inputValue, setInputValue] = useState(initialPage.toString());
   const [width, setWidth] = useState(800);
   const [error, setError] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -42,8 +43,15 @@ export function PdfViewer({ url, initialPage = 1, onSelection }: Props) {
   // Hash navigation (#page=42)
   useEffect(() => {
     const m = window.location.hash.match(/page=(\d+)/);
-    if (m) setPage(Number(m[1]));
+    if (m) {
+      setPage(Number(m[1]));
+    }
   }, []);
+
+  // Sync input value when page changes externally
+  useEffect(() => {
+    setInputValue(page.toString());
+  }, [page]);
 
   return (
     <div className="flex flex-col h-full">
@@ -58,15 +66,20 @@ export function PdfViewer({ url, initialPage = 1, onSelection }: Props) {
         </Button>
         <div className="flex items-center gap-2">
           <input
-            type="number"
-            value={page}
-            onChange={(e) => {
-              const n = Number(e.target.value);
-              if (n >= 1 && n <= pages) setPage(n);
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onBlur={() => {
+              let n = parseInt(inputValue, 10);
+              if (isNaN(n) || n < 1) n = 1;
+              if (pages > 0 && n > pages) n = pages;
+              setPage(n);
+              setInputValue(n.toString());
             }}
-            className="w-14 px-2 py-1 rounded border bg-background text-center"
-            min={1}
-            max={pages || undefined}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") e.currentTarget.blur();
+            }}
+            className="w-14 px-2 py-1 rounded border bg-background text-center focus:ring-2 focus:ring-primary/50 outline-none"
           />
           <span className="text-muted-foreground">/ {pages || "?"}</span>
         </div>
