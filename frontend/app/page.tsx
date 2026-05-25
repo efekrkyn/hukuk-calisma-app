@@ -74,10 +74,19 @@ export default function Home() {
             </div>
           )}
 
+          <div className="pt-2">
+            <Link
+              href="/dashboard"
+              className={buttonVariants({ variant: "default", size: "lg" }) + " w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md mb-4"}
+            >
+              ⏱️ Çalışma Planı & Pomodoro
+            </Link>
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
             <Link
               href="/reader"
-              className={buttonVariants({ variant: "default" })}
+              className={buttonVariants({ variant: "outline" })}
             >
               📖 Kitaplar
             </Link>
