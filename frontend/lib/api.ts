@@ -12,10 +12,19 @@ export async function fetchWorker<T = unknown>(
   path: string,
   init?: RequestInit
 ): Promise<T> {
+  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+  const headers = new Headers(init?.headers);
+  if (!headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
   const r = await fetch(`${WORKER_URL}${path}`, {
     credentials: "include",
     ...init,
-    headers: { "Content-Type": "application/json", ...init?.headers },
+    headers,
   });
   if (!r.ok) {
     let msg = "";
@@ -105,10 +114,17 @@ export async function* streamChat(params: {
   mode?: "default" | "law";
   history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
 }): AsyncGenerator<ChatEvent> {
+  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
   const r = await fetch(`${WORKER_URL}/ai/chat`, {
     method: "POST",
     credentials: "include",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(params),
   });
   if (!r.ok || !r.body) {

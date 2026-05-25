@@ -1,10 +1,12 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { verify } from "hono/jwt";
 import { health } from "./routes/health";
 import { sync } from "./routes/sync";
 import { pdf } from "./routes/pdf";
 import { admin } from "./routes/admin";
 import { ai } from "./routes/ai";
+import { authRouter } from "./routes/auth";
 
 type Bindings = {
   DB?: D1Database;
@@ -29,8 +31,38 @@ app.use(
   })
 );
 
+// Global Authentication Middleware
+app.use("*", async (c, next) => {
+  const path = c.req.path;
+  
+  // CORS Preflight, health, login ve root isteklerini bypass et
+  if (
+    c.req.method === "OPTIONS" ||
+    path === "/" ||
+    path === "/health" ||
+    path === "/auth/login"
+  ) {
+    return await next();
+  }
+
+  const authHeader = c.req.header("Authorization") ?? "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  if (!token) {
+    return c.json({ error: "Authorization required" }, 401);
+  }
+
+  try {
+    await verify(token, c.env.ADMIN_SECRET, "HS256");
+  } catch (e) {
+    return c.json({ error: "Invalid token" }, 401);
+  }
+
+  await next();
+});
+
 app.get("/", (c) => c.text("Hukuk Worker"));
 app.route("/health", health);
+app.route("/auth", authRouter);
 app.route("/sync", sync);
 app.route("/pdf", pdf);
 app.route("/admin", admin);
