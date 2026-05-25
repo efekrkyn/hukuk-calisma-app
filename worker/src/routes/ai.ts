@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { embedQuery, retrieve, buildPrompt } from "../lib/rag";
+import { embedQuery, retrieve, buildPrompt, buildSystemPrompt } from "../lib/rag";
 import { GeminiProvider } from "../lib/ai-provider";
 import { gradeSolution } from "../lib/practice-grader";
 
@@ -20,6 +20,7 @@ ai.post("/chat", async (c) => {
     pdf_key?: string;
     top_k?: number;
     mode?: "default" | "law";
+    history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
   };
   try {
     body = await c.req.json();
@@ -42,13 +43,35 @@ ai.post("/chat", async (c) => {
   // 2) Retrieve top-K chunks from Vectorize.
   // Kanun modunda: top_k'yi büyüt (kanun chunks kısa olduğu için daha fazla bağlam).
   // Course filter: mode="law" → "kanunlar" zorlanır (course param görmezden gelinir).
-  //                default → body.course aynen iletilir.
-  const filterCourse = mode === "law" ? "kanunlar" : body.course;
+  //                default → body.course ve "kanunlar" beraber aranır (cross-course).
+  let filterCourse: string | string[] | undefined = undefined;
+  if (mode === "law") {
+    filterCourse = "kanunlar";
+  } else if (body.course) {
+    filterCourse = body.course === "kanunlar" ? "kanunlar" : [body.course, "kanunlar"];
+  }
+
   const topK = body.top_k ?? (mode === "law" ? 8 : 5);
   const chunks = await retrieve(c.env.VECTORIZE, qVec, filterCourse, topK);
 
-  // 3) Build prompt + stream from Gemini
-  const prompt = buildPrompt(body.question, body.selected_text, chunks, mode);
+  // 3) Build contents list + system instruction
+  const systemInstruction = buildSystemPrompt(body.selected_text, chunks, mode);
+
+  const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+  if (body.history && Array.isArray(body.history)) {
+    for (const msg of body.history) {
+      if (!msg.content || !msg.role) continue;
+      contents.push({
+        role: msg.role === "ai" || msg.role === "model" || msg.role === "assistant" ? "model" : "user",
+        parts: [{ text: msg.content }]
+      });
+    }
+  }
+  contents.push({
+    role: "user",
+    parts: [{ text: body.question }]
+  });
+
   const provider = new GeminiProvider(c.env.GEMINI_KEY);
   const encoder = new TextEncoder();
   let fullAnswer = "";
@@ -67,7 +90,7 @@ ai.post("/chat", async (c) => {
       );
 
       try {
-        for await (const tok of provider.streamChat(prompt)) {
+        for await (const tok of provider.streamChat(contents, systemInstruction)) {
           fullAnswer += tok;
           controller.enqueue(
             encoder.encode(`event: token\ndata: ${JSON.stringify(tok)}\n\n`)

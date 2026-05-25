@@ -4,7 +4,10 @@
  */
 
 export interface AIProvider {
-  streamChat(prompt: string): AsyncGenerator<string>;
+  streamChat(
+    promptOrContents: string | Array<{ role: string; parts: Array<{ text: string }> }>,
+    systemInstruction?: string
+  ): AsyncGenerator<string>;
 }
 
 export class GeminiProvider implements AIProvider {
@@ -13,19 +16,38 @@ export class GeminiProvider implements AIProvider {
     private model = "gemini-2.5-flash"
   ) {}
 
-  async *streamChat(prompt: string): AsyncGenerator<string> {
+  async *streamChat(
+    promptOrContents: string | Array<{ role: string; parts: Array<{ text: string }> }>,
+    systemInstruction?: string
+  ): AsyncGenerator<string> {
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.model}:streamGenerateContent?alt=sse&key=${this.apiKey}`;
+
+    let contents: Array<{ role: string; parts: Array<{ text: string }> }>;
+    if (typeof promptOrContents === "string") {
+      contents = [{ role: "user", parts: [{ text: promptOrContents }] }];
+    } else {
+      contents = promptOrContents;
+    }
+
+    const body: Record<string, any> = {
+      contents,
+      generationConfig: {
+        temperature: 0.3,
+        maxOutputTokens: 4096,
+        thinkingConfig: { thinkingBudget: 0 },
+      },
+    };
+
+    if (systemInstruction) {
+      body.systemInstruction = {
+        parts: [{ text: systemInstruction }],
+      };
+    }
+
     const r = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: {
-          temperature: 0.3,
-          maxOutputTokens: 4096,
-          thinkingConfig: { thinkingBudget: 0 },
-        },
-      }),
+      body: JSON.stringify(body),
     });
     if (!r.ok || !r.body) {
       const err = await r.text();

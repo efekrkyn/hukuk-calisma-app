@@ -103,6 +103,7 @@ export async function* streamChat(params: {
   top_k?: number;
   /** Worker tarafında kullanılan AI prompt modu. "law" → kanun açıklama. */
   mode?: "default" | "law";
+  history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
 }): AsyncGenerator<ChatEvent> {
   const r = await fetch(`${WORKER_URL}/ai/chat`, {
     method: "POST",
