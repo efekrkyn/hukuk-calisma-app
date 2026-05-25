@@ -1,0 +1,36 @@
+[
+  {
+    "id": "borcg_001",
+    "course": "borclar_genel",
+    "title": "Sonraki ifa imkânsızlığı + risk dağılımı",
+    "difficulty": "orta",
+    "topics": ["ifa imkânsızlığı", "sonraki imkânsızlık", "TBK 136", "risk"],
+    "scenario": "A, ünlü bir antika sanatçısının tablosunu B'ye 500.000 TL'ye satmıştır. Satım sözleşmesinde 'eser 30 gün içinde teslim edilecek' yazmaktadır. Henüz teslim edilmeden, A'nın deposunda çıkan ve A'nın hiçbir kusuru olmayan bir yangın sonucu tablo tamamen yanmıştır. B, satım bedelini ödediğini ve hâlâ tablo veya iade istediğini söylemektedir. A ise 'tablo yok, sözleşme sona erdi' demektedir. Tarafların hukuki durumunu, riskin kime düştüğünü ve B'nin haklarını TBK çerçevesinde değerlendiriniz.",
+    "ideal_solution": "Bu olay TBK 136 sonraki kusursuz imkânsızlık ve satım sözleşmesinde risk dağılımının uygulamasıdır.\n\n1) İmkânsızlık türü: Tablo benzersiz (özellikli/spesifik) bir mal. Yangın sonrası objektif sonraki imkânsızlık doğmuştur. TBK 136/1: 'Borcun ifası borçlunun sorumlu tutulamayacağı sebeplerle imkânsızlaşırsa, borç sona erer.'\n\n2) A'nın kusursuzluğu: 'Hiçbir kusuru yok' verili. Yangın mücbir sebep niteliğindeyse (örn. yıldırım, sel) A sorumlu değildir. Kasıt veya ihmal olsaydı TBK 112 imkânsızlık sebebiyle tazminat sorumluluğu doğardı.\n\n3) Karşı edim ne olur? TBK 136/2: 'Karşılıklı borç yükleyen sözleşmelerde imkânsızlık sebebiyle borçtan kurtulan borçlu, karşı taraftan almış olduğu edimi sebepsiz zenginleşme hükümleri uyarınca geri vermekle yükümlü olur ve henüz kendisine ifa edilmemiş olan edimi isteme hakkını kaybeder.'\n\n4) Sonuç:\n   - A'nın tabloyu teslim borcu sona erer.\n   - B'nin 500.000 TL ödediği bedel sebepsiz zenginleşme olur.\n   - A, B'ye 500.000 TL'yi iade etmek zorundadır (TBK 77 vd. + 136/2).\n   - B, 'hala tablo istiyorum' diyemez (imkânsız).\n\n5) Satımda özel kural — TBK 208 (Yarar ve Hasar): Aksi kararlaştırılmamışsa, satılanın yarar ve hasarı, satılan şeyin zilyetliğinin alıcıya geçmesi anına kadar satıcıya aittir. Tablo teslim edilmediği için risk hâlâ A'da idi. Bu, TBK 136 ile uyumlu.\n\n6) Sözleşme ile farklı karar: Tarafların özel risk paylaşımı yapması mümkündür (örn. 'mücbir sebep alıcıya ait olur' klozu). Verili olayda yok.\n\nÖzet: B parasını geri alır; tablo borcu sona erer; A'nın tazminat sorumluluğu yoktur (kusursuz olduğu için). Eğer A'nın hafif ihmali olsaydı (örn. yangın söndürme cihazı bulunmaması), TBK 112 uyarınca tablonun değeri kadar tazminat ödemek zorunda kalırdı.",
+    "key_points": [
+      "TBK 136 — sonraki kusursuz imkânsızlık, borç sona erer",
+      "TBK 136/2 — karşı edimin sebepsiz zenginleşme hükümleriyle iadesi",
+      "TBK 208 — satımda yarar ve hasar zilyetliğin geçmesine kadar satıcıda",
+      "TBK 112 — kusurlu imkânsızlık halinde tazminat sorumluluğu",
+      "Mücbir sebep ve özel risk paylaşımı klozları"
+    ],
+    "source": "TBK Borçlar Genel — İmkânsızlık bölümü"
+  },
+  {
+    "id": "borcg_002",
+    "course": "borclar_genel",
+    "title": "Müteselsil borç — iç ilişki ve rücu",
+    "difficulty": "orta",
+    "topics": ["müteselsil borç", "rücu", "TBK 162", "iç ilişki"],
+    "scenario": "K, L ve M üçlüsü, A'dan müteselsil borçlu olarak 300.000 TL alacaklarına karşı sözleşme imzalamışlardır. A, sadece K'ya başvurarak tüm borcu (300.000 TL) tahsil etmiştir. K daha sonra L ve M'den iç ilişkide kendi paylarına düşen kısmı (her birinden 100.000 TL) talep etmek istemektedir. L 'ben sözleşmeyi okumadan imzaladım' diyerek itiraz ediyor, M ise 'sadece teminat olarak imzaladım, asıl borçlu sen ve L'sin' demektedir. K'nın hakları ve uygulanması gereken iç ilişki kuralları nelerdir?",
+    "ideal_solution": "Bu olay TBK 162-169 müteselsil borç ve iç ilişki rücu kurumunun uygulamasıdır.\n\n1) Dış ilişki (alacaklı-borçlular): Müteselsil borçta alacaklı, borçlulardan herhangi birinden borcun tamamını isteyebilir (TBK 163). A, K'dan 300.000 TL'yi haklı olarak tahsil etmiştir.\n\n2) Borçlulardan birinin tam ifası → diğerleri için de borç sona erer (TBK 167). Yani A artık L ve M'den ek bir şey isteyemez.\n\n3) İç ilişki — TBK 169 (rücu):\n   - Borcu ödeyen borçlu, diğer borçlulara karşı KENDİ payını aşan kısım için rücu hakkına sahiptir.\n   - Kanun veya sözleşme aksini öngörmedikçe, borçlular eşit pay ile sorumludur (TBK 169/2).\n   - K, L ve M arasında eşit pay → her biri 100.000 TL.\n   - K kendi payını aşan 200.000 TL'yi (L'den 100K + M'den 100K) rücu edebilir.\n\n4) Savunmalar:\n   a) L'nin 'okumadan imzaladım' iddiası:\n      - TBK 1 vd.: Sözleşmenin geçerliliği için iradenin açıklanması yeterli. Okumamak iradeyi etkisiz kılmaz.\n      - Hile veya esaslı yanılma yoksa imza bağlayıcı (TBK 30, 36).\n      - L'nin bu iddiası reddedilir.\n\n   b) M'nin 'teminat olarak imzaladım' iddiası:\n      - Müteselsil borç ile kefalet farklı kurumlardır.\n      - Eğer M aslında kefil olarak imzaladıysa: TBK 581 (Kefalet) gerek şekil (yazılı), gerek hak ve yükümlülük açısından özel rejime tabidir. Kefilin sorumluluğu asıl borçtan FERİ niteliktedir.\n      - Sözleşme açıkça 'müteselsil borçlu' diyorsa M kefil değil, asıl borçludur. Kefalet kabul edilmesi için şekil + müteselsil olduğu açıkça yazılmalı (TBK 581/2).\n      - M'nin bu iddiası ispata kalır. Sözleşmede 'kefil' ifadesi geçmiyorsa M asıl borçludur.\n\n5) K'nın talebi:\n   a) L'ye karşı 100.000 TL rücu davası — TBK 169/1.\n   b) M'ye karşı 100.000 TL rücu davası — TBK 169/1.\n\n6) Birinin iflası/ödeyememe durumu (TBK 169/3):\n   - Borçlulardan biri ödeyemezse, kalan borçlular eşit pay alır.\n   - Örn. L iflas ederse, K + M aralarında L'nin payını paylaşır → K aslında M'den 100K yerine 150K isteyebilir.\n\n7) Zamanaşımı (TBK 146): Rücu hakkı genel 10 yıl. Borçlunun ödediği tarihten başlar.\n\nSonuç: K, L ve M'den ayrı ayrı 100.000'er TL talep edebilir. L'nin 'okumadım' itirazı ve M'nin 'teminat' iddiası mahkemede zayıf — yazılı sözleşme + imza bağlayıcı.",
+    "key_points": [
+      "TBK 163 — alacaklının borçlulardan birinden tüm borcu isteme hakkı",
+      "TBK 167 — birinin ifa ile diğerlerinin de borçtan kurtulması",
+      "TBK 169 — rücu hakkı (kanun/sözleşme aksini öngörmedikçe eşit pay)",
+      "TBK 169/3 — borçlulardan birinin ödeyememesi halinde pay yeniden dağıtımı",
+      "TBK 581 — kefalet şekil zorunluluğu (yazılı + müteselsil ibaresi)"
+    ],
+    "source": "TBK Borçlar Genel — Müteselsil Borç bölümü"
+  }
+]

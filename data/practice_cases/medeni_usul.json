@@ -1,0 +1,38 @@
+[
+  {
+    "id": "musul_001",
+    "course": "medeni_usul",
+    "title": "Görevsizlik kararı + dava açıldı sayılması",
+    "difficulty": "orta",
+    "topics": ["görev", "yetki", "HMK 19-20", "dava açılma anı"],
+    "scenario": "Davacı K, davalı A'ya karşı 80.000 TL alacak davasını İstanbul 5. Sulh Hukuk Mahkemesi'nde açmıştır. Davalı A, ilk itiraz olarak 'görev itirazını' ileri sürmüş, davanın Asliye Hukuk Mahkemesi'nde görülmesi gerektiğini belirtmiştir. Mahkeme, 'kabul' diyerek görevsizlik kararı vermiştir. K, görevli mahkemeye başvurmuş ancak başvurusu görevsizlik kararı tebliğinden 3 hafta sonra yapılmıştır. A, 'dava süresi geçmiş, görevsizlik kararıyla dava sona ermiştir' iddiasındadır. Sürelerin uygulanması ve davanın akıbeti nedir?",
+    "ideal_solution": "Bu olay HMK 19-20 görev/yetki itirazı ve görevsizlik sonrası dava süresinin uygulamasıdır.\n\n1) Görev kuralları (HMK 1-4):\n   - Görev kamu düzenindendir, re'sen dikkate alınır (HMK 1).\n   - 80.000 TL → 2024-2025 itibariyle Sulh Hukuk Mahkemesi parasal sınırı aşmış olabilir. Asliye Hukuk Mahkemesi görevli.\n   - Görev itirazı ön sorundur ve ilk itiraz olarak ileri sürülmelidir (HMK 116).\n\n2) Görevsizlik kararının niteliği (HMK 20):\n   - Dava reddedilmiş gibi sonuçlanmaz; usule ilişkin karardır.\n   - Karar kesinleştikten sonra, davacı 2 hafta içinde görevli mahkemeye başvurmazsa dava açılmamış sayılır.\n   - 2 hafta süresi HAK DÜŞÜRÜCÜdür.\n\n3) Olayda K'nın durumu:\n   - Görevsizlik kararı tebliğinden 3 hafta (21 gün) sonra başvurmuş.\n   - 2 hafta (14 gün) süresi geçmiş.\n   - Sonuç: Dava açılmamış sayılır.\n\n4) Sonuçları:\n   - Davanın açılmasına bağlanan tüm hukuki etkiler ortadan kalkar (HMK 159):\n     a) Dava açılma tarihindeki maddi/usul hukukundan kaynaklanan süre kesintileri (zamanaşımı kesilmesi vb.) düşer.\n     b) Geçici hukuki koruma talepleri varsa onlar da düşer.\n   - K, yeniden dava açabilir AMA:\n     - Eğer alacak zamanaşımına uğramışsa, yeni dava zamanaşımı def'i ile karşılaşabilir.\n     - Genel alacak zamanaşımı 10 yıl (TBK 146), ücretler vb. 5 yıl (TBK 147).\n\n5) Önemli istisna — HMK 20/son:\n   - Görevsizlik kararını veren mahkeme dosyayı kendiliğinden görevli mahkemeye gönderebilir. Eğer böyle yaptıysa K'nın ayrıca başvurusuna gerek kalmaz.\n   - Olayda 'K, görevli mahkemeye başvurmuştur' denmiş — dosyayı kendi göndermemiş demektir.\n\n6) Yeniden dava açma:\n   - K, 14 günlük süreyi kaçırmış olsa bile yeni bir dava açabilir.\n   - Sadece görev itirazı sebebiyle dava açılmamış sayılması, K'nın hak kaybı doğurmaz; sadece prosedürel düzeni vurgular.\n\n7) Pratik tavsiye:\n   - K, hemen yeni dava açmalı.\n   - Zamanaşımı incelenmeli — kesinti süresince dahi geçen zaman önemli.\n   - Mahkemenin dosyayı kendi gönderip göndermediği UYAP üzerinden kontrol edilmeli.\n\nSonuç: HMK 20'deki 2 hafta süresi kaçırıldığı için dava açılmamış sayılır. K yeni dava açabilir, ama dava açılma etkilerini kaybetmiştir. A'nın 'dava sona ermiştir' iddiası tam doğru değil — sadece eski dava açılmamış sayılır; yeni dava açma yolu açık.",
+    "key_points": [
+      "HMK 1-4 — görev kamu düzenindendir, re'sen incelenir",
+      "HMK 19-20 — görev itirazı ve görevsizlik kararı sonrası 2 hafta süre",
+      "HMK 159 — dava açılmamış sayılmanın sonuçları",
+      "2 haftalık başvuru süresi HAK DÜŞÜRÜCÜdür",
+      "Mahkeme dosyayı re'sen görevli mahkemeye gönderebilir",
+      "Dava açılmamış sayılmak, yeni dava açma hakkını ortadan kaldırmaz"
+    ],
+    "source": "HMK 19-20, Medeni Usul Kitap Özeti"
+  },
+  {
+    "id": "musul_002",
+    "course": "medeni_usul",
+    "title": "İspat yükü + senede karşı tanık dinleme yasağı",
+    "difficulty": "orta",
+    "topics": ["ispat yükü", "senet", "HMK 200-202", "tanık"],
+    "scenario": "K, davalı A'ya karşı 75.000 TL borç para verdiğini iddia eden bir alacak davası açmıştır. K, taraflar arasında düzenlenen bir senedi delil olarak sunmuş; senette 'A, K'dan 75.000 TL borç almıştır' yazmaktadır. A ise borcu ödediğini ileri sürmüş ve 'ödediğime dair K bana sözlü olarak ibra etti, tanıkla ispat edebilirim' demektedir. K, A'nın tanık ispatına itiraz etmektedir. Mahkeme nasıl karar vermelidir? İspat yükü ve senede karşı tanık dinleme yasağı kuralları nasıl uygulanır?",
+    "ideal_solution": "Bu olay HMK 200-202 senetli ispat zorunluluğu ve istisnalarının uygulamasıdır.\n\n1) İspat yükü dağılımı (HMK 190):\n   - Genel kural: Bir vakıaya hak iddia eden taraf, o vakıayı ispat etmekle yükümlüdür (TMK 6).\n   - K: Borç verdiğini ispat etmeli → senet sunmuştur. ✓\n   - A: Ödediğini ispat etmeli (savunma) → tanık ile ispat istemektedir.\n\n2) Senedin niteliği:\n   - K'nın sunduğu senet, taraflar arasında yazılı ve imzalı bir belge → adi yazılı senet niteliğindedir.\n   - HMK 199: Senedin sahibi olduğu iddia edilen kişi imzayı inkâr etmedikçe, senedin içeriği o kişi aleyhine kesin delildir (yazılı delil başlangıcı değildir; tam delil).\n\n3) Senede karşı tanık dinleme yasağı (HMK 200-202):\n   - HMK 200/1: Belirli bir miktarı aşan hukuki işlemler senet ile ispatlanmak zorundadır. 2024-2025 itibariyle bu sınır yaklaşık ~6.640 TL ve üzeri.\n   - 75.000 TL > sınır → senet zorunluluğu var.\n   - HMK 201: Senetle ispatı zorunlu hususlarda, senetin aksine veya senetten farklı olarak tanık dinlenilemez.\n\n4) A'nın iddiasına uygulama:\n   - A, K tarafından sözlü olarak ibra edildiğini iddia ediyor → bu, senet içeriğinden farklı bir hukuki vaka (ibra = borcu ortadan kaldırma).\n   - HMK 201/1: Senedin aksine veya senetten farklı bir vaka SADECE senetle ispatlanabilir.\n   - A'nın tanık dinletme talebi REDDEDILİR.\n\n5) İstisnalar (HMK 203):\n   - Senet kaybedilmiş veya alınması imkânsızsa,\n   - Karşı tarafın muvafakatı varsa (HMK 200/2 — A'nın muvafakatı + K'nın itirazı yok → yetersiz),\n   - Hısımlık veya iş arkadaşlığı gibi belirli durumlar,\n   - Hile, sahtelik iddiası ve manevi imkânsızlık halleri.\n   - A'nın olayda hiçbir istisna nedeni yok.\n\n6) A'nın diğer ispat seçenekleri:\n   - Yazılı belge (banka dekontu, makbuz, e-posta, mesaj).\n   - Yemin (HMK 225 vd.): K'ya yemin teklif edebilir → K yemin ederse A kaybeder, K kabul ederse veya kaçınırsa A kazanır.\n   - K'nın açık ikrarı.\n\n7) Sonuç:\n   - K, senedi delil olarak sunmuştur → ispat yükünü yerine getirmiştir.\n   - A, ödemeyi tanıkla ispat ETMEYE ÇALIŞAMAZ (HMK 200-201 yasak).\n   - A'nın diğer ispat yolları (belge, yemin) kullanılabilir.\n   - A bu yollara da başvurmazsa, mahkeme K'nın talebini kabul eder.\n\nÖnemli: 'Ödeme' yazılı belge zorunluluğu olan bir hukuki işlemdir. Sözlü ibra ispatlanamaz büyüksey miktarlar için.",
+    "key_points": [
+      "HMK 190 — ispat yükü, vakıaya hak bağlayan tarafa düşer",
+      "HMK 199 — adi yazılı senet kesin delildir (imza inkâr edilmedikçe)",
+      "HMK 200 — belirli miktarın üstündeki işlemler senetle ispatlanmak zorunda",
+      "HMK 201 — senedin aksine veya farklı bir vaka tanıkla ispatlanamaz",
+      "HMK 203 — istisnalar (senet kaybı, muvafakat, hısımlık, hile, vb.)",
+      "HMK 225 — yemin yoluyla ispat alternatifi"
+    ],
+    "source": "HMK 190-203, Medeni Usul Kitap Özeti"
+  }
+]
