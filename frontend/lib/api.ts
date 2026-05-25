@@ -54,6 +54,30 @@ export const api = {
 export const pdfUrl = (key: string) =>
   `${WORKER_URL}/pdf/${key.split("/").map(encodeURIComponent).join("/")}`;
 
+// ===== Practice Grading =====
+
+export type GradeResponse = {
+  score: number;
+  feedback: string;
+  hit_points: string[];
+  missed_points: string[];
+  errors: string[];
+  ideal_solution: string;
+};
+
+export async function gradePractice(req: {
+  case_id: string;
+  scenario: string;
+  ideal_solution: string;
+  key_points: string[];
+  user_solution: string;
+}): Promise<GradeResponse> {
+  return fetchWorker<GradeResponse>("/ai/practice-grade", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
 // ===== AI Chat (SSE stream) =====
 
 export type ChatSource = {

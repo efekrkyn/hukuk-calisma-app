@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { embedQuery, retrieve, buildPrompt } from "../lib/rag";
 import { GeminiProvider } from "../lib/ai-provider";
+import { gradeSolution } from "../lib/practice-grader";
 
 type Bindings = {
   AI: Ai;
@@ -113,4 +114,60 @@ ai.post("/chat", async (c) => {
       "X-Accel-Buffering": "no",
     },
   });
+});
+
+// Pratik olay grading endpoint
+ai.post("/practice-grade", async (c) => {
+  let body: {
+    case_id: string;
+    scenario: string;
+    ideal_solution: string;
+    key_points: string[];
+    user_solution: string;
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  if (!body.user_solution || body.user_solution.trim().length < 20) {
+    return c.json(
+      { error: "Çözümün en az 20 karakter olmalı." },
+      400
+    );
+  }
+
+  if (
+    !body.scenario ||
+    !body.ideal_solution ||
+    !Array.isArray(body.key_points)
+  ) {
+    return c.json({ error: "missing case data" }, 400);
+  }
+
+  const result = await gradeSolution(c.env.GEMINI_KEY, body);
+
+  // Persist to D1 (best-effort)
+  if (c.env.DB) {
+    try {
+      await c.env.DB.prepare(
+        `INSERT INTO practice_responses (id, case_id, user_solution, ai_feedback, score, created_at)
+         VALUES (?, ?, ?, ?, ?, ?)`
+      )
+        .bind(
+          crypto.randomUUID(),
+          body.case_id,
+          body.user_solution,
+          JSON.stringify(result),
+          result.score,
+          Date.now()
+        )
+        .run();
+    } catch (e) {
+      console.error("practice_responses persist:", e);
+    }
+  }
+
+  return c.json(result);
 });

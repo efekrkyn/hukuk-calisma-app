@@ -1,0 +1,55 @@
+[
+  {
+    "id": "borc_001",
+    "course": "borclar_ozel",
+    "title": "Bağışlamadan rücu — yoksulluğa düşme",
+    "difficulty": "orta",
+    "topics": ["bağışlama", "rücu hakkı", "TBK 295"],
+    "scenario": "A, 2023 yılında, yakın akrabası olan B'ye 500.000 TL nakit bağışlamış ve bu bağışlama bir noter senedi ile resmileştirilmiştir. Bağışlama gerçekleştiği sırada A, küçük çaplı bir esnaftı ve geçimini sıkıntısız sağlıyordu. Ancak 2025 yılında A'nın işyeri yangın geçirmiş, sigortası olmadığı için tüm sermayesini kaybetmiştir. Şu an asgari ücretle çalışan A, ailesinin geçimini sağlamakta zorlanmaktadır. A, B'den bağışladığı parayı geri istemek istemektedir. B ise parayı kullanmış olduğunu ve geri verme imkânı bulunmadığını söylemektedir. Bu olayda A'nın hukuki durumu ve B'nin sorumluluğunu TBK hükümleri çerçevesinde değerlendiriniz.",
+    "ideal_solution": "Bu olayda incelenecek temel mesele, TBK 295 vd. hükümleri uyarınca yerine getirilen bağışlamadan rücu kurumudur.\n\n1) Bağışlamanın geçerliliği: Tamamlanmış bağışlama (TBK m.288) noter senedi ile şekil şartına uygun yapılmıştır (TBK m.288/2). Bağışlama geçerlidir.\n\n2) Rücu sebepleri (TBK m.295): Bağışlayan, bağışlamadan rücu edebileceği üç sebebi tahdidi olarak sayılmıştır:\n   a) Bağışlananın bağışlayana veya yakınlarına karşı ağır suç işlemesi,\n   b) Bağışlananın bağışlayana veya ailesine karşı kanundan doğan yükümlülüklerini önemli ölçüde ihlal etmesi,\n   c) Bağışlananın yüklemeyi haklı bir sebep olmaksızın yerine getirmemesi.\n\nA'nın olayda dayanabileceği özel sebep yoktur. Ancak TBK m.296 hükmü uyarınca, bağışlayanın bağışlama sonrasında yoksulluğa düşmesi halinde, bağışlananın bağışlanan miktarı geri vermesi gerekir.\n\n3) TBK 296 — yoksulluk sebebiyle rücu: Bu hüküm 'bağışlayanın aile hukukundan doğan yükümlülüklerini yerine getirebilmesi için zorunlu hale gelmesi' veya 'kendi geçimini sağlayamaz hale gelmesi' şartına bağlıdır. A'nın esnaflığını kaybetmesi ve asgari ücrete düşmesi yoksulluk düşmenin somut delili olabilir.\n\n4) Bağışlananın iade yükümlülüğü: TBK m.296/2 uyarınca bağışlanan, henüz elinde bulunan zenginleşme ölçüsünde iade ile yükümlüdür. B 'parayı harcadım' dese de iyiniyetli zenginleşmenin geri verilmesinde TBK 79 sebepsiz zenginleşme hükümleri kıyasen uygulanır: B, bağışlamayla zenginleşmiştir ve kalan/dönüştürdüğü kısımdan sorumludur.\n\n5) Sonuç: A, TBK 296 uyarınca B'ye karşı bağışlama bedelinin iadesi davası açabilir. B'nin 'parayı harcadım' savunması kendisini tamamen kurtarmaz; B, bağışlamadan henüz elinde olan veya bağışlamayla edindiği malvarlığı kalemleri (örn. yatırım, gayrimenkul) ölçüsünde sorumludur. Tamamen tüketmiş ise iyiniyetli ise zenginleşme kalmadığı için iade yükümlülüğü düşebilir; kötüniyetli ise tam iade ile yükümlüdür (TBK 79/2 kıyasen).\n\nDava süresi: TBK 297 — bağışlayan, rücu sebebini öğrendiği tarihten itibaren 1 yıl içinde dava açmalıdır.",
+    "key_points": [
+      "TBK 295-297 — bağışlamadan rücu kurumu",
+      "TBK 296 — bağışlayanın yoksulluğa düşmesi sebebiyle rücu",
+      "Bağışlananın geri verme yükümlülüğünün kapsamı (kalan zenginleşme)",
+      "TBK 79 sebepsiz zenginleşme hükümlerinin kıyasen uygulanması",
+      "1 yıllık hak düşürücü süre (TBK 297)"
+    ],
+    "source": "Eren, Borçlar Özel — Bağışlama"
+  },
+  {
+    "id": "borc_002",
+    "course": "borclar_ozel",
+    "title": "Konut kirasında zincirleme sözleşme + tahliye",
+    "difficulty": "orta",
+    "topics": ["kira sözleşmesi", "konut kirası", "tahliye", "TBK 339-356"],
+    "scenario": "K, kiracı olarak Mart 2023'te 1 yıl süreli yazılı bir konut kira sözleşmesi imzalamıştır. Aylık kira bedeli 8.000 TL'dir. Mart 2024'te taraflar arasında herhangi bir feshe yönelik bildirim yapılmamış ve K kullanmaya devam etmiştir. Mart 2025'te ev sahibi M, kiraya verdiği daireyi 'oğlumun evlenip oturması için gerekli' diyerek tahliye etmek istemektedir. K, sözleşmenin yenilenmiş olduğunu, ayrıca son 10 yıldır oturmadığını ileri sürmektedir. K'nın hukuki durumunu, ev sahibinin tahliye talebinin geçerliliğini ve uygulanması gereken usul hükümlerini TBK çerçevesinde değerlendiriniz.",
+    "ideal_solution": "Bu olayda TBK 339-356 konut ve çatılı işyeri kirası hükümleri uygulanır.\n\n1) Sözleşmenin niteliği: Konut kirası (TBK 339). 1 yıllık belirli süreli sözleşme Mart 2024'te bitmiştir.\n\n2) Zımni yenilenme (TBK 347): Belirli süreli kira sözleşmesi, kiracı süre sonunda fesih bildirimi yapmamışsa, bir yıl uzar ve böylece devam eder. K Mart 2024'te bildirim yapmadığı için sözleşme bir yıl uzamıştır. Mart 2025'te yine yenilenmesi söz konusudur.\n\n3) Kiraya verenin tahliye sebepleri — TBK 350 (sınırlı sayıda):\n   a) Kiraya veren veya yakınlarının (eş, altsoy, üstsoy, kanunen bakmakla yükümlü olduğu diğer kişiler) konut ihtiyacı,\n   b) Yeniden inşa ve imar zorunluluğu,\n   c) Yeni malik ihtiyacı (TBK 351),\n   d) Tahliye taahhüdü (TBK 352/1),\n   e) İki haklı ihtar (TBK 352/2),\n   f) Kiracının veya birlikte yaşayanların aynı ilçede konutu olması (TBK 352/3).\n\nMevcut olayda 'oğlumun evlenip oturması' TBK 350/1-a kapsamında konut ihtiyacıdır. Ancak ihtiyaç, samimi, gerçek ve süreklilik arz etmelidir.\n\n4) Usul:\n   - 1 ay önceden yazılı ihtar yeterli değildir. Bu sebeple açılan dava, kira yılının bitiminden itibaren 1 ay içinde açılmalıdır (TBK 350/son).\n   - Mart 2025'te kira yılı bitiyorsa, dava Mart 2025-Nisan 2025 arasında açılmalıdır.\n   - Alternatif: Kira yılı bitiminden önceki 3 ay içinde yazılı bildirim yapılarak süre sonu için tahliye talep edilebilir.\n\n5) K'nın 10 yıl iddiası: TBK 347/1'in son cümlesi uyarınca 'on yıllık uzama süresinin sonunda kiraya veren bu süreyi izleyen her uzama yılının bitiminden en az üç ay önce bildirimde bulunmak koşuluyla, herhangi bir sebep göstermeksizin sözleşmeye son verebilir.' Yani 10 yıllık uzama dolduktan sonra ev sahibi sebep göstermeksizin tahliye edebilir. K'nın 'son 10 yıl' ifadesi bu yönden ev sahibinin lehine olabilir; ancak gerçekten 10 yıl dolmuş ise.\n\n6) Sonuç: Ev sahibi M, oğlunun gerçek konut ihtiyacı kanıtlanabilirse TBK 350/1-a uyarınca tahliye davası açabilir. Süre uyumuna dikkat etmelidir (kira yılı bitimi ± 1 ay). Eğer kiracılık 10 yılı aştıysa, M sebep göstermeksizin TBK 347 son cümle uyarınca da tahliye edebilir.\n\nAyrıca: Mahkeme samimi ihtiyacı denetler. Tahliyeden sonra 3 yıl başkasına kiralanamaz, aksi halde kiracının yeniden kiralama hakkı doğar (TBK 355).",
+    "key_points": [
+      "TBK 347 — zımni yenilenme (kira yılı sonunda fesih bildirimi yapılmazsa 1 yıl uzar)",
+      "TBK 350 — kiraya verenden kaynaklanan tahliye sebepleri (konut ihtiyacı dahil)",
+      "Konut ihtiyacının 'samimi, gerçek, sürekli' olması şartı",
+      "TBK 350/son — dava açma süresi (kira yılı bitim tarihi ± 1 ay)",
+      "TBK 347 son cümle — 10 yıl uzama sonrası sebepsiz tahliye hakkı",
+      "TBK 355 — tahliye sonrası 3 yıl başkasına kiralama yasağı"
+    ],
+    "source": "Eren, Borçlar Özel — Kira sözleşmesi"
+  },
+  {
+    "id": "borc_003",
+    "course": "borclar_ozel",
+    "title": "Haksız fiil ile sebepsiz zenginleşme yarışması",
+    "difficulty": "zor",
+    "topics": ["haksız fiil", "sebepsiz zenginleşme", "TBK 49", "TBK 77", "iade"],
+    "scenario": "X, Y'nin kullanmadığı için ahırda durduğu antika bir traktörü, sahibinin yokluğundan yararlanıp izinsiz alıp tarlasında 6 ay süresince kullanmıştır. Bu sürede X traktörle önemli miktarda ürün elde etmiş ve traktörü Y'nin haberi olmadan tamir ettirmiştir. Y, durumu öğrenince X'i bularak traktörü geri almıştır. Y'nin X'e karşı ileri sürebileceği talepler nelerdir? Bu taleplerin hukuki dayanakları ve yarışma ilişkilerini TBK ve mülkiyet hukuku hükümleri çerçevesinde değerlendiriniz.",
+    "ideal_solution": "Bu olay; haksız fiil sorumluluğu, sebepsiz zenginleşme ve mülkiyet hakkına dayalı talepler arasındaki yarışmanın klasik bir örneğidir.\n\n1) Haksız fiil sorumluluğu (TBK 49 vd.):\n   - Hukuka aykırılık: Başkasının malını izinsiz kullanmak mülkiyet hakkını ihlal eder (MK 683).\n   - Kusur: X bilerek ve isteyerek izinsiz aldığından kasıt vardır.\n   - Zarar: Traktör amortismanı, yıpranma, mahrum kalınan kullanım değeri (kira değeri).\n   - İlliyet bağı: X'in fiili ile zarar arasında uygun illiyet vardır.\n   → Y, TBK 49 ve 56 uyarınca tazminat (maddi+manevi) talep edebilir.\n\n2) Sebepsiz zenginleşme talebi (TBK 77 vd.):\n   - X, Y'nin malını izinsiz kullanarak kullanım değeri ölçüsünde zenginleşmiştir.\n   - Y'nin malvarlığında kullanma imkânının kaybı = fakirleşme.\n   - Geçerli bir hukuki sebep yoktur (sözleşme, kanun, mahkeme kararı, izin yok).\n   → Y, TBK 77 uyarınca X'in zenginleştiği miktarın iadesini isteyebilir (örn. kira değeri kadar).\n\n3) Hukuka aykırı zenginleşme — TBK 78/3: Hukuka veya ahlâka aykırı bir sonuç doğurmak amacıyla verilen şey geri istenebilir veya kazanılan, sebep ne olursa olsun iade edilir. X'in kötü niyetli olması, iade kapsamını genişletir (TBK 80).\n\n4) Taleplerin yarışması (Anspruchskonkurrenz):\n   - Haksız fiil + sebepsiz zenginleşme: Aynı olaydan birden fazla talep doğmuştur. Türk doktrini ve uygulaması yarışma kabul eder. Davacı seçim hakkına sahiptir; ancak aynı zarar için iki tahsil olamaz (mükerrer tahsilat yasağı).\n   - Mülkiyet hakkına dayalı talep: MK 683/2 uyarınca malik, malını haksız elinde tutandan istihkak (rei vindicatio) edebilir. Traktör zaten geri alındığından bu yön tamamlanmıştır. Ek olarak MK 995 vd. iade davaları (kötüniyetli zilyet için kazanılan/kaçırılan semerelerin iadesi).\n\n5) MK 995 — kötüniyetli zilyetten elde edilen ürünler:\n   - Kötüniyetli zilyet (X), elde ettiği ürünleri (traktörle elde edilen mahsulü) geri vermek zorundadır.\n   - Ancak yapılan zorunlu masrafları (tamir bedeli) talep edebilir, faydalı masrafları da iyiniyetlilikte söz konusu olabilir.\n\n6) X'in karşı talebi — tamir bedeli:\n   - Sebepsiz zenginleşme yoluyla (TBK 77): Y, X'in yaptığı zorunlu/faydalı masraf nispetinde zenginleşmiştir. X bu kısmı talep edebilir.\n   - Ancak X kötü niyetli olduğundan sadece zorunlu masraflar iade edilir (MK 995 kıyasen).\n\n7) Sonuç — Y'nin talepleri:\n   a) Mahrum kalınan kullanım değeri (kira değeri) — haksız fiil VEYA sebepsiz zenginleşme tercihen,\n   b) Traktörün yıpranması/amortismanı — haksız fiil,\n   c) X'in elde ettiği ürünlerin değeri — MK 995/sebepsiz zenginleşme,\n   d) Manevi tazminat — TBK 58 (uygunsa).\n\n   X'in karşı talebi: Sadece zorunlu tamir masrafları (mahsup yoluyla düşülür).\n\nZamanaşımı: Haksız fiil TBK 72 — 2 yıl/10 yıl; sebepsiz zenginleşme TBK 82 — 2 yıl/10 yıl.",
+    "key_points": [
+      "Haksız fiil sorumluluğunun 4 şartı (hukuka aykırılık, kusur, zarar, illiyet)",
+      "TBK 77 — sebepsiz zenginleşmenin şartları ve iade kapsamı",
+      "Hak yarışması: Davacı seçim hakkı + mükerrer tahsilat yasağı",
+      "MK 683 ve 995 — mülkiyete dayalı istihkak ve kötüniyetli zilyetten iade",
+      "Kötüniyetli zilyetin ürün iadesi yükümlülüğü ve zorunlu masraf hakkı",
+      "Manevi tazminat (TBK 58) imkânı"
+    ],
+    "source": "Eren, Borçlar Özel — Haksız Fiil + Sebepsiz Zenginleşme yarışması bölümü"
+  }
+]

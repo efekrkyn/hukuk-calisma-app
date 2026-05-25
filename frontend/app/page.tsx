@@ -71,12 +71,20 @@ export default function Home() {
             </div>
           )}
 
-          <Link
-            href="/reader"
-            className={buttonVariants({ variant: "default" }) + " w-full"}
-          >
-            📖 Kitaplara Git
-          </Link>
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href="/reader"
+              className={buttonVariants({ variant: "default" })}
+            >
+              📖 Kitaplar
+            </Link>
+            <Link
+              href="/practice"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              ⚖️ Pratik Olaylar
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </main>
