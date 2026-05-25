@@ -86,7 +86,9 @@ export function PdfViewer({ url, initialPage = 1, onSelection }: Props) {
         className="flex-1 overflow-auto bg-muted/20 p-2 flex justify-center"
       >
         {error ? (
-          <div className="text-red-500 p-4">PDF yüklenemedi: {error}</div>
+          <div className="text-red-500 p-4 break-all text-sm max-w-full">
+            PDF yüklenemedi: {error}
+          </div>
         ) : (
           <Document
             file={url}

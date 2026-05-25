@@ -3,16 +3,30 @@ import { pdfUrl } from "@/lib/api";
 
 type Params = { key: string[] };
 
-export default async function ReaderPage({ params }: { params: Promise<Params> }) {
+function safeDecode(s: string): string {
+  try {
+    return decodeURIComponent(s);
+  } catch {
+    return s;
+  }
+}
+
+export default async function ReaderPage({
+  params,
+}: {
+  params: Promise<Params>;
+}) {
   const { key } = await params;
-  const fullKey = key.join("/");
-  const url = pdfUrl(fullKey);
+  // Next.js dinamik route params bazen encoded geliyor — defensive decode.
+  // pdfUrl içeride tekrar encodeURIComponent yapıyor, bu sayede tek encoded URL.
+  const decodedKey = key.map(safeDecode).join("/");
+  const url = pdfUrl(decodedKey);
   // dersler/borclar_ozel/foo.pdf → course = "borclar_ozel"
-  const course = key[1] ?? "(unknown)";
+  const course = key[1] ? safeDecode(key[1]) : "(unknown)";
 
   return (
-    <main className="h-screen flex flex-col">
-      <ReaderShell url={url} course={course} pdfKey={fullKey} />
+    <main className="h-screen flex flex-col overflow-hidden">
+      <ReaderShell url={url} course={course} pdfKey={decodedKey} />
     </main>
   );
 }
