@@ -1,42 +1,62 @@
 /**
- * Embedding pipeline:
- *   1. Walk all PDFs in resources/dersler/
- *   2. Extract text per page
- *   3. Chunk (~500 token windows with 100 token overlap)
- *   4. Embed via OpenAI text-embedding-3-small (1536-dim)
- *   5. Save as JSONL: { id, course, pdf, page_start, page_end, text, vector }
+ * PDF parse + worker'a ingest pipeline (Cloudflare Workers AI bge-m3):
  *
- * One-time cost: ~590MB PDFs × ~600 tokens/page × $0.02/1M ≈ $0.50-$1.00
+ *   1. Walk PDFs in resources/dersler/
+ *   2. Parse text PER PAGE (pdf-parse v2 PDFParse class)
+ *   3. Group + chunk pages (~2000 chars per chunk with overlap)
+ *   4. POST chunks (batch 100) to worker /admin/embed
+ *      → Worker calls AI.run('@cf/baai/bge-m3') + upserts to Vectorize
+ *   5. JSONL'i lokale de yaz (debug/recovery için)
+ *
+ * Maliyet: Cloudflare Workers AI free tier (10K Neurons/gün) — bizim ~50K chunk
+ *          birkaç güne yayılır; veya paid plan $5/ay'da bir saatte biter.
  *
  * Usage:
  *   cd scripts
- *   export $(cat .env | xargs)            # OPENAI_API_KEY set
  *   pnpm embed-pdfs                       # all courses
  *   pnpm embed-pdfs borclar_ozel          # one course only
  */
 import "dotenv/config";
-import OpenAI from "openai";
-import { readFileSync, readdirSync, statSync, mkdirSync, writeFileSync, existsSync } from "node:fs";
+import {
+  readFileSync,
+  readdirSync,
+  statSync,
+  mkdirSync,
+  writeFileSync,
+  existsSync,
+} from "node:fs";
 import { join, basename, relative } from "node:path";
-// @ts-expect-error - pdf-parse types are loose
-import pdfParse from "pdf-parse/lib/pdf-parse.js";
+import { PDFParse } from "pdf-parse";
+import { createHash } from "node:crypto";
+
+function shortHash(s: string, len = 12): string {
+  return createHash("sha256").update(s).digest("hex").slice(0, len);
+}
 
 const SOURCE_DIR =
-  process.env.SOURCE_DIR ?? "/Users/efekarakoyun/hukukçalışma/resources/dersler";
+  process.env.SOURCE_DIR ??
+  "/Users/efekarakoyun/hukukçalışma/resources/dersler";
 const OUT_DIR =
-  process.env.EMBED_OUT_DIR ?? "/Users/efekarakoyun/hukukçalışma/uygulama/data/embeddings";
-const MODEL = process.env.EMBED_MODEL ?? "text-embedding-3-small";
-const CHUNK_CHARS = 2000;      // ~500 tokens
-const CHUNK_OVERLAP = 400;     // ~100 tokens
-const BATCH_SIZE = 64;         // embeddings per API call
+  process.env.EMBED_OUT_DIR ??
+  "/Users/efekarakoyun/hukukçalışma/uygulama/data/embeddings";
+const WORKER_URL =
+  process.env.WORKER_URL ?? "https://hukuk-worker.efearas06.workers.dev";
+const ADMIN_SECRET = process.env.ADMIN_SECRET!;
 
-if (!process.env.OPENAI_API_KEY) {
-  console.error("Missing OPENAI_API_KEY in env");
+const CHUNK_CHARS = 2000;
+const CHUNK_OVERLAP = 400;
+const BATCH_SIZE = 32; // bge-m3 önerilen, worker iç AI batch ile eşleşir
+const RETRY_DELAY_MS = 2000;
+const MAX_RETRIES = 5;
+
+if (!ADMIN_SECRET) {
+  console.error(
+    "Missing ADMIN_SECRET in env (scripts/.env). Bu worker secret'ı ile aynı olmalı."
+  );
   process.exit(1);
 }
 
-const client = new OpenAI();
-const argCourse = process.argv[2]; // optional filter
+const argCourse = process.argv[2];
 
 mkdirSync(OUT_DIR, { recursive: true });
 
@@ -49,8 +69,9 @@ function* walkPdfs(dir: string): Generator<string> {
   }
 }
 
-function chunkText(text: string): string[] {
+function chunkPage(text: string): string[] {
   const cleaned = text.replace(/\s+/g, " ").trim();
+  if (cleaned.length === 0) return [];
   if (cleaned.length <= CHUNK_CHARS) return [cleaned];
   const chunks: string[] = [];
   let i = 0;
@@ -63,73 +84,159 @@ function chunkText(text: string): string[] {
   return chunks;
 }
 
+function chunkPagesGrouped(
+  pages: Array<{ pageNumber: number; text: string }>
+): Array<{ page_start: number; page_end: number; text: string }> {
+  const out: Array<{ page_start: number; page_end: number; text: string }> = [];
+  let buf = "";
+  let startPage = 0;
+  let endPage = 0;
+
+  const flush = () => {
+    if (buf.trim().length === 0) return;
+    const sub = chunkPage(buf);
+    for (const s of sub)
+      out.push({ page_start: startPage, page_end: endPage, text: s });
+    buf = "";
+  };
+
+  for (const p of pages) {
+    const text = p.text.replace(/\s+/g, " ").trim();
+    if (text.length === 0) continue;
+
+    if (buf.length === 0) {
+      startPage = p.pageNumber;
+      endPage = p.pageNumber;
+      buf = text;
+    } else if (buf.length + text.length + 1 < CHUNK_CHARS) {
+      buf += "\n" + text;
+      endPage = p.pageNumber;
+    } else {
+      flush();
+      startPage = p.pageNumber;
+      endPage = p.pageNumber;
+      buf = text;
+    }
+
+    if (buf.length >= CHUNK_CHARS) {
+      flush();
+    }
+  }
+  flush();
+  return out;
+}
+
 type Chunk = {
   id: string;
   course: string;
-  pdf: string;          // relative path under dersler/
+  pdf: string;
   page_start: number;
   page_end: number;
   text: string;
-  vector?: number[];    // 1536 dim float
 };
-
-async function embedBatch(texts: string[]): Promise<number[][]> {
-  const r = await client.embeddings.create({ model: MODEL, input: texts });
-  return r.data.map((d) => d.embedding);
-}
 
 async function processPdf(fullPath: string): Promise<Chunk[]> {
   const rel = relative(SOURCE_DIR, fullPath);
   const course = rel.split("/")[0];
   const pdfName = basename(fullPath);
   const data = readFileSync(fullPath);
-  const parsed = await pdfParse(data);
 
-  // pdf-parse returns full text, no per-page split easily.
-  // For chunking, we approximate page positions by character ratios.
-  const fullText = parsed.text;
-  const totalPages = parsed.numpages;
-  const chunks: Chunk[] = [];
+  const parser = new PDFParse({ data: new Uint8Array(data) });
+  let textResult;
+  try {
+    textResult = await parser.getText();
+  } catch (e) {
+    await parser.destroy().catch(() => {});
+    throw e;
+  }
+  await parser.destroy();
 
-  const rawChunks = chunkText(fullText);
-  if (rawChunks.length === 0 || rawChunks[0] === "") {
-    // Scanned PDF, no text — skip with warning
+  const pages = (textResult.pages ?? []).map((p: any) => ({
+    pageNumber: p.pageNumber as number,
+    text: (p.text as string) ?? "",
+  }));
+
+  if (pages.length === 0 || pages.every((p) => p.text.trim().length === 0)) {
     console.warn(`  [scanned, skip] ${pdfName}`);
     return [];
   }
 
-  rawChunks.forEach((text, idx) => {
-    const charRatio = idx / Math.max(1, rawChunks.length);
-    const pageStart = Math.max(1, Math.floor(charRatio * totalPages) + 1);
-    const pageEnd = Math.min(totalPages, pageStart + Math.ceil(totalPages / rawChunks.length));
-    chunks.push({
-      id: `${course}/${pdfName.replace(/\.pdf$/i, "")}/${idx.toString().padStart(4, "0")}`,
-      course,
-      pdf: rel,
-      page_start: pageStart,
-      page_end: pageEnd,
-      text,
-    });
-  });
+  const grouped = chunkPagesGrouped(pages);
+  // Vectorize ID limit: 64 byte. Hash kullanarak short, stable IDs.
+  // Format: {course-short}_{pdf-hash}_{idx}  → ~30 bytes
+  const pdfHash = shortHash(rel, 12);
+  const courseShort = course.slice(0, 16);
+  return grouped.map((g, idx) => ({
+    id: `${courseShort}_${pdfHash}_${idx.toString().padStart(4, "0")}`,
+    course,
+    pdf: rel,
+    page_start: g.page_start,
+    page_end: g.page_end,
+    text: g.text,
+  }));
+}
 
-  return chunks;
+async function sleep(ms: number) {
+  return new Promise((res) => setTimeout(res, ms));
+}
+
+async function ingestBatch(chunks: Chunk[]): Promise<number> {
+  let attempt = 0;
+  while (true) {
+    attempt++;
+    try {
+      const r = await fetch(`${WORKER_URL}/admin/embed`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ADMIN_SECRET}`,
+        },
+        body: JSON.stringify({ chunks }),
+      });
+      if (!r.ok) {
+        const text = await r.text();
+        // Rate limit / transient
+        if ((r.status === 429 || r.status >= 500) && attempt < MAX_RETRIES) {
+          const backoff = RETRY_DELAY_MS * Math.pow(2, attempt - 1);
+          console.warn(
+            `  [${r.status}] retry ${attempt}/${MAX_RETRIES} in ${backoff}ms`
+          );
+          await sleep(backoff);
+          continue;
+        }
+        throw new Error(`worker /admin/embed ${r.status}: ${text.slice(0, 300)}`);
+      }
+      const data = (await r.json()) as { ok: boolean; count: number };
+      return data.count;
+    } catch (e) {
+      if (attempt < MAX_RETRIES) {
+        const backoff = RETRY_DELAY_MS * Math.pow(2, attempt - 1);
+        console.warn(`  network error retry ${attempt}/${MAX_RETRIES}: ${e}`);
+        await sleep(backoff);
+        continue;
+      }
+      throw e;
+    }
+  }
 }
 
 async function main() {
-  console.log(`Source:  ${SOURCE_DIR}`);
-  console.log(`Out:     ${OUT_DIR}`);
-  console.log(`Model:   ${MODEL}`);
-  console.log(`Filter:  ${argCourse ?? "(all courses)"}\n`);
+  console.log(`Source:    ${SOURCE_DIR}`);
+  console.log(`Worker:    ${WORKER_URL}`);
+  console.log(`Out cache: ${OUT_DIR}`);
+  console.log(`Filter:    ${argCourse ?? "(all courses)"}\n`);
 
   const allFiles = Array.from(walkPdfs(SOURCE_DIR));
   const filtered = argCourse
-    ? allFiles.filter((f) => relative(SOURCE_DIR, f).startsWith(argCourse + "/"))
+    ? allFiles.filter((f) =>
+        relative(SOURCE_DIR, f).startsWith(argCourse + "/")
+      )
     : allFiles;
 
   console.log(`Processing ${filtered.length} PDFs\n`);
 
   let totalChunks = 0;
-  let totalCost = 0;
+  let totalIngested = 0;
   const byCourse: Record<string, Chunk[]> = {};
 
   for (const f of filtered) {
@@ -146,34 +253,33 @@ async function main() {
     }
   }
 
-  // Embed each course's chunks
-  console.log(`\n=== Embedding ${totalChunks} chunks ===\n`);
+  console.log(`\n=== Sending ${totalChunks} chunks to worker (bge-m3) ===\n`);
   for (const [course, chunks] of Object.entries(byCourse)) {
     if (!chunks.length) continue;
-    console.log(`▶ ${course}: embedding ${chunks.length} chunks`);
+
+    // Cache JSONL (no vectors — worker has them in Vectorize)
+    const outFile = join(OUT_DIR, `${course}.jsonl`);
+    writeFileSync(outFile, chunks.map((c) => JSON.stringify(c)).join("\n"));
+
+    console.log(`▶ ${course}: ingesting ${chunks.length} chunks`);
     for (let i = 0; i < chunks.length; i += BATCH_SIZE) {
       const batch = chunks.slice(i, i + BATCH_SIZE);
-      const vectors = await embedBatch(batch.map((c) => c.text));
-      batch.forEach((c, j) => (c.vector = vectors[j]));
-      // Rough cost estimate (text-embedding-3-small = $0.02 / 1M tokens)
-      const tokensApprox = batch.reduce((s, c) => s + c.text.length / 4, 0);
-      totalCost += (tokensApprox / 1_000_000) * 0.02;
-      process.stdout.write(`  batch ${Math.ceil((i + BATCH_SIZE) / BATCH_SIZE)}/${Math.ceil(chunks.length / BATCH_SIZE)}\r`);
+      const count = await ingestBatch(batch);
+      totalIngested += count;
+      process.stdout.write(
+        `  batch ${Math.ceil((i + BATCH_SIZE) / BATCH_SIZE)}/${Math.ceil(
+          chunks.length / BATCH_SIZE
+        )} (+${count})\r`
+      );
     }
     console.log();
-
-    // Write JSONL
-    const outFile = join(OUT_DIR, `${course}.jsonl`);
-    const jsonl = chunks.map((c) => JSON.stringify(c)).join("\n");
-    writeFileSync(outFile, jsonl);
-    console.log(`  ✓ ${outFile} (${(statSync(outFile).size / 1e6).toFixed(2)} MB)`);
   }
 
   console.log(
     `\n=== Özet ===\n` +
       `Chunks: ${totalChunks}\n` +
-      `Tahmini maliyet: $${totalCost.toFixed(3)}\n` +
-      `Çıktı:  ${OUT_DIR}/`
+      `Ingested to Vectorize: ${totalIngested}\n` +
+      `JSONL cache: ${OUT_DIR}/`
   );
 }
 

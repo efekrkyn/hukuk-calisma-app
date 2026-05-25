@@ -17,3 +17,12 @@ bucket_name = "hukuk-pdf"
 binding = "DB"
 database_name = "hukuk-db"
 database_id = "9c7cb485-5daa-44c7-829a-5bdfe75f30d2"
+
+# Vectorize index (1024-dim, bge-m3 multilingual native)
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "hukuk-vectors"
+
+# Workers AI binding (for embeddings via @cf/baai/bge-m3)
+[ai]
+binding = "AI"
