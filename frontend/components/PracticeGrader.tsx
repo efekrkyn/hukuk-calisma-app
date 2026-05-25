@@ -176,6 +176,33 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
                   </ul>
                 </div>
               )}
+
+              {result.law_refs && result.law_refs.length > 0 && (
+                <div>
+                  <h3 className="font-semibold text-blue-600 mb-1">
+                    📜 AI'ın referans aldığı kanun pasajları
+                  </h3>
+                  <div className="flex flex-wrap gap-1">
+                    {result.law_refs.map((ref, i) => {
+                      const name =
+                        ref.pdf
+                          .split("/")
+                          .pop()
+                          ?.replace(/\.pdf$/i, "") ?? "kaynak";
+                      return (
+                        <Link
+                          key={i}
+                          href={`/reader/${ref.pdf}#page=${ref.page_start}`}
+                          className="text-xs inline-flex items-center px-2 py-0.5 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30"
+                          title={`${name} s.${ref.page_start}-${ref.page_end}`}
+                        >
+                          {name} s.{ref.page_start}
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
             </CardContent>
           </Card>
 

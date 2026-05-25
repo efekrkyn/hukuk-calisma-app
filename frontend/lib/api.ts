@@ -63,6 +63,8 @@ export type GradeResponse = {
   missed_points: string[];
   errors: string[];
   ideal_solution: string;
+  /** Grading sırasında AI'a context olarak verilen kanun chunk referansları. */
+  law_refs?: Array<{ pdf: string; page_start: number; page_end: number }>;
 };
 
 export async function gradePractice(req: {
@@ -99,6 +101,8 @@ export async function* streamChat(params: {
   course?: string;
   pdf_key?: string;
   top_k?: number;
+  /** Worker tarafında kullanılan AI prompt modu. "law" → kanun açıklama. */
+  mode?: "default" | "law";
 }): AsyncGenerator<ChatEvent> {
   const r = await fetch(`${WORKER_URL}/ai/chat`, {
     method: "POST",

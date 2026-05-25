@@ -15,9 +15,16 @@ type Props = {
   selectedText: string | null;
   course: string;
   pdfKey: string;
+  /** "law" → kanun-modu (madde açıklama presets'i + worker tarafında özel system prompt). */
+  mode?: "default" | "law";
 };
 
-export function ChatPanel({ selectedText, course, pdfKey }: Props) {
+export function ChatPanel({
+  selectedText,
+  course,
+  pdfKey,
+  mode = "default",
+}: Props) {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -45,6 +52,7 @@ export function ChatPanel({ selectedText, course, pdfKey }: Props) {
         selected_text: selectedText ?? undefined,
         course,
         pdf_key: pdfKey,
+        mode,
       })) {
         if (ev.type === "sources") {
           setMessages((m) => {
@@ -88,8 +96,9 @@ export function ChatPanel({ selectedText, course, pdfKey }: Props) {
       >
         {messages.length === 0 && (
           <div className="text-muted-foreground text-center py-8 text-xs">
-            PDF'den bir paragraf seçip aşağıdaki "Anlat" / "Örnek" / "Özet"
-            butonlarına bas, ya da doğrudan soru yaz.
+            {mode === "law"
+              ? 'Kanun PDF\'inden bir maddeyi seç ("Madde Açıkla" / "Örnek" / "İlgili Maddeler"), ya da "TBK 49 nedir?" gibi doğrudan soru yaz.'
+              : 'PDF\'den bir paragraf seçip aşağıdaki "Anlat" / "Örnek" / "Özet" butonlarına bas, ya da doğrudan soru yaz.'}
           </div>
         )}
         {messages.map((m, i) => (
@@ -137,7 +146,58 @@ export function ChatPanel({ selectedText, course, pdfKey }: Props) {
         </div>
       )}
 
-      {selectedText && (
+      {selectedText && mode === "law" && (
+        <div className="px-2 py-1.5 border-t flex gap-1 flex-wrap">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() =>
+              send(
+                "Bu kanun maddesini SADE ve DETAYLI açıkla. Önce yalın bir özet, sonra her cümleyi ve teknik kavramı yorumla. Maddenin hangi durumlarda uygulanacağı pratik örneklerle anlat."
+              )
+            }
+            disabled={loading}
+          >
+            Madde Açıkla
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() =>
+              send(
+                "Bu madde için somut bir pratik olay (case) örneği yaz. Olayı kur, çözümü madde madde göster, hangi kanun hükümlerinin uygulanacağını belirt."
+              )
+            }
+            disabled={loading}
+          >
+            Pratik Örnek
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() =>
+              send(
+                "Bu maddeyle ilişkili veya bağlantılı diğer kanun maddelerini (aynı kanun veya başka kanunlar — TBK, TMK, TCK, HMK, CMK, TTK, İK, İYUK, vb.) bul. Her birinin nasıl bağlantılı olduğunu kısaca açıkla."
+              )
+            }
+            disabled={loading}
+          >
+            İlgili Maddeler
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() =>
+              send("Bu maddeyi 3-4 bullet ile öğrenci notu gibi özetle.")
+            }
+            disabled={loading}
+          >
+            Özet
+          </Button>
+        </div>
+      )}
+
+      {selectedText && mode !== "law" && (
         <div className="px-2 py-1.5 border-t flex gap-1 flex-wrap">
           <Button
             size="sm"

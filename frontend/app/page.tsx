@@ -84,6 +84,14 @@ export default function Home() {
             >
               ⚖️ Pratik Olaylar
             </Link>
+            <Link
+              href="/kanunlar"
+              className={
+                buttonVariants({ variant: "outline" }) + " col-span-2"
+              }
+            >
+              📜 Kanunlar (16)
+            </Link>
           </div>
         </CardContent>
       </Card>

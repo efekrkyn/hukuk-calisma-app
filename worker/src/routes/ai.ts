@@ -19,6 +19,7 @@ ai.post("/chat", async (c) => {
     course?: string;
     pdf_key?: string;
     top_k?: number;
+    mode?: "default" | "law";
   };
   try {
     body = await c.req.json();
@@ -30,22 +31,24 @@ ai.post("/chat", async (c) => {
     return c.json({ error: "question (string) required" }, 400);
   }
 
+  const mode = body.mode === "law" ? "law" : "default";
+
   // 1) Embed query (selected_text varsa onunla birleştir, daha iyi retrieval)
   const queryText = body.selected_text
     ? `${body.selected_text}\n\nSoru: ${body.question}`
     : body.question;
   const qVec = await embedQuery(queryText, c.env.AI);
 
-  // 2) Retrieve top-K chunks from Vectorize (course filter opsiyonel)
-  const chunks = await retrieve(
-    c.env.VECTORIZE,
-    qVec,
-    body.course,
-    body.top_k ?? 5
-  );
+  // 2) Retrieve top-K chunks from Vectorize.
+  // Kanun modunda: top_k'yi büyüt (kanun chunks kısa olduğu için daha fazla bağlam).
+  // Course filter: mode="law" → "kanunlar" zorlanır (course param görmezden gelinir).
+  //                default → body.course aynen iletilir.
+  const filterCourse = mode === "law" ? "kanunlar" : body.course;
+  const topK = body.top_k ?? (mode === "law" ? 8 : 5);
+  const chunks = await retrieve(c.env.VECTORIZE, qVec, filterCourse, topK);
 
   // 3) Build prompt + stream from Gemini
-  const prompt = buildPrompt(body.question, body.selected_text, chunks);
+  const prompt = buildPrompt(body.question, body.selected_text, chunks, mode);
   const provider = new GeminiProvider(c.env.GEMINI_KEY);
   const encoder = new TextEncoder();
   let fullAnswer = "";
@@ -146,7 +149,10 @@ ai.post("/practice-grade", async (c) => {
     return c.json({ error: "missing case data" }, 400);
   }
 
-  const result = await gradeSolution(c.env.GEMINI_KEY, body);
+  const result = await gradeSolution(c.env.GEMINI_KEY, body, {
+    ai: c.env.AI,
+    vectorize: c.env.VECTORIZE,
+  });
 
   // Persist to D1 (best-effort)
   if (c.env.DB) {
