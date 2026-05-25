@@ -17,7 +17,17 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-app.use("*", cors({ origin: "*", credentials: true }));
+// CORS: origin'i echo ediyoruz çünkü credentials:true ile wildcard yasak.
+// Tüm vercel.app / localhost / custom domain'leri kabul eder.
+app.use(
+  "*",
+  cors({
+    origin: (origin) => origin || "",
+    credentials: true,
+    allowMethods: ["GET", "POST", "OPTIONS"],
+    allowHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 app.get("/", (c) => c.text("Hukuk Worker"));
 app.route("/health", health);
