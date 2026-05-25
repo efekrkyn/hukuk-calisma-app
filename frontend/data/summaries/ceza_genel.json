@@ -1,0 +1,21 @@
+{
+  "title": "Ceza Hukuku Genel Hükümler - Son Gece Özeti",
+  "items": [
+    {
+      "topic": "Suçun Unsurları",
+      "content": "Suçun unsurları; maddi unsur (hareket, netice, illiyet bağı), manevi unsur (kast veya taksir) ve hukuka aykırılık unsurudur."
+    },
+    {
+      "topic": "Suçta Kanunilik İlkesi",
+      "content": "Kanunun açıkça suç saymadığı bir fiil için kimseye ceza verilemez ve güvenlik tedbiri uygulanamaz. Kıyas yasaktır."
+    },
+    {
+      "topic": "Kast ve Taksir",
+      "content": "Kast, suçun kanuni tanımındaki unsurların bilerek ve istenerek gerçekleştirilmesidir (TCK m.21). Taksir ise, dikkat ve özen yükümlülüğüne aykırılık dolayısıyla, bir davranışın suçun kanuni tanımında belirtilen neticesi öngörülmeyerek gerçekleştirilmesidir."
+    },
+    {
+      "topic": "Teşebbüs",
+      "content": "Kişi, işlemeyi kastettiği bir suçu elverişli hareketlerle doğrudan doğruya icraya başlayıp da elinde olmayan nedenlerle tamamlayamazsa teşebbüs aşamasında kalmış olur (TCK m. 35)."
+    }
+  ]
+}

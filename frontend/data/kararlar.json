@@ -1,0 +1,29 @@
+[
+  {
+    "id": "karar_001",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-01-23",
+    "number": "Karar No: 2024/18",
+    "topic": "Soybağının Reddi ve Dava Hakkı İptali (TMK m. 291)",
+    "summary": "AYM, Türk Medeni Kanunu'nun 291. maddesinin birinci fıkrasında yer alan 'baba olduğunu iddia eden kişi' ibaresinin Anayasa'ya aykırı olduğuna ve iptaline karar vermiştir. Bu iptal kararıyla soybağının reddi davası açma hakkının çerçevesi yeniden şekillenmiştir.",
+    "importance": "Aile hukuku ve soybağı davalarında (HMGS ve Hakimlik sınavları için) 2024 yılının en güncel ve kritik iptal kararlarından biridir."
+  },
+  {
+    "id": "karar_002",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-02-22",
+    "number": "Karar No: 2024/60",
+    "topic": "Adın Değiştirilmesinde İlan Şartının İptali (TMK m. 27)",
+    "summary": "Medeni Kanun'un 27. maddesinde yer alan adın değiştirilmesinin 'ilân' olunacağına ilişkin ibare iptal edilmiştir. Mahkeme, kişisel verilerin korunmasını isteme hakkı bağlamında bu düzenlemeyi Anayasa'ya aykırı bulmuştur.",
+    "importance": "Kişiler Hukukunda isim değişikliği usulünde yapılan devrim niteliğinde bir güncel (2024) Anayasa Mahkemesi içtihadıdır."
+  },
+  {
+    "id": "karar_003",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-05-30",
+    "number": "Karar No: 2024/113",
+    "topic": "Boşanma Davası ve Süre Kısıtlamaları (Red Kararı)",
+    "summary": "Boşanma davası açılabilmesi için öngörülen süreler ve usullere ilişkin itirazlar incelenmiş; mahkeme, kuralın özel hayata ve aile hayatına saygı hakkına yönelik sınırlamanın ölçülü olduğuna karar vererek iptal talebini reddetmiştir.",
+    "importance": "AYM'nin her itirazı kabul etmediğini gösteren, orantılılık ve ölçülülük ilkesinin aile hukukundaki yansımasıdır."
+  }
+]

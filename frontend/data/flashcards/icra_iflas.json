@@ -1,0 +1,12 @@
+[
+  {
+    "id": "fc_icra_001",
+    "front": "Haciz talebi ne zamana kadar geri alınabilir?",
+    "back": "Haciz talebi, haciz işlemi tamamlanana kadar geri alınabilir. Ancak masraflar ödenmişse iade edilmez."
+  },
+  {
+    "id": "fc_icra_002",
+    "front": "İtirazın iptali davası açma süresi nedir?",
+    "back": "İtirazın tebliğinden itibaren 1 yıldır."
+  }
+]

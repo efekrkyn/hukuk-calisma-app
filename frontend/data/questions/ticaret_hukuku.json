@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ticaret_001",
+    "question": "Bir ticari işletmeyi, kısmen de olsa, kendi adına işleten kişiye ne ad verilir?",
+    "options": ["Esnaf", "Tacir", "Şirket Ortakları", "Ticari Temsilci"],
+    "correctAnswer": 1,
+    "explanation": "Türk Ticaret Kanunu m.12'ye göre bir ticari işletmeyi, kısmen de olsa, kendi adına işleten kişiye tacir denir."
+  },
+  {
+    "id": "ticaret_002",
+    "question": "Aşağıdakilerden hangisi şahıs şirketlerinden biridir?",
+    "options": ["Anonim Şirket", "Limited Şirket", "Kollektif Şirket", "Sermayesi Paylara Bölünmüş Komandit Şirket"],
+    "correctAnswer": 2,
+    "explanation": "Kollektif ve Adi Komandit şirketler şahıs şirketleridir. Anonim, Limited ve Sermayesi Paylara Bölünmüş Komandit şirketler sermaye şirketidir."
+  }
+]

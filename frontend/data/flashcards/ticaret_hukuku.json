@@ -1,0 +1,12 @@
+[
+  {
+    "id": "fc_ticaret_001",
+    "front": "Ticaret Siciline tescil kural olarak hangi sürede yapılmalıdır?",
+    "back": "Aksine hüküm yoksa tescil istemi, tescil edilecek olgunun gerçekleştiği tarihten itibaren 15 gün içinde yapılmalıdır."
+  },
+  {
+    "id": "fc_ticaret_002",
+    "front": "Haksız rekabet davasında zamanaşımı süresi ne kadardır?",
+    "back": "Öğrenme tarihinden itibaren 1 yıl ve her halde doğumundan itibaren 3 yıldır."
+  }
+]

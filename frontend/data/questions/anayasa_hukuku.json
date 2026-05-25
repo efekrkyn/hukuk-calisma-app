@@ -1,0 +1,16 @@
+[
+  {
+    "id": "anayasa_001",
+    "question": "1982 Anayasasına göre Türkiye Büyük Millet Meclisi'nin (TBMM) üye tamsayısı kaçtır?",
+    "options": ["450", "500", "550", "600"],
+    "correctAnswer": 3,
+    "explanation": "1982 Anayasası'na göre (2017 değişikliği ile) TBMM, genel oyla seçilen 600 milletvekilinden oluşur."
+  },
+  {
+    "id": "anayasa_002",
+    "question": "Aşağıdakilerden hangisi normlar hiyerarşisinde en üst sırada yer alır?",
+    "options": ["Kanun", "Cumhurbaşkanlığı Kararnamesi", "Anayasa", "Yönetmelik"],
+    "correctAnswer": 2,
+    "explanation": "Normlar hiyerarşisinde Anayasa en üstte yer alır, kanunlar ve kararnameler Anayasaya aykırı olamaz."
+  }
+]

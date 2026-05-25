@@ -1,0 +1,16 @@
+[
+  {
+    "id": "idare_001",
+    "question": "İdarenin hukuka uygunluğunun denetimi kural olarak hangi yargı kolunda yapılır?",
+    "options": ["Adli Yargı", "İdari Yargı", "Anayasa Yargısı", "Uyuşmazlık Yargısı"],
+    "correctAnswer": 1,
+    "explanation": "İdarenin her türlü eylem ve işlemine karşı yargı yolu açıktır ve bu denetim kural olarak İdari Yargı mercilerince (İdare Mahkemeleri, Danıştay) yapılır."
+  },
+  {
+    "id": "idare_002",
+    "question": "Aşağıdakilerden hangisi idari işlemlerin unsurlarından biri değildir?",
+    "options": ["Yetki", "Şekil", "Sebep", "Kast"],
+    "correctAnswer": 3,
+    "explanation": "İdari işlemlerin unsurları Yetki, Şekil, Sebep, Konu ve Maksat'tır. Kast, ceza hukukuna ait bir kavramdır."
+  }
+]

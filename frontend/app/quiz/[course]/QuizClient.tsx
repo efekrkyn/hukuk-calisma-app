@@ -39,12 +39,12 @@ export default function QuizClient({
     if (selectedOption === null || isSubmitted || submitting || !currentQuestion) return;
     setSubmitting(true);
 
-    const isCorrect = selectedOption === currentQuestion.correct_index;
+    const isCorrect = selectedOption === currentQuestion.correctAnswer;
     
     try {
       await submitQuizAttempt({
         course: courseId,
-        topic: currentQuestion.topic,
+        topic: currentQuestion.topic || "Genel",
         question_id: currentQuestion.id,
         selected_answer: selectedOption,
         is_correct: isCorrect ? 1 : 0
@@ -124,7 +124,7 @@ export default function QuizClient({
           <div className="grid gap-3 mt-4">
             {currentQuestion.options.map((option, idx) => {
               const isSelected = selectedOption === idx;
-              const isCorrectOpt = currentQuestion.correct_index === idx;
+              const isCorrectOpt = currentQuestion.correctAnswer === idx;
               
               let buttonStyle = "justify-start h-auto p-4 text-left font-normal border-2 hover:bg-muted/50 transition-all";
               let icon = null;
@@ -177,9 +177,9 @@ export default function QuizClient({
             </div>
           ) : (
             <div className="mt-8 space-y-6 animate-in slide-in-from-bottom-2 fade-in duration-300">
-              <div className={`p-4 rounded-lg border-l-4 ${selectedOption === currentQuestion.correct_index ? "bg-green-500/10 border-green-500" : "bg-red-500/10 border-red-500"}`}>
-                <h4 className={`font-semibold mb-2 ${selectedOption === currentQuestion.correct_index ? "text-green-600" : "text-red-600"}`}>
-                  {selectedOption === currentQuestion.correct_index ? "Tebrikler, Doğru Yanıt!" : "Maalesef Yanlış."}
+              <div className={`mt-6 p-4 rounded-lg border-l-4 ${selectedOption === currentQuestion.correctAnswer ? "bg-green-500/10 border-green-500" : "bg-red-500/10 border-red-500"}`}>
+                <h4 className={`font-semibold mb-2 ${selectedOption === currentQuestion.correctAnswer ? "text-green-600" : "text-red-600"}`}>
+                  {selectedOption === currentQuestion.correctAnswer ? "Tebrikler, Doğru Yanıt!" : "Maalesef Yanlış."}
                 </h4>
                 <p className="text-sm leading-relaxed text-foreground/90">
                   {currentQuestion.explanation}

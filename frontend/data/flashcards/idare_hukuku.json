@@ -1,0 +1,12 @@
+[
+  {
+    "id": "fc_idare_001",
+    "front": "İdari işlemlerin geri alınması, kural olarak hangi süre içinde yapılabilir?",
+    "back": "Kural olarak iptal davası açma süresi içinde (Genel süre 60 gün) geri alınabilir."
+  },
+  {
+    "id": "fc_idare_002",
+    "front": "Devlet tüzel kişiliği dışında kalan kamu idare ve kurumlarına ne ad verilir?",
+    "back": "Yerinden Yönetim Kuruluşları (Mahalli İdareler ve Hizmet Yerinden Yönetim Kuruluşları)"
+  }
+]

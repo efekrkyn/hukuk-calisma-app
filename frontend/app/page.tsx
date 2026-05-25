@@ -84,14 +84,33 @@ export default function Home() {
 
           <div className="pt-2">
             <Link
-              href="/dashboard"
-              className={buttonVariants({ variant: "default", size: "lg" }) + " w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-md mb-4"}
+              href="/hmgs"
+              className={buttonVariants({ variant: "default", size: "lg" }) + " w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 mb-4 animate-pulse"}
             >
-              ⏱️ Çalışma Planı & Pomodoro
+              🎯 HMGS Deneme Simülasyonu
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-3">
+            <Link
+              href="/ozetler"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary"}
+            >
+              ⚡ Son Gece Özetleri
+            </Link>
+            <Link
+              href="/emsal-kararlar"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary"}
+            >
+              ⚖️ Emsal Kararlar
+            </Link>
+            
+            <Link
+              href="/dashboard"
+              className={buttonVariants({ variant: "outline" })}
+            >
+              ⏱️ Pomodoro
+            </Link>
             <Link
               href="/reader"
               className={buttonVariants({ variant: "outline" })}
@@ -102,15 +121,13 @@ export default function Home() {
               href="/practice"
               className={buttonVariants({ variant: "outline" })}
             >
-              ⚖️ Pratik Olaylar
+              📝 Pratik Çöz
             </Link>
             <Link
               href="/kanunlar"
-              className={
-                buttonVariants({ variant: "outline" }) + " col-span-2"
-              }
+              className={buttonVariants({ variant: "outline" })}
             >
-              📜 Kanunlar (16)
+              📜 Kanunlar
             </Link>
           </div>
         </CardContent>

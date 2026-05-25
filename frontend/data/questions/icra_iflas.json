@@ -1,0 +1,16 @@
+[
+  {
+    "id": "icra_001",
+    "question": "İlamsız icra takibinde ödeme emrine itiraz süresi kaç gündür?",
+    "options": ["3 Gün", "5 Gün", "7 Gün", "15 Gün"],
+    "correctAnswer": 2,
+    "explanation": "Genel haciz yoluyla ilamsız icra takibinde ödeme emrine itiraz süresi tebliğden itibaren 7 gündür."
+  },
+  {
+    "id": "icra_002",
+    "question": "Aşağıdakilerden hangisi iflas yollarından biri değildir?",
+    "options": ["Takipli İflas", "Doğrudan Doğruya İflas", "Kambiyo Senetlerine Özgü İflas", "İlamsız İflas"],
+    "correctAnswer": 3,
+    "explanation": "İflas yolları Genel İflas Yolu (Takipli), Kambiyo Senetlerine Mahsus İflas Yolu ve Doğrudan Doğruya İflas Yolu'dur. İlamsız iflas diye bir yol yoktur."
+  }
+]

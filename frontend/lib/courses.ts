@@ -18,14 +18,16 @@ export const COURSES: Course[] = [
   { id: "ticaret_hukuku", name: "Ticaret Hukuku" },
   { id: "kiymetli_evrak", name: "Kıymetli Evrak" },
   { id: "deniz_ticareti", name: "Deniz Ticareti" },
-  // Usul + Yargı
+  // Usul + Yargı + İdare
   { id: "medeni_usul", name: "Medeni Usul" },
   { id: "icra_iflas", name: "İcra İflas" },
+  { id: "idare_hukuku", name: "İdare Hukuku" },
   { id: "idari_yargilama", name: "İdari Yargı" },
   // Milletlerarası
   { id: "milletlerarasi_kamu", name: "Milletlerarası Kamu Hukuku" },
   { id: "milletlerarasi_ozel", name: "MÖHUK (Milletlerarası Özel)" },
-  // Genel kamu + felsefe/sosyoloji
+  // Genel kamu + felsefe/sosyoloji + Anayasa
+  { id: "anayasa_hukuku", name: "Anayasa Hukuku" },
   { id: "genel_kamu", name: "Genel Kamu Hukuku" },
   { id: "hukuk_felsefesi", name: "Hukuk Felsefesi" },
   { id: "hukuk_sosyolojisi", name: "Hukuk Sosyolojisi" },
