@@ -85,47 +85,87 @@ export default function Home() {
           <div className="pt-2">
             <Link
               href="/hmgs"
-              className={buttonVariants({ variant: "default", size: "lg" }) + " w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 mb-4 animate-pulse"}
+              className={buttonVariants({ variant: "default", size: "lg" }) + " w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20 mb-3 animate-pulse"}
             >
               🎯 HMGS Deneme Simülasyonu
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider pt-1">Yapay Zeka Araçları</p>
+          <div className="grid grid-cols-2 gap-2">
+            <Link
+              href="/dinamik-test"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
+            >
+              ✨ Dinamik Test Üret
+            </Link>
+            <Link
+              href="/dilekce-lab"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
+            >
+              ✍️ Dilekçe Lab
+            </Link>
+            <Link
+              href="/not-analiz"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
+            >
+              📄 Not Analizi
+            </Link>
+            <Link
+              href="/sozluk"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
+            >
+              📖 Hukuk Sözlüğü
+            </Link>
+          </div>
+
+          <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider pt-2">Çalışma Araçları</p>
+          <div className="grid grid-cols-2 gap-2">
             <Link
               href="/ozetler"
-              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary"}
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               ⚡ Son Gece Özetleri
             </Link>
             <Link
               href="/emsal-kararlar"
-              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary"}
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               ⚖️ Emsal Kararlar
             </Link>
-            
+            <Link
+              href="/takvim"
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
+            >
+              📅 Sınav Takvimi
+            </Link>
+            <Link
+              href="/mevzuat"
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
+            >
+              📰 Mevzuat Takip
+            </Link>
             <Link
               href="/dashboard"
-              className={buttonVariants({ variant: "outline" })}
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               ⏱️ Pomodoro
             </Link>
             <Link
               href="/reader"
-              className={buttonVariants({ variant: "outline" })}
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
-              📖 Kitaplar
+              📚 Kütüphane
             </Link>
             <Link
               href="/practice"
-              className={buttonVariants({ variant: "outline" })}
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               📝 Pratik Çöz
             </Link>
             <Link
               href="/kanunlar"
-              className={buttonVariants({ variant: "outline" })}
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               📜 Kanunlar
             </Link>

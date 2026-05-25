@@ -176,6 +176,67 @@ export async function* streamChat(params: {
   }
 }
 
+export async function* streamDilekce(params: {
+  documentType: string;
+  details: string;
+}): AsyncGenerator<ChatEvent> {
+  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+  const r = await fetch(`${WORKER_URL}/ai/dilekce`, {
+    method: "POST",
+    credentials: "include",
+    headers,
+    body: JSON.stringify(params),
+  });
+  if (!r.ok || !r.body) {
+    const text = await r.text().catch(() => "");
+    throw new Error(`AI dilekce ${r.status}: ${text.slice(0, 200)}`);
+  }
+  const reader = r.body.getReader();
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let currentEvent: string | null = null;
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+    buffer += decoder.decode(value, { stream: true });
+    buffer = buffer.replace(/\r\n/g, "\n");
+
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+
+    for (const line of lines) {
+      if (line === "") {
+        currentEvent = null;
+        continue;
+      }
+      if (line.startsWith("event: ")) {
+        currentEvent = line.slice(7).trim();
+        continue;
+      }
+      if (line.startsWith("data: ")) {
+        const payload = line.slice(6);
+        try {
+          if (currentEvent === "token") {
+            yield { type: "token", data: JSON.parse(payload) as string };
+          } else if (currentEvent === "done") {
+            yield { type: "done" };
+          } else if (currentEvent === "error") {
+            yield { type: "error", data: JSON.parse(payload) as string };
+          }
+        } catch {}
+        continue;
+      }
+    }
+  }
+}
+
 // ===== Flashcards (SRS) =====
 
 export type FlashcardState = {
@@ -227,3 +288,23 @@ export async function submitQuizAttempt(req: {
     body: JSON.stringify(req),
   });
 }
+
+export type DynamicQuizQuestion = {
+  question: string;
+  options: string[];
+  correctAnswer: number;
+  explanation: string;
+};
+
+export async function generateDynamicQuiz(req: {
+  course: string;
+  topic: string;
+  count: number;
+  difficulty: string;
+}): Promise<DynamicQuizQuestion[]> {
+  return fetchWorker<DynamicQuizQuestion[]>("/ai/generate-quiz", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+

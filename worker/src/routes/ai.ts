@@ -200,3 +200,153 @@ ai.post("/practice-grade", async (c) => {
 
   return c.json(result);
 });
+
+// Dilekçe & Sözleşme Laboratuvarı Endpoint
+ai.post("/dilekce", async (c) => {
+  let body: {
+    documentType: string;
+    details: string;
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  if (!body.documentType || !body.details) {
+    return c.json({ error: "documentType and details are required" }, 400);
+  }
+
+  const systemInstruction = `Sen profesyonel, 20 yıllık tecrübeli bir Türk Avukatsın.
+Senden istenen hukuki metni (dilekçe, sözleşme veya ihtarname) HMK'ya (Hukuk Muhakemeleri Kanunu) ve ilgili maddi hukuk kurallarına (TMK, TBK vs.) tam uygun olarak hazırlamalısın.
+Dilekçelerde; Görevli ve Yetkili Mahkeme, Davacı, Davalı, Konu, Açıklamalar, Hukuki Nedenler, Deliller, Sonuç ve İstem bölümlerinin eksiksiz ve resmi bir dille yazıldığından emin ol.
+Boş bırakılması gereken yerleri (İsim, T.C. Kimlik No vs.) [.....] şeklinde bırak.
+Sadece talep edilen metni oluştur, ekstra sohbet etme.`;
+
+  const prompt = `Lütfen aşağıdaki detaylara göre bir ${body.documentType} taslağı hazırla.
+Detaylar:
+${body.details}`;
+
+  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  const encoder = new TextEncoder();
+
+  const stream = new ReadableStream({
+    async start(controller) {
+      try {
+        for await (const tok of provider.streamChat(prompt, systemInstruction)) {
+          controller.enqueue(
+            encoder.encode(`event: token\ndata: ${JSON.stringify(tok)}\n\n`)
+          );
+        }
+        controller.enqueue(encoder.encode(`event: done\ndata: ok\n\n`));
+      } catch (e) {
+        controller.enqueue(
+          encoder.encode(
+            `event: error\ndata: ${JSON.stringify(String(e))}\n\n`
+          )
+        );
+      }
+      controller.close();
+    },
+  });
+
+  return new Response(stream, {
+    headers: {
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+      "X-Accel-Buffering": "no",
+    },
+  });
+});
+
+// Dinamik Soru Üretici Endpoint (JSON Mode)
+ai.post("/generate-quiz", async (c) => {
+  let body: {
+    course: string;
+    topic: string;
+    count: number;
+    difficulty: string;
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const systemInstruction = `Sen uzman bir hukuk profesörüsün. Senden çoktan seçmeli, zorluk seviyesi "${body.difficulty}" olan tam olarak ${body.count} adet hukuk sorusu üretmen isteniyor.
+Üreteceğin soruların konusu: "${body.course} - ${body.topic}".
+Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama yazma.
+Şu formatta olmalı:
+[
+  {
+    "question": "Soru metni buraya",
+    "options": ["A şıkkı", "B şıkkı", "C şıkkı", "D şıkkı", "E şıkkı"],
+    "correctAnswer": 2, // doğru şıkkın index'i (0'dan başlar)
+    "explanation": "Doğru cevabın hukuki gerekçesi ve açıklaması"
+  }
+]`;
+
+  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  
+  try {
+    let fullText = "";
+    for await (const tok of provider.streamChat("Lütfen JSON formatında soruları üret.", systemInstruction)) {
+      fullText += tok;
+    }
+    
+    // Temizle
+    const cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
+    return c.json(parsed);
+  } catch (e) {
+    console.error("Quiz generation error:", e);
+    return c.json({ error: "Sorular üretilemedi." }, 500);
+  }
+});
+
+// Canlı Not Analizi (Metin okuyup Soru Çıkarma)
+ai.post("/analyze-notes", async (c) => {
+  let body: {
+    notesText: string;
+    count: number;
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  if (!body.notesText || body.notesText.trim().length < 50) {
+    return c.json({ error: "Lütfen en az 50 karakterlik bir metin girin." }, 400);
+  }
+
+  const systemInstruction = `Sen bir hukuk sınavı hazırlayıcısısın. Kullanıcı sana uzun bir ders notu verecek. Senden bu ders notunu dikkatlice okuyup, içindeki BİLGİLERE dayanarak ${body.count || 3} adet çoktan seçmeli soru hazırlaman isteniyor.
+Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama yazma.
+[
+  {
+    "question": "Soru metni",
+    "options": ["A", "B", "C", "D", "E"],
+    "correctAnswer": 0,
+    "explanation": "Neden A şıkkının doğru olduğuna dair nottan alıntı yaparak açıklama"
+  }
+]`;
+
+  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  
+  try {
+    let fullText = "";
+    for await (const tok of provider.streamChat(`İşte ders notu:\n\n${body.notesText}`, systemInstruction)) {
+      fullText += tok;
+    }
+    
+    const cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
+    return c.json(parsed);
+  } catch (e) {
+    console.error("Notes analysis error:", e);
+    return c.json({ error: "Notlardan soru çıkarılamadı." }, 500);
+  }
+});
+
+
