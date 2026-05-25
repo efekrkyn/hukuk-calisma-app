@@ -1,0 +1,72 @@
+[
+  {
+    "id": "q_borc_001",
+    "course": "borclar_genel",
+    "topic": "Sözleşmenin Kurulması",
+    "question": "Aşağıdakilerden hangisi bir sözleşmenin esaslı unsurlarından biri değildir?",
+    "options": [
+      "Karşılıklı ve birbirine uygun irade beyanları",
+      "Tarafların hak ehliyeti ve fiil ehliyetine sahip olması",
+      "Sözleşme konusunun emredici hukuk kurallarına aykırı olmaması",
+      "Sözleşmenin yazılı şekilde yapılması"
+    ],
+    "correct_index": 3,
+    "explanation": "Türk Borçlar Kanunu'na göre kural olarak sözleşmeler şekil serbestisine tabidir. Kanunda aksi öngörülmedikçe sözleşmelerin geçerliliği hiçbir şekle bağlı değildir (TBK m. 12). Dolayısıyla yazılı şekil, her sözleşme için esaslı bir unsur değildir."
+  },
+  {
+    "id": "q_borc_002",
+    "course": "borclar_genel",
+    "topic": "İfa İmkansızlığı",
+    "question": "Sözleşme kurulduğu anda sözleşmenin konusunun objektif olarak imkansız olması durumunda aşağıdaki yaptırımlardan hangisi uygulanır?",
+    "options": [
+      "İptal edilebilirlik",
+      "Kesin hükümsüzlük (Butlan)",
+      "Nispi butlan",
+      "Tek taraflı bağlamazlık"
+    ],
+    "correct_index": 1,
+    "explanation": "TBK m. 27 uyarınca, kanunun emredici hükümlerine, ahlaka, kamu düzenine, kişilik haklarına aykırı veya konusu imkânsız olan sözleşmeler kesin olarak hükümsüzdür (butlan)."
+  },
+  {
+    "id": "q_borc_003",
+    "course": "borclar_genel",
+    "topic": "Temsil",
+    "question": "Yetkisiz temsilcinin yaptığı sözleşme ile ilgili aşağıdaki ifadelerden hangisi yanlıştır?",
+    "options": [
+      "Temsil olunan sonradan icazet verirse sözleşme başından itibaren geçerli olur.",
+      "Üçüncü kişi, temsil olunana icazet vermesi için uygun bir süre verebilir.",
+      "Temsil olunan icazet vermezse sözleşme kesin olarak hükümsüz olur.",
+      "Sözleşme temsil olunana karşı hiçbir şekilde sonuç doğurmaz, icazet verilmesi dahi sonucu değiştirmez."
+    ],
+    "correct_index": 3,
+    "explanation": "Yetkisiz temsilcinin yaptığı işlem askıda hükümsüzdür. Temsil olunan sonradan bu işleme icazet (onay) verirse işlem başından itibaren geçerli hale gelir ve temsil olunanı bağlar (TBK m. 46). Dolayısıyla icazet verilmesi dahi sonucu değiştirmez ifadesi yanlıştır."
+  },
+  {
+    "id": "q_borc_004",
+    "course": "borclar_genel",
+    "topic": "Haksız Fiil",
+    "question": "Haksız fiil sorumluluğunun unsurları arasında aşağıdakilerden hangisi yer almaz?",
+    "options": [
+      "Hukuka aykırı fiil",
+      "Kusur",
+      "Sözleşmeye aykırılık",
+      "Zarar ve illiyet bağı"
+    ],
+    "correct_index": 2,
+    "explanation": "Haksız fiil sorumluluğu; hukuka aykırı fiil, zarar, kusur ve illiyet bağı unsurlarından oluşur. Sözleşmeye aykırılık (akde aykırılık) ise haksız fiilin değil, borca aykırılığın bir unsurudur."
+  },
+  {
+    "id": "q_borc_005",
+    "course": "borclar_genel",
+    "topic": "Zamanaşımı",
+    "question": "Kural olarak, Türk Borçlar Kanunu'nda düzenlenen alacak hakları aksi kanunda öngörülmedikçe kaç yıllık zamanaşımına tabidir?",
+    "options": [
+      "1 yıl",
+      "2 yıl",
+      "5 yıl",
+      "10 yıl"
+    ],
+    "correct_index": 3,
+    "explanation": "TBK m. 146 uyarınca: 'Kanunda aksine bir hüküm bulunmadıkça, her alacak on yıllık zamanaşımına tabidir.'"
+  }
+]

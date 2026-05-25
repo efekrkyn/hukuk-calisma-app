@@ -15,6 +15,7 @@ import {
   type SyncStatus,
   type PdfListResponse,
 } from "@/lib/api";
+import GlobalAiAssistant from "@/components/GlobalAiAssistant";
 
 export default function Home() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
@@ -33,8 +34,10 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="min-h-screen p-6 flex items-center justify-center bg-background">
-      <Card className="max-w-md w-full">
+    <main className="min-h-screen p-6 md:p-12 lg:p-24 bg-background">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        {/* Left Side: Navigation & Stats */}
+        <Card className="w-full lg:col-span-4">
         <CardHeader>
           <CardTitle>Hukuk Çalışma 📚</CardTitle>
         </CardHeader>
@@ -95,6 +98,12 @@ export default function Home() {
           </div>
         </CardContent>
       </Card>
-    </main>
+
+      {/* Right Side: Omni AI Assistant */}
+      <div className="w-full lg:col-span-8 h-full min-h-[600px] flex items-stretch">
+        <GlobalAiAssistant />
+      </div>
+    </div>
+  </main>
   );
 }

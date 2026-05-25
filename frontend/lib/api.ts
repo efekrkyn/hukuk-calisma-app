@@ -175,3 +175,55 @@ export async function* streamChat(params: {
     }
   }
 }
+
+// ===== Flashcards (SRS) =====
+
+export type FlashcardState = {
+  card_id: string;
+  course: string;
+  ease: number;
+  interval_days: number;
+  next_review: number;
+  last_seen: number | null;
+  streak: number;
+};
+
+export async function getFlashcardState(courseId: string): Promise<{ state: FlashcardState[] }> {
+  return fetchWorker<{ state: FlashcardState[] }>(`/flashcards/state?course=${encodeURIComponent(courseId)}`);
+}
+
+export async function submitFlashcardReview(req: {
+  card_id: string;
+  course: string;
+  grade: number; // 0: Again, 1: Hard, 2: Good
+}): Promise<{ success: boolean; newState: FlashcardState }> {
+  return fetchWorker<{ success: boolean; newState: FlashcardState }>("/flashcards/review", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}
+
+// ===== Quiz Engine =====
+
+export type QuizStats = {
+  total_attempts: number;
+  correct_count: number;
+  weakTopics: string[];
+};
+
+export async function getQuizStats(courseId: string): Promise<QuizStats> {
+  return fetchWorker<QuizStats>(`/quiz/stats?course=${encodeURIComponent(courseId)}`);
+}
+
+export async function submitQuizAttempt(req: {
+  course: string;
+  topic: string;
+  question_id: string;
+  selected_answer: number;
+  is_correct: number;
+}): Promise<{ success: boolean; id: string }> {
+  return fetchWorker<{ success: boolean; id: string }>("/quiz/submit", {
+    method: "POST",
+    body: JSON.stringify(req),
+  });
+}

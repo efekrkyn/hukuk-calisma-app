@@ -7,6 +7,8 @@ import { pdf } from "./routes/pdf";
 import { admin } from "./routes/admin";
 import { ai } from "./routes/ai";
 import { authRouter } from "./routes/auth";
+import { flashcardsRouter } from "./routes/flashcards";
+import { quizRouter } from "./routes/quiz";
 
 type Bindings = {
   DB?: D1Database;
@@ -67,5 +69,7 @@ app.route("/sync", sync);
 app.route("/pdf", pdf);
 app.route("/admin", admin);
 app.route("/ai", ai);
+app.route("/flashcards", flashcardsRouter);
+app.route("/quiz", quizRouter);
 
 export default app;

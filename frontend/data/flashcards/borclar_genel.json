@@ -1,0 +1,32 @@
+[
+  {
+    "id": "borclar_genel_001",
+    "course": "borclar_genel",
+    "front": "Borç ilişkisinin kaynakları nelerdir?",
+    "back": "1. Hukuki işlemler (Sözleşmeler)\n2. Haksız fiiller\n3. Sebepsiz zenginleşme"
+  },
+  {
+    "id": "borclar_genel_002",
+    "course": "borclar_genel",
+    "front": "Sözleşmenin kurulabilmesi için gereken temel şart nedir?",
+    "back": "Tarafların karşılıklı ve birbirine uygun irade beyanında (icap ve kabul) bulunmasıdır."
+  },
+  {
+    "id": "borclar_genel_003",
+    "course": "borclar_genel",
+    "front": "Haksız fiilin unsurları nelerdir?",
+    "back": "1. Fiil\n2. Hukuka aykırılık\n3. Kusur\n4. Zarar\n5. İlliyet bağı (nedensellik bağı)"
+  },
+  {
+    "id": "borclar_genel_004",
+    "course": "borclar_genel",
+    "front": "Sebepsiz zenginleşme davasının zamanaşımı süresi ne kadardır?",
+    "back": "Hak sahibinin geri isteme hakkı olduğunu öğrendiği tarihten başlayarak 2 yıl ve her hâlde zenginleşmenin gerçekleştiği tarihten başlayarak 10 yıldır."
+  },
+  {
+    "id": "borclar_genel_005",
+    "course": "borclar_genel",
+    "front": "Müteselsil borçluluk ne demektir?",
+    "back": "Birden çok borçludan her birinin, alacaklıya karşı borcun tamamından sorumlu olduğu, alacaklının borcun tamamını veya bir kısmını dilediği borçludan isteyebildiği borçluluk türüdür."
+  }
+]
