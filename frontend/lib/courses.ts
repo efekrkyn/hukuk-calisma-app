@@ -5,6 +5,7 @@ export const COURSES: Course[] = [
   { id: "borclar_genel", name: "Borçlar Genel Hukuku" },
   { id: "borclar_ozel", name: "Borçlar Özel Hukuku" },
   // Diğer medeni dersler
+  { id: "medeni_hukuk", name: "Medeni Hukuk (Giriş ve Kişiler)" },
   { id: "miras_hukuku", name: "Miras Hukuku" },
   { id: "esya_hukuku", name: "Eşya Hukuku" },
   // Ceza

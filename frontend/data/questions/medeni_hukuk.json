@@ -1,0 +1,47 @@
+[
+  {
+    "id": "mh_q1",
+    "question": "Aşağıdakilerden hangisi fiil ehliyetinin şartlarından biri değildir?",
+    "options": [
+      "Ergin olmak",
+      "Ayırt etme gücüne sahip olmak",
+      "Kısıtlı olmamak",
+      "Hak ehliyetine sahip olmak",
+      "Evli olmak"
+    ],
+    "correctAnswer": 4,
+    "explanation": "Fiil ehliyetinin üç temel şartı vardır: Ergin olmak, ayırt etme gücüne sahip olmak ve kısıtlı olmamak. Evli olmak fiil ehliyetinin genel bir şartı değildir.",
+    "category": "Kişiler Hukuku",
+    "difficulty": "medium"
+  },
+  {
+    "id": "mh_q2",
+    "question": "Gerçek kişilik ne zaman sona erer?",
+    "options": [
+      "Sadece ölümle",
+      "Ölüm veya gaiplik kararıyla",
+      "Kısıtlanma kararıyla",
+      "Fiil ehliyetinin kaybıyla",
+      "İflas kararıyla"
+    ],
+    "correctAnswer": 1,
+    "explanation": "Kişilik ölümle veya mahkemece verilen gaiplik kararıyla sona erer. (TMK m. 28, m. 31)",
+    "category": "Kişiler Hukuku",
+    "difficulty": "easy"
+  },
+  {
+    "id": "mh_q3",
+    "question": "Tam ehliyetsizlerin yaptığı sözleşmelerin yaptırımı nedir?",
+    "options": [
+      "İptal edilebilirlik",
+      "Nispi butlan",
+      "Mutlak butlan",
+      "Tek taraflı bağlamazlık",
+      "Geçerlidir"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Tam ehliyetsizlerin (ayırt etme gücü olmayanların) yaptıkları hukuki işlemler, TMK m. 15 gereği kural olarak kesin hükümsüzdür (mutlak butlan).",
+    "category": "Kişiler Hukuku",
+    "difficulty": "hard"
+  }
+]

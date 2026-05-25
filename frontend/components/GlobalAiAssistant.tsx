@@ -220,15 +220,15 @@ export default function GlobalAiAssistant() {
   };
 
   return (
-    <div className={`flex flex-col border bg-card text-card-foreground shadow-sm overflow-hidden transition-all duration-300 ${isFullscreen ? "fixed inset-0 z-50 rounded-none h-screen w-screen" : "relative h-[600px] w-full max-w-2xl mx-auto rounded-xl"}`}>
+    <div className={`flex flex-col bg-card/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden h-[600px] w-full max-w-2xl mx-auto transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 !h-[calc(100vh-32px)] !max-w-none" : "relative"}`}>
       {/* Header */}
-      <div className="p-4 border-b bg-muted/30 flex items-center justify-between">
+      <div className="p-4 border-b border-white/10 bg-muted/30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="bg-primary/20 p-2 rounded-lg">
-            <Sparkles className="w-5 h-5 text-primary" />
+          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary shrink-0">
+            <Sparkles className="w-5 h-5" />
           </div>
           <div>
-            <h2 className="font-semibold text-lg">Omni AI Asistan</h2>
+            <h2 className="font-semibold text-lg text-gradient">İrem'in Asistanı</h2>
             <p className="text-xs text-muted-foreground hidden sm:block">Akıllı Sınav Arkadaşın</p>
           </div>
         </div>

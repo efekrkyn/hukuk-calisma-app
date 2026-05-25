@@ -1,0 +1,47 @@
+[
+  {
+    "id": "cg_q1",
+    "question": "Aşağıdakilerden hangisi bir hukuka uygunluk nedeni değildir?",
+    "options": [
+      "Meşru savunma",
+      "Kanunun hükmünü yerine getirme",
+      "Haksız tahrik",
+      "Hakkın kullanılması",
+      "İlgilinin rızası"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Haksız tahrik bir hukuka uygunluk nedeni değil, kusurluluğu etkileyen (cezayı indiren) bir nedendir.",
+    "category": "Ceza Hukuku Genel",
+    "difficulty": "medium"
+  },
+  {
+    "id": "cg_q2",
+    "question": "Olası kast ile bilinçli taksir arasındaki temel fark nedir?",
+    "options": [
+      "Olası kastta netice öngörülmez, bilinçli taksirde öngörülür",
+      "Bilinçli taksirde netice kabullenilir, olası kastta kabullenilmez",
+      "Olası kastta öngörülen netice 'olursa olsun' denilerek kabullenilir, bilinçli taksirde ise neticenin gerçekleşmeyeceğine güvenilir",
+      "İkisi de aynıdır, sadece ceza miktarı değişir",
+      "Olası kast sadece taksirli suçlarda uygulanır"
+    ],
+    "correctAnswer": 2,
+    "explanation": "Olası kastta fail neticeyi öngörür ve kabullenir (olursa olsun der). Bilinçli taksirde ise neticeyi öngörür ancak yeteneğine, şansına vs. güvenerek gerçekleşmeyeceğini düşünür (istemez).",
+    "category": "Ceza Hukuku Genel",
+    "difficulty": "hard"
+  },
+  {
+    "id": "cg_q3",
+    "question": "Gönüllü vazgeçme durumunda faile hangi ceza verilir?",
+    "options": [
+      "Tam ceza verilir",
+      "Ceza yarı oranında indirilir",
+      "Teşebbüsten ceza verilir",
+      "Suça teşebbüsten dolayı ceza verilmez",
+      "Sadece adli para cezası verilir"
+    ],
+    "correctAnswer": 3,
+    "explanation": "TCK m. 36'ya göre; fail, suçun icra hareketlerinden gönüllü vazgeçer veya kendi çabalarıyla suçun tamamlanmasını veya neticenin gerçekleşmesini önlerse, teşebbüsten dolayı cezalandırılmaz.",
+    "category": "Ceza Hukuku Genel",
+    "difficulty": "medium"
+  }
+]

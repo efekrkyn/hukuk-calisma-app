@@ -1,0 +1,32 @@
+[
+  {
+    "id": "cg_fc_1",
+    "front": "Suçta ve cezada kanunilik ilkesi nedir?",
+    "back": "İşlendiği zaman kanunun suç saymadığı bir fiilden dolayı kimseye ceza verilemez ve kanunda yazılı cezadan daha ağır bir ceza verilemez.",
+    "category": "Ceza Hukuku Genel"
+  },
+  {
+    "id": "cg_fc_2",
+    "front": "Kast nedir?",
+    "back": "Suçun kanuni tanımındaki unsurların bilerek ve istenerek gerçekleştirilmesidir.",
+    "category": "Ceza Hukuku Genel"
+  },
+  {
+    "id": "cg_fc_3",
+    "front": "Taksir nedir?",
+    "back": "Dikkat ve özen yükümlülüğüne aykırılık dolayısıyla, bir davranışın suçun kanuni tanımında belirtilen neticesi öngörülmeyerek gerçekleştirilmesidir.",
+    "category": "Ceza Hukuku Genel"
+  },
+  {
+    "id": "cg_fc_4",
+    "front": "Teşebbüs nedir?",
+    "back": "Kişinin, işlemeyi kastettiği bir suçu elverişli hareketlerle doğrudan doğruya icraya başlayıp da elinde olmayan nedenlerle tamamlayamamasıdır.",
+    "category": "Ceza Hukuku Genel"
+  },
+  {
+    "id": "cg_fc_5",
+    "front": "Hukuka uygunluk nedenleri nelerdir?",
+    "back": "Kanunun hükmü ve amirin emri, Meşru savunma (müdafaa), Hakkın kullanılması ve İlgilinin rızası.",
+    "category": "Ceza Hukuku Genel"
+  }
+]

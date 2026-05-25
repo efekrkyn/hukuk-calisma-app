@@ -108,7 +108,7 @@ export default function Home() {
         </CardContent>
       </Card>
 
-      {/* Right Side: Omni AI Assistant */}
+      {/* Right Side: İrem'in Asistanı */}
       <div className="w-full lg:col-span-8 h-full min-h-[600px] flex items-stretch">
         <GlobalAiAssistant />
       </div>

@@ -1,0 +1,32 @@
+[
+  {
+    "id": "mh_fc_1",
+    "front": "Gerçek kişilik ne zaman başlar?",
+    "back": "Çocuğun sağ olarak tamamıyla doğduğu anda başlar. (TMK m.28)",
+    "category": "Kişiler Hukuku"
+  },
+  {
+    "id": "mh_fc_2",
+    "front": "Hak ehliyeti nedir?",
+    "back": "Kişilerin hak sahibi olabilme ve borç altına girebilme ehliyetidir. Her insan hak ehliyetine sahiptir.",
+    "category": "Kişiler Hukuku"
+  },
+  {
+    "id": "mh_fc_3",
+    "front": "Fiil ehliyetinin şartları nelerdir?",
+    "back": "1) Ergin olmak, 2) Ayırt etme gücüne sahip olmak, 3) Kısıtlı olmamak.",
+    "category": "Kişiler Hukuku"
+  },
+  {
+    "id": "mh_fc_4",
+    "front": "Gaiplik nedir?",
+    "back": "Ölüm tehlikesi içinde kaybolan veya kendisinden uzun zamandır haber alınamayan bir kimsenin, mahkeme kararıyla hukuken ölü sayılması durumudur.",
+    "category": "Kişiler Hukuku"
+  },
+  {
+    "id": "mh_fc_5",
+    "front": "Tüzel kişilik nasıl kazanılır?",
+    "back": "Kural olarak, kanunun öngördüğü şartlar yerine getirilip sicile tescil edilmekle (veya kanundaki özel düzenlemeyle) kazanılır.",
+    "category": "Kişiler Hukuku"
+  }
+]
