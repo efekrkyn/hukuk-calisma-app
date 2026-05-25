@@ -89,29 +89,43 @@ export async function* streamChat(params: {
   const reader = r.body.getReader();
   const decoder = new TextDecoder();
   let buffer = "";
+  let currentEvent: string | null = null;
+
   while (true) {
     const { value, done } = await reader.read();
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
-    const events = buffer.split("\n\n");
-    buffer = events.pop() ?? "";
-    for (const ev of events) {
-      const lines = ev.split("\n");
-      const eventLine = lines.find((l) => l.startsWith("event: "))?.slice(7);
-      const dataLine = lines.find((l) => l.startsWith("data: "))?.slice(6);
-      if (!eventLine || !dataLine) continue;
-      try {
-        if (eventLine === "sources") {
-          yield { type: "sources", data: JSON.parse(dataLine) as ChatSource[] };
-        } else if (eventLine === "token") {
-          yield { type: "token", data: JSON.parse(dataLine) as string };
-        } else if (eventLine === "done") {
-          yield { type: "done" };
-        } else if (eventLine === "error") {
-          yield { type: "error", data: JSON.parse(dataLine) as string };
+    buffer = buffer.replace(/\r\n/g, "\n");
+
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+
+    for (const line of lines) {
+      if (line === "") {
+        // boş satır = event dispatch boundary (zaten yield ediyoruz)
+        currentEvent = null;
+        continue;
+      }
+      if (line.startsWith("event: ")) {
+        currentEvent = line.slice(7).trim();
+        continue;
+      }
+      if (line.startsWith("data: ")) {
+        const payload = line.slice(6);
+        try {
+          if (currentEvent === "sources") {
+            yield { type: "sources", data: JSON.parse(payload) as ChatSource[] };
+          } else if (currentEvent === "token") {
+            yield { type: "token", data: JSON.parse(payload) as string };
+          } else if (currentEvent === "done") {
+            yield { type: "done" };
+          } else if (currentEvent === "error") {
+            yield { type: "error", data: JSON.parse(payload) as string };
+          }
+        } catch {
+          // partial/malformed event
         }
-      } catch {
-        // partial/malformed event
+        continue;
       }
     }
   }

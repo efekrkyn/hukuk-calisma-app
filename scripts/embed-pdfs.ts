@@ -151,8 +151,9 @@ async function processPdf(fullPath: string): Promise<Chunk[]> {
   }
   await parser.destroy();
 
+  // pdf-parse v2: PageTextResult { num, text }
   const pages = (textResult.pages ?? []).map((p: any) => ({
-    pageNumber: p.pageNumber as number,
+    pageNumber: (p.num ?? p.pageNumber) as number,
     text: (p.text as string) ?? "",
   }));
 

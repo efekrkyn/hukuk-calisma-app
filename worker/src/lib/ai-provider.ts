@@ -20,40 +20,81 @@ export class GeminiProvider implements AIProvider {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { temperature: 0.3, maxOutputTokens: 2048 },
+        generationConfig: {
+          temperature: 0.3,
+          maxOutputTokens: 4096,
+          thinkingConfig: { thinkingBudget: 0 },
+        },
       }),
     });
     if (!r.ok || !r.body) {
       const err = await r.text();
+      console.error(`gemini http ${r.status}:`, err.slice(0, 500));
       throw new Error(`gemini ${r.status}: ${err.slice(0, 300)}`);
     }
 
     const reader = r.body.getReader();
     const decoder = new TextDecoder();
     let buffer = "";
+    let yieldedAny = false;
+
+    // SSE line-by-line: her "data: ..." satırı tek başına geçerli JSON event.
+    // Blank line ayrac yerine direkt satır işleme (daha sağlam).
     while (true) {
       const { value, done } = await reader.read();
       if (done) break;
       buffer += decoder.decode(value, { stream: true });
-      const events = buffer.split("\n\n");
-      buffer = events.pop() ?? "";
-      for (const ev of events) {
-        const dataLine = ev
-          .split("\n")
-          .find((l) => l.startsWith("data: "))
-          ?.slice(6)
-          .trim();
-        if (!dataLine || dataLine === "[DONE]") continue;
+
+      // CRLF normalize
+      buffer = buffer.replace(/\r\n/g, "\n");
+
+      // Tam satırları işle, son yarım satırı buffer'da bırak
+      const lines = buffer.split("\n");
+      buffer = lines.pop() ?? "";
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) continue;
+        if (!trimmed.startsWith("data: ")) continue;
+        const payload = trimmed.slice(6);
+        if (payload === "[DONE]") continue;
         try {
-          const j = JSON.parse(dataLine);
+          const j = JSON.parse(payload);
           const text = j?.candidates?.[0]?.content?.parts?.[0]?.text as
             | string
             | undefined;
-          if (text) yield text;
-        } catch {
-          // partial chunk, ignore
+          if (text) {
+            yieldedAny = true;
+            yield text;
+          }
+        } catch (e) {
+          console.error("gemini SSE parse fail:", payload.slice(0, 200));
         }
       }
+    }
+
+    // Son kalan buffer (newline ile bitmemiş son event)
+    const last = buffer.trim();
+    if (last.startsWith("data: ")) {
+      const payload = last.slice(6);
+      if (payload && payload !== "[DONE]") {
+        try {
+          const j = JSON.parse(payload);
+          const text = j?.candidates?.[0]?.content?.parts?.[0]?.text as
+            | string
+            | undefined;
+          if (text) {
+            yieldedAny = true;
+            yield text;
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    if (!yieldedAny) {
+      console.error("gemini yielded 0 tokens. last buffer:", buffer.slice(0, 500));
     }
   }
 }
