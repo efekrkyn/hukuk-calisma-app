@@ -4,7 +4,7 @@ import SozlukClient from "./SozlukClient";
 
 export default function SozlukPage() {
   return (
-    <main className="min-h-screen bg-background p-4 md:p-8">
+    <main className="min-h-[100dvh] bg-background p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <div>
           <Link

@@ -28,7 +28,7 @@ export default async function OzetReader({ params }: { params: Promise<Params> }
   }
 
   return (
-    <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6 min-h-screen">
+    <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6 min-h-[100dvh]">
       <div className="flex items-center gap-4 border-b border-border/10 pb-4">
         <Link
           href="/ozetler"
