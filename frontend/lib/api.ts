@@ -74,7 +74,7 @@ export const api = {
 };
 
 export const pdfUrl = (key: string) =>
-  `${WORKER_URL}/pdf/${key.split("/").map(encodeURIComponent).join("/")}`;
+  `/api/worker/pdf/${key.split("/").map(encodeURIComponent).join("/")}`;
 
 // ===== Practice Grading =====
 
