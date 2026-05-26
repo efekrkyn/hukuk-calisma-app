@@ -39,6 +39,15 @@ export default function DinamikTestClient() {
 
     const courseName = COURSES.find(c => c.id === course)?.name || course;
 
+    // Token kontrolü
+    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+    if (!token) {
+      setError("Oturum bulunamadı. Lütfen önce giriş yapın.");
+      setIsGenerating(false);
+      window.location.href = "/login";
+      return;
+    }
+
     try {
       const result = await generateDynamicQuiz({
         course: courseName,
@@ -51,9 +60,16 @@ export default function DinamikTestClient() {
       } else {
         setError("Yapay zeka geçerli soru üretemedi, lütfen tekrar deneyin.");
       }
-    } catch (e) {
+    } catch (e: any) {
       console.error(e);
-      setError("Sorular üretilirken sunucu hatası oluştu.");
+      // Auth hatası kontrolü
+      if (e?.message?.includes("401") || e?.message?.includes("Authorization")) {
+        localStorage.removeItem("auth_token");
+        setError("Oturumunuzun süresi dolmuş. Yeniden giriş yapılıyor...");
+        setTimeout(() => { window.location.href = "/login"; }, 1500);
+      } else {
+        setError(`Sorular üretilirken hata oluştu: ${e?.message || "Bilinmeyen hata"}. Lütfen tekrar deneyin.`);
+      }
     } finally {
       setIsGenerating(false);
     }

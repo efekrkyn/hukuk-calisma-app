@@ -274,15 +274,22 @@ ai.post("/generate-quiz", async (c) => {
     return c.json({ error: "invalid JSON" }, 400);
   }
 
-  const systemInstruction = `Sen uzman bir hukuk profesörüsün. Senden çoktan seçmeli, zorluk seviyesi "${body.difficulty}" olan tam olarak ${body.count} adet hukuk sorusu üretmen isteniyor.
+  if (!body.course || !body.topic) {
+    return c.json({ error: "course and topic are required" }, 400);
+  }
+
+  const count = body.count || 5;
+  const difficulty = body.difficulty || "Orta";
+
+  const systemInstruction = `Sen uzman bir Türk hukuk profesörüsün. Senden çoktan seçmeli, zorluk seviyesi "${difficulty}" olan tam olarak ${count} adet hukuk sorusu üretmen isteniyor.
 Üreteceğin soruların konusu: "${body.course} - ${body.topic}".
-Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama yazma.
-Şu formatta olmalı:
+Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama, markdown veya metin yazma. Sadece [ ile başlayıp ] ile biten bir JSON array döndür.
+Her soru şu formatta olmalı:
 [
   {
     "question": "Soru metni buraya",
     "options": ["A şıkkı", "B şıkkı", "C şıkkı", "D şıkkı", "E şıkkı"],
-    "correctAnswer": 2, // doğru şıkkın index'i (0'dan başlar)
+    "correctAnswer": 2,
     "explanation": "Doğru cevabın hukuki gerekçesi ve açıklaması"
   }
 ]`;
@@ -295,13 +302,34 @@ Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama y
       fullText += tok;
     }
     
-    // Temizle
-    const cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
+    if (!fullText || fullText.trim().length < 10) {
+      console.error("Quiz generation: empty response from AI");
+      return c.json({ error: "Yapay zeka boş yanıt döndü. Lütfen tekrar deneyin." }, 500);
+    }
+
+    // JSON'u çıkar - birden fazla yöntem dene
+    let cleanedText = fullText
+      .replace(/```json\s*/gi, "")
+      .replace(/```\s*/g, "")
+      .trim();
+    
+    // JSON array'i bulmak için regex kullan
+    const jsonMatch = cleanedText.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      cleanedText = jsonMatch[0];
+    }
+
     const parsed = JSON.parse(cleanedText);
+    
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      console.error("Quiz generation: parsed result is not a valid array", typeof parsed);
+      return c.json({ error: "Yapay zeka geçerli format döndüremedi." }, 500);
+    }
+
     return c.json(parsed);
   } catch (e) {
     console.error("Quiz generation error:", e);
-    return c.json({ error: "Sorular üretilemedi." }, 500);
+    return c.json({ error: `Sorular üretilemedi: ${String(e).slice(0, 200)}` }, 500);
   }
 });
 
