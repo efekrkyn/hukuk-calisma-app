@@ -26,8 +26,6 @@ export default function LoginPage() {
         setError(res.error);
         setLoading(false);
       } else if (res.success && res.token) {
-        // Save to localStorage for API calls to the Worker
-        localStorage.setItem("auth_token", res.token);
         router.push("/");
         router.refresh();
       }

@@ -12,13 +12,9 @@ export async function fetchWorker<T = unknown>(
   path: string,
   init?: RequestInit
 ): Promise<T> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
   const headers = new Headers(init?.headers);
   if (!headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
-  }
-  if (token) {
-    headers.set("Authorization", `Bearer ${token}`);
   }
 
   const r = await fetch(`${WORKER_URL}${path}`, {
@@ -62,14 +58,11 @@ export const api = {
   uploadPdf: async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
-    const headers = new Headers();
-    if (token) headers.set("Authorization", `Bearer ${token}`);
     
     const r = await fetch(`${WORKER_URL}/pdf/upload`, {
       method: "POST",
       body: formData,
-      headers,
+      credentials: "include",
     });
     if (!r.ok) {
       throw new Error(`Upload failed: ${r.status}`);
@@ -132,13 +125,9 @@ export async function* streamChat(params: {
   mode?: "default" | "law";
   history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
 }): AsyncGenerator<ChatEvent> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
   const r = await fetch(`${WORKER_URL}/ai/chat`, {
     method: "POST",
     credentials: "include",
@@ -198,13 +187,9 @@ export async function* streamDilekce(params: {
   documentType: string;
   details: string;
 }): AsyncGenerator<ChatEvent> {
-  const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
   };
-  if (token) {
-    headers["Authorization"] = `Bearer ${token}`;
-  }
   const r = await fetch(`${WORKER_URL}/ai/dilekce`, {
     method: "POST",
     credentials: "include",

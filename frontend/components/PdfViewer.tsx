@@ -106,9 +106,7 @@ export function PdfViewer({ url, initialPage = 1, onSelection }: Props) {
           <Document
             file={{
               url,
-              httpHeaders: {
-                Authorization: `Bearer ${typeof window !== "undefined" ? localStorage.getItem("auth_token") || "" : ""}`,
-              },
+              withCredentials: true,
             } as any}
             onLoadSuccess={({ numPages }) => setPages(numPages)}
             onLoadError={(e) => setError(e.message)}

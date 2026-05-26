@@ -39,14 +39,7 @@ export default function DinamikTestClient() {
 
     const courseName = COURSES.find(c => c.id === course)?.name || course;
 
-    // Token kontrolü
-    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
-    if (!token) {
-      setError("Oturum bulunamadı. Lütfen önce giriş yapın.");
-      setIsGenerating(false);
-      window.location.href = "/login";
-      return;
-    }
+    // Oturum kontrolü Next.js proxy tarafından yapılmaktadır.
 
     try {
       const result = await generateDynamicQuiz({
@@ -63,8 +56,7 @@ export default function DinamikTestClient() {
     } catch (e: any) {
       console.error(e);
       // Auth hatası kontrolü
-      if (e?.message?.includes("401") || e?.message?.includes("Authorization")) {
-        localStorage.removeItem("auth_token");
+      if (e?.message?.includes("401") || e?.message?.includes("Authorization") || e?.message?.includes("unauthorized") || e?.message?.includes("required")) {
         setError("Oturumunuzun süresi dolmuş. Yeniden giriş yapılıyor...");
         setTimeout(() => { window.location.href = "/login"; }, 1500);
       } else {

@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { verify } from "hono/jwt";
+import { getCookie } from "hono/cookie";
 import { health } from "./routes/health";
 import { sync } from "./routes/sync";
 import { pdf } from "./routes/pdf";
@@ -49,7 +50,12 @@ app.use("*", async (c, next) => {
   }
 
   const authHeader = c.req.header("Authorization") ?? "";
-  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  let token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  
+  if (!token) {
+    token = getCookie(c, "hukuk_session") ?? "";
+  }
+
   if (!token) {
     return c.json({ error: "Authorization required" }, 401);
   }

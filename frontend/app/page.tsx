@@ -36,12 +36,7 @@ export default function Home() {
   return (
     <main className="min-h-[100dvh] p-6 md:p-12 lg:p-24 bg-background">
       <div className="max-w-7xl mx-auto space-y-6">
-        {/* Sweet Greeting Banner */}
-        <div className="glass rounded-xl p-4 md:p-6 border-primary/20 bg-primary/5 flex items-center justify-center text-center animate-in fade-in slide-in-from-top-4 duration-700">
-          <p className="text-lg md:text-xl font-medium text-gradient flex items-center gap-2">
-            <span>✨</span> İyi çalışmalar sevgilim, her zaman yanındayım seni çok seviyorum <span>❤️</span>
-          </p>
-        </div>
+
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           {/* Left Side: Navigation & Stats */}
