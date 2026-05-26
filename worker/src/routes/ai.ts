@@ -349,4 +349,55 @@ Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama y
   }
 });
 
+// IRAC Olay Çözme Puanlama
+ai.post("/irac-grade", async (c) => {
+  let body: {
+    scenario: string;
+    answers: { issue: string; rule: string; analysis: string; conclusion: string };
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const systemInstruction = `Sen deneyimli bir hukuk profesörüsün. Öğrenciye bir hukuki olay verilmiş ve öğrenci bu olayı IRAC metodu ile 4 adımda çözmüş.
+Senden her adımı (issue, rule, analysis, conclusion) 0-100 puan arasında puanlamanı ve her adım için kısa ama yapıcı bir geri bildirim yazmanı istiyoruz.
+Ayrıca genel bir puan (overall, 0-100) ve genel bir değerlendirme (overallFeedback) ver.
+
+Cevabın SADECE geçerli bir JSON objesi olmalıdır:
+{
+  "scores": { "issue": 75, "rule": 60, "analysis": 80, "conclusion": 70 },
+  "feedback": { "issue": "...", "rule": "...", "analysis": "...", "conclusion": "..." },
+  "overall": 72,
+  "overallFeedback": "Genel değerlendirme metni"
+}`;
+
+  const prompt = `OLAY:
+${body.scenario}
+
+ÖĞRENCİNİN CEVAPLARI:
+1. ISSUE (Hukuki Sorun): ${body.answers.issue || "(Boş bırakıldı)"}
+2. RULE (Uygulanacak Kural): ${body.answers.rule || "(Boş bırakıldı)"}
+3. ANALYSIS (Olaya Uygulama): ${body.answers.analysis || "(Boş bırakıldı)"}
+4. CONCLUSION (Sonuç): ${body.answers.conclusion || "(Boş bırakıldı)"}
+
+Lütfen her adımı puanla ve geri bildirim ver. JSON formatında cevap ver.`;
+
+  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+
+  try {
+    let fullText = "";
+    for await (const tok of provider.streamChat(prompt, systemInstruction)) {
+      fullText += tok;
+    }
+    const cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
+    const parsed = JSON.parse(cleanedText);
+    return c.json(parsed);
+  } catch (e) {
+    console.error("IRAC grading error:", e);
+    return c.json({ error: "Puanlama yapılamadı." }, 500);
+  }
+});
+
 

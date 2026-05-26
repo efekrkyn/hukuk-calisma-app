@@ -39,3 +39,22 @@ pdf.get("/:key{.+}", async (c) => {
   }
   return new Response(obj.body, { headers });
 });
+
+// Upload a personal PDF
+pdf.post("/upload", async (c) => {
+  const formData = await c.req.formData();
+  const file = formData.get("file") as File | null;
+  if (!file) {
+    return c.json({ error: "file is required" }, 400);
+  }
+
+  // Store under kisisel/ prefix
+  const key = `kisisel/${file.name}`;
+  const arrayBuffer = await file.arrayBuffer();
+
+  await c.env.PDF_BUCKET.put(key, arrayBuffer, {
+    httpMetadata: { contentType: "application/pdf" },
+  });
+
+  return c.json({ success: true, key, size: arrayBuffer.byteLength });
+});

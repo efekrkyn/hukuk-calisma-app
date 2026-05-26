@@ -97,7 +97,13 @@ export default function Home() {
               href="/dinamik-test"
               className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
             >
-              ✨ Dinamik Test Üret
+              ✨ Dinamik Test
+            </Link>
+            <Link
+              href="/irac"
+              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
+            >
+              🧠 IRAC Olay Çözme
             </Link>
             <Link
               href="/dilekce-lab"
@@ -111,16 +117,16 @@ export default function Home() {
             >
               📄 Not Analizi
             </Link>
-            <Link
-              href="/sozluk"
-              className={buttonVariants({ variant: "secondary" }) + " glass hover-glow border-primary/20 text-primary text-xs"}
-            >
-              📖 Hukuk Sözlüğü
-            </Link>
           </div>
 
           <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider pt-2">Çalışma Araçları</p>
           <div className="grid grid-cols-2 gap-2">
+            <Link
+              href="/notlarim"
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
+            >
+              📝 Akıllı Notlar
+            </Link>
             <Link
               href="/ozetler"
               className={buttonVariants({ variant: "outline" }) + " text-xs"}
@@ -146,22 +152,16 @@ export default function Home() {
               📰 Mevzuat Takip
             </Link>
             <Link
-              href="/dashboard"
+              href="/sozluk"
               className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
-              ⏱️ Pomodoro
+              📖 Hukuk Sözlüğü
             </Link>
             <Link
               href="/reader"
               className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               📚 Kütüphane
-            </Link>
-            <Link
-              href="/practice"
-              className={buttonVariants({ variant: "outline" }) + " text-xs"}
-            >
-              📝 Pratik Çöz
             </Link>
             <Link
               href="/kanunlar"

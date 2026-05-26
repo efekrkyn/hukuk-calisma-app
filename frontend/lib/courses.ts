@@ -33,6 +33,7 @@ export const COURSES: Course[] = [
   { id: "hukuk_sosyolojisi", name: "Hukuk Sosyolojisi" },
   // Kanunlar/kitaplar
   { id: "kanunlar", name: "Genel Hukuk Kitapları" },
+  { id: "kisisel", name: "Kişisel Notlarım (Yüklenen PDF'ler)" },
 ];
 
 export const courseById = (id: string): Course | undefined =>

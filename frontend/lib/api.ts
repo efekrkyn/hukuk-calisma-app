@@ -58,6 +58,23 @@ export const api = {
     fetchWorker<PdfListResponse>(
       `/pdf/list${prefix ? `?prefix=${encodeURIComponent(prefix)}` : ""}`
     ),
+  uploadPdf: async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const token = typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
+    const headers = new Headers();
+    if (token) headers.set("Authorization", `Bearer ${token}`);
+    
+    const r = await fetch(`${WORKER_URL}/pdf/upload`, {
+      method: "POST",
+      body: formData,
+      headers,
+    });
+    if (!r.ok) {
+      throw new Error(`Upload failed: ${r.status}`);
+    }
+    return r.json() as Promise<{ success: boolean; key: string; size: number }>;
+  }
 };
 
 export const pdfUrl = (key: string) =>

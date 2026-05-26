@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Link from "next/link";
 import {
   Card,
@@ -7,24 +7,33 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import { COURSES } from "@/lib/courses";
 import { api, type PdfListItem } from "@/lib/api";
-import { Search, FileText, ArrowLeft, BookOpen } from "lucide-react";
+import { Search, FileText, ArrowLeft, BookOpen, Upload, Loader2 } from "lucide-react";
 
 export default function ReaderLanding() {
   const [byCourse, setByCourse] = useState<Record<string, PdfListItem[]>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
+  const loadPdfs = () => {
+    setLoading(true);
     api
-      .listPdfs("dersler/")
+      .listPdfs("") // Get all PDFs, including dersler/ and kisisel/
       .then((r) => {
         const grouped: Record<string, PdfListItem[]> = {};
         r.objects.forEach((o) => {
           const parts = o.key.split("/");
-          const course = parts[1];
+          let course = "";
+          if (parts[0] === "dersler" && parts[1]) {
+            course = parts[1];
+          } else if (parts[0] === "kisisel") {
+            course = "kisisel";
+          }
           if (course) (grouped[course] ??= []).push(o);
         });
         // Sort PDFs within each course alphabetically
@@ -35,7 +44,28 @@ export default function ReaderLanding() {
       })
       .catch((e) => setError(String(e)))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadPdfs();
   }, []);
+
+  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    setUploading(true);
+    try {
+      await api.uploadPdf(file);
+      loadPdfs(); // Reload after upload
+    } catch (err) {
+      console.error(err);
+      alert("PDF yüklenirken hata oluştu.");
+    } finally {
+      setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
 
   // Filter by search query
   const filteredCourses = COURSES.map((c) => {
@@ -51,7 +81,7 @@ export default function ReaderLanding() {
   return (
     <main className="p-4 md:p-6 max-w-6xl mx-auto space-y-6">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
         <div>
           <Link
             href="/"
@@ -69,16 +99,31 @@ export default function ReaderLanding() {
           </p>
         </div>
 
-        {/* Search Bar */}
-        <div className="relative w-full md:w-72">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <input
-            type="text"
-            placeholder="PDF veya Ders Ara..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 bg-card/50 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all glass"
+        <div className="flex flex-col items-end gap-2">
+          {/* Upload Button */}
+          <input 
+            type="file" 
+            accept="application/pdf" 
+            className="hidden" 
+            ref={fileInputRef} 
+            onChange={handleUpload} 
           />
+          <Button onClick={() => fileInputRef.current?.click()} disabled={uploading} className="hover-glow">
+            {uploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Upload className="w-4 h-4 mr-2" />}
+            Kendi Notunu Yükle (PDF)
+          </Button>
+
+          {/* Search Bar */}
+          <div className="relative w-full md:w-72 mt-2">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+            <input
+              type="text"
+              placeholder="PDF veya Ders Ara..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 bg-card/50 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all glass"
+            />
+          </div>
         </div>
       </div>
 
