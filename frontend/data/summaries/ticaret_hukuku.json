@@ -1,13 +1,25 @@
 {
-  "title": "TICARET HUKUKU Özeti",
+  "title": "Ticaret Hukuku (Şirketler) Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Ticari İşletme",
+      "content": "Esnaf işletmesi için öngörülen sınırı aşan düzeyde gelir sağlamayı hedef tutan faaliyetlerin devamlı ve bağımsız şekilde yürütüldüğü işletmedir."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Tacir Sıfatı",
+      "content": "Bir ticari işletmeyi kısmen de olsa kendi adına işleten kişiye denir. Ticaret siciline tescil, iflasa tabi olma, basiretli iş adamı gibi davranma yükümlülükleri vardır."
+    },
+    {
+      "topic": "Anonim Şirket",
+      "content": "Sermayesi belirli ve paylara bölünmüş olan, borçlarından dolayı sadece şirketin malvarlığıyla sorumlu olduğu şirkettir."
+    },
+    {
+      "topic": "Limited Şirket",
+      "content": "Bir veya daha çok gerçek/tüzel kişi tarafından kurulan, esas sermayesi belirli olan şirkettir. Ortaklar sadece taahhüt ettikleri sermayeyi ödemekle yükümlüdür (kamu borçları hariç)."
+    },
+    {
+      "topic": "Ticaret Sicili",
+      "content": "Ticari işletmelere ve tacirlere ilişkin önemli bilgilerin kaydedildiği aleniyet sağlayan resmi sicildir."
     }
   ]
 }

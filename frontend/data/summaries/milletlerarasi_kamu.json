@@ -1,13 +1,25 @@
 {
-  "title": "MILLETLERARASI KAMU Özeti",
+  "title": "Milletlerarası Kamu Hukuku Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Uluslararası Hukukun Kişileri",
+      "content": "Asıl kişiler devletlerdir. Ayrıca uluslararası örgütler (BM, NATO vb.) de uluslararası hukukun süjeleridir."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Uluslararası Hukukun Kaynakları",
+      "content": "Uluslararası antlaşmalar, uluslararası teamüller (yapılageliş kuralları), hukukun genel ilkeleri ve yardımcı kaynaklar (yargı kararları, doktrin)."
+    },
+    {
+      "topic": "Antlaşmaların Onaylanması",
+      "content": "Türk hukukunda uluslararası antlaşmalar kural olarak TBMM'nin uygun bulma kanunu ile ve Cumhurbaşkanı'nın onayıyla yürürlüğe girer."
+    },
+    {
+      "topic": "Devletin Ülkesel Egemenliği",
+      "content": "Kara ülkesi, karasuları ve hava sahası üzerinde devletin tam ve münhasır yetkiye sahip olmasıdır."
+    },
+    {
+      "topic": "Kuvvet Kullanma Yasağı",
+      "content": "BM Şartı m.2/4 gereği, uluslararası ilişkilerde devletlerin birbirlerinin toprak bütünlüğüne ve siyasi bağımsızlığına karşı kuvvet kullanması yasaktır (İstisna: Meşru müdafaa)."
     }
   ]
 }

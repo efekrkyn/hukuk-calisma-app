@@ -1,13 +1,25 @@
 {
-  "title": "ESYA HUKUKU Özeti",
+  "title": "Eşya Hukuku Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Ayni Haklar",
+      "content": "Sahibine eşya üzerinde doğrudan hakimiyet sağlayan ve herkese karşı ileri sürülebilen mutlak haklardır. Mülkiyet hakkı tam ayni haktır."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Mülkiyet Hakkı",
+      "content": "Malike, hukuk düzeninin sınırları içinde eşya üzerinde dilediği gibi kullanma, yararlanma ve tasarrufta bulunma (usus, fructus, abusus) yetkisi verir."
+    },
+    {
+      "topic": "Zilyetlik",
+      "content": "Eşya üzerindeki fiili hakimiyettir. Zilyetlik bir hak değil, hukuki bir durumdur ancak hukuk düzeni tarafından korunur."
+    },
+    {
+      "topic": "Tapu Sicili",
+      "content": "Ayni hakların (özellikle taşınmazlar üzerindeki) doğması, devredilmesi ve değiştirilmesi için tutulan resmi sicildir. Tescil kurucu veya açıklayıcı olabilir."
+    },
+    {
+      "topic": "İstihkak ve El Atmanın Önlenmesi",
+      "content": "Malik, malını haksız elinde bulunduran kişiye istihkak davası, mülkiyet hakkına yapılan haksız müdahalelere karşı da el atmanın önlenmesi (müdahalenin men'i) davası açabilir."
     }
   ]
 }

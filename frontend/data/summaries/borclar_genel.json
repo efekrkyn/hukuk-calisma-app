@@ -1,21 +1,25 @@
 {
-  "title": "Borçlar Hukuku Genel Hükümler - Son Gece Özeti",
+  "title": "Borçlar Genel Hukuku Son Gece Özeti",
   "items": [
     {
+      "topic": "Borç İlişkisinin Kaynakları",
+      "content": "Borç, sözleşmeden, haksız fiilden veya sebepsiz zenginleşmeden doğabilir. En yaygın olanı hukuki işlemler, özellikle sözleşmelerdir."
+    },
+    {
       "topic": "Sözleşmenin Kurulması",
-      "content": "Bir sözleşme, tarafların iradelerini karşılıklı ve birbirine uygun olarak açıklamalarıyla kurulur (TBK m. 1). İrade açıklaması açık veya örtülü olabilir."
+      "content": "Sözleşme, tarafların iradelerini karşılıklı ve birbirine uygun olarak açıklamalarıyla kurulur. İcap (Öneri) ve Kabul gerekir."
     },
     {
-      "topic": "Haksız Fiil Unsurları",
-      "content": "Kusurlu ve hukuka aykırı bir fiille başkasına zarar veren, bu zararı gidermekle yükümlüdür (TBK m. 49). Unsurları: Hukuka aykırı fiil, Kusur, Zarar ve İlliyet Bağı'dır."
+      "topic": "İrade Sakatlıkları",
+      "content": "Yanılma (Hata), Aldatma (Hile) ve Korkutma (İkrah). İradesi sakatlanan taraf, 1 yıl içinde sözleşmeyi iptal edebilir (nispi butlan)."
     },
     {
-      "topic": "Sebepsiz Zenginleşme",
-      "content": "Haklı bir sebep olmaksızın, bir başkasının malvarlığından veya emeğinden zenginleşen, bu zenginleşmeyi geri vermekle yükümlüdür (TBK m. 77)."
+      "topic": "Gabin (Aşırı Yararlanma)",
+      "content": "Edimler arasındaki açık oransızlık ve bu durumun zarar görenin zor durumundan (müzayaka), düşüncesizliğinden veya tecrübesizliğinden faydalanılarak yaratılmasıdır."
     },
     {
-      "topic": "Zamanaşımı",
-      "content": "Kanunda aksine bir hüküm bulunmadıkça, her alacak 10 yıllık zamanaşımına tabidir (TBK m. 146). Haksız fiillerde ise zarar görenin zararı ve tazminat yükümlüsünü öğrendiği tarihten başlayarak 2 yıl ve her hâlde fiilin işlendiği tarihten başlayarak 10 yıldır."
+      "topic": "Temerrüt",
+      "content": "Borçlunun ifa kabiliyeti olan bir borcu zamanında ifa etmemesi halidir. Temerrüt için genellikle ihtar şarttır (İstisna: Kesin vade)."
     }
   ]
 }

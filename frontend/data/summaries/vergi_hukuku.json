@@ -1,13 +1,25 @@
 {
-  "title": "VERGI HUKUKU Özeti",
+  "title": "Vergi Hukuku Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Verginin Kanuniliği",
+      "content": "Vergi, resim, harç ve benzeri mali yükümlülükler ancak kanunla konulur, değiştirilir veya kaldırılır."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Vergiyi Doğuran Olay",
+      "content": "Vergi alacağı, vergi kanunlarının vergiyi bağladıkları olayın vukuu veya hukuki durumun tekemmülü ile doğar."
+    },
+    {
+      "topic": "Tarh, Tebliğ, Tahakkuk, Tahsil",
+      "content": "Tarh: verginin hesaplanması. Tebliğ: Mükellefe bildirim. Tahakkuk: Verginin ödenebilir aşamaya gelmesi. Tahsil: Verginin ödenmesi."
+    },
+    {
+      "topic": "Vergi Kabahatleri ve Suçları",
+      "content": "Vergi ziyaı kabahati (verginin eksik/geç tahakkuk ettirilmesi) idari para cezası gerektirir. Kaçakçılık (sahte belge düzenleme vb.) ise hapis cezası gerektiren bir suçtur."
+    },
+    {
+      "topic": "Uzlaşma",
+      "content": "Vergi idaresi ile mükellefin yargı yoluna gitmeden önce vergi cezası veya aslı üzerinde pazarlık yaparak anlaşmasıdır."
     }
   ]
 }

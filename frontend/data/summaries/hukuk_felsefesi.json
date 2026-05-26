@@ -1,13 +1,25 @@
 {
-  "title": "HUKUK FELSEFESI Özeti",
+  "title": "Hukuk Felsefesi ve Sosyolojisi Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Doğal Hukuk",
+      "content": "Hukukun insan aklından veya doğadan (tanrıdan) kaynaklandığını, evrensel, değişmez ve adil kurallar bütünü olduğunu savunan felsefi akımdır."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Hukuki Pozitivizm",
+      "content": "Sadece devlet tarafından konulan ve uygulanan yazılı hukukun (olan hukukun) geçerli olduğunu, ahlak ile hukuk arasında zorunlu bir bağ olmadığını savunan akımdır."
+    },
+    {
+      "topic": "Normlar Hiyerarşisi (Kelsen)",
+      "content": "Hukuk düzeninin piramit gibi üst üste binen normlardan oluştuğu ve her normun geçerliliğini üstündeki normdan aldığı kuramdır (Saf Hukuk Kuramı)."
+    },
+    {
+      "topic": "Hukuk Sosyolojisi",
+      "content": "Hukuku toplumsal bir olgu olarak inceleyen, hukukun toplumla etkileşimini ve 'kanunların kağıt üzerinde değil pratikte nasıl işlediğini' araştıran daldır."
+    },
+    {
+      "topic": "Adalet Kavramı",
+      "content": "Dağıtıcı adalet (nitelik ve liyakata göre paylaştırma) ve Denkleştirici adalet (herkese mutlak eşit davranma veya zararın aynen tazmini)."
     }
   ]
 }

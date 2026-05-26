@@ -1,13 +1,25 @@
 {
-  "title": "MEDENI USUL Özeti",
+  "title": "Medeni Usul Hukuku (HMK) Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Görev ve Yetki",
+      "content": "Görev, dava konusuna göre mahkemenin türünü (Asliye, Sulh vs.) belirler (Kamu düzenindendir). Yetki ise coğrafi yer mahkemesini belirler."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Dilekçeler Aşaması",
+      "content": "Dava dilekçesi, cevap dilekçesi, cevaba cevap (replik) ve ikinci cevap (düplik) dilekçelerinden oluşur."
+    },
+    {
+      "topic": "Ön İnceleme",
+      "content": "Dilekçeler teatisi bittikten sonra mahkemenin dava şartlarını, ilk itirazları incelediği, uyuşmazlık noktalarını tam olarak belirlediği ve sulhe teşvik ettiği aşamadır."
+    },
+    {
+      "topic": "İspat Yükü",
+      "content": "Kural olarak, iddia edilen vakıaya bağlanan hukuki sonuçtan kendi lehine hak çıkaran taraf ispat yükü altındadır."
+    },
+    {
+      "topic": "Kesin Hüküm (Res Judicata)",
+      "content": "Kanun yolları tükenmiş veya süresi geçirilmiş olan kararın maddi anlamda kesinleşmesidir. Aynı taraflar, aynı sebeple aynı davayı tekrar açamazlar."
     }
   ]
 }

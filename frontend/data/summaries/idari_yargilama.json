@@ -1,13 +1,25 @@
 {
-  "title": "IDARI YARGILAMA Özeti",
+  "title": "İdari Yargılama Hukuku (İYUK) Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "İptal Davası",
+      "content": "İdari işlemlerin yetki, şekil, sebep, konu ve maksat unsurlarından biri yönüyle hukuka aykırı olması nedeniyle menfaati ihlal edilenlerin açtığı davadır."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Tam Yargı Davası",
+      "content": "İdari eylem ve işlemler nedeniyle kişisel hakkı doğrudan muhtel olanların (zarara uğrayanların) idareden tazminat istediği davadır."
+    },
+    {
+      "topic": "Dava Açma Süresi",
+      "content": "Özel bir süre öngörülmemişse kural olarak Danıştay ve İdare Mahkemelerinde 60 gün, Vergi Mahkemelerinde 30 gündür."
+    },
+    {
+      "topic": "Yürütmenin Durdurulması",
+      "content": "İdari işlemin uygulanması halinde telafisi güç veya imkansız zararların doğması VE idari işlemin açıkça hukuka aykırı olması şartlarının birlikte gerçekleşmesi halinde verilir."
+    },
+    {
+      "topic": "Kanun Yolları",
+      "content": "İstinaf (Bölge İdare Mahkemesine 30 gün içinde) ve Temyiz (Danıştaya 30 gün içinde)."
     }
   ]
 }

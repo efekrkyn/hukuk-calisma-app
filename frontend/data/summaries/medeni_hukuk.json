@@ -1,13 +1,25 @@
 {
-  "title": "MEDENI HUKUK Özeti",
+  "title": "Medeni Hukuk (Giriş ve Kişiler) Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Hakların Kazanılması",
+      "content": "Hakların kazanılmasında iyiniyet (TMK m.3) esastır. Kanunun iyiniyete hukuki bir sonuç bağladığı durumlarda, asıl olan iyiniyetin varlığıdır."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Hakların Kullanılması",
+      "content": "Herkes, haklarını kullanırken ve borçlarını yerine getirirken dürüstlük kurallarına (TMK m.2) uymak zorundadır. Bir hakkın açıkça kötüye kullanılmasını hukuk düzeni korumaz."
+    },
+    {
+      "topic": "Hak ve Fiil Ehliyeti",
+      "content": "Hak ehliyeti tam ve sağ doğmak şartıyla ana rahmine düşüldüğü an başlar. Fiil ehliyeti için ergin olmak, ayırt etme gücüne sahip olmak ve kısıtlı olmamak gerekir."
+    },
+    {
+      "topic": "Kişiliğin Korunması",
+      "content": "Hukuka aykırı olarak kişilik hakkına saldırılan kimse hakimden saldırının durdurulmasını, önlenmesini veya hukuka aykırılığın tespitini isteyebilir."
+    },
+    {
+      "topic": "Tüzel Kişiler",
+      "content": "Kişi (Örn: Dernekler) veya Mal (Örn: Vakıflar) topluluklarıdır. Tüzel kişilik, kanunların emrettiği tescil veya kuruluş anında kazanılır."
     }
   ]
 }

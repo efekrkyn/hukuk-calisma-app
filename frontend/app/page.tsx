@@ -164,6 +164,12 @@ export default function Home() {
               📚 Kütüphane
             </Link>
             <Link
+              href="/practice"
+              className={buttonVariants({ variant: "outline" }) + " text-xs"}
+            >
+              ⚖️ Pratik Çöz
+            </Link>
+            <Link
               href="/kanunlar"
               className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >

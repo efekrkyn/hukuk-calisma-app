@@ -1,13 +1,25 @@
 {
-  "title": "GENEL KAMU Özeti",
+  "title": "Genel Kamu Hukuku Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Devletin Unsurları",
+      "content": "Toprak (Ülke), İnsan Topluluğu (Millet) ve Egemenlik (Siyasi İktidar). Bu üç unsur bir araya geldiğinde devlet oluşur."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Egemenlik Kuramları",
+      "content": "Teokratik kuramlar (iktidarın kaynağı tanrıdır) ve Demokratik kuramlar (Milli Egemenlik ve Halk Egemenliği)."
+    },
+    {
+      "topic": "Kuvvetler Ayrılığı",
+      "content": "Yasama (kural koyma), Yürütme (uygulama) ve Yargı (uyuşmazlık çözme) fonksiyonlarının farklı organlara verilmesidir."
+    },
+    {
+      "topic": "Hükümet Sistemleri",
+      "content": "Kuvvetlerin katı ayrılığına dayanan Başkanlık sistemi ve kuvvetlerin yumuşak (esnek) ayrılığına dayanan Parlamenter sistemdir."
+    },
+    {
+      "topic": "Sosyal Sözleşme Kuramcıları",
+      "content": "Hobbes (mutlak monarşi), Locke (liberalizm ve kuvvetler ayrılığı) ve Rousseau (milli egemenlik ve kanunların genel iradeyi yansıtması)."
     }
   ]
 }

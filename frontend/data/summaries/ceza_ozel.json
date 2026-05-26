@@ -1,0 +1,25 @@
+{
+  "title": "Ceza Hukuku Özel Özeti",
+  "items": [
+    {
+      "topic": "Kasten Öldürme",
+      "content": "Bir insanın hayatına kasten son verilmesidir. Nitelikli halleri (tasarlayarak, canavarca hisle, vb.) ağırlaştırılmış müebbet hapis gerektirir."
+    },
+    {
+      "topic": "Kasten Yaralama",
+      "content": "Başkasının vücuduna acı veren veya sağlığının ya da algılama yeteneğinin bozulmasına neden olan eylemdir."
+    },
+    {
+      "topic": "Hırsızlık",
+      "content": "Zilyedinin rızası olmadan başkasına ait taşınır bir malı, kendisine veya başkasına bir yarar sağlamak maksadıyla bulunduğu yerden almaktır."
+    },
+    {
+      "topic": "Dolandırıcılık",
+      "content": "Hileli davranışlarla bir kimseyi aldatıp, onun veya başkasının zararına olarak, kendisine veya başkasına bir yarar sağlamaktır."
+    },
+    {
+      "topic": "Rüşvet ve İrtikap",
+      "content": "Kamu görevlisinin görevi gereği yapması/yapmaması gereken bir iş için haksız menfaat sağlamasıdır (Rüşvet). İrtikapta ise memurun vatandaşı icbar etmesi (zorlaması) veya ikna etmesi söz konusudur."
+    }
+  ]
+}

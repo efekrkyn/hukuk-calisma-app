@@ -1,0 +1,37 @@
+[
+  {
+    "course": "medeni_hukuk",
+    "title": "Nişanın Bozulması ve Hediyelerin Geri Verilmesi",
+    "difficulty": "kolay",
+    "scenario": "Nişanlılık süresince (K), nişanlısı (E)'ye pahalı bir Rolex saat hediye etmiştir. (E), haklı bir sebep olmaksızın nişanı bozmuştur. (K), saati geri isteyebilir mi?",
+    "ideal_solution": "TMK m.120 gereğince, nişanlılığın evlenme dışındaki bir sebeple sona ermesi halinde nişanlıların birbirlerine verdikleri alışılmışın dışındaki hediyeler geri istenebilir. Rolex saat alışılmışın dışında, değerli bir hediyedir. (K) saatin aynen iadesini, aynen iade mümkün değilse sebepsiz zenginleşme hükümlerine göre bedelini talep edebilir.",
+    "key_points": [
+      "Nişanın bozulması",
+      "Alışılmışın dışındaki hediyeler",
+      "Hediyelerin iadesi (TMK m.120)"
+    ],
+    "topics": [
+      "Aile Hukuku",
+      "Nişanlılık"
+    ],
+    "id": "medeni_hukuk_IRAC_201"
+  },
+  {
+    "course": "medeni_hukuk",
+    "title": "Ayırt Etme Gücü ve Sözleşmenin Geçersizliği",
+    "difficulty": "orta",
+    "scenario": "Akıl hastası olan ve kısıtlanmış bulunan (A), yasal temsilcisi (V)'nin haberi olmadan, antika bir vazoyu (B)'ye 10.000 TL'ye satmış ve teslim etmiştir. (B), vazoyu vitrinine koymuştur. (V) durumu öğrenince ne yapabilir? İşlemin hukuki niteliği nedir?",
+    "ideal_solution": "(A) tam ehliyetsizdir. Tam ehliyetsizlerin hukuki işlemleri batıldır (kesin hükümsüzdür). Muvafakat veya icazet (onay) ile geçerli hale gelmezler. (V), (B)'ye karşı mülkiyete dayalı istihkak davası (TMK m.683) açarak vazonun iadesini talep edebilir. Zira işlem baştan itibaren batıl olduğundan mülkiyet (B)'ye hiç geçmemiştir.",
+    "key_points": [
+      "Tam ehliyetsizlik",
+      "Mutlak butlan (Kesin hükümsüzlük)",
+      "İstihkak davası",
+      "İcazet verilememesi"
+    ],
+    "topics": [
+      "Kişiler Hukuku",
+      "Ehliyetsizlik"
+    ],
+    "id": "medeni_hukuk_IRAC_200"
+  }
+]

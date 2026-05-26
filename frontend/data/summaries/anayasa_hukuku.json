@@ -1,13 +1,25 @@
 {
-  "title": "ANAYASA HUKUKU Özeti",
+  "title": "Anayasa Hukuku Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "Anayasanın Üstünlüğü",
+      "content": "Kanunlar, Cumhurbaşkanlığı Kararnameleri ve diğer alt normların Anayasa'ya aykırı olamaması ilkesidir."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "Değiştirilemez Maddeler",
+      "content": "Devletin şeklinin Cumhuriyet olduğu (m.1), Cumhuriyetin nitelikleri (m.2) ve Devletin bütünlüğü, resmi dili, bayrağı, milli marşı ve başkenti (m.3) değiştirilemez ve teklif dahi edilemez."
+    },
+    {
+      "topic": "Cumhurbaşkanlığı Kararnameleri",
+      "content": "Yürütme yetkisine ilişkin konularda çıkarılır. Temel haklar, siyasi haklar (sosyal haklar hariç) CBK ile düzenlenemez. Kanunda açıkça düzenlenen konularda CBK çıkarılamaz."
+    },
+    {
+      "topic": "Anayasa Mahkemesi (AYM)",
+      "content": "Kanunların ve CBK'ların anayasaya uygunluğunu soyut (iptal davası) ve somut (itiraz yolu) norm denetimi ile inceler."
+    },
+    {
+      "topic": "Bireysel Başvuru",
+      "content": "Herkesin, Anayasa'da ve AİHS'de güvence altına alınmış temel haklarından birinin kamu gücü tarafından ihlal edildiği iddiasıyla, olağan yasa yolları tüketildikten sonra AYM'ye başvurmasıdır."
     }
   ]
 }

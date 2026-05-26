@@ -1,13 +1,25 @@
 {
-  "title": "IDARE HUKUKU Özeti",
+  "title": "İdare Hukuku Özeti",
   "items": [
     {
-      "topic": "Temel Kavramlar",
-      "content": "Bu dersin özet notları yapay zeka tarafından sisteme yüklenmiştir. Yakında detaylı notlar eklenecektir."
+      "topic": "İdarenin Kanuniliği",
+      "content": "İdarenin her türlü eylem ve işleminin kaynağını kanundan alması ve kanuna uygun olması zorunluluğudur."
     },
     {
-      "topic": "Sınav Tavsiyesi",
-      "content": "Geçmiş yıl çıkmış HMGS/Hakimlik sorularını mutlaka çözün."
+      "topic": "İdari İşlem",
+      "content": "İdarenin kamu gücü kullanarak, tek taraflı irade açıklamasıyla hukuk aleminde değişiklik yarattığı işlemlerdir. (Örn: Memur atama, ruhsat verme)."
+    },
+    {
+      "topic": "İdari İşlemin Unsurları",
+      "content": "Yetki (işlemi yapan makam), Şekil (usul kuralları), Sebep (işlemi gerektiren olay), Konu (işlemin doğurduğu hukuki sonuç) ve Maksat (daima kamu yararı)."
+    },
+    {
+      "topic": "Kamu Malları",
+      "content": "Devletin doğrudan doğruya kamunun yararlanmasına tahsis ettiği (yollar, meydanlar) veya kamu hizmeti için kullanılan (okul binaları) mallardır. Haczedilemez, kazandırıcı zamanaşımı ile kazanılamaz."
+    },
+    {
+      "topic": "İdarenin Sorumluluğu",
+      "content": "İdare, hizmet kusuru (idarenin işleyişindeki aksaklıklar) veya kusursuz sorumluluk (sosyal risk, fedakarlığın denkleştirilmesi) ilkelerine göre verdiği zararları ödemekle yükümlüdür."
     }
   ]
 }

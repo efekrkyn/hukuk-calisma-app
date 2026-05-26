@@ -1,0 +1,25 @@
+{
+  "title": "Borçlar Özel Hukuku Son Gece Özeti",
+  "items": [
+    {
+      "topic": "Satış Sözleşmesi",
+      "content": "Satıcının zilyetlik ve mülkiyeti devretme, alıcının ise satış bedelini (semen) ödeme borcu altına girdiği tam iki tarafa borç yükleyen sözleşmedir."
+    },
+    {
+      "topic": "Ayıptan Sorumluluk",
+      "content": "Satıcının, satılanın vaat edilen nitelikleri taşımamasından veya değerini/faydasını azaltan eksikliklerden sorumlu olmasıdır. Alıcının gözden geçirme ve bildirim külfeti vardır."
+    },
+    {
+      "topic": "Kira Sözleşmesi",
+      "content": "Kiraya verenin bir şeyin kullanılmasını bedel karşılığında kiracıya bırakmayı üstlendiği sözleşmedir. Konut ve çatılı işyeri kiralarında kiracı güçlü şekilde korunur."
+    },
+    {
+      "topic": "Eser Sözleşmesi",
+      "content": "Yüklenicinin bir eser meydana getirmeyi, işsahibinin de bunun karşılığında bir bedel ödemeyi üstlendiği sözleşmedir. Sonuç (eser) taahhüdü vardır."
+    },
+    {
+      "topic": "Vekalet Sözleşmesi",
+      "content": "Vekilin, vekalet verenin bir işini görmeyi veya işlemini yapmayı üstlendiği sözleşmedir. Sonuç garanti edilmez, özen borcu vardır."
+    }
+  ]
+}
