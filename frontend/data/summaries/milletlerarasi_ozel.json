@@ -1,0 +1,25 @@
+{
+  "title": "Milletlerarası Özel Hukuk (MÖHUK) Özeti",
+  "items": [
+    {
+      "topic": "Yabancılık Unsuru",
+      "content": "Bir hukuki ilişkinin, tarafların vatandaşlığı, yerleşim yeri veya olayın gerçekleştiği yer bakımından birden fazla devletin hukuku ile irtibatlı olmasıdır."
+    },
+    {
+      "topic": "Bağlama Kuralları",
+      "content": "Yabancılık unsuru taşıyan uyuşmazlıklarda hangi devletin maddi hukukunun uygulanacağını gösteren kurallardır. (Örn: Haksız fiillerde olayın meydana geldiği yer hukuku - lex loci delicti)."
+    },
+    {
+      "topic": "Kamu Düzeni Müdahalesi",
+      "content": "Yetkili yabancı hukukun uygulanması Türk kamu düzenine açıkça aykırı ise o hüküm uygulanmaz. (MÖHUK m.5)"
+    },
+    {
+      "topic": "Tanıma ve Tenfiz",
+      "content": "Yabancı mahkeme kararlarının Türkiye'de kesin hüküm teşkil etmesi için 'tanıma', icra edilebilmesi için ise 'tenfiz' davası açılması gerekir."
+    },
+    {
+      "topic": "Tenfiz Şartları",
+      "content": "Karşılıklılık (mütekabiliyet), kararın Türk mahkemelerinin münhasır yetkisine girmeyen bir konuda verilmesi, Türk kamu düzenine açıkça aykırı olmaması ve savunma hakkına riayet edilmiş olmasıdır."
+    }
+  ]
+}

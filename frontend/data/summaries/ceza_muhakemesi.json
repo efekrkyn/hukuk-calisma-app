@@ -1,0 +1,25 @@
+{
+  "title": "Ceza Muhakemesi Hukuku (CMK) Son Gece Özeti",
+  "items": [
+    {
+      "topic": "Soruşturma Evresi",
+      "content": "Suç şüphesinin öğrenilmesinden iddianamenin kabulüne kadar geçen evredir. Savcı, şüphelinin lehine ve aleyhine delilleri toplamak zorundadır."
+    },
+    {
+      "topic": "Koruma Tedbirleri",
+      "content": "Gecikmesinde sakınca bulunan hallerde geçici olarak temel hakları kısıtlayan tedbirlerdir: Yakalama, gözaltı, tutuklama, adli kontrol, arama, elkoyma, iletişimin tespiti."
+    },
+    {
+      "topic": "Tutuklama Şartları",
+      "content": "Kuvvetli suç şüphesinin varlığını gösteren somut delillerin bulunması ve bir tutuklama nedeninin (kaçma veya delil karartma şüphesi) bulunması gerekir. (CMK m.100)"
+    },
+    {
+      "topic": "Kovuşturma Evresi",
+      "content": "İddianamenin kabulüyle başlar ve hükmün kesinleşmesine kadar sürer. Duruşma alenidir, deliller doğrudan tartışılır."
+    },
+    {
+      "topic": "Kanun Yolları",
+      "content": "Olağan kanun yolları: İtiraz, İstinaf (BAM) ve Temyiz (Yargıtay). Olağanüstü kanun yolları: Yargıtay Cumhuriyet Başsavcısının İtirazı, Kanun Yararına Bozma, Yargılamanın Yenilenmesi."
+    }
+  ]
+}

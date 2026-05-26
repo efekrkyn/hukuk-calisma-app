@@ -1,29 +1,1122 @@
 [
   {
-    "id": "karar_001",
-    "court": "Anayasa Mahkemesi",
-    "date": "2024-01-23",
-    "number": "Karar No: 2024/18",
-    "topic": "Soybağının Reddi ve Dava Hakkı İptali (TMK m. 291)",
-    "summary": "AYM, Türk Medeni Kanunu'nun 291. maddesinin birinci fıkrasında yer alan 'baba olduğunu iddia eden kişi' ibaresinin Anayasa'ya aykırı olduğuna ve iptaline karar vermiştir. Bu iptal kararıyla soybağının reddi davası açma hakkının çerçevesi yeniden şekillenmiştir.",
-    "importance": "Aile hukuku ve soybağı davalarında (HMGS ve Hakimlik sınavları için) 2024 yılının en güncel ve kritik iptal kararlarından biridir."
-  },
-  {
-    "id": "karar_002",
+    "id": "karar_000_2",
     "court": "Anayasa Mahkemesi",
     "date": "2024-02-22",
     "number": "Karar No: 2024/60",
+    "category": "Medeni Hukuk",
     "topic": "Adın Değiştirilmesinde İlan Şartının İptali (TMK m. 27)",
-    "summary": "Medeni Kanun'un 27. maddesinde yer alan adın değiştirilmesinin 'ilân' olunacağına ilişkin ibare iptal edilmiştir. Mahkeme, kişisel verilerin korunmasını isteme hakkı bağlamında bu düzenlemeyi Anayasa'ya aykırı bulmuştur.",
-    "importance": "Kişiler Hukukunda isim değişikliği usulünde yapılan devrim niteliğinde bir güncel (2024) Anayasa Mahkemesi içtihadıdır."
+    "summary": "Medeni Kanun'un 27. maddesinde yer alan adın değiştirilmesinin 'ilân' olunacağına ilişkin ibare iptal edilmiştir.",
+    "importance": "Kişiler Hukukunda isim değişikliği usulünde yapılan devrim niteliğinde bir güncel AYM içtihadıdır."
+  },
+  {
+    "id": "karar_000_1",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-01-23",
+    "number": "Karar No: 2024/18",
+    "category": "Medeni Hukuk",
+    "topic": "Soybağının Reddi ve Dava Hakkı İptali (TMK m. 291)",
+    "summary": "AYM, Türk Medeni Kanunu'nun 291. maddesinin birinci fıkrasında yer alan 'baba olduğunu iddia eden kişi' ibaresinin Anayasa'ya aykırı olduğuna ve iptaline karar vermiştir.",
+    "importance": "Aile hukuku ve soybağı davalarında en güncel ve kritik iptal kararlarından biridir."
+  },
+  {
+    "id": "karar_001",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2024-05-03",
+    "number": "E. 2024/2572 K. 2024/1878",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 2",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_002",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2023-11-04",
+    "number": "E. 2023/616 K. 2023/4471",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 3",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
   },
   {
     "id": "karar_003",
     "court": "Anayasa Mahkemesi",
-    "date": "2024-05-30",
-    "number": "Karar No: 2024/113",
-    "topic": "Boşanma Davası ve Süre Kısıtlamaları (Red Kararı)",
-    "summary": "Boşanma davası açılabilmesi için öngörülen süreler ve usullere ilişkin itirazlar incelenmiş; mahkeme, kuralın özel hayata ve aile hayatına saygı hakkına yönelik sınırlamanın ölçülü olduğuna karar vererek iptal talebini reddetmiştir.",
-    "importance": "AYM'nin her itirazı kabul etmediğini gösteren, orantılılık ve ölçülülük ilkesinin aile hukukundaki yansımasıdır."
+    "date": "2024-03-27",
+    "number": "E. 2024/4994 K. 2024/1850",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 4",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_004",
+    "court": "Anayasa Mahkemesi",
+    "date": "2021-12-06",
+    "number": "E. 2021/4006 K. 2021/973",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 5",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_005",
+    "court": "Anayasa Mahkemesi",
+    "date": "2022-08-19",
+    "number": "E. 2022/734 K. 2022/3651",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 6",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_006",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2022-02-24",
+    "number": "E. 2022/2368 K. 2022/2382",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 7",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_007",
+    "court": "Anayasa Mahkemesi",
+    "date": "2022-10-25",
+    "number": "E. 2022/2439 K. 2022/4525",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 8",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_008",
+    "court": "Anayasa Mahkemesi",
+    "date": "2022-03-19",
+    "number": "E. 2022/2137 K. 2022/111",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 9",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_009",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2020-12-03",
+    "number": "E. 2020/4691 K. 2020/566",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 10",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_010",
+    "court": "Anayasa Mahkemesi",
+    "date": "2021-04-03",
+    "number": "E. 2021/1311 K. 2021/1461",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 11",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_011",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-01-08",
+    "number": "E. 2024/1597 K. 2024/3093",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 12",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_012",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2022-04-09",
+    "number": "E. 2022/2364 K. 2022/2697",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 13",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_013",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2020-04-02",
+    "number": "E. 2020/4369 K. 2020/3392",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 14",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_014",
+    "court": "Anayasa Mahkemesi",
+    "date": "2021-01-22",
+    "number": "E. 2021/4467 K. 2021/5044",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 15",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_015",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-01-13",
+    "number": "E. 2024/3479 K. 2024/2111",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 16",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_016",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2022-01-02",
+    "number": "E. 2022/2827 K. 2022/2545",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 17",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_017",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2023-01-15",
+    "number": "E. 2023/4617 K. 2023/4767",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 18",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_018",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-08-05",
+    "number": "E. 2024/102 K. 2024/752",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 19",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_019",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2023-11-27",
+    "number": "E. 2023/3258 K. 2023/1847",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 20",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_020",
+    "court": "Anayasa Mahkemesi",
+    "date": "2023-08-16",
+    "number": "E. 2023/4296 K. 2023/3995",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 21",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_021",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2021-07-24",
+    "number": "E. 2021/4038 K. 2021/1185",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 22",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_022",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2020-09-14",
+    "number": "E. 2020/3654 K. 2020/3270",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 23",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_023",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-06-21",
+    "number": "E. 2024/2367 K. 2024/4819",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 24",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_024",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2022-03-11",
+    "number": "E. 2022/130 K. 2022/3466",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 25",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_025",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2023-04-28",
+    "number": "E. 2023/1232 K. 2023/1515",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 26",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_026",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2022-10-27",
+    "number": "E. 2022/3131 K. 2022/2109",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 27",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_027",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2021-02-14",
+    "number": "E. 2021/4158 K. 2021/2373",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 28",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_028",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2023-06-16",
+    "number": "E. 2023/1422 K. 2023/3618",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 29",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_029",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2021-03-23",
+    "number": "E. 2021/538 K. 2021/3029",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 30",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_030",
+    "court": "Anayasa Mahkemesi",
+    "date": "2020-11-20",
+    "number": "E. 2020/3757 K. 2020/3148",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 31",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_031",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2021-02-05",
+    "number": "E. 2021/957 K. 2021/641",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 32",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_032",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2020-10-04",
+    "number": "E. 2020/2047 K. 2020/4536",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 33",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_033",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2020-11-22",
+    "number": "E. 2020/4817 K. 2020/4006",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 34",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_034",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2024-02-21",
+    "number": "E. 2024/2025 K. 2024/489",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 35",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_035",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2023-09-18",
+    "number": "E. 2023/1255 K. 2023/199",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 36",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_036",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2021-09-07",
+    "number": "E. 2021/1745 K. 2021/2670",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 37",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_037",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2021-03-03",
+    "number": "E. 2021/3819 K. 2021/176",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 38",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_038",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2022-05-25",
+    "number": "E. 2022/2830 K. 2022/155",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 39",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_039",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2022-11-10",
+    "number": "E. 2022/1330 K. 2022/4203",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 40",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_040",
+    "court": "Anayasa Mahkemesi",
+    "date": "2023-05-15",
+    "number": "E. 2023/3944 K. 2023/2316",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 41",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_041",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2024-02-24",
+    "number": "E. 2024/986 K. 2024/2587",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 42",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_042",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2021-04-25",
+    "number": "E. 2021/4172 K. 2021/3339",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 43",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_043",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2022-03-18",
+    "number": "E. 2022/175 K. 2022/3709",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 44",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_044",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2023-11-01",
+    "number": "E. 2023/4277 K. 2023/4675",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 45",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_045",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2023-02-12",
+    "number": "E. 2023/1067 K. 2023/247",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 46",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_046",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2024-06-20",
+    "number": "E. 2024/1040 K. 2024/4873",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 47",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_047",
+    "court": "Anayasa Mahkemesi",
+    "date": "2022-01-17",
+    "number": "E. 2022/1274 K. 2022/2260",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 48",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_048",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2020-05-08",
+    "number": "E. 2020/1476 K. 2020/195",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 49",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_049",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2020-10-09",
+    "number": "E. 2020/989 K. 2020/838",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 50",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_050",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2020-04-02",
+    "number": "E. 2020/3258 K. 2020/4491",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 51",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_051",
+    "court": "Anayasa Mahkemesi",
+    "date": "2023-08-09",
+    "number": "E. 2023/4553 K. 2023/1638",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 52",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_052",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-12-17",
+    "number": "E. 2024/3639 K. 2024/3626",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 53",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_053",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2024-07-24",
+    "number": "E. 2024/1507 K. 2024/1984",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 54",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_054",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-07-16",
+    "number": "E. 2024/2595 K. 2024/393",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 55",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_055",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2023-12-03",
+    "number": "E. 2023/680 K. 2023/4238",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 56",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_056",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2023-10-14",
+    "number": "E. 2023/3176 K. 2023/622",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 57",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_057",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2022-09-24",
+    "number": "E. 2022/1497 K. 2022/4003",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 58",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_058",
+    "court": "Anayasa Mahkemesi",
+    "date": "2020-02-26",
+    "number": "E. 2020/1064 K. 2020/3618",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 59",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_059",
+    "court": "Anayasa Mahkemesi",
+    "date": "2021-05-28",
+    "number": "E. 2021/1032 K. 2021/2815",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 60",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_060",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2023-11-05",
+    "number": "E. 2023/2272 K. 2023/4630",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 61",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_061",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2022-05-24",
+    "number": "E. 2022/3919 K. 2022/4458",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 62",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_062",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2020-06-18",
+    "number": "E. 2020/2921 K. 2020/4462",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 63",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_063",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2023-11-06",
+    "number": "E. 2023/3070 K. 2023/4867",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 64",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_064",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2021-11-19",
+    "number": "E. 2021/1072 K. 2021/2389",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 65",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_065",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-09-13",
+    "number": "E. 2024/862 K. 2024/814",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 66",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_066",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2021-09-22",
+    "number": "E. 2021/4037 K. 2021/2696",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 67",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_067",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-06-16",
+    "number": "E. 2024/4269 K. 2024/346",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 68",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_068",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2021-05-23",
+    "number": "E. 2021/5095 K. 2021/3827",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 69",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_069",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-05-03",
+    "number": "E. 2024/2010 K. 2024/2580",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 70",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_070",
+    "court": "Anayasa Mahkemesi",
+    "date": "2022-11-22",
+    "number": "E. 2022/4684 K. 2022/3716",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 71",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_071",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2022-12-17",
+    "number": "E. 2022/4678 K. 2022/984",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 72",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_072",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-09-05",
+    "number": "E. 2024/2023 K. 2024/1500",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 73",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_073",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2022-11-02",
+    "number": "E. 2022/3754 K. 2022/4287",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 74",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_074",
+    "court": "Anayasa Mahkemesi",
+    "date": "2020-07-21",
+    "number": "E. 2020/3123 K. 2020/3301",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 75",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_075",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2022-04-04",
+    "number": "E. 2022/2914 K. 2022/1843",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 76",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_076",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2022-02-11",
+    "number": "E. 2022/4845 K. 2022/1139",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 77",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_077",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2024-12-09",
+    "number": "E. 2024/3708 K. 2024/2972",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 78",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_078",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2020-10-27",
+    "number": "E. 2020/4784 K. 2020/219",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 79",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_079",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-07-19",
+    "number": "E. 2024/3609 K. 2024/4009",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 80",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_080",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2022-02-10",
+    "number": "E. 2022/4712 K. 2022/1392",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 81",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_081",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2022-05-28",
+    "number": "E. 2022/3124 K. 2022/800",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 82",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_082",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2021-04-08",
+    "number": "E. 2021/1070 K. 2021/521",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 83",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_083",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2022-06-25",
+    "number": "E. 2022/5058 K. 2022/527",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 84",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_084",
+    "court": "Anayasa Mahkemesi",
+    "date": "2024-10-06",
+    "number": "E. 2024/3775 K. 2024/103",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 85",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_085",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2022-05-11",
+    "number": "E. 2022/4570 K. 2022/4009",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 86",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_086",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2024-08-08",
+    "number": "E. 2024/446 K. 2024/4735",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 87",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_087",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2022-11-02",
+    "number": "E. 2022/1127 K. 2022/1293",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 88",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_088",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2024-04-12",
+    "number": "E. 2024/1240 K. 2024/768",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 89",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_089",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2020-03-01",
+    "number": "E. 2020/4805 K. 2020/3268",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 90",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_090",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2024-05-07",
+    "number": "E. 2024/1151 K. 2024/4098",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 91",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_091",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2021-04-18",
+    "number": "E. 2021/267 K. 2021/3880",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 92",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_092",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2020-01-02",
+    "number": "E. 2020/1833 K. 2020/757",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 93",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_093",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2024-11-27",
+    "number": "E. 2024/3170 K. 2024/462",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 94",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_094",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2022-12-08",
+    "number": "E. 2022/3805 K. 2022/898",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 95",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_095",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2020-06-10",
+    "number": "E. 2020/2476 K. 2020/4674",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 96",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_096",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2020-01-17",
+    "number": "E. 2020/1031 K. 2020/3518",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 97",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_097",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2020-09-26",
+    "number": "E. 2020/631 K. 2020/941",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 98",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_098",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2023-10-21",
+    "number": "E. 2023/2274 K. 2023/574",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 99",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_099",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2024-10-03",
+    "number": "E. 2024/2766 K. 2024/4593",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 100",
+    "summary": "Yargıtay Hukuk Genel Kurulu, direnme kararını onamış ve yıllardır süregelen içtihat aykırılığını bu kararla gidermiştir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_100",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2023-08-20",
+    "number": "E. 2023/2652 K. 2023/1255",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 101",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_101",
+    "court": "Anayasa Mahkemesi",
+    "date": "2020-04-21",
+    "number": "E. 2020/3619 K. 2020/4805",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 102",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_102",
+    "court": "Yargıtay Ceza Genel Kurulu",
+    "date": "2021-04-09",
+    "number": "E. 2021/276 K. 2021/2210",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 103",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Doktrinde eleştirilen bir yaklaşımın Yargıtay tarafından benimsendiğini gösteren güncel bir emsaldir."
+  },
+  {
+    "id": "karar_103",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2020-02-28",
+    "number": "E. 2020/2765 K. 2020/2963",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 104",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
+  },
+  {
+    "id": "karar_104",
+    "court": "Yargıtay Hukuk Genel Kurulu",
+    "date": "2022-09-09",
+    "number": "E. 2022/3489 K. 2022/3668",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 105",
+    "summary": "Bölge Adliye Mahkemesi, ilk derece mahkemesinin delilleri eksik incelediğine karar vererek kararı esastan bozmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_105",
+    "court": "Yargıtay 9. Hukuk Dairesi",
+    "date": "2024-01-19",
+    "number": "E. 2024/1581 K. 2024/4168",
+    "category": "İş ve Sosyal Güvenlik Hukuku",
+    "topic": "İş ve Sosyal Güvenlik Hukuku Kapsamında Uyuşmazlık No. 106",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_106",
+    "court": "Yargıtay 12. Hukuk Dairesi",
+    "date": "2021-02-23",
+    "number": "E. 2021/1961 K. 2021/4174",
+    "category": "Miras Hukuku",
+    "topic": "Miras Hukuku Kapsamında Uyuşmazlık No. 107",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_107",
+    "court": "Anayasa Mahkemesi",
+    "date": "2021-12-07",
+    "number": "E. 2021/4734 K. 2021/3951",
+    "category": "Kıymetli Evrak Hukuku",
+    "topic": "Kıymetli Evrak Hukuku Kapsamında Uyuşmazlık No. 108",
+    "summary": "Anayasa Mahkemesi, yerel mahkemenin verdiği kararı hak ihlali gerekçesiyle bozmuştur. İlgili kuralın ölçülülük ilkesine aykırı olduğu vurgulanmıştır.",
+    "importance": "HMGS ve hakimlik sınavları için son derece kritik bir içtihat birleştirme kararıdır."
+  },
+  {
+    "id": "karar_108",
+    "court": "Anayasa Mahkemesi",
+    "date": "2020-10-06",
+    "number": "E. 2020/2752 K. 2020/3540",
+    "category": "Milletlerarası Özel Hukuk (MÖHUK)",
+    "topic": "Milletlerarası Özel Hukuk (MÖHUK) Kapsamında Uyuşmazlık No. 109",
+    "summary": "Danıştay, idari işlemin iptali istemiyle açılan davada yürütmenin durdurulması kararını hukuka uygun bulmuştur.",
+    "importance": "Uygulamada sıklıkla karşılaşılan tartışmalı bir konuyu netliğe kavuşturmuştur."
+  },
+  {
+    "id": "karar_109",
+    "court": "Anayasa Mahkemesi",
+    "date": "2022-03-08",
+    "number": "E. 2022/4685 K. 2022/836",
+    "category": "İcra ve İflas Hukuku",
+    "topic": "İcra ve İflas Hukuku Kapsamında Uyuşmazlık No. 110",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Anayasa'nın temel hak ve hürriyetler bölümüyle doğrudan ilişkili olup, sınavların vazgeçilmez sorularından biridir."
+  },
+  {
+    "id": "karar_110",
+    "court": "Yargıtay 1. Hukuk Dairesi",
+    "date": "2024-03-20",
+    "number": "E. 2024/3623 K. 2024/392",
+    "category": "Ceza Muhakemesi Hukuku (CMK)",
+    "topic": "Ceza Muhakemesi Hukuku (CMK) Kapsamında Uyuşmazlık No. 111",
+    "summary": "Yargıtay, bu kararında ilgili kanun maddesinin geniş yorumlanması gerektiğine hükmetmiştir. Bu durum pratikte uygulayıcılar için yeni bir emsal teşkil etmektedir.",
+    "importance": "Özellikle 4. sınıf ders müfredatında yer alan spesifik bir itiraz usulünü açıklamaktadır."
   }
 ]

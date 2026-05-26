@@ -1,0 +1,25 @@
+{
+  "title": "Kıymetli Evrak Hukuku Özeti",
+  "items": [
+    {
+      "topic": "Kıymetli Evrakın Tanımı",
+      "content": "İçerdiği hakkın senetten ayrı olarak ileri sürülemediği ve başkalarına devredilemediği senetlerdir. Hak, senede sıkı sıkıya bağlıdır."
+    },
+    {
+      "topic": "Türleri",
+      "content": "Nama yazılı (devri alacağın temliki + zilyetliğin devri), Emre yazılı (ciro + zilyetliğin devri), Hamiline yazılı (sadece zilyetliğin devri ile geçer)."
+    },
+    {
+      "topic": "Poliçe",
+      "content": "Poliçede 3 taraf vardır: Düzenleyen (Keşideci), Ödeyecek olan (Muhatap) ve Alacaklı (Lehtar). Keşideci, muhataba ödeme emri verir."
+    },
+    {
+      "topic": "Ciro",
+      "content": "Senedin arka yüzüne veya alonja yazılan bir beyanla senedin devrini veya rehnini sağlayan işlemdir. Temlik, tahsil ve rehin cirosu olmak üzere üçe ayrılır."
+    },
+    {
+      "topic": "Aval",
+      "content": "Kambiyo senedi üzerindeki borcun tamamını veya bir kısmını teminat altına almak için verilen bir tür kefalettir. Müteselsil sorumluluk doğurur."
+    }
+  ]
+}

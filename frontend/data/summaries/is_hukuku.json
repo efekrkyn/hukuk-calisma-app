@@ -1,0 +1,25 @@
+{
+  "title": "İş ve Sosyal Güvenlik Hukuku Özeti",
+  "items": [
+    {
+      "topic": "İş Sözleşmesi Türleri",
+      "content": "Belirli - Belirsiz süreli, Kısmi - Tam süreli, Deneme süreli (en çok 2 ay, TİS ile 4 ay). Asıl kural sözleşmenin belirsiz süreli olmasıdır."
+    },
+    {
+      "topic": "İş Güvencesi Şartları",
+      "content": "Otuz veya daha fazla işçi çalıştıran işyerinde, en az altı aylık kıdemi olan işçinin belirsiz süreli iş sözleşmesinin feshinde işveren geçerli bir sebep bildirmek zorundadır."
+    },
+    {
+      "topic": "Kıdem Tazminatı",
+      "content": "Aynı işverene bağlı olarak en az 1 yıl çalışan işçinin, kanunda sayılan haklı fesih, emeklilik, askerlik veya ölüm gibi nedenlerle işten ayrılması/çıkarılması halinde ödenir."
+    },
+    {
+      "topic": "Haklı Nedenle Fesih (m.24-25)",
+      "content": "Sağlık sebepleri, ahlak ve iyiniyet kurallarına uymayan haller ve zorlayıcı sebeplerle işçi (m.24) veya işveren (m.25) tarafından sözleşmenin derhal, tazminatsız (kıdem hariç) feshedilebilmesidir."
+    },
+    {
+      "topic": "Çalışma Süreleri",
+      "content": "Haftalık normal çalışma süresi en çok 45 saattir. Bu süreyi aşan çalışmalar fazla çalışma sayılır ve ücret %50 zamlı ödenir."
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
-
+import FloatingDictionary from "@/components/FloatingDictionary";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -40,7 +40,10 @@ export default function RootLayout({
       lang="tr"
       className={`${inter.variable} ${outfit.variable} dark h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/30">{children}</body>
+      <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/30">
+        {children}
+        <FloatingDictionary />
+      </body>
     </html>
   );
 }

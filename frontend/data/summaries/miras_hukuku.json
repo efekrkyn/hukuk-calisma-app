@@ -1,0 +1,25 @@
+{
+  "title": "Miras Hukuku Özeti",
+  "items": [
+    {
+      "topic": "Yasal Mirasçılar (Zümre Sistemi)",
+      "content": "1. Zümre: Altsoy (Çocuklar, torunlar), 2. Zümre: Ana-baba ve onların altsoyu, 3. Zümre: Büyük ana-büyük baba ve onların altsoyu. Sağ kalan eş her zümreyle mirasçıdır."
+    },
+    {
+      "topic": "Sağ Kalan Eşin Miras Payı",
+      "content": "1. zümre ile birlikte ise mirasın 1/4'ü, 2. zümre ile birlikte ise 1/2'si, 3. zümre (sadece büyük ana-büyük baba düzeyinde) ile birlikte ise 3/4'ü, diğer hallerde tamamı."
+    },
+    {
+      "topic": "Saklı Pay (Mahfuz Hisse)",
+      "content": "Mirasbırakanın ölüme bağlı tasarruflarıyla dahi ortadan kaldıramayacağı miras payıdır. Altsoyun saklı payı yasal miras payının yarısıdır (1/2). Sağ kalan eşinki ise birlikte olduğu zümreye göre değişir."
+    },
+    {
+      "topic": "Tenkis Davası",
+      "content": "Mirasbırakanın saklı payları zedeleyen tasarruflarının yasal sınırlara çekilmesi için açılan davadır."
+    },
+    {
+      "topic": "Mirasın Reddi",
+      "content": "Mirasçıların, mirasbırakanın ölümünü öğrendikleri tarihten itibaren 3 ay içinde mirası reddetmeleridir. Terekenin borca batık olduğu açık ise miras hükmen reddedilmiş sayılır."
+    }
+  ]
+}

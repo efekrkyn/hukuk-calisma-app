@@ -62,6 +62,8 @@ app.use("*", async (c, next) => {
   await next();
 });
 
+import { mevzuat } from "./routes/mevzuat";
+
 app.get("/", (c) => c.text("Hukuk Worker"));
 app.route("/health", health);
 app.route("/auth", authRouter);
@@ -71,5 +73,6 @@ app.route("/admin", admin);
 app.route("/ai", ai);
 app.route("/flashcards", flashcardsRouter);
 app.route("/quiz", quizRouter);
+app.route("/mevzuat", mevzuat);
 
 export default app;

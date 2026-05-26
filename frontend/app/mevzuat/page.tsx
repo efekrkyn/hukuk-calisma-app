@@ -1,44 +1,34 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, Newspaper, Bell } from "lucide-react";
+import { ArrowLeft, Newspaper, AlertTriangle, ExternalLink, Loader2 } from "lucide-react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { api } from "@/lib/api";
 
-const MOCK_UPDATES = [
-  {
-    id: "1",
-    date: "2025-05-20",
-    type: "Kanun Değişikliği",
-    title: "İcra ve İflas Kanunu'nda Değişiklik",
-    summary:
-      "İİK m. 82'de yapılan değişiklikle, haczedilemez malların kapsamı genişletilmiştir. Borçlunun yaşamını sürdürmesi için zorunlu olan ev eşyaları, elektronik aletler ve kişisel eşyalar artık daha geniş bir koruma kapsamına alınmıştır.",
-    source: "Resmi Gazete - Sayı: 32543",
-    impact: "Yüksek",
-  },
-  {
-    id: "2",
-    date: "2025-05-15",
-    type: "AYM Kararı",
-    title: "Uzlaştırma Kapsamının Genişletilmesi",
-    summary:
-      "Anayasa Mahkemesi, CMK m. 253'te yer alan uzlaştırma kapsamındaki suçların sınırlandırılmasına ilişkin düzenlemeyi iptal etmiştir. Bu kararla birlikte daha fazla suç türü uzlaştırma kapsamına alınabilecektir.",
-    source: "Anayasa Mahkemesi Genel Kurulu",
-    impact: "Orta",
-  },
-  {
-    id: "3",
-    date: "2025-05-10",
-    type: "Yönetmelik",
-    title: "Avukatlık Asgari Ücret Tarifesi Güncellendi",
-    summary:
-      "2025 yılı Avukatlık Asgari Ücret Tarifesi Resmi Gazete'de yayımlanarak yürürlüğe girmiştir. Yeni tarifede özellikle tüketici ve iş davalarında vekalet ücretlerinde önemli artışlar yapılmıştır.",
-    source: "Resmi Gazete - Sayı: 32538",
-    impact: "Düşük",
-  },
-];
+type MevzuatItem = { title: string; link: string; pubDate: string; description: string };
 
-export default function MevzuatPage() {
+export default function MevzuatTakip() {
+  const [items, setItems] = useState<MevzuatItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    api.getMevzuat()
+      .then(res => {
+        setItems(res.items);
+        setLoading(false);
+      })
+      .catch(e => {
+        console.error(e);
+        setError("Resmî Gazete verilerine ulaşılamadı.");
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <main className="min-h-screen bg-background p-4 md:p-8">
-      <div className="mx-auto max-w-4xl space-y-6">
+    <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <Link
             href="/"
@@ -47,57 +37,70 @@ export default function MevzuatPage() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             Ana sayfa
           </Link>
-          <h1 className="text-3xl font-bold flex items-center gap-2 text-gradient">
+          <h1 className="text-3xl font-bold flex items-center gap-2">
             <Newspaper className="w-8 h-8 text-primary" />
-            Mevzuat Takip Sistemi
+            Canlı Mevzuat Takip
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Son kanun değişiklikleri, AYM kararları ve yönetmelik güncellemeleri.
+            T.C. Resmî Gazete RSS akışından günlük otomatik alınan güncel değişiklikler.
           </p>
         </div>
+      </div>
 
-        <div className="space-y-4">
-          {MOCK_UPDATES.map((update) => (
-            <Card key={update.id} className="glass hover-glow border-primary/20">
-              <CardHeader className="pb-3 border-b border-border/10 bg-muted/10">
-                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-primary/10 rounded-lg">
-                      <Bell className="w-4 h-4 text-primary" />
-                    </div>
-                    <div>
-                      <CardTitle className="text-lg text-gradient">{update.title}</CardTitle>
-                      <p className="text-xs text-muted-foreground mt-0.5">{update.date} • {update.source}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full">{update.type}</span>
-                    <span
-                      className={`text-xs px-2 py-0.5 rounded-full ${
-                        update.impact === "Yüksek"
-                          ? "bg-red-500/10 text-red-500"
-                          : update.impact === "Orta"
-                          ? "bg-yellow-500/10 text-yellow-600"
-                          : "bg-green-500/10 text-green-600"
-                      }`}
-                    >
-                      {update.impact} Etki
-                    </span>
-                  </div>
+      <div className="grid grid-cols-1 gap-4">
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20 text-muted-foreground">
+            <Loader2 className="w-10 h-10 animate-spin mb-4 text-primary" />
+            Resmî Gazete verileri çekiliyor...
+          </div>
+        )}
+
+        {error && (
+          <div className="p-4 border border-red-500/50 bg-red-500/10 rounded-xl text-red-500">
+            {error}
+          </div>
+        )}
+
+        {!loading && !error && items.map((item, idx) => (
+          <Card key={idx} className="glass hover-glow border-primary/20">
+            <CardHeader className="bg-muted/10 pb-3 border-b border-border/10">
+              <div className="flex justify-between items-start gap-4">
+                <CardTitle className="text-base font-semibold leading-tight text-gradient flex-1">
+                  {item.title}
+                </CardTitle>
+                <div className="shrink-0 flex items-center gap-2">
+                  <span className="text-[10px] font-bold px-2 py-1 bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 rounded-full">
+                    GÜNCEL
+                  </span>
                 </div>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <p className="text-sm leading-relaxed text-foreground/90">{update.summary}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        <div className="text-center py-6">
-          <p className="text-xs text-muted-foreground">
-            Mevzuat güncellemeleri düzenli olarak eklenmektedir. Her hafta en güncel değişiklikleri burada bulabilirsin.
-          </p>
-        </div>
+              </div>
+            </CardHeader>
+            <CardContent className="pt-4 space-y-3 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div className="flex-1">
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">
+                  {item.description || "Detaylar Resmi Gazete bağlantısındadır."}
+                </p>
+                <p className="text-xs text-muted-foreground/60 mt-2 font-medium">
+                  Yayın Tarihi: {item.pubDate}
+                </p>
+              </div>
+              
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center shrink-0 px-3 py-1.5 text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 rounded-md transition-colors"
+              >
+                Gazetede Oku <ExternalLink className="w-3 h-3 ml-1" />
+              </a>
+            </CardContent>
+          </Card>
+        ))}
+        {!loading && !error && items.length === 0 && (
+          <div className="text-center py-10 text-muted-foreground">
+            Bugün için veri bulunamadı.
+          </div>
+        )}
       </div>
     </main>
   );

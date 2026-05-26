@@ -58,6 +58,7 @@ export const api = {
     fetchWorker<PdfListResponse>(
       `/pdf/list${prefix ? `?prefix=${encodeURIComponent(prefix)}` : ""}`
     ),
+  getMevzuat: () => fetchWorker<{ items: Array<{ title: string; link: string; pubDate: string; description: string }> }>("/mevzuat/rss"),
   uploadPdf: async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);

@@ -1,0 +1,25 @@
+{
+  "title": "İcra ve İflas Hukuku Son Gece Özeti",
+  "items": [
+    {
+      "topic": "İlamsız İcra ve İtiraz",
+      "content": "İlamsız icra takibi sadece para ve teminat alacakları için yapılır. Borçlu, ödeme emrinin tebliğinden itibaren 7 gün içinde icra dairesine itiraz edebilir. İtiraz takibi durdurur."
+    },
+    {
+      "topic": "İtirazın İptali ve Kaldırılması",
+      "content": "İtirazı bertaraf etmek için alacaklı 1 yıl içinde genel mahkemede itirazın iptali davası açabilir (İİK m.67) veya elinde İİK m.68'de sayılan belgeler varsa 6 ay içinde icra mahkemesinden itirazın kesin kaldırılmasını isteyebilir."
+    },
+    {
+      "topic": "Haciz ve Sıra Cetveli",
+      "content": "Haciz, borçlunun mallarına icra dairesince el konulmasıdır. Birden fazla alacaklı varsa sıra cetveli yapılır. İmtiyazlı alacaklar (işçi, nafaka vb.) önceliklidir."
+    },
+    {
+      "topic": "İstihkak Davası",
+      "content": "Haczedilen malın kendisine ait olduğunu iddia eden üçüncü kişi istihkak iddiasında bulunabilir. Bu durumda açılan davaya istihkak davası denir."
+    },
+    {
+      "topic": "İflasın Açılması",
+      "content": "Tacirler iflasa tabidir. İflas kararı ticaret mahkemesince verilir ve karar anından itibaren borçlunun haczedilebilen tüm malları iflas masasına girer. Borçlu iflas masası üzerindeki tasarruf yetkisini kaybeder."
+    }
+  ]
+}
