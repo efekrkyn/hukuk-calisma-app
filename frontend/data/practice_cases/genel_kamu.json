@@ -1,6 +1,181 @@
 [
   {
     "course": "genel_kamu",
+    "title": "Genel Kamu - Üçüncü Kuşak İnsan Hakları",
+    "difficulty": "kolay",
+    "scenario": "Çevre hakkı, barış hakkı, gelişme hakkı gibi haklar hangi kuşak insan haklarıdır?",
+    "ideal_solution": "Bu haklar, Karel Vasak'ın tasnifine göre 'Üçüncü Kuşak (Dayanışma Hakları)' olarak adlandırılır. Birinci kuşak klasik sivil ve siyasi haklar (özgürlükler), ikinci kuşak ekonomik ve sosyal haklar (eşitlik) iken, üçüncü kuşak haklar küresel dayanışma gerektiren (kardeşlik) çevre, barış ve halkların kendi kaderini tayin hakkıdır.",
+    "key_points": [
+      "Üçüncü kuşak haklar",
+      "Dayanışma hakları",
+      "Çevre hakkı",
+      "Barış hakkı"
+    ],
+    "topics": [
+      "İnsan Hakları",
+      "Hakların Sınıflandırılması"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_910"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Weber ve Devletin Şiddet Tekeli",
+    "difficulty": "orta",
+    "scenario": "Max Weber'e göre devleti tanımlayan en belirgin sosyolojik özellik nedir?",
+    "ideal_solution": "Max Weber devleti, 'belirli bir toprak parçası üzerinde MEŞRU FİZİKSEL ŞİDDET KULLANMA TEKELİNİ (tekel hakkını) başarıyla tekelinde bulunduran insan topluluğu (örgüt)' olarak tanımlar. Yani devlet dışında hiçbir grup veya kişinin meşru olarak güç/şiddet kullanma hakkı yoktur.",
+    "key_points": [
+      "Max Weber",
+      "Meşru şiddet tekeli",
+      "Devletin tanımı"
+    ],
+    "topics": [
+      "Devletin Unsurları"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_909"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - AİHS Pozitif Yükümlülük",
+    "difficulty": "zor",
+    "scenario": "Devlet, AİHS m.2 Yaşam Hakkı kapsamında sadece vatandaşlarını öldürmemekle (negatif yükümlülük) mi mükelleftir?",
+    "ideal_solution": "Hayır. AİHM içtihatlarına göre Yaşam Hakkı (m.2) devlete sadece müdahale etmeme (öldürmeme) değil, aynı zamanda vatandaşlarının yaşamını üçüncü kişilerin veya doğa olaylarının tehlikelerinden koruma (Polis koruması sağlama, önleyici tedbirler alma vb.) 'POZİTİF YÜKÜMLÜLÜĞÜNÜ' de yükler. Ayrıca şüpheli ölümlerde etkili bir soruşturma yürütme zorunluluğu da (usuli pozitif yükümlülük) vardır.",
+    "key_points": [
+      "Yaşam Hakkı (m.2)",
+      "Pozitif yükümlülük",
+      "Etkili soruşturma",
+      "Devletin koruma ödevi"
+    ],
+    "topics": [
+      "İnsan Hakları",
+      "Yaşam Hakkı"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_908"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Machiavelli ve Amaca Giden Her Yol Mubahtır",
+    "difficulty": "kolay",
+    "scenario": "Prens adlı eserinde siyasetin ahlaktan bağımsız olduğunu savunan düşünür kimdir?",
+    "ideal_solution": "Niccolò Machiavelli'dir. 'Prens' (Il Principe) adlı eserinde devletin bekası ve siyasi gücün korunması için ahlaki değerlerin gerekirse bir kenara bırakılabileceğini savunmuştur (Amaca giden her yol mubahtır anlayışı - Makyavelizm). Ona göre devletin çıkarı her şeyin üstündedir.",
+    "key_points": [
+      "Machiavelli",
+      "Prens",
+      "Ahlak ve siyaset ayrımı",
+      "Devlet aklı (Raison d'etat)"
+    ],
+    "topics": [
+      "Devletin Kökeni",
+      "Machiavelli"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_907"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Rousseau ve Temsili Demokrasi Eleştirisi",
+    "difficulty": "orta",
+    "scenario": "Rousseau, temsili demokrasiyi (halkın temsilciler seçmesini) nasıl değerlendirir?",
+    "ideal_solution": "Rousseau, temsili demokrasiye şiddetle KARŞIDIR. Ona göre 'Egemenlik devredilemez'. İngiliz parlamenter sistemini eleştirerek, 'İngiliz halkı sadece seçim günlerinde özgürdür, seçim bittikten sonra tekrar köle olur' demiştir. Rousseau, halkın doğrudan yasa yaptığı Doğrudan Demokrasiyi savunur.",
+    "key_points": [
+      "Rousseau",
+      "Temsili demokrasi eleştirisi",
+      "Doğrudan demokrasi",
+      "Egemenlik devredilemez"
+    ],
+    "topics": [
+      "Demokrasi Teorileri",
+      "Rousseau"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_906"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Hukuk Devleti İlkeleri",
+    "difficulty": "orta",
+    "scenario": "Bir devletin 'Hukuk Devleti' sayılabilmesi için taşıması gereken olmazsa olmaz asgari şartlar (maddi ve şekli) nelerdir?",
+    "ideal_solution": "Hukuk devleti, idarenin eylem ve işlemlerinin hukuk kurallarına bağlı olduğu ve yargı denetimine tabi tutulduğu devlettir. Temel şartları: 1) Kanunların genelliği ve öngörülebilirliği, 2) Yargı bağımsızlığı ve tarafsızlığı, 3) İdarenin yargısal denetimi (İptal ve tam yargı davaları), 4) Temel hak ve hürriyetlerin güvence altına alınması, 5) İdarenin mali sorumluluğu, 6) Kanuni idare ilkesi ve idarenin kanuniliği.",
+    "key_points": [
+      "Hukuk devleti",
+      "Yargı denetimi",
+      "Yargı bağımsızlığı",
+      "Temel hak güvencesi"
+    ],
+    "topics": [
+      "Devlet Türleri",
+      "Hukuk Devleti"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_905"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Carl Schmitt ve Düşman/Dost Ayrımı",
+    "difficulty": "zor",
+    "scenario": "Carl Schmitt'e göre siyasal (politika) kavramının özü nedir?",
+    "ideal_solution": "Carl Schmitt'e göre siyasetin özü 'Dost ve Düşman' ayrımına dayanır. Ahlak için iyi-kötü, estetik için güzel-çirkin ne ise, siyaset için de dost-düşman ayrımı odur. Düşman, kamuya ait bir düşmandır (hostis) ve devletin/toplumun varlığını tehdit eden ötekidir.",
+    "key_points": [
+      "Carl Schmitt",
+      "Siyasal kavramı",
+      "Dost-Düşman ayrımı"
+    ],
+    "topics": [
+      "Siyaset Kuramları"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_904"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - AİHM ve İç Hukuk Yollarının Tüketilmesi",
+    "difficulty": "zor",
+    "scenario": "Vatandaş (V), adil yargılanma hakkının ihlal edildiği gerekçesiyle Yargıtay kararından hemen sonra doğrudan Avrupa İnsan Hakları Mahkemesi'ne (AİHM) başvurur. AİHM başvuruyu kabul eder mi?",
+    "ideal_solution": "Hayır, kabul etmez. AİHS m.35 uyarınca, AİHM'e başvurabilmek için 'İç Hukuk Yollarının Tüketilmesi' şartı vardır. Türk hukuk sisteminde Anayasa Mahkemesine Bireysel Başvuru yolu mevcut olduğundan, Yargıtay kararından sonra öncelikle AYM'ye başvurulması (Anayasa m.148) zorunludur. AYM'den de ret kararı aldıktan sonra süresi içinde (4 ay) AİHM'e başvurulabilir.",
+    "key_points": [
+      "AİHM",
+      "İç hukuk yollarının tüketilmesi",
+      "AYM Bireysel Başvuru"
+    ],
+    "topics": [
+      "İnsan Hakları",
+      "AİHM"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_903"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Montesquieu ve Kuvvetler Ayrılığı",
+    "difficulty": "orta",
+    "scenario": "Kuvvetler ayrılığı ilkesi kime aittir ve amacı nedir?",
+    "ideal_solution": "Kuvvetler Ayrılığı ilkesi, Montesquieu tarafından sistemleştirilmiştir ('Kanunların Ruhu Üzerine' adlı eserinde). Amacı, devlet içindeki yasama, yürütme ve yargı güçlerinin aynı elde toplanmasını engelleyerek mutlak monarşiyi (tiranlığı) önlemek ve vatandaşların siyasi özgürlüklerini güvence altına almaktır. 'Güç, gücü durdurmalıdır' felsefesine dayanır.",
+    "key_points": [
+      "Kuvvetler Ayrılığı",
+      "Montesquieu",
+      "Güç gücü durdurmalıdır",
+      "Özgürlüğün güvencesi"
+    ],
+    "topics": [
+      "Devletin Unsurları",
+      "Kuvvetler Ayrılığı"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_902"
+  },
+  {
+    "course": "genel_kamu",
+    "title": "Genel Kamu - Doğal Haklar Doktrini",
+    "difficulty": "kolay",
+    "scenario": "John Locke'un bahsettiği 'Doğal Haklar' nelerdir ve devlet bu hakları ortadan kaldırabilir mi?",
+    "ideal_solution": "Doğal haklar doktrinine (özellikle John Locke'a) göre, insanların doğuştan getirdiği devredilemez ve vazgeçilemez üç temel hak vardır: Yaşama, Özgürlük ve Mülkiyet hakları. Devlet (sivil toplum), bu hakları korumak için bir 'sosyal sözleşme' ile kurulmuştur. Dolayısıyla devlet, varlık sebebi olan bu doğal hakları ortadan kaldıramaz; aksine korumakla yükümlüdür.",
+    "key_points": [
+      "Doğal haklar",
+      "Locke",
+      "Yaşama, Özgürlük, Mülkiyet",
+      "Sosyal sözleşme"
+    ],
+    "topics": [
+      "Devletin Kökeni",
+      "Doğal Haklar"
+    ],
+    "id": "genel_kamu_AUHF_BULK2_901"
+  },
+  {
+    "course": "genel_kamu",
     "title": "AÜHF Özel: Egemenlik ve Sosyal Sözleşme",
     "difficulty": "kolay",
     "scenario": "Rousseau'nun 'Sosyal Sözleşme' (Toplum Sözleşmesi) teorisine göre egemenliğin kaynağı nedir ve bu teori günümüz modern demokrasilerinde hangi kavramın temelini oluşturmuştur?",

@@ -1,6 +1,182 @@
 [
   {
     "course": "is_hukuku",
+    "title": "İş Hukuku - Toplu İş Sözleşmesi Yetkisi",
+    "difficulty": "zor",
+    "scenario": "Bir işyerinde çalışan 100 işçinin 45'i A sendikasına, 30'u B sendikasına üyedir. Kalan işçiler sendikasızdır. A sendikası Toplu İş Sözleşmesi (TİS) yapmak için Bakanlığa yetki tespiti başvurusu yapar. Yetki verilir mi?",
+    "ideal_solution": "Sendikalar ve Toplu İş Sözleşmesi Kanununa göre, işyeri düzeyinde TİS yapabilmek için sendikanın işyerinde çalışan işçilerin YARISINDAN FAZLASININ (Yarıdan bir fazla, %50+1) kendi üyesi olması gerekir (İşyeri barajı). Ayrıca o işkolunda %1 işkolu barajını geçmesi gerekir. Olayda 100 işçinin yarısından fazlası 51 yapar. A sendikasının üye sayısı 45'tir. Bu nedenle A sendikası çoğunluğu sağlayamadığı için TİS yetkisi ALAMAZ.",
+    "key_points": [
+      "Toplu İş Sözleşmesi",
+      "Yetki tespiti",
+      "Yarıdan fazla (%50+1) şartı"
+    ],
+    "topics": [
+      "Toplu İş Hukuku",
+      "Toplu İş Sözleşmesi"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_915"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Altı İş Günü Süresi",
+    "difficulty": "kolay",
+    "scenario": "İşveren, muhasebecisi (K)'nın zimmetine para geçirdiğini 1 Ocak'ta öğrenir. İşveren ancak 10 Ocak tarihinde (K)'yı haklı nedenle derhal fesih yoluyla (İş K. m.25/II) işten çıkarır. (K) itiraz eder.",
+    "ideal_solution": "İş K. m.26 uyarınca, ahlak ve iyiniyet kurallarına uymayan hallere (m.25/II) dayanarak haklı nedenle fesih yetkisi, olayın öğrenildiği tarihten itibaren ALTI İŞ GÜNÜ içinde kullanılmalıdır. İşveren 1 Ocak'ta öğrenip 10 Ocak'ta feshettiği için hak düşürücü süreyi kaçırmıştır. Fesih HAKSIZ feshe dönüşmüştür, (K) kıdem ve ihbar tazminatı isteyebilir.",
+    "key_points": [
+      "Ahlak ve iyiniyet",
+      "6 iş günü süresi",
+      "Hak düşürücü süre",
+      "Haksız fesih"
+    ],
+    "topics": [
+      "Sözleşmenin Feshi",
+      "Haklı Nedenle Fesih"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_914"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Grev ve Lokavt",
+    "difficulty": "orta",
+    "scenario": "Sendika ile işveren arasında TİS görüşmeleri uyuşmazlıkla sonuçlanır. Sendika yasal grev kararı alır. İşveren, greve katılmayan 10 işçiyi fabrikada çalıştırarak üretime devam eder ve greve katılan işçilerin yerine de taşeron işçi alır. Bu durum yasal mıdır?",
+    "ideal_solution": "Grev ve Lokavt Kanununa göre, yasal grev sırasında greve katılmayan işçilerin işyerinde çalışmasına engel olunamaz (Grev kırıcı olmamak şartıyla). Ancak işveren, greve katılan işçilerin KADROLARI YERİNE hiçbir şekilde daimi veya geçici (taşeron) İŞÇİ ALAMAZ. İşverenin greve katılanların yerine dışarıdan işçi getirmesi açıkça kanuna aykırıdır.",
+    "key_points": [
+      "Yasal grev",
+      "Greve katılmayan işçiler",
+      "Grev yerine işçi alma yasağı"
+    ],
+    "topics": [
+      "Toplu İş Hukuku",
+      "Grev ve Lokavt"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_913"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Geçerli Nedenle Fesih (Performans)",
+    "difficulty": "zor",
+    "scenario": "Satış temsilcisi (S), iş güvencesi kapsamındadır. Son 6 aydır satış hedeflerini tutturamamaktadır. İşveren, (S)'nin savunmasını almadan 'performans düşüklüğü' gerekçesiyle sözleşmesini geçerli nedenle (İş K. m.18) feshedip ihbar ve kıdemini öder. (S) işe iade davası açar.",
+    "ideal_solution": "İş K. m.19/2'ye göre, işveren 'işçinin performansı veya davranışından' kaynaklanan nedenlerle fesih yapacaksa, işçinin SAVUNMASINI ALMAK ZORUNDADIR. Savunma alınmadan yapılan fesih, performans düşüklüğü ispatlansa dahi sırf usul eksikliğinden (savunma alınmamasından) dolayı GEÇERSİZ sayılır. Mahkeme (S)'nin işe iadesine karar vermelidir.",
+    "key_points": [
+      "Geçerli fesih",
+      "Performans düşüklüğü",
+      "Savunma alma zorunluluğu (İş K. m.19)",
+      "Feshin geçersizliği"
+    ],
+    "topics": [
+      "İş Güvencesi",
+      "Geçerli Nedenle Fesih"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_912"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Haklı Nedenle Fesih (İşçi)",
+    "difficulty": "orta",
+    "scenario": "İşçi (M)'nin maaşları son 3 aydır sürekli olarak 20 gün gecikmeli ödenmektedir. (M), bu durumu gerekçe göstererek iş sözleşmesini derhal fesheder ve kıdem tazminatını talep eder. İşveren ise 'maaşları ödüyoruz sadece geçikiyor' diyerek talebi reddeder.",
+    "ideal_solution": "İş K. m.24/II-e uyarınca, işveren tarafından işçinin ücreti kanun hükümleri veya sözleşme şartlarına uygun olarak hesaplanmaz veya ödenmezse işçi iş sözleşmesini derhal (haklı nedenle) feshedebilir. Ücretin sürekli gecikmeli ödenmesi haklı fesih nedenidir. (M) kıdem tazminatına hak kazanır ancak haklı nedenle dahi olsa kendisi feshettiği için ihbar tazminatı alamaz.",
+    "key_points": [
+      "Ücretin ödenmemesi/gecikmesi",
+      "İşçi lehine haklı fesih",
+      "İş K. m.24",
+      "Kıdem tazminatı"
+    ],
+    "topics": [
+      "Sözleşmenin Feshi",
+      "Haklı Nedenle Fesih"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_911"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - İşyerinin Devri",
+    "difficulty": "zor",
+    "scenario": "(A) Tekstil, fabrikasını tüm işçileriyle birlikte (B) Tekstil'e devreder. İşçi (İ), (A) döneminde 5 yıl, (B) döneminde ise 2 yıl çalıştıktan sonra (B) tarafından haksız yere işten çıkarılır. (İ), 7 yıllık kıdem tazminatının tamamını eski işveren (A)'dan isteyebilir mi?",
+    "ideal_solution": "İş K. m.6 uyarınca işyeri devrinde iş sözleşmeleri bütün hak ve borçları ile devralana geçer. Kıdem tazminatı bakımından (İş K. m.14); işyerini devreden işveren (A), işçinin kendisinde çalıştığı süre (5 yıl) ve o zamanki ücret seviyesiyle sınırlı olarak YENİ İŞVEREN (B) ile MÜTESELSİLEN sorumludur. (İ), 7 yıllık kıdeminin tamamı için (B)'ye başvurabilirken, (A)'dan sadece ilk 5 yıla isabet eden kısmı talep edebilir.",
+    "key_points": [
+      "İşyerinin devri",
+      "Kıdem tazminatı müteselsil sorumluluk",
+      "Devredenin sınırlı sorumluluğu"
+    ],
+    "topics": [
+      "İşyeri",
+      "İşyerinin Devri"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_910"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Fazla Çalışma (Mesai)",
+    "difficulty": "orta",
+    "scenario": "Haftalık 40 saatlik sözleşmeyle çalışan (Ç), bir haftada toplam 48 saat çalıştırılmıştır. (Ç)'nin 40 saatten 48 saate kadar olan 8 saatlik çalışmasının hukuki niteliği ve ücreti nedir?",
+    "ideal_solution": "İş K. m.41'e göre haftalık normal çalışma süresi azami 45 saattir. Sözleşme ile belirlenen haftalık çalışma süresi (40 saat) ile kanuni sınır (45 saat) arasındaki 5 saatlik çalışma 'Fazla Sürelerle Çalışma'dır ve ücreti %25 zamlı ödenir. 45 saati aşan (45-48 arası) 3 saatlik çalışma ise 'Fazla Çalışma'dır ve ücreti %50 zamlı ödenir.",
+    "key_points": [
+      "Fazla çalışma",
+      "Fazla sürelerle çalışma",
+      "45 saat sınırı",
+      "%25 ve %50 zam oranı"
+    ],
+    "topics": [
+      "Çalışma Süreleri",
+      "Fazla Çalışma"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_909"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Kadın İşçinin Evlenmesi",
+    "difficulty": "kolay",
+    "scenario": "Kadın işçi (K), evlendikten 8 ay sonra iş sözleşmesini evlilik gerekçesiyle fesheder. İşveren, (K)'nın ihbar süresine uymadan işi bıraktığını belirterek kıdem tazminatını ödemez ve ihbar tazminatı ister.",
+    "ideal_solution": "1475 sayılı mülga İş K. m.14 (halen yürürlüktedir) gereğince, kadın işçi evlendiği tarihten itibaren 1 yıl içinde kendi arzusu ile iş sözleşmesini sona erdirirse KIDEM TAZMİNATINA hak kazanır. Evlilik nedeniyle fesih haklı nedene dayanmadığından işçi ihbar tazminatı alamaz ancak işveren de ondan ihbar tazminatı İSTEYEMEZ. Fesih derhal etki doğurur.",
+    "key_points": [
+      "Kadın işçinin evlenmesi",
+      "1 yıllık süre",
+      "Kıdem tazminatı",
+      "İhbar tazminatı yokluğu"
+    ],
+    "topics": [
+      "Kıdem Tazminatı",
+      "Fesih"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_908"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - Belirli Süreli İş Sözleşmesi",
+    "difficulty": "orta",
+    "scenario": "Bir banka, gişe görevlisi (G) ile '1 yıllık belirli süreli' iş sözleşmesi yapar. Süre bitiminde sözleşme kendiliğinden sona erer. (G), kıdem tazminatı ve işe iade davası açar.",
+    "ideal_solution": "İş K. m.11'e göre belirli süreli iş sözleşmesi ancak 'objektif koşulların' (belirli bir işin tamamlanması, kampanya dönemi vs.) varlığı halinde yapılabilir. Gişe memurluğu sürekli ve esaslı bir iştir, objektif koşul yoktur. Bu nedenle sözleşme baştan itibaren BELİRSİZ süreli sayılır. Sözleşmenin süre bitimiyle sonlandırılması 'haksız fesih' niteliğindedir. (G) 1 yıllık kıdemi doldurduğu ve bankada 30+ işçi olduğu varsayımıyla (G) işe iade davası açabilir ve kıdem tazminatı talep edebilir.",
+    "key_points": [
+      "Belirli süreli iş sözleşmesi",
+      "Objektif koşul şartı",
+      "Belirsiz süreliye dönüşme",
+      "Haksız fesih"
+    ],
+    "topics": [
+      "İş Sözleşmesi Türleri"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_907"
+  },
+  {
+    "course": "is_hukuku",
+    "title": "İş Hukuku - İşe İade ve İşe Başlatmama Tazminatı",
+    "difficulty": "zor",
+    "scenario": "İş güvencesi kapsamında olan (İ), işten çıkarılınca işe iade davası açmış ve kazanmıştır. (İ), süresi içinde işverene başvurarak işe başlatılmasını talep etmiş, işveren (İ)'yi işe başlatmamış ve ona 4 aylık işe başlatmama tazminatını ödemiştir. Ancak işveren, ihbar ve kıdem tazminatını ödemeyi reddetmiştir. Hukuki durum nedir?",
+    "ideal_solution": "İş K. m.21'e göre, işe iade davasını kazanan işçi süresi içinde başvurmasına rağmen işveren işe başlatmazsa, işverence yapılmış olan fesih GEÇERLİ fesih haline gelir ve iş ilişkisi bu tarihte sona ermiş sayılır. Bu nedenle işveren, işe başlatmama tazminatına ek olarak (daha önce ödememişse) feshe bağlı haklar olan Kıdem ve İhbar tazminatlarını da o günkü (işe başlatmama anındaki) ücret üzerinden hesaplayarak işçiye ödemek ZORUNDADIR.",
+    "key_points": [
+      "İşe iade davası",
+      "İşe başlatmama tazminatı",
+      "Feshin geçerli hale gelmesi",
+      "Kıdem ve ihbar tazminatı ödemesi"
+    ],
+    "topics": [
+      "İş Güvencesi",
+      "İşe İade"
+    ],
+    "id": "is_hukuku_AUHF_BULK1_906"
+  },
+  {
+    "course": "is_hukuku",
     "title": "AÜHF Özel: Alt İşveren (Taşeron) İlişkisi ve Muvazaa",
     "difficulty": "zor",
     "scenario": "(A) Hastanesi, hastanedeki MR çekimi hizmetlerini (B) Görüntüleme şirketine devretmiştir. (B) şirketi, kendi MR cihazlarını hastaneye kurmuş ve kendi radyoloji teknisyenlerini çalıştırmaktadır. Ancak (A) Hastanesinin başhekimi, (B) şirketinin çalışanlarına günlük mesai saatleri konusunda doğrudan emir ve talimat vermektedir. (B) şirketinin teknisyeni (T), kıdem tazminatını alamadığı gerekçesiyle hem (A) hem de (B)'ye dava açar. (A) hastanesi sorumluluğu reddeder. Hukuki durumu değerlendiriniz.",

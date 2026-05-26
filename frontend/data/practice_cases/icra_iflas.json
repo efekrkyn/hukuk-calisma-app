@@ -1,6 +1,180 @@
 [
   {
     "course": "icra_iflas",
+    "title": "İcra ve İflas - Şikayet Süresi ve Kamu Düzeni",
+    "difficulty": "kolay",
+    "scenario": "İcra Müdürü, borçluya ait bir taşınmazı ihale yoluyla satarken kanunda öngörülen asgari satış bedelinin çok altında bir bedele ihaleyi tamamlar (Kamu düzenine aykırı ağır hata). Borçlu 1 ay sonra şikayet eder. Şikayet süresi geçmiş midir?",
+    "ideal_solution": "Kural olarak icra müdürünün işlemlerine karşı şikayet süresi işlemin öğrenildiği tarihten itibaren 7 GÜNDÜR (İİK m.16). Ancak işlem 'Kamu düzenine' aykırıysa, SÜRESİZ ŞİKAYET yolu açıktır. Ağır usul hataları ve kamu düzenini bozan emredici kural ihlalleri süresiz şikayete tabidir. İcra Mahkemesi şikayeti kabul etmelidir.",
+    "key_points": [
+      "İcra şikayeti",
+      "7 günlük kural",
+      "Süresiz şikayet istisnası",
+      "Kamu düzeni (İİK m.16)"
+    ],
+    "topics": [
+      "İcra Organları",
+      "Şikayet"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_916"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - Tasarrufun İptali Davası",
+    "difficulty": "orta",
+    "scenario": "Borca batık olan (B), hakkında icra takibi başlayacağını anlayınca tüm malvarlığını (tek evini) kayınbiraderi (K)'ya düşük bir bedelle satarak devreder. Alacaklı (A), bu satışı iptal ettirebilir mi?",
+    "ideal_solution": "Evet. İİK m.277 vd. uyarınca, borçlunun alacaklılarından mal kaçırmak amacıyla yaptığı tasarrufların iptali için 'Tasarrufun İptali Davası (Actio Pauliana)' açılabilir. İİK m.278'e göre (İvazsız tasarrufların iptali), borçlunun eşi, altsoyu, üstsoyu, kan veya kayın hısımları (3. derece dahil) ile yaptığı satışlar BAĞIŞLAMA GİBİ KABUL EDİLİR ve iptal edilebilir. Kayınbirader (K), 2. derece kayın hısmıdır. Mahkeme satışı iptal eder ve ev, (B)'nin malvarlığına geri dönmüş sayılarak (A) tarafından haczettirilip satılabilir.",
+    "key_points": [
+      "Tasarrufun iptali davası",
+      "İİK m.277-278",
+      "Hısımlara satışın bağışlama sayılması",
+      "Mal kaçırma kasti"
+    ],
+    "topics": [
+      "Tasarrufun İptali Davası"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_915"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - Hacze İştirak",
+    "difficulty": "zor",
+    "scenario": "(B)'nin maaşına (A) tarafından haciz konulmuştur ve kesintiler devam etmektedir. Daha sonra (C)'nin başlattığı takip kesinleşir ve (C) de maaş haczine iştirak etmek ister. (C)'nin alacağı ilama (mahkeme kararına) dayanmaktadır. İştirak mümkün müdür?",
+    "ideal_solution": "İİK m.100'e göre 'İmtiyazlı Hacze İştirak' için, sonradan gelen alacaklının alacağının, ilk haczin İHTİYATİ veya İCRASİ olarak KESİNLEŞTİĞİ TARİHTEN ÖNCE (önceki bir tarihte) alınmış bir İLAMA (veya resmi belgeye) dayanması gerekir. Eğer (C)'nin ilamı ilk haciz tarihinden öncesine aitse, ilk hacze iştirak edebilir ve haczedilen malların (maaşın) satış bedeli ikisi arasında garame (orantılı) paylaştırılır.",
+    "key_points": [
+      "Hacze iştirak (İİK m.100)",
+      "İmtiyazlı iştirak şartları",
+      "İlamın tarihi"
+    ],
+    "topics": [
+      "Haciz",
+      "Hacze İştirak"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_914"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - Sıra Cetveline İtiraz",
+    "difficulty": "orta",
+    "scenario": "İflas masasına giren alacakların ödenmesi için iflas idaresi tarafından hazırlanan Sıra Cetvelinde (A), kendi sırasının yanlış olduğunu düşünmektedir. Nereye ve nasıl başvurmalıdır?",
+    "ideal_solution": "Sıra cetveline itiraz iki farklı sebeple yapılabilir. Eğer (A) sadece 'sırasına' (öncelik hakkına) veya 'hukuki yoruma/icra dairesinin işlemine' itiraz ediyorsa (yani başkasının alacağına değil kendi sırasına), 7 GÜN içinde İcra Mahkemesine ŞİKAYET yoluyla başvurur. Eğer (A), cetvele alınan başka bir alacaklının alacağının esasına veya miktarına (böyle bir borç yoktur diyerek) itiraz ediyorsa, 15 GÜN içinde Asliye Ticaret Mahkemesinde (veya genel mahkemelerde) SIRA CETVELİNE İTİRAZ DAVASI açmalıdır.",
+    "key_points": [
+      "Sıra cetveli",
+      "Sıraya şikayet (İcra Mahkemesi - 7 gün)",
+      "Esasa itiraz (Genel Mahkeme - 15 gün)"
+    ],
+    "topics": [
+      "İflas Hukuku",
+      "İflas Tasfiyesi"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_913"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - İflasın Ertelenmesi ve Konkordato",
+    "difficulty": "kolay",
+    "scenario": "Mali durumu bozulan bir anonim şirket, iflastan kurtulmak için iflasın ertelenmesi kurumuna başvurmak ister. Bu günümüzde mümkün müdür?",
+    "ideal_solution": "Hayır. 2018 yılında İcra ve İflas Kanunu'nda yapılan büyük değişiklikle 'İflasın Ertelenmesi' kurumu tamamen KALDIRILMIŞTIR. Bunun yerine 'Konkordato' kurumu yeniden düzenlenmiş ve güçlendirilmiştir. Şirket, Asliye Ticaret Mahkemesinden konkordato mühleti talep etmelidir.",
+    "key_points": [
+      "İflasın ertelenmesi mülga",
+      "Konkordato kurumunun önceliği",
+      "2018 yasa değişikliği"
+    ],
+    "topics": [
+      "İflas Hukuku",
+      "Konkordato"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_912"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - Kambiyo Senetlerine Özgü Takip",
+    "difficulty": "orta",
+    "scenario": "Alacaklı (A), elindeki senede dayanarak kambiyo senetlerine özgü haciz yoluyla takip başlatır. Ancak İcra Müdürü, senedin bono vasfı taşımadığını (zorunlu unsurlarının eksik olduğunu) tespit eder. İcra müdürü ne yapmalıdır?",
+    "ideal_solution": "İİK m.170/a ve Yargıtay içtihatlarına göre icra müdürü, kambiyo takibi talebi geldiğinde senedin kambiyo vasfı taşıyıp taşımadığını ve vadenin gelip gelmediğini RE'SEN (kendiliğinden) incelemek ZORUNDADIR. Eğer senet bono vasfı taşımıyorsa, icra müdürü takip talebini reddetmeli ve ödeme emri GÖNDERMEMELİDİR. Gönderirse, borçlu 5 gün içinde İcra Mahkemesine şikayet yoluna başvurabilir.",
+    "key_points": [
+      "Kambiyo takibi",
+      "İcra müdürünün re'sen inceleme yetkisi",
+      "Kambiyo vasfı"
+    ],
+    "topics": [
+      "Kambiyo Senetlerine Özgü Haciz Yolu"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_911"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - İtirazın İptali ve İcra İnkar Tazminatı",
+    "difficulty": "zor",
+    "scenario": "Fatura alacağına dayanan ilamsız takipte borçlu haksız yere borca itiraz eder ve takip durur. Alacaklı 1 yıl içinde Asliye Hukuk Mahkemesinde İtirazın İptali Davası açar ve kazanır. Alacaklı ayrıca ne talep edebilir?",
+    "ideal_solution": "İİK m.67 uyarınca alacaklı, itirazın iptali davasını kazanırsa, borçlunun haksız itirazı nedeniyle ve alacağın 'LİKİT (belirlenebilir)' olması şartıyla, alacak tutarının %20'sinden aşağı olmamak üzere 'İcra İnkar Tazminatına' hükmedilmesini isteyebilir. Fatura alacağı likit bir alacak olduğundan mahkeme, borçlunun (haksız olduğu anlaşıldığı için) %20 oranında inkar tazminatı ödemesine hükmeder.",
+    "key_points": [
+      "İtirazın iptali davası (İİK m.67)",
+      "1 yıllık süre",
+      "Likit alacak",
+      "%20 İcra İnkar Tazminatı"
+    ],
+    "topics": [
+      "İlamsız İcra",
+      "İtirazın Hükümden Düşürülmesi"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_910"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - Haczedilmezlik (Meslek Aletleri)",
+    "difficulty": "kolay",
+    "scenario": "Taksicilik yaparak geçimini sağlayan (T)'nin tek taksisi, alacaklı (A) tarafından haczettirilir. (T), taksinin haczedilemeyeceğini iddia eder. Haklı mıdır?",
+    "ideal_solution": "İİK m.82/1-4'e göre, borçlunun 'mesleğini sürdürebilmesi için gerekli olan her türlü alet, edevat ve kitapları' HACZEDİLEMEZ. Şoför/Taksici için taksi, mesleğin icrası için zorunlu ve temel alet niteliğindedir (Yargıtay içtihatları da bu yöndedir). Dolayısıyla (T)'nin mesleğini devam ettirdiği tek taksisi haczedilemez. (T), İcra Mahkemesine şikayet yoluyla (7 gün içinde) başvurarak haczin kaldırılmasını isteyebilir.",
+    "key_points": [
+      "Haczedilmezlik",
+      "Meslek aletleri (İİK m.82)",
+      "İcra mahkemesine şikayet"
+    ],
+    "topics": [
+      "Haciz",
+      "Haczedilemeyen Mallar"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_909"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - Gecikmiş İtiraz",
+    "difficulty": "zor",
+    "scenario": "Borçlu (C) ağır bir trafik kazası geçirip komadayken aleyhine başlatılan ilamsız takipte ödeme emri eşine tebliğ edilir ve 7 günlük itiraz süresi geçer. (C) iyileşip durumu öğrendiğinde ne yapabilir?",
+    "ideal_solution": "İİK m.65'e göre, borçlu kusuru olmaksızın bir MÜCBİR SEBEP (ağır hastalık, koma) nedeniyle süresi içinde itiraz edememişse, 'Gecikmiş İtiraz' kurumuna başvurabilir. Gecikmiş itiraz, engelin kalktığı (iyileştiği) tarihten itibaren 3 GÜN İÇİNDE İcra Mahkemesine (İcra Dairesine değil) yapılır. Mahkeme mazereti haklı bulursa itirazı kabul eder ve takibi durdurur.",
+    "key_points": [
+      "Gecikmiş itiraz (İİK m.65)",
+      "Mücbir sebep",
+      "Engelin kalkmasından itibaren 3 gün",
+      "İcra mahkemesine başvuru"
+    ],
+    "topics": [
+      "İlamsız İcra",
+      "Ödeme Emrine İtiraz"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_908"
+  },
+  {
+    "course": "icra_iflas",
+    "title": "İcra ve İflas - İlamsız Takipte Yetki İtirazı",
+    "difficulty": "orta",
+    "scenario": "İstanbul'da ikamet eden borçlu (B) aleyhine, İzmir İcra Dairesinde ilamsız icra takibi başlatılır. (B), İzmir İcra Dairesinin yetkisiz olduğunu düşünmektedir. İtirazını nereye ve ne kadar sürede yapmalıdır?",
+    "ideal_solution": "İlamsız icra takibinde yetki kuralları HMK m.6 atfıyla belirlenir (Borçlunun yerleşim yeri esastır). Yetki itirazı bir İLK İTİRAZDIR ve ödeme emrinin tebliğinden itibaren 7 GÜN içinde ESAS İCRA DAİRESİNE (İzmir İcra Dairesine) dilekçe veya sözlü beyanla yapılmalıdır. İcra mahkemesine değil, doğrudan takibin yapıldığı icra dairesine yapılır (İİK m.50).",
+    "key_points": [
+      "İlamsız icra",
+      "Yetki itirazı",
+      "7 gün süre",
+      "İcra dairesine başvuru",
+      "İİK m.50"
+    ],
+    "topics": [
+      "İlamsız İcra",
+      "Ödeme Emrine İtiraz"
+    ],
+    "id": "icra_iflas_AUHF_BULK2_907"
+  },
+  {
+    "course": "icra_iflas",
     "title": "AÜHF Özel: İhtiyati Haciz ve Tamamlama Merasimi",
     "difficulty": "zor",
     "scenario": "Alacaklı (A), borçlu (B)'nin mallarını kaçırmaya hazırlandığını öğrenerek mahkemeden ihtiyati haciz kararı almış ve kararı icra dairesine götürerek (B)'nin aracını haczettirmiştir. Ancak (A), ihtiyati haczin uygulandığı tarihten itibaren 10 gün geçmesine rağmen henüz esas takibe (ilamsız icra) geçmemiş veya dava açmamıştır. (B) bu durumda ne yapabilir?",

@@ -1,6 +1,179 @@
 [
   {
     "course": "ceza_muhakemesi",
+    "title": "CMK - Şikayetten Vazgeçme",
+    "difficulty": "orta",
+    "scenario": "Hakaret suçu (şikayete tabi) sebebiyle sanık (S) yargılanırken, müşteki (M) şikayetinden vazgeçtiğini bildirir. Ancak (S), 'Ben bu suçu işlemedim, beraat etmek istiyorum, şikayetten vazgeçmeyi kabul etmiyorum' der. Mahkeme nasıl karar vermelidir?",
+    "ideal_solution": "TCK m.73/6 gereğince, şikayetten vazgeçme, onu kabul etmeyen sanığı etkilemez. Sanık (S) beraat etmek istiyor ve şikayetten vazgeçmeyi kabul etmiyorsa, mahkeme yargılamaya devam etmeli ve sanığın beraat edip etmeyeceğine karar vermelidir. Doğrudan düşme kararı verilemez.",
+    "key_points": [
+      "Şikayetten vazgeçme",
+      "Sanığın kabulü şartı",
+      "Düşme kararı"
+    ],
+    "topics": [
+      "Muhakeme Şartları",
+      "Şikayet"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_916"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - HAGB (Hükmün Açıklanmasının Geri Bırakılması)",
+    "difficulty": "kolay",
+    "scenario": "Sanık (Y) hakkında 3 yıl hapis cezası verilir ve sanık daha önce sabıkasız olduğu için HAGB uygulanır. Bu karar hukuka uygun mudur?",
+    "ideal_solution": "CMK m.231'e göre HAGB kararı verilebilmesi için kurulan mahkumiyet hükmünün '2 yıl veya daha az süreli hapis veya adli para cezası' olması gerekir. Olayda 3 yıl hapis cezası verildiği için HAGB uygulanamaz. Karar hukuka aykırıdır.",
+    "key_points": [
+      "HAGB şartları",
+      "2 yıl sımırı",
+      "CMK m.231"
+    ],
+    "topics": [
+      "Kovuşturma Evresi",
+      "Hüküm"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_915"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - Kanun Yararına Bozma",
+    "difficulty": "zor",
+    "scenario": "Yerel mahkeme (S) hakkında basit yaralama suçundan beraat kararı verir ve karar istinaf/temyiz edilmeksizin kesinleşir. Aylar sonra, kararın açıkça hukuka aykırı olduğu ve delillerin hiçe sayıldığı fark edilir. Adalet Bakanlığı bu kararı nasıl bozabilir?",
+    "ideal_solution": "İstinaf veya temyiz incelemesinden geçmeksizin kesinleşen mahkeme kararlarındaki hukuka aykırılıklar için Adalet Bakanlığı, Yargıtay Cumhuriyet Başsavcılığından 'Kanun Yararına Bozma' (CMK m.309) talebinde bulunur. Başsavcı bu talebi Yargıtay'a götürür ve Yargıtay ilgili ceza dairesi kararı kanun yararına bozar.",
+    "key_points": [
+      "Olağanüstü kanun yolu",
+      "Kanun yararına bozma",
+      "CMK m.309",
+      "Adalet Bakanlığı"
+    ],
+    "topics": [
+      "Kanun Yolları",
+      "Olağanüstü Kanun Yolları"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_914"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - Görevsizlik Kararı",
+    "difficulty": "orta",
+    "scenario": "Asliye Ceza Mahkemesinde görülmekte olan bir davada, mahkeme sanığın eyleminin 'Yağma' suçunu oluşturabileceğini değerlendirir ve görevsizlik kararı vererek dosyayı Ağır Ceza Mahkemesine gönderir. Ağır Ceza Mahkemesi, eylemin 'Hırsızlık' olduğu gerekçesiyle karşı görevsizlik kararı verebilir mi?",
+    "ideal_solution": "CMK m.5'e göre alt dereceli mahkemenin verdiği görevsizlik kararı üst dereceli mahkemeyi bağlar. Asliye Ceza Mahkemesinin görevsizlik kararı üzerine Ağır Ceza Mahkemesi bu kararla bağlıdır ve yargılamayı yapmak zorundadır, karşı görevsizlik kararı veremez.",
+    "key_points": [
+      "Görevsizlik",
+      "Alt mahkemenin kararının bağlayıcılığı",
+      "CMK m.5"
+    ],
+    "topics": [
+      "Görev ve Yetki"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_913"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - Adli Kontrol ve Kefalet",
+    "difficulty": "zor",
+    "scenario": "Tutuklama istemiyle hakimliğe sevk edilen (A) hakkında hakim, tutuklama yerine '100.000 TL kefalet ödemesi' şartıyla adli kontrol kararı verir. (A) parayı ödeyemez. Hakim bu durumda ne kararı vermelidir?",
+    "ideal_solution": "CMK m.109/2-f uyarınca adli kontrol yükümlülükleri arasında 'güvence parası yatırmak' (kefalet) vardır. Şüpheli güvence parasını ödeyemiyorsa veya adli kontrol şartlarına uymuyorsa, hakim adli kontrol kararını kaldırarak şüphelinin tutuklanmasına karar verebilir (CMK m.112).",
+    "key_points": [
+      "Adli kontrol",
+      "Güvence parası (Kefalet)",
+      "Tutuklamaya çevirme",
+      "CMK m.112"
+    ],
+    "topics": [
+      "Koruma Tedbirleri",
+      "Adli Kontrol"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_912"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - İddianamenin İadesi Süresi",
+    "difficulty": "orta",
+    "scenario": "Savcılık iddianameyi mahkemeye sunduktan 20 gün sonra mahkeme, suçun vasfının yanlış belirtildiği gerekçesiyle iddianameyi iade eder. Savcı bu iade kararına itiraz eder. İtirazın sonucu ne olmalıdır?",
+    "ideal_solution": "CMK m.174 gereğince mahkeme, iddianamenin iadesine 15 gün içinde karar vermelidir. 15 gün geçtikten sonra iddianame iade edilemez, kabul edilmiş sayılır. Mahkemenin 20. günde iade etmesi usule aykırıdır. Savcının itirazı kabul edilmelidir.",
+    "key_points": [
+      "İddianamenin iadesi",
+      "15 günlük süre",
+      "CMK m.174"
+    ],
+    "topics": [
+      "Kovuşturma Evresi",
+      "İddianame"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_911"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - Çapraz Sorgu",
+    "difficulty": "zor",
+    "scenario": "Duruşmada tanık olarak dinlenen (X)'e, sanık avukatı doğrudan soru sormak ister ancak mahkeme başkanı 'Sorularınızı bana yöneltin, ben uygun bulursam sorarım' diyerek müdahale eder. Avukat bu duruma itiraz eder. Kim haklıdır?",
+    "ideal_solution": "CMK m.201 uyarınca 'Doğrudan Soru Yöneltme' (Çapraz sorgu) hakkı vardır. Sanık avukatı (müdafi), tanığa doğrudan soru yöneltebilir. Mahkeme başkanının araya girip soruyu kendi üzerinden sorması usule aykırıdır. Avukat itirazında haklıdır.",
+    "key_points": [
+      "Doğrudan soru yöneltme",
+      "Çapraz sorgu",
+      "CMK m.201"
+    ],
+    "topics": [
+      "Kovuşturma Evresi",
+      "Duruşma"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_910"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - Gözaltı Süreleri",
+    "difficulty": "kolay",
+    "scenario": "Terör örgütü üyeliği (toplu suç) şüphesiyle yakalanan (T), 5 gün boyunca karakolda gözaltında tutulur. Bu süre yasal mıdır?",
+    "ideal_solution": "Toplu suçlarda gözaltı süresi, delillerin toplanmasındaki güçlük veya şüpheli sayısının çokluğu nedeniyle savcı kararıyla 4 günü geçemez (CMK m.91/3). Olayda 5 gün gözaltında tutulması açıkça hukuka aykırıdır. Şüpheli derhal hakime çıkarılmalıydı.",
+    "key_points": [
+      "Gözaltı süresi",
+      "Toplu suçlar",
+      "Maksimum 4 gün"
+    ],
+    "topics": [
+      "Koruma Tedbirleri",
+      "Gözaltı"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_909"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - Zorunlu Müdafilik",
+    "difficulty": "orta",
+    "scenario": "16 yaşındaki (Ç), hırsızlık şüphesiyle gözaltına alınır. Karakolda avukat istemediğini söyler ve ifadesi alınır. Bu ifade mahkemede delil olarak kullanılabilir mi?",
+    "ideal_solution": "CMK m.150/2 uyarınca, şüpheli veya sanık 18 yaşını doldurmamışsa, istemi aranmaksızın bir müdafi görevlendirilir (zorunlu müdafilik). (Ç)'nin avukat istemediğini beyan etmesi hukuken geçersizdir. Müdafi bulunmaksızın alman ifade, hakim veya mahkeme huzurunda şüpheli tarafından doğrulanmadıkça delil olarak kullanılamaz (CMK m.148/4).",
+    "key_points": [
+      "Zorunlu müdafi",
+      "18 yaşından küçükler",
+      "CMK m.150/2",
+      "İfadenin delil değeri"
+    ],
+    "topics": [
+      "Soruşturma Evresi",
+      "Müdafi"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_908"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "CMK - İletişimin Tespiti ve Dinlenmesi",
+    "difficulty": "zor",
+    "scenario": "Uyuşturucu ticareti şüphesiyle soruşturulan (A)'nın telefonu savcı kararıyla dinlenmeye başlanır. Dinleme kararından 48 saat sonra hakim onayı alınır. (A)'nın avukatı dinleme kayıtlarının hukuka aykırı olduğunu iddia eder. Hukuki durumu açıklayınız.",
+    "ideal_solution": "CMK m.135 gereği iletişimin tespiti ve dinlenmesi hakim kararıyla, gecikmesinde sakınca bulunan hallerde savcı kararıyla olur. Savcı kararı derhal hakime sunulur ve hakim 24 saat içinde kararını verir. Olayda 48 saat sonra hakim onayı alınmıştır, bu nedenle dinleme hukuka aykırı hale gelmiştir ve delil olarak kullanılamaz.",
+    "key_points": [
+      "İletişimin dinlenmesi",
+      "Savcı kararı",
+      "24 saat içinde hakim onayı",
+      "Hukuka aykırı delil"
+    ],
+    "topics": [
+      "Koruma Tedbirleri",
+      "Telekomünikasyon Yoluyla İletişimin Denetlenmesi"
+    ],
+    "id": "ceza_muhakemesi_AUHF_BULK1_907"
+  },
+  {
+    "course": "ceza_muhakemesi",
     "title": "AÜHF Özel: İddianamenin İadesi",
     "difficulty": "orta",
     "scenario": "Cumhuriyet Savcısı, şüpheli (B) hakkında 'Hırsızlık' suçundan iddianame düzenleyerek Asliye Ceza Mahkemesine sunmuştur. İddianamede şüphelinin kimlik bilgileri, atılı suç ve sevk maddeleri yer almakta ancak suçu nasıl işlediğine dair hiçbir olgu, delillerle ilişkilendirilerek anlatılmamıştır. Mahkeme başkanı bu durumu fark eder. Hukuki süreç nasıl işlemelidir?",

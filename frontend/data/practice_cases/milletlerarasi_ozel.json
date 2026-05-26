@@ -1,6 +1,179 @@
 [
   {
     "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Yabancıların Çalışma İzni",
+    "difficulty": "kolay",
+    "scenario": "Turist vizesiyle Türkiye'ye gelen İngiliz vatandaşı (İ), bir restoranda garson olarak çalışmaya başlar. Herhangi bir izin almamıştır. Yaptırımı nedir?",
+    "ideal_solution": "6735 sayılı Uluslararası İşgücü Kanunu'na göre, yabancıların Türkiye'de bağımlı veya bağımsız çalışabilmeleri için Çalışma ve Sosyal Güvenlik Bakanlığından 'Çalışma İzni' almaları zorunludur. İzni olmadan kaçak çalışan yabancıya ve onu çalıştıran işverene idari para cezası verilir ve yabancı sınır dışı (deport) edilir.",
+    "key_points": [
+      "Yabancıların çalışması",
+      "Çalışma izni",
+      "Sınır dışı etme"
+    ],
+    "topics": [
+      "Yabancılar Hukuku",
+      "Çalışma Hakkı"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_914"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Tüketici Sözleşmeleri",
+    "difficulty": "zor",
+    "scenario": "Türkiye'de oturan tüketici (T), Amerikan firmasından (A) internet üzerinden bir laptop satın alır. Sözleşmede Amerikan hukukunun uygulanacağı yazar. Laptop bozuk çıkar. (T), Türk mahkemesinde dava açar.",
+    "ideal_solution": "MÖHUK m.26 uyarınca tüketici sözleşmelerinde taraflar hukuk seçebilir (Amerikan hukuku). Ancak bu seçim, TÜKETİCİNİN MUTAD MESKENİ (Türkiye) hukukunun emredici kurallarının tüketiciye sağladığı asgari korumadan onu yoksun bırakamaz. Yani Amerikan hukuku uygulansa bile, TKHK (Türk Tüketici Kanunu) kurallarından daha aleyhe bir hüküm içeriyorsa, Türk hukukunun emredici hükümleri devreye girer.",
+    "key_points": [
+      "Tüketici sözleşmeleri (MÖHUK m.26)",
+      "Asgari koruma ilkesi",
+      "Mutad mesken hukuku"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Borçlar Hukuku (Sözleşmeler)"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_913"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Ehliyetin Sonradan Kazanılması",
+    "difficulty": "kolay",
+    "scenario": "Milli hukukuna göre ehliyetli olan ve işlem yapan bir kişi, sonradan vatandaşlığını değiştirir ve yeni milli hukukuna göre ehliyetsiz sayılırsa eski işlemi geçersiz olur mu?",
+    "ideal_solution": "MÖHUK m.9/3'e göre; milli hukukuna göre fiil ehliyetine sahip olan bir kişi, sonradan tabiiyetini (vatandaşlığını) değiştirirse, fiil ehliyetini kaybetmez (Müktesep hak / kazanılmış hak). Yani sonradan ehliyetsiz hale gelse bile geçmişe etkili olmaz, işlemi geçerliliğini korur.",
+    "key_points": [
+      "Vatandaşlık değişimi",
+      "Ehliyetin korunması",
+      "MÖHUK m.9/3"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Kişiler Hukuku"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_912"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Miras Hukuku",
+    "difficulty": "orta",
+    "scenario": "Türkiye'de yaşayan Alman vatandaşı (H) vefat eder. (H)'nin Türkiye'de bir dairesi, bir banka hesabı ve arabası vardır. Hangi mallarına hangi devletin miras hukuku uygulanacaktır?",
+    "ideal_solution": "MÖHUK m.20'ye göre miras, ölenin milli hukukuna tabidir (Alman hukuku). Ancak Türkiye'de bulunan TAŞINMAZLAR (daire) için Türk Hukuku uygulanır. Yani (H)'nin banka hesabı ve arabasına (taşınır mallarına) Alman miras hukuku, Türkiye'deki dairesine (taşınmaz) ise Türk miras hukuku uygulanacaktır.",
+    "key_points": [
+      "Miras (MÖHUK m.20)",
+      "Milli hukuk kuralı",
+      "Taşınmaz istisnası (Türk Hukuku)"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Miras Hukuku"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_911"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Hak Ehliyeti ve Fiil Ehliyeti",
+    "difficulty": "orta",
+    "scenario": "Türkiye'de ticaret yapan 19 yaşındaki İsviçre vatandaşı (G), bir Türk firmasıyla ticari sözleşme imzalar. İsviçre hukukunda erginlik yaşı 20'dir. G, 'Ben İsviçre hukukuna göre ergin değilim, işlem geçersizdir' diyebilir mi?",
+    "ideal_solution": "MÖHUK m.9'a göre, hak ve fiil ehliyeti kişinin milli hukukuna tabidir (Yani İsviçre hukuku). Ancak MÖHUK m.9/2'de işlem güvenliğini koruyan bir istisna vardır: 'Kişi kendi milli hukukuna göre ehliyetsiz, ancak İŞLEMİN YAPILDIĞI YER (Türkiye) hukukuna göre ehliyetli ise, bu hukuki işlem GEÇERLİDİR'. Türk hukukuna göre 18 yaşını dolduran ergin olduğundan işlem tamamen geçerlidir.",
+    "key_points": [
+      "Fiil ehliyeti (MÖHUK m.9)",
+      "Milli Hukuk",
+      "İşlem yeri hukuku istisnası",
+      "İşlem güvenliği"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Kişiler Hukuku"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_910"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Münhasır Yetki İstisnası",
+    "difficulty": "kolay",
+    "scenario": "Alman mahkemesi, Antalya'daki bir taşınmazın mülkiyetinin Alman vatandaşı (X)'e ait olduğuna karar verir. (X) bu kararı Türkiye'de tanıtabilir mi?",
+    "ideal_solution": "MÖHUK m.54/b uyarınca, yabancı mahkeme kararının Türkiye'de tenfiz/tanıma alabilmesi için kararın 'Türk mahkemelerinin münhasır yetkisine girmeyen bir konuda' verilmiş olması şarttır. Türkiye'deki taşınmazın ayni haklarına ilişkin davalar Türk mahkemelerinin MÜNHASIR yetkisindedir (HMK m.12). Bu nedenle Alman mahkemesinin Antalya'daki taşınmazın mülkiyeti hakkındaki kararı Türkiye'de ASLA tanınamaz ve tenfiz edilemez.",
+    "key_points": [
+      "Münhasır yetki",
+      "Taşınmazın ayni hakkı",
+      "Tenfiz şartı"
+    ],
+    "topics": [
+      "Milletlerarası Usul Hukuku",
+      "Tanıma ve Tenfiz"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_909"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Tenfiz Kararı Şartları",
+    "difficulty": "zor",
+    "scenario": "Fransız mahkemesi, Türk vatandaşı (A)'nın gıyabında, ona usulüne uygun hiçbir tebligat yapmadan ve savunma hakkı vermeden (A) aleyhine 1 Milyon Euro tazminat ödemesine karar verir. Alacaklı bu kararın Türkiye'de tenfizi için dava açar.",
+    "ideal_solution": "MÖHUK m.54 uyarınca tenfiz şartlarından biri de 'O yerin kanunları uyarınca, kendisine karşı tenfiz istenen kişinin hükmü veren mahkemeye usulüne uygun bir şekilde çağrılmamış veya o mahkemede temsil edilmemiş...' olmamasıdır (Savunma hakkının ihlal edilmemesi). Olayda gıyapta ve tebligatsız, savunma hakkı verilmeden kurulan hüküm Türk mahkemelerince tenfiz edilemez (MÖHUK m.54/ç).",
+    "key_points": [
+      "Tenfiz şartları (MÖHUK m.54)",
+      "Savunma hakkının kısıtlanması",
+      "Tebligat yokluğu",
+      "Tenfizin reddi"
+    ],
+    "topics": [
+      "Milletlerarası Usul Hukuku",
+      "Tenfiz"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_908"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Kamu Düzeni Müdahalesi",
+    "difficulty": "orta",
+    "scenario": "İran uyruklu birbirinin kuzeni olan (amca çocukları) (E) ve (K), Türkiye'de evlenmek için evlendirme memurluğuna başvururlar. İran hukukunda kuzen evliliği serbesttir. Türk makamları bu evliliği yapabilir mi?",
+    "ideal_solution": "MÖHUK m.13'e göre evlenme ehliyeti ve şartları her iki eşin kendi milli hukukuna tabidir. İran hukukuna göre evlenmelerinde engel yoktur. Ancak, yabancı hukukun uygulanması Türk Kamu Düzenine (MÖHUK m.5) 'açıkça aykırı' ise o hüküm uygulanmaz. TMK m.129'a göre amca çocukları arasında evlenme yasağı vardır (mutlak butlan). Ancak Türk hukukundaki kuzen evliliği yasağı milletlerarası kamu düzeni oluşturacak kadar evrensel ve ağır bir ahlaki/hukuki temel teşkil etmez (Yargıtay içtihatları). Dolayısıyla kamu düzeni engeline takılmaz ve evlilik yapılabilir.",
+    "key_points": [
+      "Evlenme şartları (MÖHUK m.13)",
+      "Kamu düzeni müdahalesi (MÖHUK m.5)",
+      "Kuzen evliliği"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Kamu Düzeni"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_907"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Sözleşmeden Doğan Borçlar (Lex Causae)",
+    "difficulty": "orta",
+    "scenario": "Türkiye'deki bir tekstil firması (T), İtalya'daki bir mağazaya (İ) kumaş satışı için sözleşme yapar. Sözleşmede uygulanacak hukuk seçilmemiştir. İtalyan firma kumaşların kusurlu olduğunu iddia ederek Türk mahkemesinde dava açar. Hangi hukuk uygulanır?",
+    "ideal_solution": "MÖHUK m.24'e göre, sözleşmeden doğan borç ilişkilerinde tarafların açıkça veya zımnen seçtikleri hukuk uygulanır. Hukuk seçimi yoksa, sözleşmeyle 'en sıkı ilişkili' olan hukuk uygulanır. Kanun, en sıkı ilişkili hukukun, karakteristik edim borçlusunun işyeri veya yerleşim yeri hukuku olduğunu karine olarak kabul eder. Satış sözleşmesinde karakteristik edim 'malın teslimi' yani satıcının (T) edimidir. Bu nedenle Türk hukuku sözleşmeyle en sıkı ilişkili hukuk kabul edilir ve uygulanır.",
+    "key_points": [
+      "Hukuk seçimi yokluğu",
+      "En sıkı ilişkili hukuk (MÖHUK m.24)",
+      "Karakteristik edim borçlusu",
+      "Türk Hukuku"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Borçlar Hukuku (Sözleşmeler)"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_906"
+  },
+  {
+    "course": "milletlerarasi_ozel",
+    "title": "MÖHUK - Boşanmada Uygulanacak Hukuk",
+    "difficulty": "zor",
+    "scenario": "Biri Alman diğeri Fransız vatandaşı olan ve Müşterek yerleşim yerleri İngiltere olan bir çift, tatil için geldikleri Türkiye'de şiddetli geçimsizlik nedeniyle Ankara mahkemesinde boşanma davası açarlar. Türk hakimi hangi hukuku uygulamalıdır?",
+    "ideal_solution": "MÖHUK m.14'e göre boşanma ve ayrılık sebepleri ve hükümleri, eşlerin müşterek milli hukukuna tabidir. Tarafların uyrukları farklı (Alman ve Fransız) olduğu için müşterek milli hukuk yoktur. Bu durumda tarafların MÜŞTEREK MUTAD MESKEN (yerleşim yeri) hukukuna bakılır. Olayda eşlerin müşterek yerleşim yeri İngiltere'dir. Dolayısıyla Türk Hakimi, boşanma davasında İngiliz maddi hukukunu (İngiliz Medeni Kanununu) uygulamalıdır.",
+    "key_points": [
+      "Boşanmada uygulanacak hukuk (MÖHUK m.14)",
+      "Müşterek milli hukuk",
+      "Müşterek mutad mesken hukuku"
+    ],
+    "topics": [
+      "Kanunlar İhtilafı",
+      "Aile Hukuku (Boşanma)"
+    ],
+    "id": "milletlerarasi_ozel_AUHF_BULK1_905"
+  },
+  {
+    "course": "milletlerarasi_ozel",
     "title": "AÜHF Özel: Haksız Fiilde Uygulanacak Hukuk (Lex Loci Delicti)",
     "difficulty": "orta",
     "scenario": "Türk vatandaşı (A), Almanya'da tatil yaparken İtalyan vatandaşı (B)'nin kullandığı kiralık aracın kendisine çarpması sonucu ağır yaralanır. (A), Türkiye'ye döndükten sonra (B) aleyhine Ankara Asliye Hukuk Mahkemesinde maddi ve manevi tazminat davası açar. Türk mahkemesinin milletlerarası yetkisini ve uyuşmazlığa uygulanacak hukuku belirleyiniz.",

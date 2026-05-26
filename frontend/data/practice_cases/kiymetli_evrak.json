@@ -1,6 +1,186 @@
 [
   {
     "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Çekte Vade",
+    "difficulty": "kolay",
+    "scenario": "(X), 01.01.2025'te düzenlediği çeke düzenleme (keşide) tarihi olarak ileri bir tarih olan 01.06.2025 yazar. Ancak hamil çeki 05.01.2025'te bankaya ibraz eder. Banka ne yapmalıdır?",
+    "ideal_solution": "TTK m.795'e göre çekte vade yoktur; çek GÖRÜLDÜĞÜNDE ÖDENİR. İleri tarihli (postdated) çekler, üzerindeki tarihten önce bankaya ibraz edilirse (eğer hesapta para varsa) banka tarafından ÖDENMEK ZORUNDADIR. (Geçici kanuni düzenlemelerle getirilen karşılıksız işlem yapılamayacağına dair istisnalar saklı kalmak kaydıyla genel kural budur).",
+    "key_points": [
+      "Çekte vade yasağı",
+      "İleri tarihli çek",
+      "Görüldüğünde ödenme (TTK m.795)"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Çek"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_913"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Poliçede Kabul",
+    "difficulty": "orta",
+    "scenario": "Poliçede muhatap (M), poliçenin ön yüzüne sadece imzasını atmıştır. Bu imzanın anlamı nedir?",
+    "ideal_solution": "TTK m.696'ya göre, muhatabın poliçenin 'ÖN YÜZÜNE' sadece imzasını atması KABUL hükmündedir. Muhatap, kabul ile birlikte poliçenin asli borçlusu haline gelir ve vade geldiğinde poliçe bedelini ödemeyi taahhüt etmiş olur.",
+    "key_points": [
+      "Poliçede muhatap",
+      "Ön yüze atılan imza",
+      "Kabul hükmünde olması",
+      "Asli borçlu"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Poliçe",
+      "Kabul"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_912"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Nama Yazılı Senet",
+    "difficulty": "kolay",
+    "scenario": "Üzerinde '(B) adına ödeyiniz, emre değildir' yazan senedin hukuki niteliği nedir ve nasıl devredilir?",
+    "ideal_solution": "Üzerinde 'emre değildir' (menfi emre şartı) ibaresi bulunan senetler, kural olarak emre yazılı olsalar bile (kambiyo senetleri böyledir), bu ibare nedeniyle 'Nama Yazılı Senet' hükmündedirler (TTK m.823). Nama yazılı senetler ciro ile değil, ancak 'Yazılı Devir Beyanı (Alacağın Temliki)' ve 'Senedin Teslimi' ile devredilebilirler.",
+    "key_points": [
+      "Nama yazılı senet",
+      "Menfi emre şartı",
+      "Alacağın temliki yoluyla devir"
+    ],
+    "topics": [
+      "Kıymetli Evrakın Türleri",
+      "Nama Yazılı Senetler"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_911"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Postadan Gecikme (İbraz Süresi)",
+    "difficulty": "zor",
+    "scenario": "Hamil (H), çeki bankaya ibraz etmek üzere posta/kargo ile gönderir. Ancak kargo şirketinin kaza yapması nedeniyle çek, 10 günlük ibraz süresi bittikten sonra bankaya ulaşır. Mücbir sebep midir?",
+    "ideal_solution": "TTK m.811 uyarınca, kanuni süresi içinde çekin ibrazı veya protesto edilmesi devletin bir kanunu veya aşılamaz bir engel (mücbir sebep) nedeniyle yapılamamışsa süreler UZAR. Ancak posta veya kargodaki gecikmeler Yargıtay tarafından mücbir sebep olarak KABUL EDİLMEMEKTEDİR. Hamil, şahsen ibraz etme riskini üzerine almıştır. Süre kaçtığı için müracaat hakkı düşer.",
+    "key_points": [
+      "Mücbir sebep",
+      "Posta gecikmesi (Mücbir sebep sayılmaz)",
+      "İbraz süresinin uzamaması"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Çek",
+      "İbraz"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_910"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Çizgili Çek",
+    "difficulty": "kolay",
+    "scenario": "(Y), (Z)'ye verdiği çekin ön yüzüne paralel iki çizgi çeker. Bunun anlamı nedir ve banka kime ödeme yapabilir?",
+    "ideal_solution": "Ön yüzüne birbirine paralel iki çizgi çekilen çeke 'Çizgili Çek' denir (TTK m.803). Çizgili çekin amacı, çekin hırsızlık veya kaybolma riskine karşı korunmasıdır. Çizgili çeki muhatap banka, sadece MÜŞTERİSİNE veya BİR BAŞKA BANKAYA ödeyebilir. Doğrudan gişeden elden nakit ödeme yapamaz, mutlaka hesaba geçirilmesi gerekir.",
+    "key_points": [
+      "Çizgili çek",
+      "TTK m.803",
+      "Sadece bankaya veya müşteriye ödeme"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Çek"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_909"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Sahte İmza Def'i",
+    "difficulty": "orta",
+    "scenario": "Bir poliçe üzerindeki keşideci (A)'nın imzası, (X) tarafından taklit edilerek atılmıştır (sahte imza). Poliçe (B)'ye, oradan da iyi niyetli (C)'ye ciro edilmiştir. (C), (A)'ya başvurduğunda (A) imzanın kendisine ait olmadığını belirtir.",
+    "ideal_solution": "Sahte imza, senet metninden anlaşılamasa da 'Mutlak Defi' niteliğindedir (TTK m.677 atfıyla geçerlilik def'i). Mutlak defiler herkese karşı, hatta senedi devralan iyiniyetli 3. kişilere (C'ye) karşı da ileri sürülebilir. (A), imzanın kendisine ait olmadığını ispatladığında (C)'ye ödeme yapmaktan kurtulur. Ancak 'imzaların bağımsızlığı ilkesi' gereği (TTK m.678), sahte imza dışındaki diğer geçerli imzaların sahipleri (örneğin B) senedin bedelinden (C)'ye karşı sorumludur.",
+    "key_points": [
+      "Sahte imza",
+      "Mutlak defi",
+      "Herkese karşı ileri sürülebilirlik",
+      "İmzaların bağımsızlığı ilkesi (TTK m.678)"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Poliçe",
+      "Def'iler"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_908"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Hatır Senedi",
+    "difficulty": "zor",
+    "scenario": "(K), bankadan kredi çekmek isteyen arkadaşı (L)'ye yardımcı olmak için aslında ona hiçbir borcu olmadığı halde (L) lehine 50.000 TL'lik bir bono düzenler. (L) bu senedi bankaya (B) kredi teminatı olarak ciro eder. Banka senedi tahsil etmek için (K)'ya başvurduğunda (K) borcu olmadığını iddia eder.",
+    "ideal_solution": "Taraflar arasında borç olmadığı halde sırf kredi vb. sağlamak için düzenlenen senetlere 'Hatır Senedi' denir. Hatır senedi savunması (bedelsizlik defi), sadece aralarında bu hatır ilişkisi olan taraflara (K ile L) karşı ileri sürülebilir. Bu bir KİŞİSEL DEF'İDİR (TTK m.687). Çeki/bonoyu devralan banka (B), senedi devralırken bile bile borçlunun zararına (kötü niyetle) hareket etmediği sürece, (K) hatır senedi def'ini bankaya karşı İLERİ SÜREMEZ. Bankaya ödeme yapmak zorundadır.",
+    "key_points": [
+      "Hatır senedi",
+      "Kişisel defi",
+      "Üçüncü kişiye karşı ileri sürülememesi (TTK m.687)",
+      "Kötüniyet istisnası"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Bono",
+      "Def'iler"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_907"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Çekin Süresinde İbraz Edilmemesi",
+    "difficulty": "orta",
+    "scenario": "Ankara'da düzenlenip Ankara'da ödenecek olan (Aynı yerde ödenecek) bir çek, keşide tarihi olan 01.05.2025'ten 20 gün sonra (21.05.2025) hamil tarafından bankaya ibraz edilir. Banka karşılığı olmasına rağmen ödeme yapmaz. Hamil kime başvurabilir?",
+    "ideal_solution": "TTK m.796'ya göre, bir çek düzenlendiği yerde ödenecekse 10 GÜN içinde muhatap bankaya ibraz edilmelidir. Hamil bu süreyi kaçırmıştır (20 gün geçmiş). Süresinde ibraz edilmeyen çek, 'ÇEK NİTELİĞİNİ KAYBETMEZ' ancak hamil, müracaat borçlularına (cirantalara) başvuru hakkını KAYBEDER. Hamil sadece keşideciye (ve eğer çekin karşılığı bankada kalmışsa şans eseri tahsil edebilir ancak banka ödemek zorunda değildir) başvurabilir, o da sebepsiz zenginleşme hükümlerine (TTK m.732) göre olur.",
+    "key_points": [
+      "İbraz süreleri (10 gün)",
+      "Müracaat hakkının kaybı",
+      "Sebepsiz zenginleşme davası"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Çek",
+      "İbraz"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_906"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Açık (Beyaz) Bono",
+    "difficulty": "orta",
+    "scenario": "(M), acil nakde ihtiyacı olduğu için (N)'den borç alır ve sadece imzasını atarak boş bir bono kağıdını (N)'ye verir. (N), alacağı 10.000 TL olmasına rağmen senedi 100.000 TL olarak doldurur ve bankaya tahsile verir. (M)'nin savunması ne olabilir?",
+    "ideal_solution": "TTK m.680 uyarınca, tedavüle çıkarılırken tamamen doldurulmamış olan bonoya 'Açık Bono' (beyaz poliçe) denir. Açık bono düzenlenmesi geçerlidir ve doldurma yetkisi alacaklıya verilmiş sayılır. Ancak aralarındaki anlaşmaya aykırı doldurulursa (10.000 yerine 100.000), borçlu (M) bunu 'anlaşmaya aykırı doldurulduğu' (kişisel defi) gerekçesiyle lehtara (N)'ye karşı İLERİ SÜREBİLİR. İspat yükü (M)'dedir (Yazılı delil gerekir). Ancak (N) senedi iyiniyetli 3. kişiye devrederse, (M) bu savunmayı 3. kişiye karşı yapamaz.",
+    "key_points": [
+      "Açık (beyaz) bono",
+      "Anlaşmaya aykırı doldurma",
+      "Kişisel defi",
+      "İspat yükü"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Bono",
+      "Def'iler"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_905"
+  },
+  {
+    "course": "kiymetli_evrak",
+    "title": "Kıymetli Evrak - Emre Yazılı Senedin Ciro Edilmesi",
+    "difficulty": "kolay",
+    "scenario": "(A), emre yazılı bir bono düzenleyerek (B)'ye verir. (B), senedin arkasına sadece imzasını atarak senedi (C)'ye devreder. (C), senedin meşru hamili midir?",
+    "ideal_solution": "(B)'nin senedin arkasına sadece imzasını atması 'Beyaz Ciro'dur (TTK m.683). Beyaz ciro ile birlikte senedin zilyetliğinin (C)'ye geçirilmesi, senedin devri için yeterlidir. Emre yazılı senetler ciro ve teslim ile devredilir. (C), senedin meşru (haklı) hamilidir.",
+    "key_points": [
+      "Emre yazılı senet",
+      "Beyaz ciro",
+      "Teslim ve ciro zinciri"
+    ],
+    "topics": [
+      "Kambiyo Senetleri",
+      "Ciro"
+    ],
+    "id": "kiymetli_evrak_AUHF_BULK2_904"
+  },
+  {
+    "course": "kiymetli_evrak",
     "title": "AÜHF Özel: Çekte Tahrifat ve Ödeme",
     "difficulty": "zor",
     "scenario": "(K), alacaklısı (L)'ye 10.000 TL bedelli bir çek düzenleyip verir. Çek çalınır ve çalan kişi (X), çekteki rakamı '110.000 TL' olarak değiştirir (tahrifat) ve çeki (İ)'ye devreder. (İ) iyi niyetlidir. (İ) çeki bankaya ibraz eder ve muhatap banka 110.000 TL ödeme yapar. Tahrifat sonradan anlaşılır. Zarara kim katlanacaktır?",

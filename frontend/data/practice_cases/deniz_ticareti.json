@@ -1,6 +1,176 @@
 [
   {
     "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Taşıyanın Sorumluluğu (Hague-Visby Kuralları)",
+    "difficulty": "zor",
+    "scenario": "Taşıyan (T), yükü sağlam olarak teslim almış ancak seyir esnasında kaptanın seyir haritalarını yanlış okuması (navigasyon hatası) nedeniyle gemi sığlığa bindirmiş ve yük zarar görmüştür. Taşıtan zararın tazminini ister. Taşıyan sorumlu mudur?",
+    "ideal_solution": "Deniz ticaretinde Hague-Visby kurallarına dayanan TTK m.1179'a göre, taşıyan, kaptanın veya gemi adamlarının 'geminin sevk ve idaresindeki' (teknik idare/navigasyon) kusurlarından dolayı yükle ilgililere karşı SORUMLU DEĞİLDİR (Teknik kusur istisnası). Haritayı yanlış okuma tipik bir teknik idare kusuru olduğundan Taşıyan (T) zarardan sorumlu tutulamaz.",
+    "key_points": [
+      "Hague-Visby kuralları",
+      "Teknik kusur istisnası",
+      "Navigasyon hatası",
+      "Sorumsuzluk hali"
+    ],
+    "topics": [
+      "Navlun Sözleşmesi",
+      "Taşıyanın Sorumluluğu"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_914"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Navlun Sözleşmesinde Yükleme Süresi (Starya)",
+    "difficulty": "kolay",
+    "scenario": "Gemi yükleme için limana gelir ve 'Hazırlık İhbarnamesi' verir. Starya (yükleme süresi) işlemeye başlar. Ancak liman işçilerinin grevi nedeniyle yükleme 3 gün durur. Taşıyan, bu 3 gün için sürastarya (demurrage) ücreti ister.",
+    "ideal_solution": "TTK m.1154 uyarınca, starya süresi içinde ortaya çıkan ve taşıtanın şahsına bağlı olmayan (mücbir sebep niteliğindeki grev vb.) engeller starya süresinin işlemesini durdurur. Dolayısıyla grevde geçen 3 gün starya süresinden sayılmaz ve taşıyan bu günler için sürastarya ücreti isteyemez.",
+    "key_points": [
+      "Starya (Yükleme süresi)",
+      "Sürastarya",
+      "Mücbir sebep (Grev)"
+    ],
+    "topics": [
+      "Navlun Sözleşmesi",
+      "Yükleme ve Boşaltma"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_913"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Kurtarma ve Yardım",
+    "difficulty": "orta",
+    "scenario": "Açık denizde sürüklenen (S) gemisine, oradan geçmekte olan (K) gemisi gönüllü olarak halat atıp onu limana çeker. (K), kurtarma ücreti talep eder. (S)'nin maliki ise 'Biz sizden yardım istemedik' diyerek ödemeyi reddeder.",
+    "ideal_solution": "TTK m.1299 vd. (1989 Kurtarma Sözleşmesi) uyarınca, kurtarma ücreti talep edebilmek için kurtarma eyleminin 'faydalı bir sonuç' doğurması yeterlidir (No cure no pay ilkesi). Kurtarılanın açık ve makul bir itirazı olmadığı sürece, gönüllü yapılan faydalı kurtarma operasyonları ücrete hak kazandırır. (K) gemisi kurtarma ücreti alabilir.",
+    "key_points": [
+      "Kurtarma ve yardım",
+      "Faydalı sonuç (No cure no pay)",
+      "Açık itiraz yokluğu"
+    ],
+    "topics": [
+      "Deniz Kazaları",
+      "Kurtarma"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_912"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Zaman Çarteri (Time Charter)",
+    "difficulty": "zor",
+    "scenario": "Zaman çarteri sözleşmesiyle bir gemiyi kiralayan tahsis alan (T), gemiyi ticari olarak kendi emir ve talimatlarına göre işletmektedir. Gemi, (T)'nin talimatıyla tehlikeli bir limana girerken karaya oturur. Hasardan kim sorumludur?",
+    "ideal_solution": "Zaman çarteri sözleşmesinde (TTK m.1131), tahsis eden (malik) geminin teknik idaresinden, tahsis alan (T) ise geminin TİCARİ idaresinden sorumludur. Kaptan, ticari konularda (T)'nin emirlerine uymak zorundadır. Tehlikeli (emniyetsiz) bir limana girme talimatı ticari bir emir olup, bu emrin yerine getirilmesi sırasında doğan zarardan kural olarak Tahsis Alan (T) sorumludur.",
+    "key_points": [
+      "Zaman çarteri",
+      "Ticari idare - Teknik idare",
+      "Güvenli liman şartı"
+    ],
+    "topics": [
+      "Gemi Kiralama",
+      "Zaman Çarteri"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_911"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Gemi Alacaklısı Hakkı",
+    "difficulty": "orta",
+    "scenario": "Gemide çalışan gemi adamı (G), 3 aylık maaşını alamadığı için gemiye karşı 'Gemi Alacaklısı Hakkı' (Maritime Lien) iddia ederek gemiyi haczettirmek ister. Geminin mülkiyeti ise bir hafta önce (X)'e satılmıştır. (X), kendisinin borcu olmadığını ileri sürer.",
+    "ideal_solution": "TTK m.1320'ye göre gemi adamlarının ücret alacakları, kanundan doğan bir 'Gemi Alacaklısı Hakkı'dır. Bu hak, gemiyi takip eder (Ayni bir haktır). Geminin mülkiyeti kime devredilirse devredilsin, gemi alacaklısı hakkı gemi üzerinde varlığını sürdürür. (G), yeni malik (X)'e karşı da geminin haczini ve satışını isteyebilir.",
+    "key_points": [
+      "Gemi alacaklısı hakkı",
+      "Gizli rehin (Maritime Lien)",
+      "Takip hakkı"
+    ],
+    "topics": [
+      "Ayni Haklar",
+      "Gemi Alacaklısı Hakkı"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_910"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Kaptanın Yetkileri",
+    "difficulty": "zor",
+    "scenario": "Gemi denizin ortasında arızalanır ve erzakları tükenir. Kaptan (K), gemiyi en yakın limana çektirmek ve mürettebata erzak almak için gemi donatanına (D) ulaşamaz. Kaptan, geminin yükünün bir kısmını (Y firmasına ait kahveleri) o limandaki bir tüccara satarak para bulur. Y firması bu satışın yetkisiz olduğunu iddia eder.",
+    "ideal_solution": "TTK m.1089 uyarınca Kaptan, yolculuk sırasında geminin korunması veya yolculuğun tamamlanması için acil para ihtiyacı doğarsa ve donatana ulaşılamıyorsa, öncelikle gemiyi veya yükü rehin edebilir, bu mümkün değilse en son çare olarak yükü SATABİLİR. Olayda donatana ulaşılamadığı ve acil erzak/tamir ihtiyacı olduğu için kaptanın yükü satma yetkisi yasal olarak doğmuştur. Y firmasının itirazı haksızdır, zararını donatandan talep etmelidir.",
+    "key_points": [
+      "Kaptanın yasal yetkileri",
+      "Yükün satılması (Acil durum)",
+      "TTK m.1089"
+    ],
+    "topics": [
+      "Gemi Adamları",
+      "Kaptan"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_909"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Gemi Sicili",
+    "difficulty": "kolay",
+    "scenario": "15 grostonluk ticari bir gemi maliki olan (M), gemisini Türk Gemi Siciline tescil ettirmek istemektedir. Sicil memuru, geminin 18 grostondan küçük olduğu gerekçesiyle tescili reddeder. Memurun işlemi hukuka uygun mudur?",
+    "ideal_solution": "TTK m.955'e göre, 18 groston (GT) ve daha büyük ticari gemilerin tescili mecburidir. Ancak 18 GT'den küçük ticari gemilerin tescili malikin İHTİYARINA (isteğine) bırakılmıştır. Yani (M) talep ederse sicil memuru bunu tescil etmek ZORUNDADIR. Memurun reddi hukuka aykırıdır.",
+    "key_points": [
+      "Gemi sicili",
+      "18 GT kuralı",
+      "İhtiyari tescil"
+    ],
+    "topics": [
+      "Gemi Sicili"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_908"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Konişmento (Bill of Lading)",
+    "difficulty": "orta",
+    "scenario": "Yükleten (Y), 1000 koli pamuğu taşıyan (T)'ye teslim etmiş ve 'Emre Yazılı Konişmento' almıştır. (Y), konişmentoyu ciro ederek bankaya (B) devreder. Gemi varış limanına geldiğinde (T), yükü konişmentoyu ibraz edemeyen alıcı (A)'ya teslim eder. Banka (B), (T)'ye dava açar. Sonuç ne olur?",
+    "ideal_solution": "Konişmento, eşyayı temsil eden bir kıymetli evraktır. Taşıyan (T), yükü ancak konişmentonun asıl nüshasını kendisine ibraz eden meşru hamile teslim edebilir (TTK m.1228). Konişmentoyu ibraz edemeyen (A)'ya yükü teslim eden (T), meşru hamil olan Banka (B)'ye karşı zarardan (yükün bedelinden) sorumludur.",
+    "key_points": [
+      "Konişmento",
+      "Eşyayı temsil edici nitelik",
+      "Meşru hamile teslim"
+    ],
+    "topics": [
+      "Taşıma Sözleşmeleri",
+      "Konişmento"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_907"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Müşterek Avarya İştirak",
+    "difficulty": "orta",
+    "scenario": "Gemi batma tehlikesi yaşarken kaptan 10 ton çimentoyu denize atar (müşterek avarya). Ancak gemi kurtulamaz ve fırtınanın etkisiyle kayalıklara çarparak tamamen batar. Çimento sahibi, gemi malikinden müşterek avarya payı isteyebilir mi?",
+    "ideal_solution": "Müşterek avarya alacağının doğması için yapılan fedakarlığın 'faydalı bir sonuç' doğurması, yani geminin ve diğer yüklerin kurtulması şarttır (York-Anvers Kuralları / TTK m.1272). Olayda gemi tamamen battığı ve hiçbir değer kurtulamadığı için faydalı sonuç şartı gerçekleşmemiştir. Çimento sahibi müşterek avarya iştirak payı isteyemez.",
+    "key_points": [
+      "Müşterek avarya",
+      "Faydalı sonuç şartı",
+      "Geminin batması"
+    ],
+    "topics": [
+      "Deniz Kazaları",
+      "Müşterek Avarya"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_906"
+  },
+  {
+    "course": "deniz_ticareti",
+    "title": "Deniz Ticareti - Çatma (Collision)",
+    "difficulty": "zor",
+    "scenario": "Kusursuz iki gemi, İstanbul Boğazı'nda yoğun sis nedeniyle çarpışır (çatma). Her iki gemide de hasar oluşur. A gemisi B gemisinden zararının tazminini isteyebilir mi?",
+    "ideal_solution": "TTK m.1228 uyarınca, çatma umulmayan bir hal veya mücbir sebepten ileri gelmişse veya neden ileri geldiği anlaşılamıyorsa (kusursuz çatma), zarara uğrayanlar kendi zararlarına katlanırlar. Kimse diğerinden tazminat isteyemez. Olayda yoğun sis ve kusursuzluk (mücbir sebep) durumu olduğundan her gemi kendi zararına katlanacaktır.",
+    "key_points": [
+      "Kusursuz çatma",
+      "Mücbir sebep",
+      "TTK m.1228"
+    ],
+    "topics": [
+      "Deniz Kazaları",
+      "Çatma"
+    ],
+    "id": "deniz_ticareti_AUHF_BULK1_905"
+  },
+  {
+    "course": "deniz_ticareti",
     "title": "AÜHF Özel: Müşterek Avarya (General Average)",
     "difficulty": "zor",
     "scenario": "İstanbul'dan Marsilya'ya yük taşıyan 'M/V Akdeniz' gemisi, Ege Denizi'nde şiddetli bir fırtınaya yakalanır. Gemi batma tehlikesi geçirince Kaptan, gemiyi ve diğer yükleri kurtarmak amacıyla güvertedeki (X) firmasına ait 50 tonluk demir yükünün denize atılmasına karar verir. Gemi sağ salim limana ulaşır. (X) firması zararını kimden ve nasıl talep edebilir?",

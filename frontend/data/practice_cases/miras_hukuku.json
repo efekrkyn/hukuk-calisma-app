@@ -1,6 +1,183 @@
 [
   {
     "course": "miras_hukuku",
+    "title": "Miras Hukuku - Ölüm Karinesi ve Birlikte Ölüm",
+    "difficulty": "kolay",
+    "scenario": "Baba ve oğul aynı trafik kazasında vefat etmiş, ancak hangisinin önce öldüğü tıbben tespit edilememiştir. Birbirlerine mirasçı olabilirler mi?",
+    "ideal_solution": "TMK m.29 uyarınca (Birlikte Ölüm Karinesi); birden fazla kişiden hangisinin önce öldüğü ispat edilemezse, hepsi AYNI ANDA ölmüş sayılırlar. Aynı anda ölmüş sayılan kişiler BİRBİRLERİNE MİRASÇI OLAMAZLAR. Baba ve oğulun mirasları tamamen kendi yasal mirasçılarına (kendi yönlerinden ayrı ayrı) geçer.",
+    "key_points": [
+      "Birlikte ölüm karinesi (TMK m.29)",
+      "Aynı anda ölüm",
+      "Mirasçı olamama durumu"
+    ],
+    "topics": [
+      "Mirasın Açılması",
+      "Ölüm Karinesi"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_914"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Artmirasçı Atanması",
+    "difficulty": "zor",
+    "scenario": "Mirasbırakan, vasiyetnamesinde: 'Malvarlığımı yeğenim Ön-Mirasçı (Ö)'ye bırakıyorum. Ancak (Ö) vefat ettiğinde, bu mallar diğer yeğenim Art-Mirasçı (A)'ya intikal edecektir' der. (Ö), malları satabilir mi?",
+    "ideal_solution": "TMK m.521 uyarınca 'Artmirasçı Atanması (Fevkalade İkame)' geçerli bir ölüme bağlı tasarruftur. Bu durumda önmirasçı (Ö), mirası geçici olarak kazanır. Ancak mirası olduğu gibi (bozmadan ve satmadan) artmirasçıya devretme yükümlülüğü altındadır. Bu nedenle (Ö)'nün mülkiyeti GÜVENCELİ MÜLKİYET niteliğindedir. Tereke mallarını kural olarak SATAMAZ. Satış yapabilmesi için artmirasçının veya hakimin izni (veya teminat verilmesi) gerekir.",
+    "key_points": [
+      "Artmirasçı (TMK m.521)",
+      "Önmirasçı",
+      "Güvenceli mülkiyet",
+      "Tasarruf kısıtlaması"
+    ],
+    "topics": [
+      "Ölüme Bağlı Tasarruflar",
+      "Artmirasçı Atanması"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_913"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - El Yazılı Vasiyetname Şartları",
+    "difficulty": "orta",
+    "scenario": "Mirasbırakan bilgisayarda yazıp, çıktısını alıp altını tükenmez kalemle kendi eliyle imzaladığı ve yine kendi eliyle tarih (01.01.2024) attığı bir vasiyetname bırakır. Geçerli midir?",
+    "ideal_solution": "TMK m.538'e göre el yazılı vasiyetnamenin geçerli olabilmesi için yapıldığı yıl, ay ve gün gösterilerek BAŞTAN SONA KADAR mirasbırakanın EL YAZISIYLA yazılmış ve imzalanmış olması ZORUNLUDUR. Bilgisayar, daktilo vb. ile yazılıp sadece imzalanan belge el yazılı vasiyetname olarak GEÇERSİZDİR (Kesin hükümsüzlük/Butlan).",
+    "key_points": [
+      "El yazılı vasiyetname (TMK m.538)",
+      "Baştan sona el yazısı şartı",
+      "Geçersizlik (Butlan)"
+    ],
+    "topics": [
+      "Ölüme Bağlı Tasarruflar",
+      "Vasiyetname Şekilleri"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_912"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - İvazlı Mirastan Feragat Sözleşmesi",
+    "difficulty": "zor",
+    "scenario": "Mirasbırakan sağlığında, yasal mirasçısı olan kızı (K) ile noterde resmi şekilde 'Miras payına karşılık 500.000 TL alması ve mirastan tamamen vazgeçmesi' konulu İvazlı Mirastan Feragat Sözleşmesi yapar. (K) parayı alır. (K)'nın altsoyu (kendi çocukları), dedeleri vefat ettiğinde (K)'nın payını isteyebilir mi?",
+    "ideal_solution": "TMK m.528 uyarınca mirasbırakan ile mirasçı arasında yapılan mirastan feragat sözleşmesi geçerlidir ve feragat eden mirasçılık sıfatını kaybeder. TMK m.528/3'e göre; 'İvazlı (karşılıklı, paralı) feragat, SÖZLEŞMEDE AKSİ KARARLAŞTIRILMAMIŞSA feragat edenin altsoyuna da etkili olur'. Olayda (K) ivaz (para) almış ve aksi kararlaştırılmamıştır. Dolayısıyla (K)'nın çocukları da (altsoyu) dedelerinin mirasından pay ALAMAZLAR.",
+    "key_points": [
+      "Mirastan feragat sözleşmesi (TMK m.528)",
+      "İvazlı feragat",
+      "Altsoya etki kuralı"
+    ],
+    "topics": [
+      "Ölüme Bağlı Tasarruflar",
+      "Mirastan Feragat Sözleşmesi"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_911"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Mirasçılık Belgesi (Veraset İlamı)",
+    "difficulty": "kolay",
+    "scenario": "Mirasçılar bankadaki parayı çekmek için Sulh Hukuk Mahkemesinden veya Noterden 'Mirasçılık Belgesi' alırlar. Daha sonra gaiplikten dönen başka bir mirasçı bu belgenin iptalini isteyebilir mi?",
+    "ideal_solution": "Mirasçılık belgesi (veraset ilamı), mirasçılık sıfatını gösteren aksi ispat edilene kadar geçerli olan bir karinedir (TMK m.598). Kesin hüküm teşkil etmez. Bu nedenle, mirasçı olduğunu sonradan anlayan veya belgede yanlışlık olduğunu iddia eden herkes, Asliye Hukuk Mahkemesinde (veya belgeyi veren kuruma karşı) 'Mirasçılık Belgesinin İptali Davası' açarak belgeyi her zaman iptal ettirebilir.",
+    "key_points": [
+      "Mirasçılık belgesi (Veraset İlamı)",
+      "Kesin hüküm sayılmaması",
+      "Karine",
+      "İptal davası"
+    ],
+    "topics": [
+      "Mirasın Geçmesi",
+      "Mirasçılık Belgesi"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_910"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Mirasın Mirasçılara Geçişi (Külli Halefiyet)",
+    "difficulty": "orta",
+    "scenario": "Mirasbırakan ölür. Terekenin vergi borçları ve intikal işlemleri henüz yapılmamıştır. Mirasçılar, 'Biz daha tapuda intikalleri üzerimize almadık, evler bizim değil' diyebilirler mi?",
+    "ideal_solution": "TMK m.599'da düzenlenen 'Külli Halefiyet' ilkesine göre mirasçılar, mirasbırakanın ölümü ile mirası bir bütün olarak, kanun gereğince KENDİLİĞİNDEN kazanırlar. Mirasçıların mülkiyeti kazanmaları için tapuda tescil (intikal) işlemi yapmalarına veya başka bir tasarrufi işleme gerek yoktur. Tapudaki tescil sadece kurucu değil, bildirici (açıklayıcı) niteliktedir. O an itibariyle evlerin malikidirler ve borçlardan da sorumludurlar.",
+    "key_points": [
+      "Külli halefiyet (TMK m.599)",
+      "Kendiliğinden kazanma",
+      "Bildirici tescil"
+    ],
+    "topics": [
+      "Mirasın Geçmesi",
+      "Külli Halefiyet"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_909"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Vasiyetnameden Dönme",
+    "difficulty": "kolay",
+    "scenario": "Mirasbırakan (M), 2020 yılında resmi vasiyetname ile arabasını (X)'e bırakır. 2025 yılında ise el yazılı vasiyetname ile aynı arabayı (Y)'ye bırakır. M vefat edince arabayı kim alır?",
+    "ideal_solution": "TMK m.542 uyarınca, mirasbırakan yeni bir ölüme bağlı tasarrufla önceki tasarrufundan her zaman dönebilir. Sonraki tasarruf, önceki ile çelişiyorsa sonrakine itibar edilir. El yazılı vasiyetname kanuni şartları taşıyorsa geçerlidir ve önceki resmi vasiyetnameyi o madde yönünden (araba bağlamında) hükümsüz kılar. Arabayı (Y) alır.",
+    "key_points": [
+      "Vasiyetnameden dönme",
+      "Sonraki tasarruf",
+      "Şekil serbestisi",
+      "TMK m.542"
+    ],
+    "topics": [
+      "Ölüme Bağlı Tasarruflar",
+      "Vasiyetname"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_908"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Mirasın Reddi (Süresi ve Karinesi)",
+    "difficulty": "kolay",
+    "scenario": "Mirasbırakan borca batık olarak ölmüştür. Mirasçı (A), vefatı öğrendiği tarihten itibaren hiçbir işlem yapmadan 4 ay bekler. 5. ayda alacaklılar borç için icra takibi yapınca (A), 'Mirası reddediyorum' der. Geçerli midir?",
+    "ideal_solution": "TMK m.606'ya göre, miras 3 AY İÇİNDE reddolunabilir. Bu süre, yasal mirasçılar için mirasbırakanın ölümünü öğrendikleri tarihten itibaren başlar. Süresi içinde mirası reddetmeyen mirasçı, mirası KABUL ETMİŞ (kayıtsız şartsız) sayılır (TMK m.610). 4 ay geçtiği için ret geçersizdir. ANCAK; ölümü anında mirasbırakanın ÖDEMEDEN ACZİ AÇIKÇA BELLİ veya resmen tespit edilmişse, miras reddedilmiş sayılır (Hükmi Ret - TMK m.605/2). Olayda borca batıklık açıkça belli ise hükmi ret karinesi işler ve (A) kurtulabilir. Aksi halde borçlardan şahsen sorumludur.",
+    "key_points": [
+      "Mirasın gerçek reddi (3 ay)",
+      "Mirasın kabulü karinesi",
+      "Hükmi ret (TMK m.605/2)",
+      "Borca batıklık"
+    ],
+    "topics": [
+      "Mirasın Geçmesi",
+      "Mirasın Reddi"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_907"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Mirasçılıktan Çıkarma (Iskat)",
+    "difficulty": "orta",
+    "scenario": "Baba (B), sürekli kendisine şiddet uygulayan ve ağır hakaretler eden oğlu (O)'yu noterde düzenlediği vasiyetnameyle 'Bana şiddet uyguladığı için onu mirasçılıktan çıkarıyorum' diyerek mirastan ıskat eder. (O), babasının ölümünden sonra saklı payını isteyebilir mi?",
+    "ideal_solution": "TMK m.510'a göre 'Mirasçılıktan Çıkarma (Iskat)', mirasçının mirasbırakana veya yakınlarına karşı ağır bir suç işlemesi veya aile hukukundan doğan yükümlülüklerini ağır şekilde ihlal etmesi durumunda mümkündür. Olayda şiddet uygulama ağır bir ihlal ve suçtur. Geçerli bir çıkarma işlemi yapıldığından (O), yasal mirasçılık sıfatını kaybeder ve SAKLI PAYINI İSTEYEMEZ. Çıkarılan kimsenin payı (kendi altsoyu varsa onlara), yoksa mirasbırakanın diğer yasal mirasçılarına kalır.",
+    "key_points": [
+      "Mirastan çıkarma (Iskat)",
+      "Cezai ıskat (TMK m.510)",
+      "Ağır suç/yükümlülük ihlali",
+      "Saklı payın kaybı"
+    ],
+    "topics": [
+      "Ölüme Bağlı Tasarruflar",
+      "Mirasçılıktan Çıkarma"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_906"
+  },
+  {
+    "course": "miras_hukuku",
+    "title": "Miras Hukuku - Mirasbırakanın Tasarruf Özgürlüğü ve Saklı Pay",
+    "difficulty": "zor",
+    "scenario": "Mirasbırakan (M), vefat ettiğinde eşi (E) ve iki çocuğu (Ç1, Ç2) hayattadır. (M), ölmeden önce vasiyetname ile tüm malvarlığını (1.200.000 TL) yardım vakfına bırakmıştır. Mirasçıların saklı payları ne kadardır ve ne davası açabilirler?",
+    "ideal_solution": "Öncelikle yasal miras payları hesaplanır: Eşin yasal payı (1. zümre ile birlikte) mirasın 1/4'üdür. Çocukların yasal payı kalanın (3/4'ün) yarısı, yani 3/8'erdir. TMK m.506'ya göre saklı pay oranları; Altsoy (çocuklar) için yasal miras payının 1/2'si, eş için (1. veya 2. zümre ile birlikteyse) yasal miras payının TAMAMI'dır. Buna göre; Eşin saklı payı: 1/4 * 1 = 1/4 (300.000 TL). Çocukların saklı payı: 3/8 * 1/2 = 3/16'şar (225.000'er TL). Toplam saklı pay: 1/4 (4/16) + 3/16 + 3/16 = 10/16 (750.000 TL). Mirasbırakanın tasarruf edilebilir kısmı (serbest oranı) 1.200.000 - 750.000 = 450.000 TL'dir. Mirasçılar (E, Ç1, Ç2), kendi saklı paylarını ihlal eden vasiyetnameye karşı TENKİS DAVASI açarak vakıftan saklı paylarını geri alabilirler.",
+    "key_points": [
+      "Yasal miras payı",
+      "Saklı pay oranları (TMK m.506)",
+      "Tenkis davası",
+      "Tasarruf edilebilir kısım"
+    ],
+    "topics": [
+      "Yasal Mirasçılar",
+      "Saklı Pay",
+      "Tenkis Davası"
+    ],
+    "id": "miras_hukuku_AUHF_BULK2_905"
+  },
+  {
+    "course": "miras_hukuku",
     "title": "AÜHF Özel: Ölüme Bağlı Tasarrufların İptali",
     "difficulty": "orta",
     "scenario": "Mirasbırakan (M), ölümünden kısa bir süre önce ağır demans hastası iken noterde resmi vasiyetname düzenleyerek tüm malvarlığını bakıcısı (B)'ye bırakmıştır. Yasal mirasçı olan çocuğu (Ç), bu durumdan babasının vefatından sonra haberdar olur. (Ç)'nin hukuki hakları nelerdir?",
