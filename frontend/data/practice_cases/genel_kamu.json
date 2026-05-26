@@ -1,0 +1,20 @@
+[
+  {
+    "course": "genel_kamu",
+    "title": "AÜHF Özel: Egemenlik ve Sosyal Sözleşme",
+    "difficulty": "kolay",
+    "scenario": "Rousseau'nun 'Sosyal Sözleşme' (Toplum Sözleşmesi) teorisine göre egemenliğin kaynağı nedir ve bu teori günümüz modern demokrasilerinde hangi kavramın temelini oluşturmuştur?",
+    "ideal_solution": "J.J. Rousseau'ya göre egemenliğin kaynağı bireylerin bir araya gelerek kendi aralarında yaptıkları sözleşmedir (Genel İrade). Bireyler doğal durumdan çıkıp sivil topluma geçerken haklarını bir üst otoriteye tamamen devretmezler, haklarını topluma (genel iradeye) devrederler. Bu durum, egemenliğin bölünemez ve devredilemez olduğunu savunur. Rousseau'nun bu teorisi, günümüz modern demokrasilerinde 'Milli Egemenlik' ve 'Halk Egemenliği' (Özellikle doğrudan ve yarı doğrudan demokrasi) kavramlarının felsefi temelini oluşturmuştur.",
+    "key_points": [
+      "Rousseau",
+      "Genel İrade",
+      "Milli/Halk Egemenliği",
+      "Bölünemez ve devredilemez egemenlik"
+    ],
+    "topics": [
+      "Egemenlik Teorileri",
+      "Sosyal Sözleşme"
+    ],
+    "id": "genel_kamu_AUHF4_800"
+  }
+]

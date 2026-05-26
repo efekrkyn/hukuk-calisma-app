@@ -1,14 +1,15 @@
 export type Course = { id: string; name: string };
 
 export const COURSES: Course[] = [
-  // AÜHF 4. Sınıf Öncelikli Dersler
-  { id: "icra_iflas", name: "İcra ve İflas Hukuku" },
-  { id: "ceza_muhakemesi", name: "Ceza Muhakemesi Hukuku (CMK)" },
-  { id: "milletlerarasi_ozel", name: "Milletlerarası Özel Hukuk (MÖHUK)" },
+  // AÜHF 4. Sınıf Bahar Dönemi Dersleri
+  { id: "ceza_muhakemesi", name: "Ceza Usul Hukuku (CMK)" },
+  { id: "deniz_ticareti", name: "Deniz Ticareti ve Sigorta Hukuku" },
   { id: "is_hukuku", name: "İş ve Sosyal Güvenlik Hukuku" },
+  { id: "milletlerarasi_ozel", name: "Milletlerarası Özel Hukuk" },
   { id: "kiymetli_evrak", name: "Kıymetli Evrak Hukuku" },
+  { id: "icra_iflas", name: "İcra-İflas Hukuku" },
+  { id: "genel_kamu", name: "Genel Kamu Hukuku ve İnsan Hakları" },
   { id: "miras_hukuku", name: "Miras Hukuku" },
-  { id: "deniz_ticareti", name: "Deniz Ticareti Hukuku" },
 
   // Borçlar
   { id: "borclar_genel", name: "Borçlar Genel Hukuku" },
@@ -34,9 +35,8 @@ export const COURSES: Course[] = [
   // Milletlerarası
   { id: "milletlerarasi_kamu", name: "Milletlerarası Kamu Hukuku" },
 
-  // Genel kamu + felsefe/sosyoloji + Anayasa
+  // Felsefe/sosyoloji + Anayasa
   { id: "anayasa_hukuku", name: "Anayasa Hukuku" },
-  { id: "genel_kamu", name: "Genel Kamu Hukuku" },
   { id: "hukuk_felsefesi", name: "Hukuk Felsefesi ve Sosyolojisi" },
 
   // Kanunlar/kitaplar/kişisel

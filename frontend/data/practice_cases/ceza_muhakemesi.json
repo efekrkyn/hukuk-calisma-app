@@ -1,6 +1,44 @@
 [
   {
     "course": "ceza_muhakemesi",
+    "title": "AÜHF Özel: İddianamenin İadesi",
+    "difficulty": "orta",
+    "scenario": "Cumhuriyet Savcısı, şüpheli (B) hakkında 'Hırsızlık' suçundan iddianame düzenleyerek Asliye Ceza Mahkemesine sunmuştur. İddianamede şüphelinin kimlik bilgileri, atılı suç ve sevk maddeleri yer almakta ancak suçu nasıl işlediğine dair hiçbir olgu, delillerle ilişkilendirilerek anlatılmamıştır. Mahkeme başkanı bu durumu fark eder. Hukuki süreç nasıl işlemelidir?",
+    "ideal_solution": "CMK m.170'e göre iddianamede bulunması gereken zorunlu unsurlar vardır. Bunlardan en önemlisi, yüklenen suçu oluşturan olayların mevcut delillerle ilişkilendirilerek açıklanmasıdır. Mahkeme, iddianamenin CMK m.170'teki şartları taşımadığını, yani olayın anlatımının delillerle irtibatlandırılmadığını (illiyet bağının kurulmadığını) tespit ederse, iddianamenin iadesine karar vermelidir. İade kararı, iddianamenin mahkemeye verildiği tarihten itibaren 15 gün içinde verilmelidir (CMK m.174). Savcı, eksiklikleri tamamladıktan sonra yeniden iddianame düzenleyebilir.",
+    "key_points": [
+      "İddianamenin unsurları (CMK m.170)",
+      "İddianamenin iadesi (CMK m.174)",
+      "15 günlük süre",
+      "Delillerin ilişkilendirilmesi"
+    ],
+    "topics": [
+      "Soruşturma Evresi",
+      "İddianame"
+    ],
+    "id": "ceza_muhakemesi_AUHF4_806"
+  },
+  {
+    "course": "ceza_muhakemesi",
+    "title": "AÜHF Özel: Tutuklama Şartları ve İtiraz",
+    "difficulty": "zor",
+    "scenario": "Şüpheli (A), kasten adam öldürme suçlamasıyla gözaltına alınmış ve savcı tarafından tutuklama talebiyle Sulh Ceza Hakimliğine sevk edilmiştir. Hakim, (A)'nın sabit ikametgahı olmasına ve delillerin büyük oranda toplanmış olmasına rağmen, suçun katalog suçlardan (TCK m.81) olması ve toplumda infial yaratması gerekçesiyle tutuklama kararı vermiştir. (A)'nın avukatı olarak bu karara karşı nasıl bir yol izlersiniz? Gerekçelerinizi belirtiniz.",
+    "ideal_solution": "CMK m.100 gereği tutuklama kararı verilebilmesi için kuvvetli suç şüphesinin varlığını gösteren somut delillerin bulunması ve bir tutuklama nedeninin (kaçma veya delil karartma şüphesi) bulunması gerekir. Katalog suçlarda tutuklama nedeninin var sayılabileceği bir karine (CMK m.100/3) olsa da, bu karine mutlak değildir ve hakimin somut olayda tutuklamanın orantılı olup olmadığını değerlendirmesi zorunludur. Şüphelinin sabit ikametgahının olması ve delillerin toplanmış olması, kaçma ve delil karartma şüphesini zayıflatmaktadır. Ayrıca salt 'toplumda infial yaratması' hukuki bir tutuklama nedeni değildir. Kararın tefhim veya tebliğinden itibaren 7 gün içinde Asliye Ceza Mahkemesi nezdinde (veya bir sonraki Sulh Ceza Hakimliğinde) itiraz yoluna başvurulmalı ve adli kontrol hükümlerinin (CMK m.109) neden yetersiz kaldığının hakimlikçe gerekçelendirilmediği (CMK m.101/2) vurgulanmalıdır.",
+    "key_points": [
+      "Katalog suçlar karinesi",
+      "Tutuklama nedenleri (CMK m.100)",
+      "Orantılılık ilkesi",
+      "İtiraz süresi (7 gün)",
+      "Adli kontrol önceliği"
+    ],
+    "topics": [
+      "Koruma Tedbirleri",
+      "Tutuklama",
+      "İtiraz Kanun Yolu"
+    ],
+    "id": "ceza_muhakemesi_AUHF4_805"
+  },
+  {
+    "course": "ceza_muhakemesi",
     "title": "Hukuka Aykırı Arama ve Delil Değerlendirmesi",
     "difficulty": "zor",
     "scenario": "Polis memurları, ihbar üzerine şüpheli (E)'nin evine gitmiştir. Gecikmesinde sakınca bulunan hal kapsamında savcıdan yazılı arama kararı almadan, amirlerinin 'sözlü talimatıyla' eve girmiş ve evde uyuşturucu madde bulmuşlardır. (E) mahkemede, bu aramanın hukuka aykırı olduğunu belirterek delillerin kabul edilmemesini talep etmiştir. Mahkeme nasıl bir karar vermelidir?",

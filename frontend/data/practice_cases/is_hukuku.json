@@ -1,6 +1,25 @@
 [
   {
     "course": "is_hukuku",
+    "title": "AÜHF Özel: Alt İşveren (Taşeron) İlişkisi ve Muvazaa",
+    "difficulty": "zor",
+    "scenario": "(A) Hastanesi, hastanedeki MR çekimi hizmetlerini (B) Görüntüleme şirketine devretmiştir. (B) şirketi, kendi MR cihazlarını hastaneye kurmuş ve kendi radyoloji teknisyenlerini çalıştırmaktadır. Ancak (A) Hastanesinin başhekimi, (B) şirketinin çalışanlarına günlük mesai saatleri konusunda doğrudan emir ve talimat vermektedir. (B) şirketinin teknisyeni (T), kıdem tazminatını alamadığı gerekçesiyle hem (A) hem de (B)'ye dava açar. (A) hastanesi sorumluluğu reddeder. Hukuki durumu değerlendiriniz.",
+    "ideal_solution": "Asıl işveren-alt işveren ilişkisinin geçerli olabilmesi için alt işverenin (B) ayrı bir organizasyona sahip olması ve işçilerinin sadece bu işyerinde çalışması gerekir. Olayda MR hizmeti uzmanlık gerektiren bir asıl işin bir bölümüdür (İş K. m.2). Ancak alt işverenlik ilişkisinin geçerli olması için asıl işverenin (A), alt işverenin işçilerine doğrudan emir ve talimat vermemesi (yönetim hakkını devretmesi) gerekir. Başhekimin doğrudan emir vermesi, ilişkinin muvazaalı olma ihtimalini (veya en azından sıkı bağımlılığı) gösterir. İş K. m.2/6 uyarınca asıl işveren (A) ile alt işveren (B), alt işverenin işçilerinin iş sözleşmesinden, toplu iş sözleşmesinden ve İş Kanunundan doğan yükümlülüklerinden (kıdem tazminatı dahil) 'birlikte (müteselsilen) sorumludur'. Muvazaa tespiti yapılmasa dahi (A) asıl işveren sıfatıyla kanundan doğan müteselsil sorumluluk gereği (T)'ye tazminatı ödemekle yükümlüdür.",
+    "key_points": [
+      "Asıl işveren-alt işveren ilişkisi (İş K. m.2)",
+      "Emir ve talimat verme yetkisi (Yönetim hakkı)",
+      "Müteselsil sorumluluk",
+      "Muvazaa ihtimali"
+    ],
+    "topics": [
+      "İş Sözleşmesi",
+      "Alt İşveren",
+      "Kıdem Tazminatı"
+    ],
+    "id": "is_hukuku_AUHF4_805"
+  },
+  {
+    "course": "is_hukuku",
     "title": "İşe İade Davası Şartları",
     "difficulty": "orta",
     "scenario": "40 işçinin çalıştığı bir fabrikada 5 aydır çalışan işçi (İ), işveren tarafından hiçbir gerekçe gösterilmeden işten çıkarılmıştır. (İ), işe iade davası açmak istemektedir. Şartları değerlendiriniz.",

@@ -1,6 +1,24 @@
 [
   {
     "course": "icra_iflas",
+    "title": "AÜHF Özel: İhtiyati Haciz ve Tamamlama Merasimi",
+    "difficulty": "zor",
+    "scenario": "Alacaklı (A), borçlu (B)'nin mallarını kaçırmaya hazırlandığını öğrenerek mahkemeden ihtiyati haciz kararı almış ve kararı icra dairesine götürerek (B)'nin aracını haczettirmiştir. Ancak (A), ihtiyati haczin uygulandığı tarihten itibaren 10 gün geçmesine rağmen henüz esas takibe (ilamsız icra) geçmemiş veya dava açmamıştır. (B) bu durumda ne yapabilir?",
+    "ideal_solution": "İİK m.264'e göre, alacaklı ihtiyati haciz kararını icra dairesine verip uygulattıktan sonra (tamamlama merasimi), kanuni süre olan 7 GÜN içinde esas takibe geçmek veya dava açmak zorundadır. Olayda 10 gün geçmiştir. 7 günlük sürenin kaçırılması halinde ihtiyati haciz kararı KENDİLİĞİNDEN hükümsüz hale gelir (düşer). Borçlu (B), icra müdürlüğüne başvurarak sürenin geçtiğini ve ihtiyati haczin düştüğünü belirterek aracının üzerindeki haczin kaldırılmasını talep etmelidir. İcra müdürü talebi kabul etmek zorundadır.",
+    "key_points": [
+      "İhtiyati haczi tamamlama süresi (7 gün)",
+      "İİK m.264",
+      "İhtiyati haczin kendiliğinden düşmesi",
+      "Haczin kaldırılması talebi"
+    ],
+    "topics": [
+      "Geçici Hukuki Korumalar",
+      "İhtiyati Haciz"
+    ],
+    "id": "icra_iflas_AUHF4_806"
+  },
+  {
+    "course": "icra_iflas",
     "title": "İstihkak İddiası ve Haciz",
     "difficulty": "orta",
     "scenario": "Borçlu (C)'nin evinde yapılan haciz sırasında, evde bulunan televizyon ve bilgisayar haczedilmiştir. Ancak o sırada evde bulunan (C)'nin ev arkadaşı (D), televizyonun faturasını göstererek kendisine ait olduğunu iddia etmiştir. İcra memuru bu durumu haciz tutanağına geçirmiş ancak malları muhafaza altına almıştır. (D) hakkını nasıl arayabilir?",
