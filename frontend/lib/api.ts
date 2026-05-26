@@ -1,5 +1,7 @@
 const WORKER_URL =
-  process.env.NEXT_PUBLIC_WORKER_URL ?? "http://localhost:8787";
+  typeof window !== "undefined"
+    ? "/api/worker"
+    : (process.env.NEXT_PUBLIC_WORKER_URL ?? "http://localhost:8787");
 
 export class WorkerError extends Error {
   constructor(public status: number, public path: string, message?: string) {
