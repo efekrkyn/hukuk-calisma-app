@@ -1,6 +1,24 @@
 [
   {
     "course": "esya_hukuku",
+    "title": "Klasik Final: Rehinli Alacaklının Hakları ve Lex Commissoria Yasağı",
+    "difficulty": "zor",
+    "scenario": "(M), (N)'den aldığı 100.000 TL borca karşılık, kendisine ait 150.000 TL değerindeki tabloyu (N)'ye rehin olarak teslim etmiştir. Taraflar arasındaki sözleşmede, '(M) borcunu vadesinde ödemezse, tablonun mülkiyeti doğrudan (N)'ye geçecektir' şeklinde bir madde bulunmaktadır. Vade geldiğinde (M) borcunu ödeyemez. (N), sözleşmedeki maddeye dayanarak tablonun maliki olduğunu iddia edebilir mi?",
+    "ideal_solution": "Taraflar arasındaki sözleşmede yer alan, borcun ödenmemesi halinde rehinli malın mülkiyetinin alacaklıya geçeceğine ilişkin anlaşma 'Lex Commissoria (Mürتهin mülk edinme) yasağı' kapsamında kesin olarak hükümsüzdür (TMK m.873). Kanun koyucu, zorda kalan borçlunun sömürülmesini engellemek için bu yasağı getirmiştir. (N), tablonun mülkiyetini doğrudan kazanamaz. (N)'nin yapması gereken, İcra ve İflas Kanunu hükümlerine göre rehnin paraya çevrilmesi yoluyla takip başlatarak tabloyu icra dairesi aracılığıyla sattırmak ve alacağını satış bedelinden tahsil etmektir.",
+    "key_points": [
+      "Rehin hakkı",
+      "Lex commissoria yasağı",
+      "TMK m.873",
+      "Rehnin paraya çevrilmesi"
+    ],
+    "topics": [
+      "Ayni Haklar",
+      "Rehin"
+    ],
+    "id": "esya_hukuku_FINAL_505"
+  },
+  {
+    "course": "esya_hukuku",
     "title": "İyiniyetli Üçüncü Kişinin Ayni Hak Kazanımı",
     "difficulty": "zor",
     "scenario": "(A), bilgisayarını onarması için tamirci (T)'ye bırakmıştır. (T), bilgisayarı dükkanında sergilemiş ve müşteri (M)'ye kendisine ait olduğunu söyleyerek 5.000 TL'ye satıp teslim etmiştir. (A) durumu öğrendiğinde bilgisayarı (M)'den alabilir mi?",

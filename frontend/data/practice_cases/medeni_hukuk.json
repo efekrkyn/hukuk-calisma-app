@@ -1,6 +1,24 @@
 [
   {
     "course": "medeni_hukuk",
+    "title": "Klasik Final: Tüzel Kişilerde Organın Haksız Fiilinden Sorumluluk",
+    "difficulty": "orta",
+    "scenario": "(X) Derneği'nin yönetim kurulu başkanı (Y), dernek adına düzenlenen bir kermeste çıkan tartışma sonucunda, kermese katılan (Z)'yi darp ederek yaralamıştır. (Z), hastane masrafları ve manevi tazminat için kime veya kimlere karşı dava açabilir? Gerekçelendiriniz.",
+    "ideal_solution": "TMK m.50 gereğince, tüzel kişinin organları, hukuki işlemleri ve diğer bütün fiilleriyle tüzel kişiyi borç altına sokarlar. Organların haksız fiillerinden dolayı tüzel kişi doğrudan doğruya ve kusursuz olarak sorumludur. Yönetim kurulu başkanı (Y), derneğin zorunlu organıdır ve fiili dernek faaliyeti (kermes) sırasında işlenmiştir. Bu nedenle (X) Derneği, (Y)'nin haksız fiilinden dolayı (Z)'ye karşı sorumludur. Ayrıca haksız fiili bizzat işleyen (Y) de kendi kusuru nedeniyle şahsen sorumludur. (Z), uğradığı zararın tazmini için (X) Derneği'ne ve (Y)'ye karşı müteselsilen dava açabilir (TMK m.50/3).",
+    "key_points": [
+      "Tüzel kişinin organı",
+      "Organın haksız fiili",
+      "TMK m.50",
+      "Müteselsil sorumluluk"
+    ],
+    "topics": [
+      "Kişiler Hukuku",
+      "Tüzel Kişiler"
+    ],
+    "id": "medeni_hukuk_FINAL_502"
+  },
+  {
+    "course": "medeni_hukuk",
     "title": "Nişanın Bozulması ve Hediyelerin Geri Verilmesi",
     "difficulty": "kolay",
     "scenario": "Nişanlılık süresince (K), nişanlısı (E)'ye pahalı bir Rolex saat hediye etmiştir. (E), haklı bir sebep olmaksızın nişanı bozmuştur. (K), saati geri isteyebilir mi?",

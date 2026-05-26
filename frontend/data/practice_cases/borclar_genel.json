@@ -1,6 +1,45 @@
 [
   {
     "course": "borclar_genel",
+    "title": "Klasik Final: Temsil Yetkisinin Kapsamı ve Yetkisiz Temsil",
+    "difficulty": "orta",
+    "scenario": "İş adamı (T), yurt dışı seyahatine çıkmadan önce arkadaşı (V)'ye, 'Garajımdaki 2020 model aracımı en az 400.000 TL'ye sat' diyerek yetki belgesi verir. (V), (T) yurt dışındayken aracı 350.000 TL'ye (Ü)'ye satar ve teslim eder. (T) döndüğünde durumu öğrenir ve aracı geri ister. (Ü) ise geçerli bir sözleşme olduğunu iddia eder. Hukuki durumu değerlendiriniz.",
+    "ideal_solution": "(V)'ye verilen temsil yetkisi özel ve sınırlandırılmış bir yetkidir (en az 400.000 TL). (V), aracı 350.000 TL'ye satarak temsil yetkisinin sınırlarını aşmıştır. Yetki sınırının aşılması durumunda yetkisiz temsil (TBK m.46) hükümleri uygulanır. Yetkisiz temsilcinin yaptığı işlem, temsil olunan (T) tarafından onanmadıkça (icazet verilmedikçe) onu bağlamaz. (T), işleme icazet vermediği için satış sözleşmesi kesin olarak hükümsüzdür (askıda geçersizlik sona ermiştir). (T), mülkiyet hakkına dayanarak (Ü)'den aracın iadesini (istihkak davası) talep edebilir. (Ü) ise iyiniyetli olsa bile mülkiyeti kazanamaz, sadece yetkisiz temsilci (V)'den uğradığı menfi (şartları varsa müspet) zararı talep edebilir (TBK m.47).",
+    "key_points": [
+      "Yetkisiz temsil",
+      "Temsil yetkisinin aşılması",
+      "İcazet (Onay)",
+      "Askıda geçersizlik",
+      "İstihkak davası"
+    ],
+    "topics": [
+      "Temsil",
+      "Yetkisiz Temsil"
+    ],
+    "id": "borclar_genel_FINAL_507"
+  },
+  {
+    "course": "borclar_genel",
+    "title": "Klasik Final: Hata ve Hile Kesişimi, Sözleşmenin İptali",
+    "difficulty": "zor",
+    "scenario": "(A), antika eşya koleksiyoncusu (B)'nin mağazasına giderek, 18. yüzyıla ait olduğunu düşündüğü bir vazoyu 50.000 TL'ye satın almak ister. (B), vazonun aslında 20. yüzyıla ait sıradan bir reprodüksiyon olduğunu bilmesine rağmen, (A)'nın bu yanlış inancından faydalanmak için ses çıkarmaz ve hatta 'Bu vazo koleksiyonunuzun en nadide parçası olacak' diyerek satışı gerçekleştirir. Bir ay sonra gerçeği öğrenen (A), (B)'ye karşı hangi hukuki yollara başvurabilir? Süreleri ve sonuçları ile açıklayınız.",
+    "ideal_solution": "Olayda (A), vazonun niteliğinde (esaslı noktasında) yanılmaktadır (TBK m.31 - Saikte esaslı yanılma/Temel Hatası). Ancak (B), (A)'nın bu hatasını bilmekte ve 'en nadide parçanız olacak' diyerek bu hatayı pekiştirmekte, aldatma (hile) kastıyla hareket etmektedir. (TBK m.36). Hile durumunda, hata esaslı olmasa bile sözleşme iptal edilebilir. (A), durumu öğrendiği tarihten itibaren 1 yıl içinde (TBK m.39) sözleşme ile bağlı olmadığını bildirerek ödediği 50.000 TL'nin iadesini (sebepsiz zenginleşme hükümlerine göre) talep edebilir. Ayrıca (B)'nin hilesi haksız fiil teşkil ettiğinden, (A) uğradığı menfi zararın tazminini de isteyebilir.",
+    "key_points": [
+      "Hile (Aldatma)",
+      "Temel hatası (Esaslı yanılma)",
+      "1 yıllık hak düşürücü süre",
+      "Sözleşmenin iptali (Nispi butlan)",
+      "Menfi zarar"
+    ],
+    "topics": [
+      "İrade Sakatlıkları",
+      "Hata",
+      "Hile"
+    ],
+    "id": "borclar_genel_FINAL_506"
+  },
+  {
+    "course": "borclar_genel",
     "title": "Aşırı Yararlanma (Gabin)",
     "difficulty": "orta",
     "scenario": "(S), ekonomik olarak zor durumda olan ve paraya acil ihtiyacı bulunan (A)'nın bu durumundan faydalanarak, (A)'nın 500.000 TL değerindeki evini 150.000 TL'ye satın almıştır. (A), maddi durumunu düzelttikten sonra bu satışı iptal etmek istemektedir. Hukuki durumu değerlendiriniz.",
