@@ -37,12 +37,13 @@ app.use(
 app.use("*", async (c, next) => {
   const path = c.req.path;
   
-  // CORS Preflight, health, login ve root isteklerini bypass et
+  // CORS Preflight, health, login, mevzuat ve root isteklerini bypass et
   if (
     c.req.method === "OPTIONS" ||
     path === "/" ||
     path === "/health" ||
-    path === "/auth/login"
+    path === "/auth/login" ||
+    path.startsWith("/mevzuat")
   ) {
     return await next();
   }

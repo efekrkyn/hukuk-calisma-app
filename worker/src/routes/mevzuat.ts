@@ -5,9 +5,15 @@ export const mevzuat = new Hono();
 // https://www.resmigazete.gov.tr/rss.xml
 mevzuat.get("/rss", async (c) => {
   try {
-    const response = await fetch("https://www.resmigazete.gov.tr/rss.xml");
+    const response = await fetch("https://www.resmigazete.gov.tr/rss.xml", {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "application/rss+xml, application/xml, text/xml, */*"
+      }
+    });
     if (!response.ok) {
-      return c.json({ error: "Resmi Gazete'ye ulaşılamadı" }, 500);
+      console.error(`Resmi Gazete RSS failed: ${response.status}`);
+      return c.json({ error: `Resmi Gazete'ye ulaşılamadı (HTTP ${response.status})` }, 500);
     }
     const text = await response.text();
     

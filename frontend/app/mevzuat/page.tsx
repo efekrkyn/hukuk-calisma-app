@@ -14,9 +14,13 @@ export default function MevzuatTakip() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    api.getMevzuat()
+    fetch("/api/mevzuat")
+      .then(async (r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
       .then(res => {
-        setItems(res.items);
+        setItems(res.items || []);
         setLoading(false);
       })
       .catch(e => {
