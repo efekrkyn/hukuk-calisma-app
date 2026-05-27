@@ -24,6 +24,80 @@ export default function GlobalAiAssistant() {
   const [isListening, setIsListening] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
+  const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash");
+
+  // Load selected model from localStorage on mount
+  useEffect(() => {
+    const savedModel = localStorage.getItem("hukuk_selected_model");
+    if (savedModel) {
+      setSelectedModel(savedModel);
+    }
+  }, []);
+
+  const handleModelChange = (model: string) => {
+    setSelectedModel(model);
+    localStorage.setItem("hukuk_selected_model", model);
+  };
+
+  const renderMessageContent = (content: string) => {
+    if (content.includes("<think>") && content.includes("</think>")) {
+      const parts = content.split("</think>");
+      const thinking = parts[0].replace("<think>", "").trim();
+      const answer = parts[1].trim();
+      return (
+        <div className="space-y-4">
+          <details className="group border border-zinc-800 bg-zinc-900/50 rounded-xl p-3 [&_summary::-webkit-details-marker]:hidden" open>
+            <summary className="flex items-center justify-between font-semibold text-xs text-zinc-400 cursor-pointer select-none">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
+                Düşünme Süreci
+              </span>
+              <span className="text-zinc-500 transition group-open:rotate-180">
+                ▼
+              </span>
+            </summary>
+            <div className="mt-2 text-xs text-zinc-500 font-mono whitespace-pre-wrap border-t border-zinc-800/40 pt-2 leading-relaxed">
+              {thinking}
+            </div>
+          </details>
+          {answer ? (
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+              {answer}
+            </ReactMarkdown>
+          ) : (
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span className="text-sm font-medium animate-pulse">Yanıt oluşturuluyor...</span>
+            </div>
+          )}
+        </div>
+      );
+    }
+    
+    if (content.includes("<think>")) {
+      const thinking = content.replace("<think>", "").trim();
+      return (
+        <div className="space-y-4">
+          <div className="border border-zinc-800 bg-zinc-900/50 rounded-xl p-3">
+            <div className="flex items-center gap-1.5 font-semibold text-xs text-zinc-400">
+              <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
+              <span>Düşünme Süreci...</span>
+            </div>
+            <div className="mt-2 text-xs text-zinc-500 font-mono whitespace-pre-wrap border-t border-zinc-800/40 pt-2 leading-relaxed">
+              {thinking}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+        {content}
+      </ReactMarkdown>
+    );
+  };
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
@@ -185,6 +259,7 @@ export default function GlobalAiAssistant() {
       const stream = streamChat({
         question: userText,
         history: historyToSend,
+        model: selectedModel,
       });
 
       let currentText = "";
@@ -234,6 +309,19 @@ export default function GlobalAiAssistant() {
         </div>
         
         <div className="flex items-center gap-2">
+          {/* Model Selector */}
+          <div className="flex items-center gap-1.5 mr-2">
+            <select
+              value={selectedModel}
+              onChange={(e) => handleModelChange(e.target.value)}
+              className="bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer"
+            >
+              <option value="gemini-2.5-flash">Gemini 2.5</option>
+              <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
+              <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
+            </select>
+          </div>
+
           {/* 9. Exam Mode Toggle */}
           <div className="flex items-center gap-2 mr-2">
             <span className="text-xs font-medium text-muted-foreground">Sınav Modu</span>
@@ -306,9 +394,7 @@ export default function GlobalAiAssistant() {
               
               <div className={`prose prose-sm md:prose-base dark:prose-invert max-w-none ${m.role === "user" ? "text-primary-foreground" : ""}`}>
                 {m.content ? (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {m.content}
-                  </ReactMarkdown>
+                  renderMessageContent(m.content)
                 ) : (
                   <div className="flex items-center gap-2 text-muted-foreground">
                     <Loader2 className="w-4 h-4 animate-spin" />

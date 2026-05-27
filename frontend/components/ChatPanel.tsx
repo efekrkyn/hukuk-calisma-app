@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { streamChat, type ChatSource } from "@/lib/api";
-import { Sparkles, HelpCircle, BookOpen, Lightbulb, GraduationCap, RefreshCw, ArrowRight } from "lucide-react";
+import { Sparkles, HelpCircle, BookOpen, Lightbulb, GraduationCap, RefreshCw, ArrowRight, Loader2 } from "lucide-react";
 
 type Msg = {
   role: "user" | "ai";
@@ -31,6 +31,58 @@ export function ChatPanel({
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
+  const renderMessageContent = (content: string) => {
+    if (content.includes("<think>") && content.includes("</think>")) {
+      const parts = content.split("</think>");
+      const thinking = parts[0].replace("<think>", "").trim();
+      const answer = parts[1].trim();
+      return (
+        <div className="space-y-3">
+          <details className="group border border-zinc-800 bg-zinc-900/50 rounded-xl p-3 [&_summary::-webkit-details-marker]:hidden" open>
+            <summary className="flex items-center justify-between font-semibold text-xs text-zinc-400 cursor-pointer select-none">
+              <span className="flex items-center gap-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-primary animate-pulse" />
+                Düşünme Süreci
+              </span>
+              <span className="text-zinc-500 transition group-open:rotate-180">
+                ▼
+              </span>
+            </summary>
+            <div className="mt-2 text-xs text-zinc-500 font-mono whitespace-pre-wrap border-t border-zinc-800/40 pt-2 leading-relaxed">
+              {thinking}
+            </div>
+          </details>
+          <div className="whitespace-pre-wrap leading-relaxed text-[13.5px]">
+            {answer}
+          </div>
+        </div>
+      );
+    }
+
+    if (content.includes("<think>")) {
+      const thinking = content.replace("<think>", "").trim();
+      return (
+        <div className="space-y-3">
+          <div className="border border-zinc-800 bg-zinc-900/50 rounded-xl p-3">
+            <div className="flex items-center gap-1.5 font-semibold text-xs text-zinc-400">
+              <Loader2 className="w-3.5 h-3.5 text-primary animate-spin" />
+              <span>Düşünme Süreci...</span>
+            </div>
+            <div className="mt-2 text-xs text-zinc-500 font-mono whitespace-pre-wrap border-t border-zinc-800/40 pt-2 leading-relaxed">
+              {thinking}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="whitespace-pre-wrap leading-relaxed text-[13.5px]">
+        {content}
+      </div>
+    );
+  };
+
   useEffect(() => {
     scrollRef.current?.scrollTo({
       top: scrollRef.current.scrollHeight,
@@ -41,6 +93,7 @@ export function ChatPanel({
   async function send(question: string) {
     if (!question.trim() || loading) return;
     setLoading(true);
+    const selectedModel = (typeof window !== "undefined" ? localStorage.getItem("hukuk_selected_model") : null) || "gemini-2.5-flash";
     const currentHistory = messages.map((m) => ({
       role: m.role,
       content: m.content,
@@ -58,6 +111,7 @@ export function ChatPanel({
         course,
         pdf_key: pdfKey,
         mode,
+        model: selectedModel,
         history: currentHistory,
       })) {
         if (ev.type === "sources") {
@@ -122,9 +176,16 @@ export function ChatPanel({
                   : "bg-muted/80 backdrop-blur-sm rounded-tl-none border border-border/40"
               }`}
             >
-              <div className="whitespace-pre-wrap leading-relaxed text-[13.5px]">
-                {m.content || (m.role === "ai" && loading ? "..." : "")}
-              </div>
+              {m.content ? (
+                renderMessageContent(m.content)
+              ) : (
+                m.role === "ai" && loading ? (
+                  <div className="flex items-center gap-2 text-muted-foreground text-xs">
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <span>Düşünme/Yanıt oluşturuluyor...</span>
+                  </div>
+                ) : null
+              )}
               {m.sources && m.sources.length > 0 && (
                 <div className="mt-2.5 pt-2.5 border-t border-border/30 flex flex-wrap gap-1">
                   {m.sources.map((s, idx) => {

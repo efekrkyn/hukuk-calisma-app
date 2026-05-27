@@ -18,6 +18,7 @@ type Bindings = {
   AI: Ai;
   ADMIN_SECRET: string;
   GEMINI_KEY: string;
+  DEEPSEEK_API_KEY?: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();

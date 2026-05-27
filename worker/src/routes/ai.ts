@@ -1,12 +1,13 @@
 import { Hono } from "hono";
 import { embedQuery, retrieve, buildPrompt, buildSystemPrompt } from "../lib/rag";
-import { GeminiProvider } from "../lib/ai-provider";
+import { GeminiProvider, DeepSeekProvider } from "../lib/ai-provider";
 import { gradeSolution } from "../lib/practice-grader";
 
 type Bindings = {
   AI: Ai;
   VECTORIZE: VectorizeIndex;
   GEMINI_KEY: string;
+  DEEPSEEK_API_KEY?: string;
   DB?: D1Database;
 };
 
@@ -20,6 +21,7 @@ ai.post("/chat", async (c) => {
     pdf_key?: string;
     top_k?: number;
     mode?: "default" | "law";
+    model?: string;
     history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
   };
   try {
@@ -72,7 +74,13 @@ ai.post("/chat", async (c) => {
     parts: [{ text: body.question }]
   });
 
-  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  const selectedModel = body.model || "gemini-2.5-flash";
+  let provider;
+  if (selectedModel.startsWith("deepseek")) {
+    provider = new DeepSeekProvider(c.env.DEEPSEEK_API_KEY || "", selectedModel);
+  } else {
+    provider = new GeminiProvider(c.env.GEMINI_KEY, selectedModel);
+  }
   const encoder = new TextEncoder();
   let fullAnswer = "";
 
