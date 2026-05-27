@@ -74,7 +74,7 @@ ai.post("/chat", async (c) => {
     parts: [{ text: body.question }]
   });
 
-  const selectedModel = body.model || "gemini-2.5-flash";
+  const selectedModel = body.model === "gemini-2.5-flash" ? "deepseek-v4-flash" : (body.model || "deepseek-v4-flash");
   let provider;
   if (selectedModel.startsWith("deepseek")) {
     provider = new DeepSeekProvider(c.env.DEEPSEEK_API_KEY || "", selectedModel);

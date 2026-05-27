@@ -93,7 +93,8 @@ export function ChatPanel({
   async function send(question: string) {
     if (!question.trim() || loading) return;
     setLoading(true);
-    const selectedModel = (typeof window !== "undefined" ? localStorage.getItem("hukuk_selected_model") : null) || "gemini-2.5-flash";
+    const savedModel = typeof window !== "undefined" ? localStorage.getItem("hukuk_selected_model") : null;
+    const selectedModel = savedModel === "gemini-2.5-flash" ? "deepseek-v4-flash" : (savedModel || "deepseek-v4-flash");
     const currentHistory = messages.map((m) => ({
       role: m.role,
       content: m.content,

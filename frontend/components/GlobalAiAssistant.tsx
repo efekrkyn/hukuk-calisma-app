@@ -24,13 +24,15 @@ export default function GlobalAiAssistant() {
   const [isListening, setIsListening] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
-  const [selectedModel, setSelectedModel] = useState<string>("gemini-2.5-flash");
+  const [selectedModel, setSelectedModel] = useState<string>("deepseek-v4-flash");
 
   // Load selected model from localStorage on mount
   useEffect(() => {
     const savedModel = localStorage.getItem("hukuk_selected_model");
     if (savedModel) {
-      setSelectedModel(savedModel);
+      setSelectedModel(savedModel === "gemini-2.5-flash" ? "deepseek-v4-flash" : savedModel);
+    } else {
+      setSelectedModel("deepseek-v4-flash");
     }
   }, []);
 
@@ -316,9 +318,8 @@ export default function GlobalAiAssistant() {
               onChange={(e) => handleModelChange(e.target.value)}
               className="bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer"
             >
-              <option value="gemini-2.5-flash">Gemini 2.5</option>
-              <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
               <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
+              <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
             </select>
           </div>
 
