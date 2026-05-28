@@ -2,8 +2,19 @@ import { Hono } from "hono";
 
 export const mevzuat = new Hono();
 
+const CACHE_TTL_SECONDS = 300; // 5 dakika — Resmi Gazete günde bir güncellenir
+const CACHE_KEY = "https://hukuk-worker.internal/mevzuat/rss-cache-v1";
+
 // https://www.resmigazete.gov.tr/rss.xml
 mevzuat.get("/rss", async (c) => {
+  // Cloudflare cache lookup
+  const cache = caches.default;
+  const cacheKey = new Request(CACHE_KEY);
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+
   try {
     const response = await fetch("https://www.resmigazete.gov.tr/rss.xml", {
       headers: {
@@ -16,19 +27,19 @@ mevzuat.get("/rss", async (c) => {
       return c.json({ error: `Resmi Gazete'ye ulaşılamadı (HTTP ${response.status})` }, 500);
     }
     const text = await response.text();
-    
+
     // Basit XML parse (Cloudflare worker'da DOMParser vs. olmadığı için regex ile temel kısımları alıyoruz)
     const items: Array<{ title: string; link: string; pubDate: string; description: string }> = [];
     const itemRegex = /<item>([\s\S]*?)<\/item>/g;
     let match;
-    
+
     while ((match = itemRegex.exec(text)) !== null) {
       const itemText = match[1];
       const titleMatch = /<title><!\[CDATA\[(.*?)\]\]><\/title>/.exec(itemText) || /<title>(.*?)<\/title>/.exec(itemText);
       const linkMatch = /<link>(.*?)<\/link>/.exec(itemText);
       const pubDateMatch = /<pubDate>(.*?)<\/pubDate>/.exec(itemText);
       const descMatch = /<description><!\[CDATA\[([\s\S]*?)\]\]><\/description>/.exec(itemText) || /<description>([\s\S]*?)<\/description>/.exec(itemText);
-      
+
       items.push({
         title: titleMatch ? titleMatch[1].trim() : "",
         link: linkMatch ? linkMatch[1].trim() : "",
@@ -37,7 +48,16 @@ mevzuat.get("/rss", async (c) => {
       });
     }
 
-    return c.json({ items });
+    const payload = JSON.stringify({ items });
+    const cacheable = new Response(payload, {
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": `public, max-age=${CACHE_TTL_SECONDS}`,
+      },
+    });
+    // Cache'i fire-and-forget yaz — response'u bloklamadan
+    c.executionCtx.waitUntil(cache.put(cacheKey, cacheable.clone()));
+    return cacheable;
   } catch (error) {
     return c.json({ error: "RSS okunurken hata oluştu" }, 500);
   }

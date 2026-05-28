@@ -34,12 +34,26 @@ flashcardsRouter.get("/state", async (c) => {
 
 // POST /flashcards/review
 flashcardsRouter.post("/review", async (c) => {
-  const body = await c.req.json<{
+  let body: {
     card_id: string;
     course: string;
     grade: number; // 0: Again, 1: Hard, 2: Good
-  }>();
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
 
+  if (!body.card_id || typeof body.card_id !== "string") {
+    return c.json({ error: "card_id (string) required" }, 400);
+  }
+  if (!body.course || typeof body.course !== "string") {
+    return c.json({ error: "course (string) required" }, 400);
+  }
+  if (typeof body.grade !== "number" || !Number.isInteger(body.grade)) {
+    return c.json({ error: "grade (integer) required" }, 400);
+  }
   if (body.grade < 0 || body.grade > 2) {
     return c.json({ error: "Invalid grade. Must be 0, 1, or 2." }, 400);
   }

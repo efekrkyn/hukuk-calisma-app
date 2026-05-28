@@ -49,16 +49,30 @@ quizRouter.get("/stats", async (c) => {
 
 // POST /quiz/submit
 quizRouter.post("/submit", async (c) => {
-  const body = await c.req.json<{
+  let body: {
     course: string;
     topic: string;
     question_id: string;
     selected_answer: number;
     is_correct: number;
-  }>();
+  };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
 
-  if (!body.course || !body.question_id || body.selected_answer === undefined || body.is_correct === undefined) {
-    return c.json({ error: "Missing required fields" }, 400);
+  if (!body.course || typeof body.course !== "string") {
+    return c.json({ error: "course (string) required" }, 400);
+  }
+  if (!body.question_id || typeof body.question_id !== "string") {
+    return c.json({ error: "question_id (string) required" }, 400);
+  }
+  if (typeof body.selected_answer !== "number" || !Number.isInteger(body.selected_answer)) {
+    return c.json({ error: "selected_answer (integer) required" }, 400);
+  }
+  if (typeof body.is_correct !== "number" || (body.is_correct !== 0 && body.is_correct !== 1)) {
+    return c.json({ error: "is_correct must be 0 or 1" }, 400);
   }
 
   const id = crypto.randomUUID();

@@ -77,8 +77,14 @@ ai.post("/chat", async (c) => {
   const selectedModel = body.model === "gemini-2.5-flash" ? "deepseek-v4-flash" : (body.model || "deepseek-v4-flash");
   let provider;
   if (selectedModel.startsWith("deepseek")) {
-    provider = new DeepSeekProvider(c.env.DEEPSEEK_API_KEY || "", selectedModel);
+    if (!c.env.DEEPSEEK_API_KEY) {
+      return c.json({ error: "DEEPSEEK_API_KEY env secret not configured" }, 503);
+    }
+    provider = new DeepSeekProvider(c.env.DEEPSEEK_API_KEY, selectedModel);
   } else {
+    if (!c.env.GEMINI_KEY) {
+      return c.json({ error: "GEMINI_KEY env secret not configured" }, 503);
+    }
     provider = new GeminiProvider(c.env.GEMINI_KEY, selectedModel);
   }
   const encoder = new TextEncoder();
@@ -376,8 +382,21 @@ Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama y
       fullText += tok;
     }
     
-    const cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
+    if (!fullText || fullText.trim().length < 10) {
+      console.error("Notes analysis: empty response from AI");
+      return c.json({ error: "Yapay zeka boş yanıt döndü. Lütfen tekrar deneyin." }, 500);
+    }
+
+    let cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
+    const jsonMatch = cleanedText.match(/\[[\s\S]*\]/);
+    if (jsonMatch) {
+      cleanedText = jsonMatch[0];
+    }
     const parsed = JSON.parse(cleanedText);
+    if (!Array.isArray(parsed) || parsed.length === 0) {
+      console.error("Notes analysis: parsed result is not a valid array");
+      return c.json({ error: "Yapay zeka geçerli format döndüremedi." }, 500);
+    }
     return c.json(parsed);
   } catch (e) {
     console.error("Notes analysis error:", e);
@@ -396,6 +415,20 @@ ai.post("/irac-grade", async (c) => {
   } catch {
     return c.json({ error: "invalid JSON" }, 400);
   }
+
+  if (!body.scenario || typeof body.scenario !== "string") {
+    return c.json({ error: "scenario (string) required" }, 400);
+  }
+  if (!body.answers || typeof body.answers !== "object") {
+    return c.json({ error: "answers object required" }, 400);
+  }
+  // Eksik alanları boş string'e normalize et — prompt template yine çalışsın.
+  body.answers = {
+    issue: typeof body.answers.issue === "string" ? body.answers.issue : "",
+    rule: typeof body.answers.rule === "string" ? body.answers.rule : "",
+    analysis: typeof body.answers.analysis === "string" ? body.answers.analysis : "",
+    conclusion: typeof body.answers.conclusion === "string" ? body.answers.conclusion : "",
+  };
 
   const systemInstruction = `Sen deneyimli bir hukuk profesörüsün. Öğrenciye bir hukuki olay verilmiş ve öğrenci bu olayı IRAC metodu ile 4 adımda çözmüş.
 Senden her adımı (issue, rule, analysis, conclusion) 0-100 puan arasında puanlamanı ve her adım için kısa ama yapıcı bir geri bildirim yazmanı istiyoruz.

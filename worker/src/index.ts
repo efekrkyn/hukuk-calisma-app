@@ -10,9 +10,10 @@ import { ai } from "./routes/ai";
 import { authRouter } from "./routes/auth";
 import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
+import { mevzuat } from "./routes/mevzuat";
 
 type Bindings = {
-  DB?: D1Database;
+  DB: D1Database;
   PDF_BUCKET: R2Bucket;
   VECTORIZE: VectorizeIndex;
   AI: Ai;
@@ -23,12 +24,25 @@ type Bindings = {
 
 const app = new Hono<{ Bindings: Bindings }>();
 
-// CORS: origin'i echo ediyoruz çünkü credentials:true ile wildcard yasak.
-// Tüm vercel.app / localhost / custom domain'leri kabul eder.
+// CORS allowlist: vercel.app deployments + localhost dev + bilinen custom domain.
+// Echo-any-origin desenini kaldırdık — credentials:true ile herhangi bir origin'i
+// echo etmek, oturum açık kullanıcının cookie/Authorization header'ını tüm sitelere
+// teslim eder. Sadece tanınan origin'lere izin ver.
+const ALLOWED_ORIGIN_PATTERNS: Array<RegExp> = [
+  /^https?:\/\/localhost(:\d+)?$/,
+  /^https?:\/\/127\.0\.0\.1(:\d+)?$/,
+  /^https:\/\/[a-z0-9-]+\.vercel\.app$/,
+];
+
+function isAllowedOrigin(origin: string | undefined): string {
+  if (!origin) return "";
+  return ALLOWED_ORIGIN_PATTERNS.some((re) => re.test(origin)) ? origin : "";
+}
+
 app.use(
   "*",
   cors({
-    origin: (origin) => origin || "",
+    origin: (origin) => isAllowedOrigin(origin),
     credentials: true,
     allowMethods: ["GET", "POST", "OPTIONS"],
     allowHeaders: ["Content-Type", "Authorization"],
@@ -38,21 +52,23 @@ app.use(
 // Global Authentication Middleware
 app.use("*", async (c, next) => {
   const path = c.req.path;
-  
-  // CORS Preflight, health, login, mevzuat ve root isteklerini bypass et
+
+  // Bypass: CORS preflight, public endpoints, ve /admin (kendi raw-secret
+  // middleware'i var — script'ler JWT yerine ADMIN_SECRET ile çağırır).
   if (
     c.req.method === "OPTIONS" ||
     path === "/" ||
     path === "/health" ||
     path === "/auth/login" ||
-    path.startsWith("/mevzuat")
+    path.startsWith("/mevzuat") ||
+    path.startsWith("/admin")
   ) {
     return await next();
   }
 
   const authHeader = c.req.header("Authorization") ?? "";
   let token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
-  
+
   if (!token) {
     token = getCookie(c, "hukuk_session") ?? "";
   }
@@ -69,8 +85,6 @@ app.use("*", async (c, next) => {
 
   await next();
 });
-
-import { mevzuat } from "./routes/mevzuat";
 
 app.get("/", (c) => c.text("Hukuk Worker"));
 app.route("/health", health);
