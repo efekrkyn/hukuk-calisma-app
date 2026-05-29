@@ -3,7 +3,7 @@
 | | |
 |---|---|
 | **Tarih** | 2026-05-25 |
-| **Durum** | Brainstorm onaylandı, writing-plans bekliyor |
+| **Durum** | ✅ Canlı (Sprint 3 tamamlandı, deploy: 2026-05-30) |
 | **Sahip** | Efe Karakoyun |
 | **Hedef milestone** | Sprint 3 (Finallere ~5 hafta) |
 | **Tahmini effort** | 3-4 gün |
