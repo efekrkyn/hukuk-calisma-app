@@ -1,15 +1,16 @@
 import { z } from "zod";
 
 export const FormInputSchema = z.object({
-  target_exam: z.enum(["final", "hmgs", "both"]),
-  exam_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  courses: z.array(z.object({
+    name: z.string(),
+    exam_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+  })).min(1).max(25),
   weeks_remaining: z.number().int().min(1).max(52),
   weekly_hours_weekday: z.number().min(0).max(12),
   weekly_hours_weekend: z.number().min(0).max(12),
   study_window_start: z.string().regex(/^\d{2}:\d{2}$/),
   study_window_end: z.string().regex(/^\d{2}:\d{2}$/),
   break_minutes: z.number().int().min(0).max(120).default(15),
-  weak_courses: z.array(z.string()).max(21),
   notes: z.string().max(2000).default(""),
 });
 

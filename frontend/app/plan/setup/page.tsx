@@ -15,50 +15,100 @@ import { COURSES } from "@/lib/courses";
 import { generatePlan } from "@/lib/plan-api";
 import type { FormInput } from "@/types/plan";
 
+type CourseEntry = {
+  selectedId: string;
+  customName: string;
+  examDate: string;
+};
+
 export default function PlanSetupPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [targetExam, setTargetExam] = useState<FormInput["target_exam"]>("final");
-  const [examDate, setExamDate] = useState("2026-06-30");
+  const [courseCount, setCourseCount] = useState(3);
+  const [courses, setCourses] = useState<CourseEntry[]>(
+    Array.from({ length: 3 }).map(() => ({
+      selectedId: "",
+      customName: "",
+      examDate: "2026-06-30",
+    }))
+  );
+
   const [hoursWeekday, setHoursWeekday] = useState(4);
   const [hoursWeekend, setHoursWeekend] = useState(8);
   const [windowStart, setWindowStart] = useState("09:00");
   const [windowEnd, setWindowEnd] = useState("18:00");
   const [breakMinutes, setBreakMinutes] = useState(15);
-  const [weakCourses, setWeakCourses] = useState<string[]>(["borclar_genel"]);
   const [notes, setNotes] = useState("");
 
-  function toggleWeak(courseId: string) {
-    setWeakCourses((prev) =>
-      prev.includes(courseId)
-        ? prev.filter((x) => x !== courseId)
-        : [...prev, courseId]
-    );
+  function handleCourseCountChange(val: number) {
+    if (val < 1 || val > 25) return;
+    setCourseCount(val);
+    setCourses((prev) => {
+      const copy = [...prev];
+      if (val > prev.length) {
+        for (let i = prev.length; i < val; i++) {
+          copy.push({ selectedId: "", customName: "", examDate: "2026-06-30" });
+        }
+      } else {
+        copy.splice(val);
+      }
+      return copy;
+    });
+  }
+
+  function updateCourse(index: number, field: keyof CourseEntry, value: string) {
+    setCourses((prev) => {
+      const copy = [...prev];
+      copy[index] = { ...copy[index], [field]: value };
+      return copy;
+    });
   }
 
   function computeWeeksRemaining(): number {
-    const exam = new Date(examDate);
+    if (courses.length === 0) return 1;
+    let maxDate = new Date();
+    for (const c of courses) {
+      if (c.examDate) {
+        const d = new Date(c.examDate);
+        if (d > maxDate) maxDate = d;
+      }
+    }
     const today = new Date();
-    const ms = exam.getTime() - today.getTime();
+    const ms = maxDate.getTime() - today.getTime();
     return Math.max(1, Math.ceil(ms / (7 * 24 * 60 * 60 * 1000)));
   }
 
   async function submit() {
     setError(null);
+
+    // Validate courses
+    const finalCourses: { name: string; exam_date: string }[] = [];
+    for (let i = 0; i < courses.length; i++) {
+      const c = courses[i];
+      const name = c.selectedId === "other" ? c.customName.trim() : (COURSES.find(x => x.id === c.selectedId)?.name || "");
+      if (!name) {
+        setError(`${i + 1}. dersin adını seçin veya yazın.`);
+        return;
+      }
+      if (!c.examDate) {
+        setError(`${name} dersinin final tarihini girin.`);
+        return;
+      }
+      finalCourses.push({ name, exam_date: c.examDate });
+    }
+
     setSubmitting(true);
     try {
       const form: FormInput = {
-        target_exam: targetExam,
-        exam_date: examDate,
+        courses: finalCourses,
         weeks_remaining: computeWeeksRemaining(),
         weekly_hours_weekday: hoursWeekday,
         weekly_hours_weekend: hoursWeekend,
         study_window_start: windowStart,
         study_window_end: windowEnd,
         break_minutes: breakMinutes,
-        weak_courses: weakCourses,
         notes,
       };
       const r = await generatePlan(form);
@@ -94,47 +144,75 @@ export default function PlanSetupPage() {
         <div className="space-y-6">
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">1) Hedef Sınav</CardTitle>
+              <CardTitle className="text-base font-semibold">1) Kaç Dersiniz Var?</CardTitle>
             </CardHeader>
-            <CardContent className="flex gap-2">
-              {(["final", "hmgs", "both"] as const).map((v) => (
-                <Button
-                  key={v}
-                  variant={targetExam === v ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => {
-                    setTargetExam(v);
-                    if (v === "final") {
-                      setExamDate("2026-06-30");
-                    } else if (v === "hmgs") {
-                      setExamDate("2026-09-27");
-                    }
-                  }}
-                  className="flex-1 transition-all duration-200"
-                >
-                  {v === "final" ? "Final (30 Haz)" : v === "hmgs" ? "HMGS (27 Eyl)" : "İkisi Birden"}
-                </Button>
-              ))}
+            <CardContent>
+              <Input
+                type="number"
+                min={1}
+                max={25}
+                value={courseCount}
+                onChange={(e) => handleCourseCountChange(Number(e.target.value))}
+                className="w-full"
+              />
+              <p className="text-xs text-muted-foreground mt-2 font-medium">
+                Bu sayıya göre aşağıda ders ve tarih seçim alanları açılacaktır.
+              </p>
             </CardContent>
           </Card>
 
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">2) Sınav Tarihi</CardTitle>
+              <CardTitle className="text-base font-semibold">2) Dersler ve Final Tarihleri</CardTitle>
             </CardHeader>
-            <CardContent>
-              <Input
-                type="date"
-                value={examDate}
-                onChange={(e) => setExamDate(e.target.value)}
-                className="w-full"
-              />
-              <p className="text-xs text-muted-foreground mt-2 font-medium">
-                ⏱️ Kalan Süre: <span className="text-blue-600 font-bold">{computeWeeksRemaining()}</span> hafta
-              </p>
+            <CardContent className="space-y-4 max-h-[400px] overflow-y-auto scrollbar-thin pr-2">
+              {courses.map((c, i) => (
+                <div key={i} className="p-3 border rounded-lg bg-neutral-50 dark:bg-neutral-900/50 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-blue-600">Ders {i + 1}</span>
+                  </div>
+                  <div>
+                    <select
+                      value={c.selectedId}
+                      onChange={(e) => updateCourse(i, "selectedId", e.target.value)}
+                      className="w-full text-sm border p-2 rounded-md bg-white dark:bg-black focus:ring-2 focus:ring-blue-500"
+                    >
+                      <option value="">-- Ders Seçiniz --</option>
+                      {COURSES.filter(x => x.id !== "kanunlar" && x.id !== "kisisel").map((course) => (
+                        <option key={course.id} value={course.id}>
+                          {course.name}
+                        </option>
+                      ))}
+                      <option value="other">➕ Diğer (Yeni Ders Ekle)</option>
+                    </select>
+                  </div>
+                  {c.selectedId === "other" && (
+                    <div>
+                      <Input
+                        type="text"
+                        placeholder="Ders adını yazınız..."
+                        value={c.customName}
+                        onChange={(e) => updateCourse(i, "customName", e.target.value)}
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+                  <div>
+                    <label className="text-xs text-muted-foreground font-medium mb-1 block">Final Tarihi</label>
+                    <Input
+                      type="date"
+                      value={c.examDate}
+                      onChange={(e) => updateCourse(i, "examDate", e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
+                </div>
+              ))}
             </CardContent>
           </Card>
+        </div>
 
+        <div className="space-y-6">
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold">3) Günlük Çalışma Süresi (Saat)</CardTitle>
@@ -199,38 +277,10 @@ export default function PlanSetupPage() {
               </div>
             </CardContent>
           </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800 h-[calc(100%-88px)] flex flex-col">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">5) Zayıf Dersler (AI bu derslere %30 ağırlık verir)</CardTitle>
-            </CardHeader>
-            <CardContent className="overflow-y-auto max-h-[320px] pr-2 space-y-2 flex-1 scrollbar-thin">
-              {COURSES.filter(c => c.id !== "kanunlar" && c.id !== "kisisel").map((c) => (
-                <label
-                  key={c.id}
-                  className={`flex items-center gap-3 p-2 rounded-lg border text-sm cursor-pointer transition-all duration-150 ${
-                    weakCourses.includes(c.id)
-                      ? "bg-blue-500/5 border-blue-500/40 text-blue-900 dark:text-blue-100"
-                      : "border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800"
-                  }`}
-                >
-                  <input
-                    type="checkbox"
-                    checked={weakCourses.includes(c.id)}
-                    onChange={() => toggleWeak(c.id)}
-                    className="h-4 w-4 rounded border-neutral-300 text-blue-600 focus:ring-blue-500"
-                  />
-                  <span className="font-medium">{c.name}</span>
-                </label>
-              ))}
-            </CardContent>
-          </Card>
 
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">6) Özel Kısıtlamalar ve Notlar (Opsiyonel)</CardTitle>
+              <CardTitle className="text-base font-semibold">5) Özel Kısıtlamalar ve Notlar (Opsiyonel)</CardTitle>
             </CardHeader>
             <CardContent>
               <textarea

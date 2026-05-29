@@ -24,9 +24,9 @@ KURALLAR:
    - "kanunlar/<slug>"              (kanun: anayasa, tbk, tmk, tck, cmk, hmk, ttk, ik, iik, iyuk, mohuk, vuk, avukatlik, fsek, sendika, tkhk)
    - "practice/<case_id>"           (pratik: borc_001 vb.)
 8. tip opsiyonel: 1 cümle ipucu/odak (ör. "TBK m.49: kusurun 3 unsurunu listele").
-9. Zayıf dersleri (weak_courses + düşük practice_stats) %30 daha fazla saat al.
-10. Her hafta sonunda (genelde Cumartesi) 1 "review" task ekle.
-11. Sınav tarihinden 1 hafta önce yoğunluk %50 artsın.
+9. SADECE form.courses listesinde verilen dersleri programa dahil et. Başka hiçbir dersi KESİNLİKLE takvime koyma.
+10. DİKKAT: Her dersin kendine ait bir final tarihi (exam_date) vardır. Eğer planladığın gün (date), bir dersin final tarihinden SONRA ise, o dersi o güne ve sonraki günlere KESİNLİKLE yerleştirme (çünkü sınavı bitmiş).
+11. Final tarihi yaklaşan derslere takvimde daha fazla yoğunluk (saat) ver.
 12. Görevleri kullanıcının belirttiği 'study_window_start' ile 'study_window_end' arasına YAYARAK yerleştir. Sadece sabaha sıkıştırma.
 13. Her task'a benzersiz UUID üret (v4 format).
 14. notes alanını dikkate al; "Salı 17 sonrası iş var" gibi kısıtları uygula.

@@ -2,15 +2,13 @@
 // Worker plan-schemas.ts ile birebir senkron — değiştirirsen iki yeri de güncelle.
 
 export type FormInput = {
-  target_exam: "final" | "hmgs" | "both";
-  exam_date: string;
+  courses: { name: string; exam_date: string }[];
   weeks_remaining: number;
   weekly_hours_weekday: number;
   weekly_hours_weekend: number;
   study_window_start: string;
   study_window_end: string;
   break_minutes: number;
-  weak_courses: string[];
   notes: string;
 };
 

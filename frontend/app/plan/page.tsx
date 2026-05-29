@@ -89,7 +89,7 @@ export default function PlanPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground font-medium border-t pt-2">
-          <span>🎯 Sınav Tarihi: {plan.form_input.exam_date}</span>
+          <span>🎯 Hedef Dersler: {plan.form_input.courses?.length || 0} adet</span>
           <span>⏱️ Kalan Hafta: {plan.form_input.weeks_remaining}</span>
           <span>🗓️ Oluşturuldu: {generatedDate}</span>
           <span>🤖 Model: {plan.ai_model}</span>
