@@ -20,8 +20,8 @@ export type Task = {
   course: string;
   topic: string;
   task_type: "read" | "practice" | "review";
-  target_ref?: string;
-  tip?: string;
+  target_ref?: string | null;
+  tip?: string | null;
 };
 
 export type Day = {

@@ -1,6 +1,6 @@
 import { Hono } from "hono";
 import { embedQuery, retrieve, buildPrompt, buildSystemPrompt } from "../lib/rag";
-import { GeminiProvider, DeepSeekProvider } from "../lib/ai-provider";
+import { DeepSeekProvider } from "../lib/ai-provider";
 import { gradeSolution } from "../lib/practice-grader";
 
 type Bindings = {
@@ -74,19 +74,11 @@ ai.post("/chat", async (c) => {
     parts: [{ text: body.question }]
   });
 
-  const selectedModel = body.model === "gemini-2.5-flash" ? "deepseek-v4-flash" : (body.model || "deepseek-v4-flash");
-  let provider;
-  if (selectedModel.startsWith("deepseek")) {
-    if (!c.env.DEEPSEEK_API_KEY) {
-      return c.json({ error: "DEEPSEEK_API_KEY env secret not configured" }, 503);
-    }
-    provider = new DeepSeekProvider(c.env.DEEPSEEK_API_KEY, selectedModel);
-  } else {
-    if (!c.env.GEMINI_KEY) {
-      return c.json({ error: "GEMINI_KEY env secret not configured" }, 503);
-    }
-    provider = new GeminiProvider(c.env.GEMINI_KEY, selectedModel);
+  const selectedModel = "deepseek-chat";
+  if (!c.env.DEEPSEEK_API_KEY) {
+    return c.json({ error: "DEEPSEEK_API_KEY env secret not configured" }, 503);
   }
+  const provider = new DeepSeekProvider(c.env.DEEPSEEK_API_KEY, selectedModel);
   const encoder = new TextEncoder();
   let fullAnswer = "";
 
@@ -241,7 +233,8 @@ Sadece talep edilen metni oluştur, ekstra sohbet etme.`;
 Detaylar:
 ${body.details}`;
 
-  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
@@ -308,7 +301,8 @@ Her soru şu formatta olmalı:
   }
 ]`;
 
-  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
   
   try {
     let fullText = "";
@@ -374,7 +368,8 @@ Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama y
   }
 ]`;
 
-  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
   
   try {
     let fullText = "";
@@ -453,7 +448,8 @@ ${body.scenario}
 
 Lütfen her adımı puanla ve geri bildirim ver. JSON formatında cevap ver.`;
 
-  const provider = new GeminiProvider(c.env.GEMINI_KEY);
+  const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
 
   try {
     let fullText = "";

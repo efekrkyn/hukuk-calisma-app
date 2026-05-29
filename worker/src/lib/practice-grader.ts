@@ -1,4 +1,4 @@
-import { GeminiProvider } from "./ai-provider";
+import { DeepSeekProvider } from "./ai-provider";
 import { embedQuery, retrieve, type RetrievedChunk } from "./rag";
 
 export type GradeRequest = {
@@ -93,7 +93,7 @@ GÖREV: Aşağıdaki JSON formatında değerlendir. SADECE JSON döndür, başka
   "errors": [<varsa hatalı yorumladığı hukuki kavramlar veya yanlış sonuçlar, kısa cümleler>]
 }`;
 
-  const provider = new GeminiProvider(apiKey);
+  const provider = new DeepSeekProvider(apiKey, "deepseek-chat");
   let raw = "";
   for await (const tok of provider.streamChat(prompt)) raw += tok;
 

@@ -21,8 +21,8 @@ const TaskSchema = z.object({
   course: z.string(),
   topic: z.string(),
   task_type: z.enum(["read", "practice", "review"]),
-  target_ref: z.string().optional(),
-  tip: z.string().optional(),
+  target_ref: z.string().nullable().optional(),
+  tip: z.string().nullable().optional(),
 });
 
 const DaySchema = z.object({
