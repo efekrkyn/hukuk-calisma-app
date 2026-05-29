@@ -16,6 +16,7 @@ import {
   type PdfListResponse,
 } from "@/lib/api";
 import GlobalAiAssistant from "@/components/GlobalAiAssistant";
+import { TodayCard } from "@/components/TodayCard";
 
 export default function Home() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
@@ -84,6 +85,10 @@ export default function Home() {
             >
               🎯 HMGS Deneme Simülasyonu
             </Link>
+          </div>
+
+          <div className="my-4">
+            <TodayCard />
           </div>
 
           <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider pt-1">Yapay Zeka Araçları</p>
@@ -169,6 +174,12 @@ export default function Home() {
               className={buttonVariants({ variant: "outline" }) + " text-xs"}
             >
               📜 Kanunlar
+            </Link>
+            <Link
+              href="/plan"
+              className={buttonVariants({ variant: "outline" }) + " text-xs col-span-2"}
+            >
+              🗓️ Planım
             </Link>
           </div>
         </CardContent>
