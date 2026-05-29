@@ -61,6 +61,11 @@ plan.post("/generate", async (c) => {
   for await (const tok of provider.streamChat(prompt)) raw += tok;
 
   // 5) JSON cleanup + parse
+  const thinkEnd = raw.lastIndexOf("</think>");
+  if (thinkEnd !== -1) {
+    raw = raw.slice(thinkEnd + 8).trim();
+  }
+
   const firstBrace = raw.indexOf("{");
   const lastBrace = raw.lastIndexOf("}");
   if (firstBrace !== -1 && lastBrace !== -1 && firstBrace < lastBrace) {

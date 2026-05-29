@@ -316,6 +316,9 @@ Her soru şu formatta olmalı:
     }
 
     // JSON'u çıkar - birden fazla yöntem dene
+    const thinkEnd = fullText.lastIndexOf("</think>");
+    if (thinkEnd !== -1) fullText = fullText.slice(thinkEnd + 8);
+
     let cleanedText = fullText
       .replace(/```json\s*/gi, "")
       .replace(/```\s*/g, "")
@@ -381,6 +384,9 @@ Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama y
       console.error("Notes analysis: empty response from AI");
       return c.json({ error: "Yapay zeka boş yanıt döndü. Lütfen tekrar deneyin." }, 500);
     }
+
+    const thinkEnd = fullText.lastIndexOf("</think>");
+    if (thinkEnd !== -1) fullText = fullText.slice(thinkEnd + 8);
 
     let cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
     const jsonMatch = cleanedText.match(/\[[\s\S]*\]/);
@@ -456,6 +462,9 @@ Lütfen her adımı puanla ve geri bildirim ver. JSON formatında cevap ver.`;
     for await (const tok of provider.streamChat(prompt, systemInstruction)) {
       fullText += tok;
     }
+    const thinkEnd = fullText.lastIndexOf("</think>");
+    if (thinkEnd !== -1) fullText = fullText.slice(thinkEnd + 8);
+
     const cleanedText = fullText.replace(/```json/gi, "").replace(/```/g, "").trim();
     const parsed = JSON.parse(cleanedText);
     return c.json(parsed);

@@ -97,6 +97,11 @@ GÖREV: Aşağıdaki JSON formatında değerlendir. SADECE JSON döndür, başka
   let raw = "";
   for await (const tok of provider.streamChat(prompt)) raw += tok;
 
+  const thinkEnd = raw.lastIndexOf("</think>");
+  if (thinkEnd !== -1) {
+    raw = raw.slice(thinkEnd + 8);
+  }
+
   // Code fence temizliği (Gemini bazen ekler)
   raw = raw
     .trim()
