@@ -25,3 +25,10 @@ export async function toggleTask(
     body: JSON.stringify({ task_uuid, completed }),
   });
 }
+
+export async function addTaskToPlan(date: string, task: any): Promise<any> {
+  return fetchWorker<any>("/plan/add-task", {
+    method: "POST",
+    body: JSON.stringify({ date, task }),
+  });
+}

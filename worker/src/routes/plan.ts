@@ -131,6 +131,68 @@ plan.post("/task-toggle", async (c) => {
   return c.json({ ok: true });
 });
 
+plan.post("/add-task", async (c) => {
+  let body: { date: string; task: any };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+  if (!body.date || !body.task || !body.task.uuid) {
+    return c.json({ error: "date and task object with uuid required" }, 400);
+  }
+
+  const active = await getActivePlan(c.env.DB);
+  if (!active) return c.json({ error: "no active plan" }, 404);
+
+  const planData = active.ai_output;
+  let dayFound = false;
+
+  for (const week of planData.weeks) {
+    let day = week.days.find((d: any) => d.date === body.date);
+    if (day) {
+      day.tasks.push(body.task);
+      day.tasks.sort((a: any, b: any) => a.time_start.localeCompare(b.time_start));
+      dayFound = true;
+      break;
+    }
+  }
+
+  if (!dayFound) {
+    // If the day doesn't exist, we find the right week and insert the day
+    for (const week of planData.weeks) {
+      if (body.date >= week.start_date && body.date <= week.end_date) {
+        week.days.push({
+          date: body.date,
+          weekday: new Date(body.date).toLocaleDateString("tr-TR", { weekday: "long" }),
+          tasks: [body.task]
+        });
+        week.days.sort((a: any, b: any) => a.date.localeCompare(b.date));
+        dayFound = true;
+        break;
+      }
+    }
+  }
+
+  if (!dayFound) {
+    return c.json({ error: "Date is out of bounds of the current plan weeks." }, 400);
+  }
+
+  try {
+    await c.env.DB.prepare(
+      `UPDATE study_plans SET ai_output = ? WHERE id = ?`
+    ).bind(
+      JSON.stringify(planData),
+      active.id
+    ).run();
+  } catch (e) {
+    console.error("Failed to update plan:", e);
+    return c.json({ error: "DB update failed" }, 500);
+  }
+
+  return c.json({ ok: true, plan: planData });
+});
+
 plan.get("/active", async (c) => {
   const active = await getActivePlan(c.env.DB);
   if (!active) return c.json({ plan: null, completions: {} });
