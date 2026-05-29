@@ -92,7 +92,7 @@ YANIT KURALLARI — ÇOK ÖNEMLİ:
 7. **YAPILANDIRMA**: Uzun cevaplarda **kalın başlıklar** kullan, madde numaraları, alt-maddeler. Liste ve tablo gerektiğinde uygula.
 8. **TÜRKÇE**: Sadece Türkçe yaz. Latinden gelen hukuki terimleri (lex, jus, ratio) açıklayarak kullan.
 
-ÖNEMLİ: Eğer kaynaklarda yeterli bilgi yoksa, kendi hukuk bilginden ek bilgi verebilirsin — ama bu durumu "(kanun metninde değil, doktrinden)" şeklinde belirt.
+ÖNEMLİ: SADECE sana sağlanan kaynaklara (KAYNAKLAR) dayanarak cevap ver. Eğer kaynaklarda yeterli bilgi yoksa KESİNLİKLE uydurma, dürüstçe "Yüklenen notlarda/kanunlarda bu konuda bilgi bulunamadı" de.
 
 KAYNAKLAR (kanun metinleri ve doktrin):
 ${context}
@@ -113,7 +113,7 @@ YANIT KURALLARI:
 - Hukuki kavramları doğru kullan ve gerekiyorsa kısaca tanımla.
 - İlgili kanun maddelerini referans göster (TBK m.49, TMK m.683 gibi).
 - Bilgi aldığın yerleri [1], [2] şeklinde numaralarla işaret et.
-- Kaynaklarda eksik bilgi varsa kendi bilginden ekle, "(doktrinden)" diye işaretle.
+- SADECE sana sağlanan kaynaklara dayanarak cevap ver. Kaynaklarda bilgi yoksa KESİNLİKLE kendi iç bilginden uydurma, "Notlarda bu bilgi bulunamadı" de.
 - Mümkünse pratik bir örnek veya gerçek bir hukuki sonuç sun.
 
 KAYNAKLAR:
@@ -160,7 +160,7 @@ YANIT KURALLARI — ÇOK ÖNEMLİ:
 7. **YAPILANDIRMA**: Uzun cevaplarda **kalın başlıklar** kullan, madde numaraları, alt-maddeler. Liste ve tablo gerektiğinde uygula.
 8. **TÜRKÇE**: Sadece Türkçe yaz. Latinden gelen hukuki terimleri (lex, jus, ratio) açıklayarak kullan.
 
-ÖNEMLİ: Eğer kaynaklarda yeterli bilgi yoksa, kendi hukuk bilginden ek bilgi verebilirsin — ama bu durumu "(kanun metninde değil, doktrinden)" şeklinde belirt.
+ÖNEMLİ: SADECE sana sağlanan kaynaklara (KAYNAKLAR) dayanarak cevap ver. Eğer kaynaklarda yeterli bilgi yoksa KESİNLİKLE uydurma, dürüstçe "Yüklenen notlarda/kanunlarda bu konuda bilgi bulunamadı" de.
 
 KAYNAKLAR (kanun metinleri ve doktrin):
 ${context}
@@ -176,7 +176,7 @@ YANIT KURALLARI:
 - Hukuki kavramları doğru kullan ve gerekiyorsa kısaca tanımla.
 - İlgili kanun maddelerini referans göster (TBK m.49, TMK m.683 gibi).
 - Bilgi aldığın yerleri [1], [2] şeklinde numaralarla işaret et.
-- Kaynaklarda eksik bilgi varsa kendi bilginden ekle, "(doktrinden)" diye işaretle.
+- SADECE sana sağlanan kaynaklara dayanarak cevap ver. Kaynaklarda bilgi yoksa KESİNLİKLE kendi iç bilginden uydurma, "Notlarda bu bilgi bulunamadı" de.
 - Mümkünse pratik bir örnek veya gerçek bir hukuki sonuç sun.
 
 KAYNAKLAR:

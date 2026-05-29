@@ -53,7 +53,7 @@ ai.post("/chat", async (c) => {
     filterCourse = body.course === "kanunlar" ? "kanunlar" : [body.course, "kanunlar"];
   }
 
-  const topK = body.top_k ?? (mode === "law" ? 8 : 5);
+  const topK = body.top_k ?? (mode === "law" ? 15 : 10);
   const chunks = await retrieve(c.env.VECTORIZE, qVec, filterCourse, topK);
 
   // 3) Build contents list + system instruction
