@@ -11,6 +11,7 @@ import { authRouter } from "./routes/auth";
 import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
 import { mevzuat } from "./routes/mevzuat";
+import { plan } from "./routes/plan";
 
 type Bindings = {
   DB: D1Database;
@@ -96,5 +97,6 @@ app.route("/ai", ai);
 app.route("/flashcards", flashcardsRouter);
 app.route("/quiz", quizRouter);
 app.route("/mevzuat", mevzuat);
+app.route("/plan", plan);
 
 export default app;

@@ -32,6 +32,7 @@ KURALLAR:
 14. notes alanını dikkate al; "Salı 17 sonrası iş var" gibi kısıtları uygula.
 15. tick_history varsa, kullanıcının hangi türde görevleri ardarda tikleme
     eğiliminde olduğunu gözet; o ders/konuya yatkınlık varsa hafifçe artır.
+16. ÖNEMLİ (TIMEOUT VE BOYUT SINIRI): Üretilen JSON boyutunu ve token sayısını azaltmak için son derece kompakt yaz. Her güne en fazla 1 veya 2 görev ekle. Görev bulunmayan günleri (tatil günlerini) 'days' listesine HİÇ ekleme (listeden atla). Görevlerin 'topic' ve 'tip' açıklamalarını 4-5 kelimeyi geçmeyecek şekilde çok kısa tut. Tüm yanıtın 1500 token'ı geçmemesini sağla.
 
 ÇIKTI ŞEMASI:
 {
