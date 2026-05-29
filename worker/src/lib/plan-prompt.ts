@@ -27,12 +27,12 @@ KURALLAR:
 9. Zayıf dersleri (weak_courses + düşük practice_stats) %30 daha fazla saat al.
 10. Her hafta sonunda (genelde Cumartesi) 1 "review" task ekle.
 11. Sınav tarihinden 1 hafta önce yoğunluk %50 artsın.
-12. Saatler birbirine bitişik olmasın — minimum 15 dakika mola.
+12. Görevleri kullanıcının belirttiği 'study_window_start' ile 'study_window_end' arasına YAYARAK yerleştir. Sadece sabaha sıkıştırma.
 13. Her task'a benzersiz UUID üret (v4 format).
 14. notes alanını dikkate al; "Salı 17 sonrası iş var" gibi kısıtları uygula.
 15. tick_history varsa, kullanıcının hangi türde görevleri ardarda tikleme
     eğiliminde olduğunu gözet; o ders/konuya yatkınlık varsa hafifçe artır.
-16. ÖNEMLİ (TIMEOUT VE BOYUT SINIRI): Üretilen JSON boyutunu ve token sayısını azaltmak için son derece kompakt yaz. Her güne en fazla 1 veya 2 görev ekle. Görev bulunmayan günleri (tatil günlerini) 'days' listesine HİÇ ekleme (listeden atla). Görevlerin 'topic' ve 'tip' açıklamalarını 4-5 kelimeyi geçmeyecek şekilde çok kısa tut. Tüm yanıtın 1500 token'ı geçmemesini sağla.
+16. ÖNEMLİ (MOLA VE DAĞILIM): Görevler (time_start/time_end) ardışık olmasın, aralarına mutlaka formda gelen 'break_minutes' süresi kadar mola koy. Kullanıcının günlük hedef çalışma süresini dolduracak kadar görev ekle. JSON boyutunu küçültmek için 'topic' ve 'tip' alanlarını 3-4 kelimeyi geçmeyecek şekilde çok kısa tut.
 
 ÇIKTI ŞEMASI:
 {

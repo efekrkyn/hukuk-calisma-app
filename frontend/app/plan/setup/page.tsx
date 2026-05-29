@@ -26,6 +26,7 @@ export default function PlanSetupPage() {
   const [hoursWeekend, setHoursWeekend] = useState(8);
   const [windowStart, setWindowStart] = useState("09:00");
   const [windowEnd, setWindowEnd] = useState("18:00");
+  const [breakMinutes, setBreakMinutes] = useState(15);
   const [weakCourses, setWeakCourses] = useState<string[]>(["borclar_genel"]);
   const [notes, setNotes] = useState("");
 
@@ -56,6 +57,7 @@ export default function PlanSetupPage() {
         weekly_hours_weekend: hoursWeekend,
         study_window_start: windowStart,
         study_window_end: windowEnd,
+        break_minutes: breakMinutes,
         weak_courses: weakCourses,
         notes,
       };
@@ -165,9 +167,9 @@ export default function PlanSetupPage() {
 
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">4) Çalışma Saat Penceresi</CardTitle>
+              <CardTitle className="text-base font-semibold">4) Çalışma Penceresi & Mola</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
+            <CardContent className="grid grid-cols-3 gap-4">
               <div>
                 <label className="text-xs text-muted-foreground font-medium mb-1 block">Başlangıç</label>
                 <Input
@@ -182,6 +184,17 @@ export default function PlanSetupPage() {
                   type="time"
                   value={windowEnd}
                   onChange={(e) => setWindowEnd(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="text-xs text-muted-foreground font-medium mb-1 block">Mola (dk)</label>
+                <Input
+                  type="number"
+                  min={0}
+                  max={120}
+                  step={5}
+                  value={breakMinutes}
+                  onChange={(e) => setBreakMinutes(Number(e.target.value))}
                 />
               </div>
             </CardContent>

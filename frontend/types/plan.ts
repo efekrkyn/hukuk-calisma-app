@@ -9,6 +9,7 @@ export type FormInput = {
   weekly_hours_weekend: number;
   study_window_start: string;
   study_window_end: string;
+  break_minutes: number;
   weak_courses: string[];
   notes: string;
 };

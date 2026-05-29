@@ -8,6 +8,7 @@ export const FormInputSchema = z.object({
   weekly_hours_weekend: z.number().min(0).max(12),
   study_window_start: z.string().regex(/^\d{2}:\d{2}$/),
   study_window_end: z.string().regex(/^\d{2}:\d{2}$/),
+  break_minutes: z.number().int().min(0).max(120).default(15),
   weak_courses: z.array(z.string()).max(21),
   notes: z.string().max(2000).default(""),
 });
