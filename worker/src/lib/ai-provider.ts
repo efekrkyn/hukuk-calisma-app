@@ -124,7 +124,7 @@ export class GeminiProvider implements AIProvider {
 export class DeepSeekProvider implements AIProvider {
   constructor(
     private apiKey: string,
-    private model = "deepseek-v4-pro"
+    private model = "deepseek-reasoner"
   ) {}
 
   async *streamChat(
@@ -152,14 +152,6 @@ export class DeepSeekProvider implements AIProvider {
       messages,
       stream: true,
     };
-
-    // Enable thinking parameters for reasoning in deepseek-v4-pro
-    if (this.model === "deepseek-v4-pro") {
-      body.reasoning_effort = "high";
-      body.extra_body = {
-        thinking: { type: "enabled" }
-      };
-    }
 
     const r = await fetch(url, {
       method: "POST",

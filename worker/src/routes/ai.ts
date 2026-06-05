@@ -54,7 +54,7 @@ ai.post("/chat", async (c) => {
   }
 
   const topK = body.top_k ?? (mode === "law" ? 15 : 10);
-  const chunks = await retrieve(c.env.VECTORIZE, qVec, filterCourse, topK);
+  const chunks = await retrieve(c.env.VECTORIZE, c.env.DB, queryText, qVec, c.env.AI, filterCourse, topK);
 
   // 3) Build contents list + system instruction
   const systemInstruction = buildSystemPrompt(body.selected_text, chunks, mode);
@@ -74,7 +74,7 @@ ai.post("/chat", async (c) => {
     parts: [{ text: body.question }]
   });
 
-  const selectedModel = "deepseek-chat";
+  const selectedModel = "deepseek-reasoner";
   if (!c.env.DEEPSEEK_API_KEY) {
     return c.json({ error: "DEEPSEEK_API_KEY env secret not configured" }, 503);
   }
@@ -234,7 +234,7 @@ Detaylar:
 ${body.details}`;
 
   const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
-  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-reasoner");
   const encoder = new TextEncoder();
 
   const stream = new ReadableStream({
@@ -302,7 +302,7 @@ Her soru şu formatta olmalı:
 ]`;
 
   const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
-  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-reasoner");
   
   try {
     let fullText = "";
@@ -372,7 +372,7 @@ Cevabın SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama y
 ]`;
 
   const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
-  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-reasoner");
   
   try {
     let fullText = "";
@@ -455,7 +455,7 @@ ${body.scenario}
 Lütfen her adımı puanla ve geri bildirim ver. JSON formatında cevap ver.`;
 
   const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
-  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-chat");
+  const provider = new DeepSeekProvider(apiKey ?? "", "deepseek-reasoner");
 
   try {
     let fullText = "";

@@ -76,3 +76,14 @@ CREATE TABLE IF NOT EXISTS practice_responses (
   created_at INTEGER NOT NULL
 );
 CREATE INDEX IF NOT EXISTS idx_practice_case ON practice_responses(case_id);
+
+-- Hybrid Search FTS5 chunks
+CREATE VIRTUAL TABLE IF NOT EXISTS fts_chunks USING fts5(
+  id UNINDEXED,
+  course UNINDEXED,
+  pdf UNINDEXED,
+  page_start UNINDEXED,
+  page_end UNINDEXED,
+  text,
+  tokenize="unicode61"
+);

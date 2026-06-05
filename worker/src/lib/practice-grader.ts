@@ -39,7 +39,7 @@ async function fetchLawContext(
       "; "
     )}`;
     const qVec = await embedQuery(queryText, ai);
-    return await retrieve(vectorize, qVec, "kanunlar", 6);
+    return await retrieve(vectorize, undefined, queryText, qVec, ai, "kanunlar", 6);
   } catch (e) {
     console.warn("law context fetch failed:", e);
     return [];

@@ -23,7 +23,10 @@ export async function embedQuery(query: string, ai: Ai): Promise<number[]> {
 
 export async function retrieve(
   vectorize: VectorizeIndex,
+  db: D1Database | undefined,
+  queryText: string,
   queryVector: number[],
+  ai: Ai,
   course?: string | string[],
   topK = 5
 ): Promise<RetrievedChunk[]> {
@@ -35,21 +38,115 @@ export async function retrieve(
       filter = { course: { $eq: course } };
     }
   }
-  const r = await vectorize.query(queryVector, {
+
+  // 1) Vector Search
+  const vecPromise = vectorize.query(queryVector, {
     topK,
     returnMetadata: "all",
     filter,
+  }).catch((e) => {
+    console.error("Vectorize query failed", e);
+    return { matches: [] };
   });
-  return r.matches.map((m) => {
+
+  // 2) FTS5 Search (BM25 Keyword)
+  let ftsPromise: Promise<{ results: any[] }> = Promise.resolve({ results: [] });
+  if (db) {
+    // Basic FTS syntax formatting: remove punctuation, join with OR
+    const cleanQuery = queryText.replace(/[^a-zA-ZğüşıöçĞÜŞİÖÇ0-9\s]/g, " ").trim();
+    const ftsWords = cleanQuery.split(/\s+/).filter(w => w.length > 2);
+    if (ftsWords.length > 0) {
+      const ftsQuery = ftsWords.join(" OR ");
+      
+      let ftsSql = `SELECT id, course, pdf, page_start, page_end, text, bm25(fts_chunks) as score FROM fts_chunks WHERE fts_chunks MATCH ?`;
+      const params: any[] = [ftsQuery];
+      
+      if (course) {
+        if (Array.isArray(course)) {
+          const placeholders = course.map(() => '?').join(',');
+          ftsSql += ` AND course IN (${placeholders})`;
+          params.push(...course);
+        } else {
+          ftsSql += ` AND course = ?`;
+          params.push(course);
+        }
+      }
+      ftsSql += ` ORDER BY score LIMIT ?`;
+      params.push(topK);
+      
+      ftsPromise = db.prepare(ftsSql).bind(...params).all().catch(e => {
+        console.error("FTS5 query failed", e);
+        return { results: [] };
+      });
+    }
+  }
+
+  const [vecRes, ftsRes] = await Promise.all([vecPromise, ftsPromise]);
+
+  const combined = new Map<string, RetrievedChunk>();
+
+  // Add Vector results
+  for (const m of vecRes.matches) {
     const md = m.metadata as Record<string, unknown>;
-    return {
+    if (!m.id) continue;
+    combined.set(m.id, {
       text: String(md.text ?? ""),
       pdf: String(md.pdf ?? ""),
       page_start: Number(md.page_start ?? 0),
       page_end: Number(md.page_end ?? 0),
-      score: m.score,
-    };
-  });
+      score: m.score, // Vector score usually 0-1
+    });
+  }
+
+  // Add FTS results (merge and prioritize)
+  // BM25 score is usually negative (more negative = better) in SQLite FTS5! 
+  // We'll just add them to the mix if they don't exist, or boost existing ones.
+  for (const row of ftsRes.results) {
+    const id = String(row.id);
+    if (!combined.has(id)) {
+      combined.set(id, {
+        text: String(row.text ?? ""),
+        pdf: String(row.pdf ?? ""),
+        page_start: Number(row.page_start ?? 0),
+        page_end: Number(row.page_end ?? 0),
+        score: 0.9, // Artificial high score for exact matches
+      });
+    } else {
+      const existing = combined.get(id)!;
+      existing.score = existing.score + 0.2; // Boost
+      combined.set(id, existing);
+    }
+  }
+
+  // Top-K büyüt: önce 20 candidate al, sonra reranker'la topK'ye indir
+  const candidates = Array.from(combined.values())
+    .sort((a, b) => b.score - a.score)
+    .slice(0, Math.max(topK * 4, 20)); // ~20 candidate
+
+  if (candidates.length <= topK) return candidates;
+
+  try {
+    const rerankResult = (await ai.run("@cf/baai/bge-reranker-base", {
+      query: queryText,
+      contexts: candidates.map((c) => ({ text: c.text })),
+    })) as { response: Array<{ id: number; score: number }> };
+
+    if (!rerankResult?.response?.length) {
+      return candidates.slice(0, topK);
+    }
+
+    // Reranker'ın döndürdüğü sıra ile candidates'i yeniden düzenle
+    const reranked = rerankResult.response
+      .sort((a, b) => b.score - a.score)
+      .slice(0, topK)
+      .map((r) => ({ ...candidates[r.id], score: r.score }))
+      .filter((c) => c.text); // güvenlik: geçersiz id'leri ele
+
+    return reranked.length > 0 ? reranked : candidates.slice(0, topK);
+  } catch (e) {
+    console.error("Reranker failed, falling back to original order:", e);
+    return candidates.slice(0, topK);
+  }
 }
 
 export type PromptMode = "default" | "law";

@@ -12,6 +12,7 @@ type ChunkIn = {
 type Bindings = {
   AI: Ai;
   VECTORIZE: VectorizeIndex;
+  DB: D1Database;
   ADMIN_SECRET: string;
 };
 
@@ -99,6 +100,22 @@ admin.post("/embed", async (c) => {
       { error: "Vectorize.upsert failed", detail: String(e).slice(0, 500) },
       500
     );
+  }
+
+  // D1 FTS5 Insert (Batch)
+  try {
+    const stmt = c.env.DB.prepare(
+      `INSERT INTO fts_chunks (id, course, pdf, page_start, page_end, text) VALUES (?, ?, ?, ?, ?, ?)`
+    );
+    const batchStmts = safeChunks.map((ch) =>
+      stmt.bind(ch.id, ch.course, ch.pdf, ch.page_start, ch.page_end, ch.text)
+    );
+    
+    // Execute D1 batch
+    await c.env.DB.batch(batchStmts);
+  } catch (e) {
+    console.error("D1 FTS5 Insert failed", e);
+    // Continue even if D1 fails, vectorize succeeded
   }
 
   return c.json({ ok: true, count: safeChunks.length });
