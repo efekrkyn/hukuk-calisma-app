@@ -12,6 +12,7 @@ import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
 import { mevzuat } from "./routes/mevzuat";
 import { plan } from "./routes/plan";
+import { caseLaw } from "./routes/case-law";
 
 type Bindings = {
   DB: D1Database;
@@ -94,6 +95,7 @@ app.route("/sync", sync);
 app.route("/pdf", pdf);
 app.route("/admin", admin);
 app.route("/ai", ai);
+app.route("/case-law", caseLaw);
 app.route("/flashcards", flashcardsRouter);
 app.route("/quiz", quizRouter);
 app.route("/mevzuat", mevzuat);

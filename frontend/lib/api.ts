@@ -314,3 +314,27 @@ export async function generateDynamicQuiz(req: {
   });
 }
 
+
+// ===== Case Law MCP =====
+
+export type CaseLawResult = {
+  document_id?: string;
+  case_no?: string;
+  date?: string;
+  summary?: string;
+  court?: string;
+};
+
+export async function searchCaseLaw(params: {
+  query: string;
+  court?: string;
+}): Promise<{ results: CaseLawResult[] }> {
+  const r = await fetch(`${WORKER_URL}/case-law/search`, {
+    method: "POST",
+    credentials: "include",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(params),
+  });
+  if (!r.ok) throw new Error(`searchCaseLaw ${r.status}`);
+  return (await r.json()) as { results: CaseLawResult[] };
+}

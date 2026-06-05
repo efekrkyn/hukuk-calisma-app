@@ -3,8 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { streamChat, type ChatSource } from "@/lib/api";
-import { Sparkles, HelpCircle, BookOpen, Lightbulb, GraduationCap, RefreshCw, ArrowRight, Loader2 } from "lucide-react";
+import { streamChat, searchCaseLaw, type ChatSource } from "@/lib/api";
+import { Sparkles, HelpCircle, BookOpen, Lightbulb, GraduationCap, RefreshCw, ArrowRight, Loader2, Scale } from "lucide-react";
 
 type Msg = {
   role: "user" | "ai";
@@ -99,6 +99,14 @@ export function ChatPanel({
       role: m.role,
       content: m.content,
     }));
+    const recentHistory = currentHistory
+      .slice(-8)
+      .filter((m) => m.content.trim().length > 0)
+      .map((m) => ({
+        role: m.role === "user" ? "user" : "assistant" as "user" | "assistant" | "model" | "ai",
+        content: m.content,
+      }));
+
     setMessages((m) => [
       ...m,
       { role: "user", content: question },
@@ -113,7 +121,7 @@ export function ChatPanel({
         pdf_key: pdfKey,
         mode,
         model: selectedModel,
-        history: currentHistory,
+        history: recentHistory,
       })) {
         if (ev.type === "sources") {
           setMessages((m) => {
@@ -142,6 +150,51 @@ export function ChatPanel({
       setMessages((m) => {
         const a = [...m];
         a[a.length - 1] = { role: "ai", content: `Bağlantı hatası: ${e}` };
+        return a;
+      });
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleCaseLawSearch() {
+    if (loading) return;
+    setLoading(true);
+    try {
+      let query = selectedText;
+      if (!query && messages.length > 0) {
+        const last = [...messages].reverse().find((m) => m.content && !m.content.includes("Yargıtay emsali"));
+        if (last) query = last.content.slice(0, 100);
+      }
+      if (!query) query = "haksız fiil";
+      
+      setMessages((m) => [
+        ...m,
+        { role: "user", content: `(Yargıtay emsali aranıyor: ${query})` },
+        { role: "ai", content: "" }
+      ]);
+      
+      const res = await searchCaseLaw({ query, court: "yargitay" });
+      if (!res.results || res.results.length === 0) {
+        setMessages((m) => {
+          const a = [...m];
+          a[a.length - 1] = { role: "ai", content: "Bu konuda Yargıtay emsali bulunamadı." };
+          return a;
+        });
+        return;
+      }
+      
+      const formatted = res.results.map((r) => `**${r.case_no || "Karar"}** (${r.date || "Tarihsiz"}):\n${r.summary || ""}`).join("\n\n");
+      
+      setMessages((m) => {
+        const a = [...m];
+        a[a.length - 1] = { role: "ai", content: `Bulunan Yargıtay Emsalleri:\n\n${formatted}` };
+        return a;
+      });
+    } catch (e) {
+      setMessages((m) => {
+        const a = [...m];
+        a[a.length - 1] = { role: "ai", content: `Yargıtay arama hatası: ${e}` };
         return a;
       });
     } finally {
@@ -304,6 +357,16 @@ export function ChatPanel({
                 >
                   Özet
                 </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="text-xs h-7 gap-1 bg-red-500/5 text-red-600 dark:text-red-400 hover:bg-red-500/15 border-red-500/15 rounded-full"
+                  onClick={handleCaseLawSearch}
+                  disabled={loading}
+                >
+                  <Scale className="w-3.5 h-3.5" />
+                  📜 Yargıtay Emsali Bul
+                </Button>
               </>
             ) : (
               <>
@@ -391,6 +454,18 @@ export function ChatPanel({
               <GraduationCap className="w-3.5 h-3.5" />
               Beni Sına
             </Button>
+            {mode === "law" && (
+              <Button
+                size="sm"
+                variant="outline"
+                className="text-xs h-7 gap-1 bg-red-500/5 text-red-600 dark:text-red-400 hover:bg-red-500/15 border-red-500/15 rounded-full"
+                onClick={handleCaseLawSearch}
+                disabled={loading}
+              >
+                <Scale className="w-3.5 h-3.5" />
+                📜 Yargıtay Emsali Bul
+              </Button>
+            )}
             {messages.length > 0 && (
               <Button
                 size="sm"
