@@ -31,6 +31,22 @@ const AI_BATCH = 32; // bge-m3 önerilen batch
 const MAX_TEXT_CHARS = 4000; // ~1000 token, güvenli marj
 const VECTORIZE_BATCH = 1000; // upsert limit
 
+/**
+ * PDF metin çıkarımının bıraktığı, embedding modelinin reddettiği baytları temizler.
+ *
+ * pdf-parse taranmış/bozuk sayfalardan eşleşmemiş surrogate ve C0/C1 kontrol
+ * karakterleri üretebiliyor; bge-m3 bunları içeren partinin TAMAMINI
+ * "3030: invalid input" ile reddediyor.
+ */
+export function sanitizeText(s: string): string {
+  return s
+    .replace(/[\uD800-\uDBFF](?![\uDC00-\uDFFF])/g, " ")  // yalnız yüksek surrogate
+    .replace(/(?<![\uD800-\uDBFF])[\uDC00-\uDFFF]/g, " ")  // yalnız düşük surrogate
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, " ")
+    .replace(/\uFFFD/g, " ")                                // replacement char
+    .replace(/\s+/g, " ");
+}
+
 admin.post("/embed", async (c) => {
   let body: { chunks: ChunkIn[] };
   try {
@@ -44,52 +60,60 @@ admin.post("/embed", async (c) => {
     return c.json({ error: "max 200 chunks per request" }, 400);
   }
 
-  // Text uzunluğu cap'le (safety) + boş chunk'ları ele.
-  //
-  // bge-m3 partide tek bir boş string görürse TÜM partiyi
-  // "3030: invalid input" ile reddediyor — taranmış/boş sayfası olan bir PDF
-  // yüzünden 17 bin chunk'lık ingest ortasında duruyordu. Boşları burada
-  // düşür: tek giriş noktası burası, her ingest bundan korunsun.
+  // PDF metin çıkarımı kontrol karakteri ve eşleşmemiş surrogate üretebiliyor;
+  // bunlar bge-m3'e "3030: invalid input" dedirtiyor. Temizle, kırp, boşları at.
   const safeChunks = chunks
-    .map((ch) => ({ ...ch, text: (ch.text ?? "").slice(0, MAX_TEXT_CHARS).trim() }))
+    .map((ch) => ({ ...ch, text: sanitizeText(ch.text ?? "").slice(0, MAX_TEXT_CHARS).trim() }))
     .filter((ch) => ch.text.length > 0);
 
   const skipped = chunks.length - safeChunks.length;
   if (safeChunks.length === 0) return c.json({ ok: true, count: 0, skipped });
 
-  // AI embeddings (multiple batches if large)
-  const allVectors: number[][] = [];
-  try {
-    for (let i = 0; i < safeChunks.length; i += AI_BATCH) {
-      const slice = safeChunks.slice(i, i + AI_BATCH);
-      const r = (await c.env.AI.run("@cf/baai/bge-m3", {
-        text: slice.map((ch) => ch.text),
-      })) as { data: number[][] };
-      if (!r.data || r.data.length !== slice.length) {
-        return c.json(
-          {
-            error: "AI count mismatch",
-            expected: slice.length,
-            got: r.data?.length ?? 0,
-            batch_offset: i,
-          },
-          500
-        );
-      }
-      allVectors.push(...r.data);
+  // AI embeddings. Tek bozuk chunk TÜM partiyi düşürüyor ve 17 bin chunk'lık
+  // ingest ortada kalıyordu — parti patlarsa tek tek dene, sadece gerçekten
+  // bozuk olanı ele. Vektörler chunk'larla hizalı kalmalı, o yüzden çift tut.
+  const paired: Array<{ ch: (typeof safeChunks)[number]; vec: number[] }> = [];
+  const failedTexts: string[] = [];
+
+  async function embed(texts: string[]): Promise<number[][]> {
+    const r = (await c.env.AI.run("@cf/baai/bge-m3", { text: texts })) as {
+      data: number[][];
+    };
+    if (!r.data || r.data.length !== texts.length) {
+      throw new Error(`AI count mismatch: ${r.data?.length ?? 0}/${texts.length}`);
     }
-  } catch (e) {
+    return r.data;
+  }
+
+  for (let i = 0; i < safeChunks.length; i += AI_BATCH) {
+    const slice = safeChunks.slice(i, i + AI_BATCH);
+    try {
+      const vecs = await embed(slice.map((ch) => ch.text));
+      slice.forEach((ch, k) => paired.push({ ch, vec: vecs[k] }));
+    } catch {
+      for (const ch of slice) {
+        try {
+          const [vec] = await embed([ch.text]);
+          paired.push({ ch, vec });
+        } catch (e) {
+          failedTexts.push(`${ch.pdf}#${ch.id}: ${String(e).slice(0, 120)}`);
+        }
+      }
+    }
+  }
+
+  if (paired.length === 0) {
     return c.json(
-      { error: "AI.run failed", detail: String(e).slice(0, 500) },
+      { error: "AI.run failed", failed: failedTexts.slice(0, 5) },
       502
     );
   }
 
   // Vectorize upsert (batches of 1000)
   try {
-    const vectors = safeChunks.map((ch, i) => ({
+    const vectors = paired.map(({ ch, vec }) => ({
       id: ch.id,
-      values: allVectors[i],
+      values: vec,
       metadata: {
         course: ch.course,
         pdf: ch.pdf,
@@ -114,7 +138,7 @@ admin.post("/embed", async (c) => {
     const stmt = c.env.DB.prepare(
       `INSERT INTO fts_chunks (id, course, pdf, page_start, page_end, text) VALUES (?, ?, ?, ?, ?, ?)`
     );
-    const batchStmts = safeChunks.map((ch) =>
+    const batchStmts = paired.map(({ ch }) =>
       stmt.bind(ch.id, ch.course, ch.pdf, ch.page_start, ch.page_end, ch.text)
     );
     
@@ -125,7 +149,13 @@ admin.post("/embed", async (c) => {
     // Continue even if D1 fails, vectorize succeeded
   }
 
-  return c.json({ ok: true, count: safeChunks.length, skipped });
+  return c.json({
+    ok: true,
+    count: paired.length,
+    skipped,
+    failed: failedTexts.length,
+    failed_samples: failedTexts.slice(0, 3),
+  });
 });
 
 admin.get("/vectorize-info", async (c) => {
