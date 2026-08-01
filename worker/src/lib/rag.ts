@@ -13,6 +13,18 @@ export type RetrievedChunk = {
   score: number;
 };
 
+/**
+ * embed-pdfs.ts `pdf` metadata'sını SOURCE_DIR'e göreli yazıyor
+ * ("kanunlar/x.pdf"), upload-pdfs.ts ise R2 key'ine "dersler/" ekliyor.
+ * Bu yüzden eski index'teki kayıtlar R2 key'iyle eşleşmiyor ve reader
+ * linkleri 404 dönüyor. Okuma tarafında normalize et — idempotent, yeni
+ * (düzeltilmiş) kayıtlar zaten prefix'li geldiği için dokunulmaz.
+ */
+function normalizePdfKey(pdf: string): string {
+  if (!pdf || pdf.startsWith("dersler/")) return pdf;
+  return `dersler/${pdf}`;
+}
+
 export async function embedQuery(query: string, ai: Ai): Promise<number[]> {
   const r = (await ai.run("@cf/baai/bge-m3", { text: [query] })) as {
     data: number[][];
@@ -91,7 +103,7 @@ export async function retrieve(
     if (!m.id) continue;
     combined.set(m.id, {
       text: String(md.text ?? ""),
-      pdf: String(md.pdf ?? ""),
+      pdf: normalizePdfKey(String(md.pdf ?? "")),
       page_start: Number(md.page_start ?? 0),
       page_end: Number(md.page_end ?? 0),
       score: m.score, // Vector score usually 0-1
@@ -106,7 +118,7 @@ export async function retrieve(
     if (!combined.has(id)) {
       combined.set(id, {
         text: String(row.text ?? ""),
-        pdf: String(row.pdf ?? ""),
+        pdf: normalizePdfKey(String(row.pdf ?? "")),
         page_start: Number(row.page_start ?? 0),
         page_end: Number(row.page_end ?? 0),
         score: 0.9, // Artificial high score for exact matches

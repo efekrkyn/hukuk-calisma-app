@@ -8,6 +8,8 @@ const ENDPOINT = process.env.R2_ENDPOINT!;
 const ACCESS_KEY = process.env.R2_ACCESS_KEY_ID!;
 const SECRET_KEY = process.env.R2_SECRET_ACCESS_KEY!;
 const BUCKET = process.env.R2_BUCKET ?? "hukuk-pdf";
+// R2 key prefix'i — embed-pdfs.ts ile AYNI olmalı.
+const R2_PREFIX = process.env.R2_PREFIX ?? "dersler";
 const SOURCE_DIR =
   process.env.SOURCE_DIR ?? "/Users/efekarakoyun/hukukçalışma/resources/dersler";
 
@@ -62,7 +64,7 @@ async function main() {
   const start = Date.now();
 
   for (const fullPath of allFiles) {
-    const key = `dersler/${relative(SOURCE_DIR, fullPath)}`;
+    const key = `${R2_PREFIX}/${relative(SOURCE_DIR, fullPath)}`;
     const localSize = statSync(fullPath).size;
 
     // Skip if exists and same size

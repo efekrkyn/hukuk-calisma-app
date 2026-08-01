@@ -36,6 +36,8 @@ function shortHash(s: string, len = 12): string {
 const SOURCE_DIR =
   process.env.SOURCE_DIR ??
   "/Users/efekarakoyun/hukukçalışma/resources/dersler";
+// R2 key prefix'i — upload-pdfs.ts ile AYNI olmalı, yoksa reader linkleri 404 döner.
+const R2_PREFIX = process.env.R2_PREFIX ?? "dersler";
 const OUT_DIR =
   process.env.EMBED_OUT_DIR ??
   "/Users/efekarakoyun/hukukçalışma/uygulama/data/embeddings";
@@ -170,7 +172,7 @@ async function processPdf(fullPath: string): Promise<Chunk[]> {
   return grouped.map((g, idx) => ({
     id: `${courseShort}_${pdfHash}_${idx.toString().padStart(4, "0")}`,
     course,
-    pdf: rel,
+    pdf: `${R2_PREFIX}/${rel}`,
     page_start: g.page_start,
     page_end: g.page_end,
     text: g.text,
