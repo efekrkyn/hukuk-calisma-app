@@ -4,15 +4,17 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Loader2, Trophy, Clock, Star, Flag } from "lucide-react";
-import { courseById } from "@/lib/courses";
 
 type QuizQuestion = {
   id: string;
-  course: string;
+  subject: string;
+  subject_name: string;
   question: string;
   options: string[];
   correctAnswer: number;
   explanation: string;
+  source_pdf?: string;
+  source_page?: number;
 };
 
 type Answer = {
@@ -34,17 +36,23 @@ export default function HmgsClient() {
   const [timeLeft, setTimeLeft] = useState(EXAM_DURATION_SECONDS);
   const [finished, setFinished] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [examId, setExamId] = useState<string | null>(null);
+  const submittedRef = useRef(false);
+  const [shortfall, setShortfall] = useState<Array<{ subject: string; needed: number; have: number }>>([]);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    fetch("/api/hmgs")
+    fetch("/api/worker/hmgs/exam?count=20")
       .then((res) => {
         if (!res.ok) throw new Error("Sınav soruları yüklenemedi.");
         return res.json();
       })
       .then((data) => {
-        setQuestions(data);
-        setAnswers(data.map(() => ({ selected: null, flagged: false })));
+        const qs: QuizQuestion[] = data.questions ?? [];
+        setQuestions(qs);
+        setAnswers(qs.map(() => ({ selected: null, flagged: false })));
+        setExamId(data.exam_id ?? null);
+        setShortfall(data.shortfall ?? []);
         setLoading(false);
       })
       .catch((err) => {
@@ -52,6 +60,25 @@ export default function HmgsClient() {
         setLoading(false);
       });
   }, []);
+
+  // Sonucu bir kez kaydet (süre dolarak da bitebilir, elle de — ikisinde de çalışsın)
+  useEffect(() => {
+    if (!finished || submittedRef.current || !examId || questions.length === 0) return;
+    submittedRef.current = true;
+    fetch("/api/worker/hmgs/submit", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        exam_id: examId,
+        answers: questions.map((q, i) => ({
+          question_id: q.id,
+          subject: q.subject,
+          selected: answers[i]?.selected ?? null,
+          correct: answers[i]?.selected === q.correctAnswer,
+        })),
+      }),
+    }).catch((e) => console.error("HMGS sonucu kaydedilemedi:", e));
+  }, [finished, examId, questions, answers]);
 
   // Timer
   useEffect(() => {
@@ -121,11 +148,22 @@ export default function HmgsClient() {
         </div>
         <h2 className="text-2xl font-bold text-gradient">HMGS Zamanlı Deneme Sınavı</h2>
         <div className="max-w-md mx-auto text-sm text-muted-foreground space-y-2">
-          <p>📝 <strong>{questions.length} Soru</strong> — Tüm derslerden karışık</p>
+          <p>📝 <strong>{questions.length} Soru</strong> — ÖSYM'nin resmî alan dağılımına göre</p>
           <p>⏱️ <strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</p>
           <p>⭐ Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</p>
           <p>🔢 Soru numaralarına tıklayarak istediğin soruya atlayabilirsin</p>
         </div>
+        {shortfall.length > 0 && (
+          <div className="max-w-md mx-auto text-xs text-amber-500/90 border border-amber-500/25 rounded-lg p-3 text-left">
+            <p className="font-medium mb-1">Soru bankası bu alanlarda eksik:</p>
+            <p>
+              {shortfall.map((s) => `${s.subject} (${s.have}/${s.needed})`).join(", ")}
+            </p>
+            <p className="mt-1 text-muted-foreground">
+              Deneme yine de çalışır ama alan dağılımı gerçek sınavı tam yansıtmaz.
+            </p>
+          </div>
+        )}
         <Button size="lg" className="hover-glow mt-4" onClick={() => setStarted(true)}>
           🚀 Sınava Başla
         </Button>
@@ -213,7 +251,7 @@ export default function HmgsClient() {
   // Exam UI
   const q = questions[currentIndex];
   const ans = answers[currentIndex];
-  const courseName = courseById(q.course)?.name || q.course;
+  const courseName = q.subject_name || q.subject;
   const answeredCount = answers.filter((a) => a.selected !== null).length;
 
   return (

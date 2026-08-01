@@ -11,6 +11,7 @@ import { authRouter } from "./routes/auth";
 import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
 import { plan } from "./routes/plan";
+import { hmgs } from "./routes/hmgs";
 import { caseLaw } from "./routes/case-law";
 
 type Bindings = {
@@ -97,5 +98,6 @@ app.route("/case-law", caseLaw);
 app.route("/flashcards", flashcardsRouter);
 app.route("/quiz", quizRouter);
 app.route("/plan", plan);
+app.route("/hmgs", hmgs);
 
 export default app;
