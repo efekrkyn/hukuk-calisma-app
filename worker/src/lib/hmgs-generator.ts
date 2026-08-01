@@ -30,6 +30,9 @@ KURALLAR:
 3. Her soru 4 şıklı, tek doğru cevaplı olacak. Çeldiriciler makul olmalı; "hepsi/hiçbiri" kullanma.
 4. HMGS seviyesi: maddenin uygulanmasını ölçen, olaya dayalı veya karşılaştırmalı sorular tercih et.
 5. explanation alanında doğru cevabın dayandığı kanun maddesini belirt.
+5b. ŞIK UZUNLUKLARI BİRBİRİNE YAKIN OLSUN. Doğru şıkkı diğerlerinden daha uzun
+   veya daha ayrıntılı yazma — uzunluk cevabı ele verir, soru ölçmez olur.
+5c. Doğru cevabı şıklar arasında rastgele konumlandır, hep aynı harfe koyma.
 6. sourceIndex: soruyu hangi <KAYNAK> parçasından yazdığını [n] numarasıyla bildir.
 7. İSTENEN ALAN DIŞINA ÇIKMA. Kaynak parçaları istenen alanı karşılamıyorsa o soruyu
    hiç yazma — az soru döndürmek, yanlış alandan soru döndürmekten iyidir.
@@ -94,7 +97,26 @@ export async function generateQuestions(
     .map((c, i) => `[${i + 1}] ${c.pdf} (s.${c.page_start}):\n${c.text}`)
     .join("\n\n");
 
-  const prompt = `<KAYNAK>\n${context}\n</KAYNAK>\n\nYukarıdaki kanun metnine dayanarak "${subject.name}" alanında ${count} adet HMGS sorusu yaz.`;
+  // Bankada ne olduğunu söylemezsek model aynı soruyu tekrar üretiyor
+  // (denetimde Medeni Hukuk'ta aynı soru 3 kez çıktı).
+  let avoid = "";
+  if (env.DB) {
+    try {
+      const prev = await env.DB.prepare(
+        `SELECT question FROM hmgs_questions WHERE subject = ? ORDER BY created_at DESC LIMIT 25`
+      ).bind(subject.id).all<{ question: string }>();
+      if (prev.results.length > 0) {
+        avoid =
+          "\n\n<ZATEN_VAR>\nBu sorular bankada mevcut, bunları veya çok benzerlerini TEKRAR YAZMA:\n" +
+          prev.results.map((r, i) => `${i + 1}. ${r.question}`).join("\n") +
+          "\n</ZATEN_VAR>";
+      }
+    } catch (e) {
+      console.error("mevcut sorular okunamadı:", e);
+    }
+  }
+
+  const prompt = `<KAYNAK>\n${context}\n</KAYNAK>${avoid}\n\nYukarıdaki kanun metnine dayanarak "${subject.name}" alanında ${count} adet HMGS sorusu yaz.`;
 
   const provider = new DeepSeekProvider(env.DEEPSEEK_API_KEY, "deepseek-chat");
   let raw = "";
