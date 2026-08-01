@@ -126,6 +126,7 @@ export async function* streamChat(params: {
   /** Worker tarafında kullanılan AI prompt modu. "law" → kanun açıklama. */
   mode?: "default" | "law";
   model?: string;
+  web_search?: boolean;
   history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
 }): AsyncGenerator<ChatEvent> {
   const headers: Record<string, string> = {

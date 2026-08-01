@@ -21,6 +21,7 @@ export default function GlobalAiAssistant() {
   const [personalContext, setPersonalContext] = useState<string>("");
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [isExamMode, setIsExamMode] = useState(false);
+  const [isWebSearch, setIsWebSearch] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
@@ -185,13 +186,17 @@ export default function GlobalAiAssistant() {
     }
   }, []);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [userScrolled, setUserScrolled] = useState(false);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    if (!userScrolled && scrollRef.current) {
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [messages, userScrolled]);
 
   const handleClearHistory = () => {
     setMessages([]);
@@ -239,6 +244,7 @@ export default function GlobalAiAssistant() {
     }
     
     const displayMessage = overrideText || input.trim();
+    setUserScrolled(false);
     const newMessages: Message[] = [...messages, { role: "user", content: displayMessage }];
     setMessages(newMessages);
     setIsLoading(true);
@@ -262,6 +268,8 @@ export default function GlobalAiAssistant() {
         question: userText,
         history: historyToSend,
         model: selectedModel,
+        mode: isExamMode ? "law" : "default",
+        web_search: isWebSearch,
       });
 
       let currentText = "";
@@ -296,6 +304,66 @@ export default function GlobalAiAssistant() {
     }
   };
 
+  const handleCaseLawSearch = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    try {
+      let query = "";
+      if (messages.length > 0) {
+        // Try to find a meaningful user prompt (skip quick actions like "daha basit anlat", "soru sor")
+        const meaningfulUserMsg = [...messages].reverse().find(
+          (m) => m.role === "user" && m.content.length > 30 && !m.content.toLowerCase().includes("basit") && !m.content.toLowerCase().includes("soru sor") && !m.content.includes("Yargıtay emsali")
+        );
+        
+        const targetMsg = meaningfulUserMsg || [...messages].reverse().find((m) => m.content && !m.content.includes("Yargıtay emsali"));
+        
+        if (targetMsg) {
+          let content = targetMsg.content;
+          if (content.includes("<think>") && content.includes("</think>")) {
+            content = content.split("</think>")[1].trim();
+          }
+          query = content.slice(0, 150);
+        }
+      }
+      if (!query) query = "haksız fiil tazminat kusur";
+      
+      setMessages((m) => [
+        ...m,
+        { role: "user", content: `(Yargıtay emsali aranıyor: ${query})` },
+        { role: "ai", content: "" }
+      ]);
+      setUserScrolled(false);
+      
+      const { searchCaseLaw } = await import("@/lib/api");
+      const res = await searchCaseLaw({ query, court: "yargitay" });
+      
+      if (!res.results || res.results.length === 0) {
+        setMessages((m) => {
+          const a = [...m];
+          a[a.length - 1] = { role: "ai", content: "Bu konuda Yargıtay emsali bulunamadı." };
+          return a;
+        });
+        return;
+      }
+      
+      const formatted = res.results.map((r: any) => `**${r.case_no || "Karar"}** (${r.date || "Tarihsiz"}):\n${r.summary || ""}`).join("\n\n");
+      
+      setMessages((m) => {
+        const a = [...m];
+        a[a.length - 1] = { role: "ai", content: `Bulunan Yargıtay Emsalleri:\n\n${formatted}` };
+        return a;
+      });
+    } catch (e) {
+      setMessages((m) => {
+        const a = [...m];
+        a[a.length - 1] = { role: "ai", content: `Yargıtay arama hatası: ${e}` };
+        return a;
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className={`flex flex-col bg-card/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden h-[600px] w-full max-w-2xl mx-auto transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 !h-[calc(100vh-32px)] !max-w-none" : "relative"}`}>
       {/* Header */}
@@ -311,16 +379,15 @@ export default function GlobalAiAssistant() {
         </div>
         
         <div className="flex items-center gap-2">
-          {/* Model Selector */}
-          <div className="flex items-center gap-1.5 mr-2">
-            <select
-              value={selectedModel}
-              onChange={(e) => handleModelChange(e.target.value)}
-              className="bg-zinc-900 border border-zinc-800 text-zinc-300 text-xs rounded-lg px-2 py-1 outline-none focus:ring-1 focus:ring-primary/50 cursor-pointer"
+          {/* Web Search Toggle */}
+          <div className="flex items-center gap-2 mr-2">
+            <span className="text-xs font-medium text-muted-foreground">🌐 Web Arama</span>
+            <button 
+              onClick={() => setIsWebSearch(!isWebSearch)}
+              className={`w-10 h-5 rounded-full relative transition-colors ${isWebSearch ? "bg-blue-500" : "bg-muted-foreground/30"}`}
             >
-              <option value="deepseek-v4-flash">DeepSeek V4 Flash</option>
-              <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
-            </select>
+              <div className={`w-3 h-3 bg-white rounded-full absolute top-1 transition-transform ${isWebSearch ? "right-1" : "left-1"}`} />
+            </button>
           </div>
 
           {/* 9. Exam Mode Toggle */}
@@ -344,7 +411,15 @@ export default function GlobalAiAssistant() {
       </div>
 
       {/* Chat Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-6">
+      <div 
+        ref={scrollRef}
+        onScroll={(e) => {
+          const target = e.target as HTMLDivElement;
+          const isAtBottom = target.scrollHeight - target.scrollTop <= target.clientHeight + 50;
+          setUserScrolled(!isAtBottom);
+        }}
+        className="flex-1 overflow-y-auto p-4 space-y-6"
+      >
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-6 animate-in fade-in zoom-in duration-500">
             <Bot className="w-16 h-16 text-primary/40" />
@@ -366,6 +441,9 @@ export default function GlobalAiAssistant() {
               </Button>
               <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2" onClick={() => handleSend("Maddi tazminat ile manevi tazminat arasındaki farklar nelerdir?")}>
                 🔄 Tazminat Türlerini Karşılaştır
+              </Button>
+              <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2 text-red-600 dark:text-red-400 border-red-500/20 hover:bg-red-500/10" onClick={handleCaseLawSearch}>
+                📜 Yargıtay Emsali Bul
               </Button>
             </div>
           </div>
@@ -429,6 +507,9 @@ export default function GlobalAiAssistant() {
                 </Button>
                 <Button variant="secondary" size="sm" className="text-[11px] h-7 rounded-full" onClick={() => handleSend("Bana bu konudan kısa bir test sorusu sorar mısın?")}>
                   🧠 Konudan Soru Sor
+                </Button>
+                <Button variant="secondary" size="sm" className="text-[11px] h-7 rounded-full text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20" onClick={handleCaseLawSearch}>
+                  📜 Yargıtay Emsali Bul
                 </Button>
               </div>
             )}

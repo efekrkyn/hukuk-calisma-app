@@ -8,8 +8,7 @@ const YARGI_MCP_URL = "https://yargimcp.surucu.dev/mcp";
 
 /** MCP yanıtı SSE ("data: {...}") veya düz JSON dönebilir; ikisini de parse et. */
 function parseMcp(text: string): any {
-  const trimmed = text.trimStart();
-  if (trimmed.startsWith("data:")) {
+  if (text.includes("data:")) {
     const dataLine = text.split("\n").find((l) => l.trimStart().startsWith("data:"));
     if (!dataLine) throw new Error("SSE içinde data satırı yok");
     return JSON.parse(dataLine.trimStart().slice(5).trim());
@@ -88,6 +87,11 @@ caseLaw.post("/search", async (c) => {
   if (!body.query) return c.json({ error: "query required" }, 400);
 
   const court = body.court || "yargitay";
+  let mappedCourt = "YARGITAYKARARI";
+  if (court.toLowerCase() === "danistay") mappedCourt = "DANISTAYKARAR";
+  else if (court.toLowerCase() === "yerel") mappedCourt = "YERELHUKUK";
+  else if (court.toLowerCase() === "istinaf") mappedCourt = "ISTINAFHUKUK";
+  else if (court.toLowerCase() === "kyb") mappedCourt = "KYB";
 
   const rpcBody = {
     jsonrpc: "2.0",
@@ -97,9 +101,8 @@ caseLaw.post("/search", async (c) => {
       name: "search_bedesten_unified",
       arguments: {
         phrase: body.query,
-        court_types: [court],
+        court_types: [mappedCourt],
         ...(body.date_from && { date_from: body.date_from }),
-        page: body.page || 1,
       },
     },
   };
@@ -109,7 +112,25 @@ caseLaw.post("/search", async (c) => {
     if (parsed.error) {
       return c.json({ error: `MCP error: ${JSON.stringify(parsed.error).slice(0, 200)}` }, 502);
     }
-    return c.json({ results: parsed.result?.content || [] });
+    let finalResults = [];
+    const content = parsed.result?.content || [];
+    if (content.length > 0 && content[0].text) {
+      try {
+        const textData = JSON.parse(content[0].text);
+        if (textData.decisions) {
+          finalResults = textData.decisions.map((d: any) => ({
+            document_id: d.documentId,
+            case_no: (d.esasNo ? d.esasNo + " E. " : "") + (d.kararNo ? d.kararNo + " K." : ""),
+            date: d.kararTarihiStr,
+            summary: d.birimAdi,
+            court: "Yargıtay"
+          }));
+        }
+      } catch (err) {
+        console.error("Failed to parse MCP JSON:", err);
+      }
+    }
+    return c.json({ results: finalResults });
   } catch (e) {
     return c.json({ error: `Yargı MCP error: ${String(e).slice(0, 200)}` }, 502);
   }

@@ -1,14 +1,18 @@
 import { Hono } from "hono";
-import { embedQuery, retrieve, buildPrompt, buildSystemPrompt } from "../lib/rag";
+import { embedQuery, retrieve, buildSystemPrompt } from "../lib/rag";
 import { DeepSeekProvider } from "../lib/ai-provider";
 import { gradeSolution } from "../lib/practice-grader";
+import { compress } from "headroom-ai";
 
 type Bindings = {
   AI: Ai;
   VECTORIZE: VectorizeIndex;
   GEMINI_KEY: string;
+  TAVILY_API_KEY?: string;
   DEEPSEEK_API_KEY?: string;
   DB?: D1Database;
+  MEMPALACE_URL?: string;
+  HEADROOM_URL?: string;
 };
 
 export const ai = new Hono<{ Bindings: Bindings }>();
@@ -22,6 +26,7 @@ ai.post("/chat", async (c) => {
     top_k?: number;
     mode?: "default" | "law";
     model?: string;
+    web_search?: boolean;
     history?: Array<{ role: "user" | "model" | "assistant" | "ai"; content: string }>;
   };
   try {
@@ -34,7 +39,21 @@ ai.post("/chat", async (c) => {
     return c.json({ error: "question (string) required" }, 400);
   }
 
-  const mode = body.mode === "law" ? "law" : "default";
+  // --- MULTI-AGENT SWARM ROUTER (ruflo inspired) ---
+  // If the user didn't explicitly pick a mode, the Router Agent decides the best sub-agent.
+  let swarmMode = body.mode;
+  if (!swarmMode) {
+    const qLower = body.question.toLowerCase();
+    const lawKeywords = ["madde", "kanun", "hüküm", "emsal", "yargıtay", "tbk", "tmk", "anayasa", "ceza", "dava"];
+    const isLaw = lawKeywords.some(kw => qLower.includes(kw));
+    
+    if (isLaw) {
+      swarmMode = "law"; // -> Routes to Law Agent (Deep legal analysis, Step-by-step reasoning)
+    } else {
+      swarmMode = "default"; // -> Routes to General/Summary Agent
+    }
+  }
+  const mode = swarmMode;
 
   // 1) Embed query (selected_text varsa onunla birleştir, daha iyi retrieval)
   const queryText = body.selected_text
@@ -56,23 +75,77 @@ ai.post("/chat", async (c) => {
   const topK = body.top_k ?? (mode === "law" ? 15 : 10);
   const chunks = await retrieve(c.env.VECTORIZE, c.env.DB, queryText, qVec, c.env.AI, filterCourse, topK);
 
-  // 3) Build contents list + system instruction
-  const systemInstruction = buildSystemPrompt(body.selected_text, chunks, mode);
+  // 2.5) Web Search (if enabled)
+  let webSearchResults = "";
+  if (body.web_search) {
+    const { searchWeb } = await import("../lib/web-search");
+    webSearchResults = await searchWeb(queryText, c.env.TAVILY_API_KEY);
+  }
 
-  const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
+  // 2.6) MemPalace Integration
+  let memoryContext = "";
+  if (c.env.MEMPALACE_URL) {
+    try {
+      // Assuming a generic userId for now or use session
+      const memReq = await fetch(`${c.env.MEMPALACE_URL}/search`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: queryText, wing: "efe" })
+      });
+      if (memReq.ok) {
+        const memData = await memReq.json<{results?: any[]}>();
+        if (memData.results && Array.isArray(memData.results)) {
+           memoryContext = memData.results.map((r) => r.text || JSON.stringify(r)).join("\n");
+        }
+      }
+    } catch (e) {
+      console.error("MemPalace Error:", e);
+    }
+  }
+
+  // 3) Build contents list + system instruction
+  let systemInstruction = buildSystemPrompt(body.selected_text, chunks, mode, webSearchResults, memoryContext);
+
+  const rawContents: any[] = [];
+  rawContents.push({ role: "system", parts: [{ text: systemInstruction }] });
+
   if (body.history && Array.isArray(body.history)) {
     for (const msg of body.history) {
       if (!msg.content || !msg.role) continue;
-      contents.push({
+      rawContents.push({
         role: msg.role === "ai" || msg.role === "model" || msg.role === "assistant" ? "model" : "user",
         parts: [{ text: msg.content }]
       });
     }
   }
-  contents.push({
+  rawContents.push({
     role: "user",
     parts: [{ text: body.question }]
   });
+
+  let finalContents = rawContents;
+  let finalSystemInstruction = systemInstruction;
+
+  if (c.env.HEADROOM_URL) {
+    try {
+      const compressRes = await compress(rawContents, {
+        baseUrl: c.env.HEADROOM_URL,
+        model: "deepseek-reasoner"
+      });
+      if (compressRes && compressRes.messages) {
+        finalContents = compressRes.messages;
+      }
+    } catch (e) {
+      console.error("Headroom compression error:", e);
+    }
+  }
+
+  // Extract system instruction back out to pass separately to providers
+  const sysIdx = finalContents.findIndex((m: any) => m.role === "system");
+  if (sysIdx !== -1) {
+    const sysMsg = finalContents.splice(sysIdx, 1)[0];
+    finalSystemInstruction = sysMsg.parts?.[0]?.text || sysMsg.content || finalSystemInstruction;
+  }
 
   const selectedModel = "deepseek-reasoner";
   if (!c.env.DEEPSEEK_API_KEY) {
@@ -96,7 +169,7 @@ ai.post("/chat", async (c) => {
       );
 
       try {
-        for await (const tok of provider.streamChat(contents, systemInstruction)) {
+        for await (const tok of provider.streamChat(finalContents, finalSystemInstruction)) {
           fullAnswer += tok;
           controller.enqueue(
             encoder.encode(`event: token\ndata: ${JSON.stringify(tok)}\n\n`)

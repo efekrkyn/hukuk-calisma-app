@@ -1,6 +1,11 @@
 # Dependencies
 node_modules/
 .pnpm-store/
+venv/
+__pycache__/
+
+# npm lockfiles — repo pnpm kullanıyor
+package-lock.json
 
 # Builds
 .next/

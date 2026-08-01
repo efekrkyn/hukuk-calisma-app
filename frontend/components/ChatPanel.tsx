@@ -29,6 +29,7 @@ export function ChatPanel({
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [isWebSearch, setIsWebSearch] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const renderMessageContent = (content: string) => {
@@ -121,6 +122,7 @@ export function ChatPanel({
         pdf_key: pdfKey,
         mode,
         model: selectedModel,
+        web_search: isWebSearch,
         history: recentHistory,
       })) {
         if (ev.type === "sources") {
@@ -482,27 +484,39 @@ export function ChatPanel({
         )}
       </div>
 
-      <div className="p-2 border-t bg-muted/30 flex gap-2">
-        <Input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              send(input);
-            }
-          }}
-          placeholder="Sor..."
-          disabled={loading}
-          className="rounded-xl border-border/50 bg-background/50 focus-visible:ring-primary/50"
-        />
-        <Button
-          onClick={() => send(input)}
-          disabled={loading || !input.trim()}
-          className="rounded-xl px-4 shadow-sm active:scale-95 transition-transform"
-        >
-          Sor
-        </Button>
+      <div className="p-2 border-t bg-muted/30 flex flex-col gap-2">
+        <div className="flex items-center justify-start px-1">
+          <div className="flex items-center gap-1.5 cursor-pointer" onClick={() => setIsWebSearch(!isWebSearch)}>
+            <span className="text-[11px] font-medium text-muted-foreground">🌐 Web Arama</span>
+            <button 
+              className={`w-7 h-4 rounded-full relative transition-colors ${isWebSearch ? "bg-blue-500" : "bg-muted-foreground/30"}`}
+            >
+              <div className={`w-2.5 h-2.5 bg-white rounded-full absolute top-[3px] transition-transform ${isWebSearch ? "right-[3px]" : "left-[3px]"}`} />
+            </button>
+          </div>
+        </div>
+        <div className="flex gap-2">
+          <Input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                send(input);
+              }
+            }}
+            placeholder="Sor..."
+            disabled={loading}
+            className="rounded-xl border-border/50 bg-background/50 focus-visible:ring-primary/50"
+          />
+          <Button
+            onClick={() => send(input)}
+            disabled={loading || !input.trim()}
+            className="rounded-xl px-4 shadow-sm active:scale-95 transition-transform"
+          >
+            Sor
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -22,6 +22,8 @@ type Bindings = {
   ADMIN_SECRET: string;
   GEMINI_KEY: string;
   DEEPSEEK_API_KEY?: string;
+  MEMPALACE_URL?: string;
+  HEADROOM_URL?: string;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
