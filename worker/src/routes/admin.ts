@@ -44,11 +44,18 @@ admin.post("/embed", async (c) => {
     return c.json({ error: "max 200 chunks per request" }, 400);
   }
 
-  // Text uzunluğu cap'le (safety)
-  const safeChunks = chunks.map((ch) => ({
-    ...ch,
-    text: (ch.text ?? "").slice(0, MAX_TEXT_CHARS),
-  }));
+  // Text uzunluğu cap'le (safety) + boş chunk'ları ele.
+  //
+  // bge-m3 partide tek bir boş string görürse TÜM partiyi
+  // "3030: invalid input" ile reddediyor — taranmış/boş sayfası olan bir PDF
+  // yüzünden 17 bin chunk'lık ingest ortasında duruyordu. Boşları burada
+  // düşür: tek giriş noktası burası, her ingest bundan korunsun.
+  const safeChunks = chunks
+    .map((ch) => ({ ...ch, text: (ch.text ?? "").slice(0, MAX_TEXT_CHARS).trim() }))
+    .filter((ch) => ch.text.length > 0);
+
+  const skipped = chunks.length - safeChunks.length;
+  if (safeChunks.length === 0) return c.json({ ok: true, count: 0, skipped });
 
   // AI embeddings (multiple batches if large)
   const allVectors: number[][] = [];
@@ -118,7 +125,7 @@ admin.post("/embed", async (c) => {
     // Continue even if D1 fails, vectorize succeeded
   }
 
-  return c.json({ ok: true, count: safeChunks.length });
+  return c.json({ ok: true, count: safeChunks.length, skipped });
 });
 
 admin.get("/vectorize-info", async (c) => {
