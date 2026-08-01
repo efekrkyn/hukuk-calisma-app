@@ -10,7 +10,6 @@ import { ai } from "./routes/ai";
 import { authRouter } from "./routes/auth";
 import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
-import { mevzuat } from "./routes/mevzuat";
 import { plan } from "./routes/plan";
 import { caseLaw } from "./routes/case-law";
 
@@ -62,7 +61,6 @@ app.use("*", async (c, next) => {
     path === "/" ||
     path === "/health" ||
     path === "/auth/login" ||
-    path.startsWith("/mevzuat") ||
     path.startsWith("/admin")
   ) {
     return await next();
@@ -98,7 +96,6 @@ app.route("/ai", ai);
 app.route("/case-law", caseLaw);
 app.route("/flashcards", flashcardsRouter);
 app.route("/quiz", quizRouter);
-app.route("/mevzuat", mevzuat);
 app.route("/plan", plan);
 
 export default app;

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
+// Resmî Gazete günde bir güncellenir — her ziyarette origin'e gitme.
+export const revalidate = 300;
 
 export async function GET() {
   try {
@@ -11,7 +11,7 @@ export async function GET() {
           "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
         Accept: "application/rss+xml, application/xml, text/xml, */*",
       },
-      next: { revalidate: 0 },
+      next: { revalidate: 300 },
     });
 
     if (!response.ok) {
