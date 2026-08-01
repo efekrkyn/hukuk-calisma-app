@@ -131,13 +131,16 @@ hmgs.get("/exam", async (c) => {
   for (const [si, s] of HMGS_SUBJECTS.entries()) {
     const need = quota[si];
     if (need === 0) continue;
+    // Tekrar elenince kota açık kalmasın: fazladan aday çek, kotayı dolduran
+    // ilk `need` tanesini al. (20 istenip 19 dönüyordu.)
     const rows = await c.env.DB.prepare(
       `SELECT id, subject, question, options, correct_answer, explanation, source_pdf, source_page
          FROM hmgs_questions WHERE subject = ? ORDER BY RANDOM() LIMIT ?`
-    ).bind(s.id, need).all<any>();
+    ).bind(s.id, need * 3).all<any>();
 
     let taken = 0;
     for (const r of rows.results) {
+      if (taken >= need) break;
       // Üretim parti parti çalıştığı için banka neredeyse aynı soruyu birden
       // fazla içerebiliyor; aynı denemede iki kez sormanın anlamı yok.
       if (picked.some((p) => isNearDuplicate(p.question, r.question))) continue;
