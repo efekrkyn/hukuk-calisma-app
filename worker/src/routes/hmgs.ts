@@ -6,6 +6,7 @@ import {
   getSubject,
 } from "../lib/hmgs-subjects";
 import { generateQuestions } from "../lib/hmgs-generator";
+import { apportion } from "../lib/apportion";
 
 type Bindings = {
   AI: Ai;
@@ -118,13 +119,16 @@ hmgs.get("/exam", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
   const size = Math.min(Math.max(Number(c.req.query("count") ?? HMGS_TOTAL_QUESTIONS), 10), HMGS_TOTAL_QUESTIONS);
-  const scale = size / HMGS_TOTAL_QUESTIONS;
+
+  // Alan başına round() toplamı tutturmuyordu (20 istenince 26 dönüyordu).
+  const quota = apportion(HMGS_SUBJECTS.map((s) => s.count), size);
 
   const picked: any[] = [];
   const shortfall: Array<{ subject: string; needed: number; have: number }> = [];
 
-  for (const s of HMGS_SUBJECTS) {
-    const need = Math.max(1, Math.round(s.count * scale));
+  for (const [si, s] of HMGS_SUBJECTS.entries()) {
+    const need = quota[si];
+    if (need === 0) continue;
     const rows = await c.env.DB.prepare(
       `SELECT id, subject, question, options, correct_answer, explanation, source_pdf, source_page
          FROM hmgs_questions WHERE subject = ? ORDER BY RANDOM() LIMIT ?`
