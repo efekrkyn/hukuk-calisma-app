@@ -7,6 +7,8 @@ import {
 } from "../lib/hmgs-subjects";
 import { generateQuestions } from "../lib/hmgs-generator";
 import { apportion } from "../lib/apportion";
+import { shuffleOptions } from "../lib/shuffle-options";
+import { isNearDuplicate } from "../lib/near-duplicate";
 
 type Bindings = {
   AI: Ai;
@@ -134,21 +136,29 @@ hmgs.get("/exam", async (c) => {
          FROM hmgs_questions WHERE subject = ? ORDER BY RANDOM() LIMIT ?`
     ).bind(s.id, need).all<any>();
 
+    let taken = 0;
     for (const r of rows.results) {
-      picked.push({
-        id: r.id,
-        subject: r.subject,
-        subject_name: s.name,
-        question: r.question,
-        options: JSON.parse(r.options),
-        correctAnswer: r.correct_answer,
-        explanation: r.explanation,
-        source_pdf: r.source_pdf,
-        source_page: r.source_page,
-      });
+      // Üretim parti parti çalıştığı için banka neredeyse aynı soruyu birden
+      // fazla içerebiliyor; aynı denemede iki kez sormanın anlamı yok.
+      if (picked.some((p) => isNearDuplicate(p.question, r.question))) continue;
+
+      picked.push(
+        shuffleOptions({
+          id: r.id,
+          subject: r.subject,
+          subject_name: s.name,
+          question: r.question,
+          options: JSON.parse(r.options) as string[],
+          correctAnswer: r.correct_answer as number,
+          explanation: r.explanation,
+          source_pdf: r.source_pdf,
+          source_page: r.source_page,
+        })
+      );
+      taken++;
     }
-    if (rows.results.length < need) {
-      shortfall.push({ subject: s.name, needed: need, have: rows.results.length });
+    if (taken < need) {
+      shortfall.push({ subject: s.name, needed: need, have: taken });
     }
   }
 
