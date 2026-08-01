@@ -221,6 +221,10 @@ export default function HmgsClient() {
   if (finished && showReview) {
     return (
       <div className="space-y-4">
+        <p className="text-[11px] text-amber-500/90 border border-amber-500/25 rounded-lg p-2.5">
+          Sorular kanun metninden yapay zekâ ile üretiliyor; hukuki doğrulukları
+          denetlenmiş değil. Şüphelendiğin soruda kaynak bağlantısından maddeyi kontrol et.
+        </p>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-gradient">Cevap Anahtarı</h3>
           <Button variant="outline" size="sm" onClick={() => window.location.reload()}>Yeni Deneme</Button>
@@ -240,6 +244,14 @@ export default function HmgsClient() {
                 )}
                 <p className="text-xs text-green-600">Doğru cevap: {String.fromCharCode(65 + q.correctAnswer)} — {q.options[q.correctAnswer]}</p>
                 <p className="text-xs text-muted-foreground">{q.explanation}</p>
+                {q.source_pdf && (
+                  <a
+                    href={`/reader/${q.source_pdf}#page=${q.source_page ?? 1}`}
+                    className="inline-block text-[11px] text-primary/80 hover:text-primary underline underline-offset-2"
+                  >
+                    Kaynak: {q.source_pdf.split("/").pop()} s.{q.source_page} →
+                  </a>
+                )}
               </CardContent>
             </Card>
           );
