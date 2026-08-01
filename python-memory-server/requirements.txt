@@ -1,5 +1,0 @@
-fastapi
-uvicorn
-mempalace
-pydantic
-headroom-ai[proxy]

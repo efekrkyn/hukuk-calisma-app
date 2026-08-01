@@ -2,7 +2,6 @@ import { Hono } from "hono";
 import { embedQuery, retrieve, buildSystemPrompt } from "../lib/rag";
 import { DeepSeekProvider } from "../lib/ai-provider";
 import { gradeSolution } from "../lib/practice-grader";
-import { compress } from "headroom-ai";
 
 type Bindings = {
   AI: Ai;
@@ -11,8 +10,6 @@ type Bindings = {
   TAVILY_API_KEY?: string;
   DEEPSEEK_API_KEY?: string;
   DB?: D1Database;
-  MEMPALACE_URL?: string;
-  HEADROOM_URL?: string;
 };
 
 export const ai = new Hono<{ Bindings: Bindings }>();
@@ -82,70 +79,23 @@ ai.post("/chat", async (c) => {
     webSearchResults = await searchWeb(queryText, c.env.TAVILY_API_KEY);
   }
 
-  // 2.6) MemPalace Integration
-  let memoryContext = "";
-  if (c.env.MEMPALACE_URL) {
-    try {
-      // Assuming a generic userId for now or use session
-      const memReq = await fetch(`${c.env.MEMPALACE_URL}/search`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: queryText, wing: "efe" })
-      });
-      if (memReq.ok) {
-        const memData = await memReq.json<{results?: any[]}>();
-        if (memData.results && Array.isArray(memData.results)) {
-           memoryContext = memData.results.map((r) => r.text || JSON.stringify(r)).join("\n");
-        }
-      }
-    } catch (e) {
-      console.error("MemPalace Error:", e);
-    }
-  }
-
   // 3) Build contents list + system instruction
-  let systemInstruction = buildSystemPrompt(body.selected_text, chunks, mode, webSearchResults, memoryContext);
+  const systemInstruction = buildSystemPrompt(body.selected_text, chunks, mode, webSearchResults);
 
-  const rawContents: any[] = [];
-  rawContents.push({ role: "system", parts: [{ text: systemInstruction }] });
-
+  const contents: Array<{ role: string; parts: Array<{ text: string }> }> = [];
   if (body.history && Array.isArray(body.history)) {
     for (const msg of body.history) {
       if (!msg.content || !msg.role) continue;
-      rawContents.push({
+      contents.push({
         role: msg.role === "ai" || msg.role === "model" || msg.role === "assistant" ? "model" : "user",
         parts: [{ text: msg.content }]
       });
     }
   }
-  rawContents.push({
+  contents.push({
     role: "user",
     parts: [{ text: body.question }]
   });
-
-  let finalContents = rawContents;
-  let finalSystemInstruction = systemInstruction;
-
-  if (c.env.HEADROOM_URL) {
-    try {
-      const compressRes = await compress(rawContents, {
-        baseUrl: c.env.HEADROOM_URL,
-        model: "deepseek-reasoner"
-      });
-      if (compressRes && compressRes.messages) {
-        finalContents = compressRes.messages;
-      }
-    } catch (e) {
-      console.error("Headroom compression error:", e);
-    }
-  }
-
-  // Extract system instruction back out to pass separately to providers
-  const sysIdx = finalContents.findIndex((m: any) => m.role === "system");
-  if (sysIdx !== -1) {
-    const sysMsg = finalContents.splice(sysIdx, 1)[0];
-    finalSystemInstruction = sysMsg.parts?.[0]?.text || sysMsg.content || finalSystemInstruction;
-  }
 
   const selectedModel = "deepseek-reasoner";
   if (!c.env.DEEPSEEK_API_KEY) {
@@ -169,7 +119,7 @@ ai.post("/chat", async (c) => {
       );
 
       try {
-        for await (const tok of provider.streamChat(finalContents, finalSystemInstruction)) {
+        for await (const tok of provider.streamChat(contents, systemInstruction)) {
           fullAnswer += tok;
           controller.enqueue(
             encoder.encode(`event: token\ndata: ${JSON.stringify(tok)}\n\n`)

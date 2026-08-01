@@ -157,8 +157,7 @@ export function buildSystemPrompt(
   selectedText: string | undefined,
   chunks: RetrievedChunk[],
   mode: PromptMode = "default",
-  webSearchResults?: string,
-  memoryContext?: string
+  webSearchResults?: string
 ): string {
   const context = chunks
     .map(
@@ -188,7 +187,7 @@ export function buildSystemPrompt(
 <SOURCES>
 ${context}
 </SOURCES>
-${sel}${webSearchResults ? `\n<WEB_SEARCH>\n${webSearchResults}\n</WEB_SEARCH>` : ""}${memoryContext ? `\n<MEMORY>\n${memoryContext}\n</MEMORY>` : ""}
+${sel}${webSearchResults ? `\n<WEB_SEARCH>\n${webSearchResults}\n</WEB_SEARCH>` : ""}
 <QUESTION>
 `;
   }
@@ -207,7 +206,7 @@ ${sel}${webSearchResults ? `\n<WEB_SEARCH>\n${webSearchResults}\n</WEB_SEARCH>` 
 <SOURCES>
 ${context}
 </SOURCES>
-${sel}${webSearchResults ? `\n<WEB_SEARCH>\n${webSearchResults}\n</WEB_SEARCH>` : ""}${memoryContext ? `\n<MEMORY>\n${memoryContext}\n</MEMORY>` : ""}
+${sel}${webSearchResults ? `\n<WEB_SEARCH>\n${webSearchResults}\n</WEB_SEARCH>` : ""}
 `;
 }
 

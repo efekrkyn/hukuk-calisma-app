@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import FloatingDictionary from "@/components/FloatingDictionary";
-import CopilotKitProvider from "@/components/CopilotKitProvider";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -42,10 +41,8 @@ export default function RootLayout({
       className={`${inter.variable} ${outfit.variable} dark h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/30">
-        <CopilotKitProvider>
-          {children}
-          <FloatingDictionary />
-        </CopilotKitProvider>
+        {children}
+        <FloatingDictionary />
       </body>
     </html>
   );
