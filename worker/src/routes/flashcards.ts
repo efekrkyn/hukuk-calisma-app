@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { schedule, type StoredSrs } from "../lib/srs";
 
 type Bindings = {
   DB: D1Database;
@@ -37,7 +38,7 @@ flashcardsRouter.post("/review", async (c) => {
   let body: {
     card_id: string;
     course: string;
-    grade: number; // 0: Again, 1: Hard, 2: Good
+    grade: number; // 0=Tekrar 1=Zor 2=İyi 3=Kolay
   };
   try {
     body = await c.req.json();
@@ -54,8 +55,8 @@ flashcardsRouter.post("/review", async (c) => {
   if (typeof body.grade !== "number" || !Number.isInteger(body.grade)) {
     return c.json({ error: "grade (integer) required" }, 400);
   }
-  if (body.grade < 0 || body.grade > 2) {
-    return c.json({ error: "Invalid grade. Must be 0, 1, or 2." }, 400);
+  if (body.grade < 0 || body.grade > 3) {
+    return c.json({ error: "Geçersiz not. 0=Tekrar 1=Zor 2=İyi 3=Kolay" }, 400);
   }
 
   // Get current state
@@ -66,54 +67,34 @@ flashcardsRouter.post("/review", async (c) => {
     .first<FlashcardState>();
 
   const now = Date.now();
-  let ease = currentState ? currentState.ease : 2.5;
-  let interval_days = currentState ? currentState.interval_days : 0;
-  let streak = currentState ? currentState.streak : 0;
+  const s = schedule(currentState as unknown as StoredSrs | null, body.grade);
 
-  // Simplified SuperMemo-2 algorithm adaptation
-  // grade 0 (Again): ease decreases by 0.2, interval = 1, streak resets
-  // grade 1 (Hard): ease decreases by 0.15, interval *= 1.2, streak increments
-  // grade 2 (Good): ease stays or increases slightly, interval *= ease, streak increments
-  
-  if (body.grade === 0) {
-    streak = 0;
-    interval_days = 1;
-    ease = Math.max(1.3, ease - 0.2);
-  } else if (body.grade === 1) {
-    streak += 1;
-    interval_days = interval_days === 0 ? 1 : Math.round(interval_days * 1.2);
-    ease = Math.max(1.3, ease - 0.15);
-  } else if (body.grade === 2) {
-    streak += 1;
-    if (interval_days === 0) {
-      interval_days = 1;
-    } else if (interval_days === 1) {
-      interval_days = 3;
-    } else {
-      interval_days = Math.round(interval_days * ease);
-    }
-  }
-
-  // Ensure interval_days isn't smaller than 1 if grade > 0
-  if (body.grade > 0 && interval_days < 1) interval_days = 1;
-
-  // Next review in ms
-  const next_review = now + interval_days * 24 * 60 * 60 * 1000;
+  // streak yalnızca gösterim için tutuluyor; planlamayı FSRS yapıyor
+  const streak = body.grade === 0 ? 0 : (currentState?.streak ?? 0) + 1;
 
   if (currentState) {
     await c.env.DB.prepare(
-      `UPDATE flashcard_state 
-       SET ease = ?, interval_days = ?, next_review = ?, last_seen = ?, streak = ?
+      `UPDATE flashcard_state
+       SET next_review = ?, last_seen = ?, streak = ?, interval_days = ?,
+           stability = ?, difficulty = ?, elapsed_days = ?, scheduled_days = ?,
+           reps = ?, lapses = ?, fsrs_state = ?, last_review = ?
        WHERE card_id = ?`
     )
-      .bind(ease, interval_days, next_review, now, streak, body.card_id)
+      .bind(s.next_review, now, streak, s.scheduled_days,
+            s.stability, s.difficulty, s.elapsed_days, s.scheduled_days,
+            s.reps, s.lapses, s.fsrs_state, s.last_review, body.card_id)
       .run();
   } else {
     await c.env.DB.prepare(
-      `INSERT INTO flashcard_state (card_id, course, ease, interval_days, next_review, last_seen, streak)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`
+      `INSERT INTO flashcard_state
+         (card_id, course, ease, interval_days, next_review, last_seen, streak,
+          stability, difficulty, elapsed_days, scheduled_days, reps, lapses,
+          fsrs_state, last_review)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
     )
-      .bind(body.card_id, body.course, ease, interval_days, next_review, now, streak)
+      .bind(body.card_id, body.course, 2.5, s.scheduled_days, s.next_review, now, streak,
+            s.stability, s.difficulty, s.elapsed_days, s.scheduled_days,
+            s.reps, s.lapses, s.fsrs_state, s.last_review)
       .run();
   }
 
@@ -122,9 +103,12 @@ flashcardsRouter.post("/review", async (c) => {
     newState: {
       card_id: body.card_id,
       course: body.course,
-      ease,
-      interval_days,
-      next_review,
+      next_review: s.next_review,
+      interval_days: s.scheduled_days,
+      stability: s.stability,
+      difficulty: s.difficulty,
+      reps: s.reps,
+      lapses: s.lapses,
       last_seen: now,
       streak,
     },

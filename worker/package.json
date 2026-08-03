@@ -12,6 +12,7 @@
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
     "hono": "^4.12.22",
+    "ts-fsrs": "^5.4.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

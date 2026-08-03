@@ -164,7 +164,7 @@ export default function FlashcardReviewClient({
       </div>
 
       {isFlipped && (
-        <div className="mt-12 grid grid-cols-3 gap-4 mx-auto w-full max-w-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
+        <div className="mt-12 grid grid-cols-2 sm:grid-cols-4 gap-3 mx-auto w-full max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
           <Button 
             variant="destructive" 
             size="lg" 
@@ -194,6 +194,16 @@ export default function FlashcardReviewClient({
           >
             <span className="font-bold">İyi</span>
             <span className="text-xs opacity-80 font-normal">Bildim</span>
+          </Button>
+          <Button
+            variant="outline"
+            size="lg"
+            className="flex flex-col h-16 border-blue-500/50 hover:bg-blue-500/10 hover:text-blue-500"
+            onClick={() => handleReview(3)}
+            disabled={submitting}
+          >
+            <span className="font-bold">Kolay</span>
+            <span className="text-xs opacity-80 font-normal">Çok rahat</span>
           </Button>
         </div>
       )}
