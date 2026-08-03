@@ -60,10 +60,14 @@ export async function verifyBatch(
 
   // Kanun metnini soruların kendi içeriğine göre çek — konu başlığına göre
   // değil, yoksa alakasız maddeler gelir ve her şey "unsupported" çıkar.
-  const query = questions.map((q) => q.question).join(" ");
+  // Sorguya AÇIKLAMAYI da kat: madde numarası ("CMK m.100") soruda değil
+  // açıklamada geçiyor. Yalnızca soru metniyle arayınca hakem doğru maddeyi
+  // göremiyor ve sağlam soruya "unsupported" diyordu — Ceza Yargılama'da
+  // 30 sorunun 20'si böyle işaretlenmişti.
+  const query = questions.map((q) => `${q.question} ${q.explanation}`).join(" ");
   const qVec = await embedQuery(query, env.AI);
   const all = await retrieve(
-    env.VECTORIZE, env.DB, query, qVec, env.AI, "kanunlar", 40
+    env.VECTORIZE, env.DB, query, qVec, env.AI, "kanunlar", 80
   );
   const chunks = all.filter((c) => subject.lawFiles.some((f) => c.pdf.includes(f)));
   if (chunks.length === 0) return [];

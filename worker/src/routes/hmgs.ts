@@ -251,7 +251,7 @@ hmgs.post("/verify", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
   if (!c.env.DEEPSEEK_API_KEY) return c.json({ error: "DEEPSEEK_API_KEY yok" }, 503);
 
-  let body: { subject?: string; limit?: number };
+  let body: { subject?: string; limit?: number; recheck?: boolean };
   try {
     body = await c.req.json();
   } catch {
@@ -264,12 +264,21 @@ hmgs.post("/verify", async (c) => {
   // Aynı anda çok soru göndermek hakemi sulandırıyor; küçük parti tut.
   const limit = Math.min(Math.max(Number(body.limit ?? 5), 1), 8);
 
+  // recheck=1: "unsupported" damgalıları yeniden dene. Çoğu kötü soru değil,
+  // hakemin doğru maddeyi görememesiydi.
+  const recheck = body.recheck === true;
   const rows = await c.env.DB.prepare(
-    `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
-       FROM hmgs_questions q
-       LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
-      WHERE q.subject = ? AND v.question_id IS NULL
-      LIMIT ?`
+    recheck
+      ? `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+           FROM hmgs_questions q
+           JOIN hmgs_verdicts v ON v.question_id = q.id
+          WHERE q.subject = ? AND v.verified = 0
+          LIMIT ?`
+      : `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+           FROM hmgs_questions q
+           LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+          WHERE q.subject = ? AND v.question_id IS NULL
+          LIMIT ?`
   ).bind(subject.id, limit).all<any>();
 
   if (rows.results.length === 0) {
@@ -314,9 +323,13 @@ hmgs.post("/verify", async (c) => {
   );
 
   const left = await c.env.DB.prepare(
-    `SELECT COUNT(*) as n FROM hmgs_questions q
-       LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
-      WHERE q.subject = ? AND v.question_id IS NULL`
+    recheck
+      ? `SELECT COUNT(*) as n FROM hmgs_questions q
+           JOIN hmgs_verdicts v ON v.question_id = q.id
+          WHERE q.subject = ? AND v.verified = 0`
+      : `SELECT COUNT(*) as n FROM hmgs_questions q
+           LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+          WHERE q.subject = ? AND v.question_id IS NULL`
   ).bind(subject.id).first<{ n: number }>();
 
   return c.json({
