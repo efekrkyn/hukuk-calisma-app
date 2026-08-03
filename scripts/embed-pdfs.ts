@@ -26,6 +26,7 @@ import {
   existsSync,
 } from "node:fs";
 import { join, basename, relative } from "node:path";
+import { execFileSync } from "node:child_process";
 import { PDFParse } from "pdf-parse";
 import { createHash } from "node:crypto";
 
@@ -44,6 +45,18 @@ const OUT_DIR =
 const WORKER_URL =
   process.env.WORKER_URL ?? "https://hukuk-worker.efearas06.workers.dev";
 const ADMIN_SECRET = process.env.ADMIN_SECRET!;
+
+/**
+ * OCR'ı çöp üreten dosyalar (el yazısı ders notları). Önizleme raporundan
+ * elle seçildi; otomatik ayırt edilemiyor — Vision güven skoru çöpte 0.948,
+ * temizde 0.961 veriyor, yani ayrım yok.
+ */
+const OCR_SKIP = [
+  "Ankara hukuk 1.dönem icra",
+  "Esra Dinç İş Hukuku",
+  "idari yargı tablolar Esra Dinç",
+  "MİRAS HUKUKU.pdf",
+];
 
 const CHUNK_CHARS = 2000;
 const CHUNK_OVERLAP = 400;
@@ -159,9 +172,49 @@ async function processPdf(fullPath: string): Promise<Chunk[]> {
     text: (p.text as string) ?? "",
   }));
 
-  if (pages.length === 0 || pages.every((p) => p.text.trim().length === 0)) {
-    console.warn(`  [scanned, skip] ${pdfName}`);
+  const isScanned = pages.length === 0 || pages.every((p) => p.text.trim().length === 0);
+
+  // ONLY_OCR=1: metni zaten çıkan PDF'leri atla. Bunlar indexte var; yeniden
+  // göndermek Vectorize'da zararsız (aynı id upsert) ama D1 fts_chunks'ta
+  // KOPYA satır üretir ve keyword araması aynı parçayı iki kez döndürür.
+  if (process.env.ONLY_OCR === "1" && !isScanned) {
     return [];
+  }
+
+  if (isScanned) {
+    // Taranmış PDF. OCR=1 ile macOS Vision'a düş — ama yalnızca BASILI
+    // taramalarda işe yarıyor; el yazısında çöp üretiyor ve çöp metin
+    // index'i bozar. OCR_SKIP listesindekiler elle elendi.
+    if (process.env.OCR !== "1") {
+      console.warn(`  [scanned, skip] ${pdfName}`);
+      return [];
+    }
+    if (OCR_SKIP.some((s) => rel.includes(s))) {
+      console.warn(`  [el yazısı, atlandı] ${pdfName}`);
+      return [];
+    }
+    console.log(`  [OCR] ${pdfName} …`);
+    try {
+      const out = execFileSync(
+        "swift",
+        [join(import.meta.dirname, "ocr-pdf.swift"), fullPath, "200"],
+        { encoding: "utf8", maxBuffer: 512 * 1024 * 1024, stdio: ["ignore", "pipe", "ignore"] }
+      );
+      const ocrPages = JSON.parse(out) as Array<{ page: number; text: string }>;
+      pages.length = 0;
+      for (const op of ocrPages) {
+        pages.push({ pageNumber: op.page, text: op.text ?? "" });
+      }
+      const chars = pages.reduce((a, p) => a + p.text.length, 0);
+      console.log(`  [OCR] ${pdfName}: ${pages.length} sayfa, ${chars} karakter`);
+      if (chars < 200) {
+        console.warn(`  [OCR boş, atlandı] ${pdfName}`);
+        return [];
+      }
+    } catch (e) {
+      console.warn(`  [OCR hata, atlandı] ${pdfName}: ${String(e).slice(0, 120)}`);
+      return [];
+    }
   }
 
   const grouped = chunkPagesGrouped(pages);
