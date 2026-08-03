@@ -33,9 +33,20 @@ for (const s of HMGS_SUBJECTS) {
   assert.ok(Array.isArray(s.lawFiles), `${s.name}: lawFiles dizi olmalı`);
 }
 
-// alanların çoğu korpustan karşılanabilmeli; hepsi boşsa eşleştirme kopmuş demektir
-const coverable = HMGS_SUBJECTS.filter((s) => s.lawFiles.length > 0);
-assert.ok(coverable.length >= 15, `karşılanabilir alan ${coverable.length}, en az 15 bekleniyor`);
+// HMGS'nin TAMAMI karşılanabilmeli: kanun konuları lawFiles ile, doktrin
+// konuları (Hukuk Felsefesi, Milletlerarası, Genel Kamu) ragCourse ile.
+// Biri boş kalırsa o alandan hiç soru üretilemez ve deneme eksik çıkar.
+const coverable = HMGS_SUBJECTS.filter((s) => s.lawFiles.length > 0 || s.ragCourse);
+assert.equal(coverable.length, 20, `karşılanamayan alan: ${
+  HMGS_SUBJECTS.filter((s) => !s.lawFiles.length && !s.ragCourse).map((s) => s.name).join(", ")
+}`);
+
+// doktrin konuları kanun DEĞİL makale korpusundan beslenmeli
+for (const id of ["felsefe_sosyoloji", "milletlerarasi", "genel_kamu"]) {
+  const s = getSubject(id)!;
+  assert.equal(s.lawFiles.length, 0, `${s.name}: kanun beklenmiyor`);
+  assert.equal(s.ragCourse, "hmgs_ozet", `${s.name}: makale korpusu bekleniyor`);
+}
 
 console.log(`karşılanabilir alan: ${coverable.length}/20`);
 

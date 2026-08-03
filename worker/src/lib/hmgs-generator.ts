@@ -75,20 +75,24 @@ export async function generateQuestions(
   subject: HmgsSubject,
   count: number
 ): Promise<GeneratedQuestion[]> {
-  // Korpusta bu alanın kanunu yoksa üretme — dayanağı olmayan soru uydurma olur.
-  if (subject.lawFiles.length === 0) return [];
+  // Doktrin konularında kanun yok; makale korpusundan besleniyorlar.
+  // Ne kanun ne makale kaynağı varsa üretme — dayanaksız soru uydurma olur.
+  const course = subject.ragCourse ?? "kanunlar";
+  if (subject.lawFiles.length === 0 && !subject.ragCourse) return [];
 
   // 1) Alanın konusuyla ilgili kanun metnini çek. "kanunlar" course'u 23 kanun
   //    içerdiği için geniş alıp alanın kendi kanunlarına daraltıyoruz.
   const query = `${subject.name}: ${subject.topic}`;
   const qVec = await embedQuery(query, env.AI);
   const all = await retrieve(
-    env.VECTORIZE, env.DB, query, qVec, env.AI, "kanunlar", Math.max(count * 8, 40)
+    env.VECTORIZE, env.DB, query, qVec, env.AI, course, Math.max(count * 8, 40)
   );
 
-  const chunks = all.filter((c) =>
-    subject.lawFiles.some((f) => c.pdf.includes(f))
-  );
+  // lawFiles boşsa (doktrin konusu) course filtresi zaten daraltıyor,
+  // dosya bazlı çapa uygulanmaz.
+  const chunks = subject.lawFiles.length
+    ? all.filter((c) => subject.lawFiles.some((f) => c.pdf.includes(f)))
+    : all;
 
   // Doğru kanundan hiç parça gelmediyse başka kanundan soru üretmektense hiç üretme.
   if (chunks.length === 0) return [];

@@ -43,8 +43,8 @@ hmgs.get("/stats", async (c) => {
     name: s.name,
     needed: s.count,
     have: have.get(s.id) ?? 0,
-    // korpusta dayanak kanun yoksa bu alan hiç dolmaz — sebebi görünsün
-    coverable: s.lawFiles.length > 0,
+    // Kanun ya da doktrin kaynağı yoksa bu alan hiç dolmaz — sebebi görünsün
+    coverable: s.lawFiles.length > 0 || Boolean(s.ragCourse),
   }));
 
   const total = subjects.reduce((a, s) => a + s.have, 0);

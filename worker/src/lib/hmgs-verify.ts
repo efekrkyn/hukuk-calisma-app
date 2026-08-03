@@ -96,7 +96,9 @@ export async function verifyBatch(
   subject: HmgsSubject,
   questions: QuestionToCheck[]
 ): Promise<Verdict[]> {
-  if (questions.length === 0 || subject.lawFiles.length === 0) return [];
+  if (questions.length === 0) return [];
+  const course = subject.ragCourse ?? "kanunlar";
+  if (subject.lawFiles.length === 0 && !subject.ragCourse) return [];
 
   // Kanun metnini soruların kendi içeriğine göre çek — konu başlığına göre
   // değil, yoksa alakasız maddeler gelir ve her şey "unsupported" çıkar.
@@ -107,9 +109,11 @@ export async function verifyBatch(
   const query = questions.map((q) => `${q.question} ${q.explanation}`).join(" ");
   const qVec = await embedQuery(query, env.AI);
   const all = await retrieve(
-    env.VECTORIZE, env.DB, query, qVec, env.AI, "kanunlar", 80
+    env.VECTORIZE, env.DB, query, qVec, env.AI, course, 80
   );
-  const chunks = all.filter((c) => subject.lawFiles.some((f) => c.pdf.includes(f)));
+  const chunks = subject.lawFiles.length
+    ? all.filter((c) => subject.lawFiles.some((f) => c.pdf.includes(f)))
+    : all;
   if (chunks.length === 0) return [];
 
   const law = chunks
