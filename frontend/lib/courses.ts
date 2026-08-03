@@ -39,6 +39,12 @@ export const COURSES: Course[] = [
   { id: "anayasa_hukuku", name: "Anayasa Hukuku" },
   { id: "hukuk_felsefesi", name: "Hukuk Felsefesi ve Sosyolojisi" },
 
+  // HMGS
+  // Okuyucu SADECE bu listedeki id'leri gösteriyor — R2'ye klasör eklemek
+  // yetmiyor, buraya da girmesi gerekiyor.
+  { id: "hmgs_sinavlar", name: "HMGS Çıkmış Sınavlar (ÖSYM kitapçıkları)" },
+  { id: "hmgs_ozet", name: "HMGS Konu Özetleri (makaleler)" },
+
   // Kanunlar/kitaplar/kişisel
   { id: "kanunlar", name: "Genel Hukuk Kitapları" },
   { id: "kisisel", name: "Kişisel Notlarım (Yüklenen PDF'ler)" },
