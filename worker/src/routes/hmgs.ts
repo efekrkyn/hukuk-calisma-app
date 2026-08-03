@@ -9,6 +9,7 @@ import { generateQuestions } from "../lib/hmgs-generator";
 import { apportion } from "../lib/apportion";
 import { shuffleOptions } from "../lib/shuffle-options";
 import { isNearDuplicate } from "../lib/near-duplicate";
+import { verifyBatch, type QuestionToCheck } from "../lib/hmgs-verify";
 
 type Bindings = {
   AI: Ai;
@@ -122,6 +123,8 @@ hmgs.get("/exam", async (c) => {
 
   const size = Math.min(Math.max(Number(c.req.query("count") ?? HMGS_TOTAL_QUESTIONS), 10), HMGS_TOTAL_QUESTIONS);
 
+  const onlyVerified = c.req.query("verified") === "1";
+
   // Alan başına round() toplamı tutturmuyordu (20 istenince 26 dönüyordu).
   const quota = apportion(HMGS_SUBJECTS.map((s) => s.count), size);
 
@@ -133,9 +136,17 @@ hmgs.get("/exam", async (c) => {
     if (need === 0) continue;
     // Tekrar elenince kota açık kalmasın: fazladan aday çek, kotayı dolduran
     // ilk `need` tanesini al. (20 istenip 19 dönüyordu.)
+    // Denetimde ELENEN soru hiçbir koşulda denemeye girmez — hakem "yanlış"
+    // dediyse onu sormak çalışmayı bozar. verified=1 ise yalnızca onaylılar.
     const rows = await c.env.DB.prepare(
-      `SELECT id, subject, question, options, correct_answer, explanation, source_pdf, source_page
-         FROM hmgs_questions WHERE subject = ? ORDER BY RANDOM() LIMIT ?`
+      `SELECT q.id, q.subject, q.question, q.options, q.correct_answer,
+              q.explanation, q.source_pdf, q.source_page, v.verified
+         FROM hmgs_questions q
+         LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+        WHERE q.subject = ?
+          AND (v.verified IS NULL OR v.verified >= 0)
+          ${onlyVerified ? "AND v.verified = 1" : ""}
+        ORDER BY RANDOM() LIMIT ?`
     ).bind(s.id, need * 3).all<any>();
 
     let taken = 0;
@@ -156,6 +167,7 @@ hmgs.get("/exam", async (c) => {
           explanation: r.explanation,
           source_pdf: r.source_pdf,
           source_page: r.source_page,
+          verified: r.verified === 1,
         })
       );
       taken++;
@@ -177,6 +189,8 @@ hmgs.get("/exam", async (c) => {
     questions: picked,
     pass_score: HMGS_PASS_SCORE,
     shortfall,
+    verified_count: picked.filter((q) => q.verified).length,
+    only_verified: onlyVerified,
   });
 });
 
@@ -229,4 +243,110 @@ hmgs.post("/submit", async (c) => {
     score,
     passed: score >= HMGS_PASS_SCORE,
   });
+});
+
+
+/** Bir alandaki denetlenmemiş soruları kanun metnine karşı denetler. */
+hmgs.post("/verify", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+  if (!c.env.DEEPSEEK_API_KEY) return c.json({ error: "DEEPSEEK_API_KEY yok" }, 503);
+
+  let body: { subject?: string; limit?: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const subject = getSubject(String(body.subject ?? ""));
+  if (!subject) return c.json({ error: "geçersiz subject" }, 400);
+
+  // Aynı anda çok soru göndermek hakemi sulandırıyor; küçük parti tut.
+  const limit = Math.min(Math.max(Number(body.limit ?? 5), 1), 8);
+
+  const rows = await c.env.DB.prepare(
+    `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+       FROM hmgs_questions q
+       LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+      WHERE q.subject = ? AND v.question_id IS NULL
+      LIMIT ?`
+  ).bind(subject.id, limit).all<any>();
+
+  if (rows.results.length === 0) {
+    return c.json({ ok: true, subject: subject.id, checked: 0, remaining: 0 });
+  }
+
+  const questions: QuestionToCheck[] = rows.results.map((r) => ({
+    id: r.id,
+    question: r.question,
+    options: JSON.parse(r.options),
+    correctAnswer: r.correct_answer,
+    explanation: r.explanation,
+  }));
+
+  const verdicts = await verifyBatch(
+    { AI: c.env.AI, VECTORIZE: c.env.VECTORIZE, DB: c.env.DB, DEEPSEEK_API_KEY: c.env.DEEPSEEK_API_KEY },
+    subject,
+    questions
+  );
+
+  if (verdicts.length === 0) {
+    return c.json({ error: "denetim sonucu alınamadı", subject: subject.id, checked: 0 }, 502);
+  }
+
+  const now = Date.now();
+  const stmt = c.env.DB.prepare(
+    `INSERT OR REPLACE INTO hmgs_verdicts (question_id, verified, verdict, reason, checked_at)
+     VALUES (?, ?, ?, ?, ?)`
+  );
+  await c.env.DB.batch(
+    verdicts.map((v) =>
+      // correct = 1 (onaylı) · unsupported = 0 (kaynakta doğrulanamadı, YANLIŞ
+      // demek değil — retrieval doğru maddeyi getirmemiş olabilir) · wrong = -1
+      stmt.bind(
+        v.id,
+        v.verdict === "correct" ? 1 : v.verdict === "unsupported" ? 0 : -1,
+        v.verdict,
+        v.reason,
+        now
+      )
+    )
+  );
+
+  const left = await c.env.DB.prepare(
+    `SELECT COUNT(*) as n FROM hmgs_questions q
+       LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+      WHERE q.subject = ? AND v.question_id IS NULL`
+  ).bind(subject.id).first<{ n: number }>();
+
+  return c.json({
+    ok: true,
+    subject: subject.id,
+    checked: verdicts.length,
+    remaining: left?.n ?? 0,
+    verdicts,
+  });
+});
+
+/** Denetim özeti. */
+hmgs.get("/verify-stats", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const rows = await c.env.DB.prepare(
+    `SELECT q.subject, v.verdict, COUNT(*) as n
+       FROM hmgs_questions q
+       LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+      GROUP BY q.subject, v.verdict`
+  ).all<{ subject: string; verdict: string | null; n: number }>();
+
+  const by: Record<string, Record<string, number>> = {};
+  let total = 0, correct = 0, unchecked = 0;
+  for (const r of rows.results) {
+    const key = r.verdict ?? "unchecked";
+    (by[r.subject] ??= {})[key] = r.n;
+    total += r.n;
+    if (key === "correct") correct += r.n;
+    if (key === "unchecked") unchecked += r.n;
+  }
+  return c.json({ total, correct, unchecked, by_subject: by });
 });

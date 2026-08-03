@@ -15,6 +15,7 @@ type QuizQuestion = {
   explanation: string;
   source_pdf?: string;
   source_page?: number;
+  verified?: boolean;
 };
 
 type Answer = {
@@ -39,6 +40,7 @@ export default function HmgsClient() {
   const [examId, setExamId] = useState<string | null>(null);
   const submittedRef = useRef(false);
   const [shortfall, setShortfall] = useState<Array<{ subject: string; needed: number; have: number }>>([]);
+  const [verifiedCount, setVerifiedCount] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -53,6 +55,7 @@ export default function HmgsClient() {
         setAnswers(qs.map(() => ({ selected: null, flagged: false })));
         setExamId(data.exam_id ?? null);
         setShortfall(data.shortfall ?? []);
+        setVerifiedCount(data.verified_count ?? 0);
         setLoading(false);
       })
       .catch((err) => {
@@ -149,6 +152,14 @@ export default function HmgsClient() {
         <h2 className="text-2xl font-bold text-gradient">HMGS Zamanlı Deneme Sınavı</h2>
         <div className="max-w-md mx-auto text-sm text-muted-foreground space-y-2">
           <p>📝 <strong>{questions.length} Soru</strong> — ÖSYM'nin resmî alan dağılımına göre</p>
+          <p>
+            ✅ <strong>{verifiedCount}</strong> soru kanun metnine karşı denetlendi
+            {verifiedCount < questions.length && (
+              <span className="text-muted-foreground">
+                , {questions.length - verifiedCount} tanesi denetlenmedi
+              </span>
+            )}
+          </p>
           <p>⏱️ <strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</p>
           <p>⭐ Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</p>
           <p>🔢 Soru numaralarına tıklayarak istediğin soruya atlayabilirsin</p>
@@ -222,8 +233,9 @@ export default function HmgsClient() {
     return (
       <div className="space-y-4">
         <p className="text-[11px] text-amber-500/90 border border-amber-500/25 rounded-lg p-2.5">
-          Sorular kanun metninden yapay zekâ ile üretiliyor; hukuki doğrulukları
-          denetlenmiş değil. Şüphelendiğin soruda kaynak bağlantısından maddeyi kontrol et.
+          Sorular kanun metninden yapay zekâ ile üretiliyor. &quot;Denetlendi&quot; rozeti,
+          ikinci bir modelin soruyu kanun metnine karşı kontrol ettiği anlamına gelir —
+          insan onayı değildir. Şüphelendiğin soruda kaynak bağlantısından maddeyi kontrol et.
         </p>
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-xl font-bold text-gradient">Cevap Anahtarı</h3>
@@ -244,6 +256,11 @@ export default function HmgsClient() {
                 )}
                 <p className="text-xs text-green-600">Doğru cevap: {String.fromCharCode(65 + q.correctAnswer)} — {q.options[q.correctAnswer]}</p>
                 <p className="text-xs text-muted-foreground">{q.explanation}</p>
+                {q.verified && (
+                  <span className="inline-block text-[10px] font-medium px-1.5 py-0.5 rounded bg-green-500/15 text-green-600 dark:text-green-400 mr-2">
+                    ✓ kaynağa karşı denetlendi
+                  </span>
+                )}
                 {q.source_pdf && (
                   <a
                     href={`/reader/${q.source_pdf}#page=${q.source_page ?? 1}`}
