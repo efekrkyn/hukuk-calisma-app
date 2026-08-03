@@ -18,6 +18,45 @@ import { embedQuery, retrieve } from "./rag";
 import { DeepSeekProvider } from "./ai-provider";
 import { parseLlmJson } from "./llm-json";
 import type { HmgsSubject } from "./hmgs-subjects";
+import { extractLawRefs } from "./law-refs";
+import { callMcpTool, unwrapMcpResult } from "./mcp-client";
+
+const MEVZUAT_MCP_URL = "https://mevzuat.surucu.dev/mcp";
+
+/**
+ * Korpusta olmayan kanunları canlı mevzuattan çeker.
+ *
+ * Denetimde "unsupported" kalanların çoğu kötü soru değil, korpusta bulunmayan
+ * kanuna dayanan sorulardı (FSEK m.75, Avukatlık Kanunu m.58 — uygulamanın 23
+ * kanunluk PDF setinde yoklar). Hakem göremediğini onaylamıyor, haklı olarak.
+ *
+ * Bounded: en fazla MAX_LOOKUPS kanun, her biri ayrı MCP çağrısı; biri
+ * patlarsa denetimi düşürmüyoruz, o kanun eksik kalıyor.
+ */
+const MAX_LOOKUPS = 3;
+
+async function fetchExternalLaws(
+  refs: Array<{ mevzuatNo: string; madde: string | null }>,
+  keyword: string
+): Promise<string> {
+  const out: string[] = [];
+  for (const ref of refs.slice(0, MAX_LOOKUPS)) {
+    try {
+      const res = await callMcpTool(MEVZUAT_MCP_URL, "search_within_kanun", {
+        mevzuat_no: ref.mevzuatNo,
+        keyword: ref.madde ? `madde ${ref.madde}` : keyword.slice(0, 80),
+      });
+      const r = unwrapMcpResult(res);
+      const text = typeof r?.raw === "string" ? r.raw : JSON.stringify(r);
+      if (text && text.length > 40) {
+        out.push(`### ${ref.mevzuatNo} sayılı Kanun${ref.madde ? ` m.${ref.madde}` : ""}\n${text.slice(0, 4000)}`);
+      }
+    } catch (e) {
+      console.error(`mevzuat ${ref.mevzuatNo} çekilemedi:`, e);
+    }
+  }
+  return out.join("\n\n");
+}
 
 export type QuestionToCheck = {
   id: string;
@@ -36,14 +75,15 @@ export type Verdict = {
 const SYSTEM = `Sen bir hukuk sınavı sorularını DENETLEYEN kıdemli hukukçusun.
 Görevin soruları onaylamak değil, HATA BULMAK.
 
-Her soru için <KANUN> bölümündeki metne bakarak karar ver:
+Her soru için <KANUN> ve varsa <EK_MEVZUAT> bölümündeki metne bakarak karar ver.
+<EK_MEVZUAT>, korpusta bulunmayan kanunlardan canlı çekilmiş hükümlerdir; o da kaynaktır.
 - "correct"     : Kanun metni, işaretlenen doğru cevabı açıkça destekliyor.
 - "wrong"       : Kanun metni farklı bir şıkkı destekliyor VEYA açıklama
                   kendi içinde çelişiyor (bir şeyi söyleyip tersini işaretlemek).
 - "unsupported" : Kanun metninde bu soruyu karara bağlayacak hüküm yok.
 
 KURALLAR:
-1. YALNIZCA <KANUN> metnine dayan. Kendi hukuk bilginle boşluk DOLDURMA —
+1. YALNIZCA <KANUN> ve <EK_MEVZUAT> metnine dayan. Kendi hukuk bilginle boşluk DOLDURMA —
    metinde yoksa "unsupported" de. Bu kural denetimin tüm değeri.
 2. Açıklamanın kendi içinde tutarlı olup olmadığını ayrıca kontrol et.
 3. reason alanına kısa ve somut gerekçe yaz (hangi madde, neden).
@@ -86,10 +126,22 @@ export async function verifyBatch(
     )
     .join("\n\n---\n\n");
 
+  // Açıklamalarda geçen ama korpusta olmayan kanunları canlı çek.
+  const corpusNos = new Set(
+    chunks.flatMap((c) => (c.pdf.match(/-(\d{3,5})\.pdf$/) ?? []).slice(1))
+  );
+  const refs = extractLawRefs(questions.map((q) => q.explanation).join(" "))
+    .filter((r) => !corpusNos.has(r.mevzuatNo));
+  const external = refs.length
+    ? await fetchExternalLaws(refs, questions[0].question)
+    : "";
+
   const provider = new DeepSeekProvider(env.DEEPSEEK_API_KEY, "deepseek-reasoner");
   let raw = "";
   for await (const tok of provider.streamChat(
-    `<KANUN>\n${law}\n</KANUN>\n\n<SORULAR>\n${body}\n</SORULAR>`,
+    `<KANUN>\n${law}\n</KANUN>` +
+      (external ? `\n\n<EK_MEVZUAT>\n${external}\n</EK_MEVZUAT>` : "") +
+      `\n\n<SORULAR>\n${body}\n</SORULAR>`,
     SYSTEM
   )) {
     raw += tok;
