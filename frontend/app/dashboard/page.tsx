@@ -8,7 +8,7 @@ import ExamCountdown from "@/components/ExamCountdown";
 
 export default function DashboardPage() {
   return (
-    <main className="min-h-screen p-6 md:p-12 lg:p-24 bg-background">
+    <main className="min-h-dvh p-6 md:p-12 lg:p-24 bg-background">
       <div className="max-w-6xl mx-auto space-y-8">
         
         {/* Header */}

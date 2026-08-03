@@ -69,7 +69,7 @@ export default function NotlarimPage() {
   });
 
   return (
-    <main className="min-h-screen bg-background p-4 md:p-8">
+    <main className="min-h-dvh bg-background p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>

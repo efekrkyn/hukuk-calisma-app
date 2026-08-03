@@ -36,7 +36,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center p-4 bg-radial from-slate-900 via-zinc-950 to-black min-h-screen relative overflow-hidden">
+    <div className="flex-1 flex items-center justify-center p-4 bg-radial from-slate-900 via-zinc-950 to-black min-h-dvh relative overflow-hidden">
       {/* Background abstract elements */}
       <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl -z-10 animate-pulse" />
       <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-500/5 rounded-full blur-3xl -z-10 animate-pulse delay-700" />

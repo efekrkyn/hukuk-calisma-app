@@ -45,7 +45,7 @@ export default function TakvimPage() {
   const today = new Date().toISOString().split("T")[0];
 
   return (
-    <main className="min-h-screen bg-background p-4 md:p-8">
+    <main className="min-h-dvh bg-background p-4 md:p-8">
       <div className="mx-auto max-w-3xl space-y-6">
         <div>
           <Link

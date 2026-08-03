@@ -45,17 +45,17 @@ export default function ExamCountdown() {
           
           <div className="flex items-baseline gap-4">
             <div className="flex flex-col items-center">
-              <span className="text-4xl font-bold tracking-tighter tabular-nums">{finals.days}</span>
+              <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums">{finals.days}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Gün</span>
             </div>
             <span className="text-2xl text-muted-foreground/30 font-light">:</span>
             <div className="flex flex-col items-center">
-              <span className="text-4xl font-bold tracking-tighter tabular-nums">{finals.hours.toString().padStart(2, '0')}</span>
+              <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums">{finals.hours.toString().padStart(2, '0')}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Saat</span>
             </div>
             <span className="text-2xl text-muted-foreground/30 font-light">:</span>
             <div className="flex flex-col items-center">
-              <span className="text-4xl font-bold tracking-tighter tabular-nums text-muted-foreground">{finals.minutes.toString().padStart(2, '0')}</span>
+              <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums text-muted-foreground">{finals.minutes.toString().padStart(2, '0')}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Dk</span>
             </div>
           </div>
@@ -73,17 +73,17 @@ export default function ExamCountdown() {
           
           <div className="flex items-baseline gap-4">
             <div className="flex flex-col items-center">
-              <span className="text-4xl font-bold tracking-tighter tabular-nums">{hmgs.days}</span>
+              <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums">{hmgs.days}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Gün</span>
             </div>
             <span className="text-2xl text-muted-foreground/30 font-light">:</span>
             <div className="flex flex-col items-center">
-              <span className="text-4xl font-bold tracking-tighter tabular-nums">{hmgs.hours.toString().padStart(2, '0')}</span>
+              <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums">{hmgs.hours.toString().padStart(2, '0')}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Saat</span>
             </div>
             <span className="text-2xl text-muted-foreground/30 font-light">:</span>
             <div className="flex flex-col items-center">
-              <span className="text-4xl font-bold tracking-tighter tabular-nums text-muted-foreground">{hmgs.minutes.toString().padStart(2, '0')}</span>
+              <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums text-muted-foreground">{hmgs.minutes.toString().padStart(2, '0')}</span>
               <span className="text-xs text-muted-foreground uppercase tracking-widest mt-1">Dk</span>
             </div>
           </div>

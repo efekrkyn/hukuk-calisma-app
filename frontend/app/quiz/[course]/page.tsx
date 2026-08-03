@@ -15,7 +15,7 @@ export default async function QuizCoursePage({
   }
 
   return (
-    <div className="min-h-screen bg-background p-4 md:p-8">
+    <div className="min-h-dvh bg-background p-4 md:p-8">
       <div className="mx-auto max-w-3xl">
         <QuizClient courseId={courseId} questions={questions} />
       </div>

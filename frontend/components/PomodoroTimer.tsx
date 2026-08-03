@@ -130,7 +130,7 @@ export default function PomodoroTimer() {
           />
         </svg>
         <div className="absolute flex flex-col items-center">
-          <span className="text-5xl font-bold tracking-tighter tabular-nums">{formatTime(timeLeft)}</span>
+          <span className="text-3xl sm:text-5xl font-bold tracking-tighter tabular-nums">{formatTime(timeLeft)}</span>
           <span className="text-xs text-muted-foreground mt-2 font-medium tracking-widest uppercase">
             {mode === "pomodoro" ? "ODAKLAN" : "DİNLEN"}
           </span>

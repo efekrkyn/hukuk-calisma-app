@@ -247,7 +247,7 @@ export default function PlanSetupPage() {
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold">4) Çalışma Penceresi & Mola</CardTitle>
             </CardHeader>
-            <CardContent className="grid grid-cols-3 gap-4">
+            <CardContent className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
                 <label className="text-xs text-muted-foreground font-medium mb-1 block">Başlangıç</label>
                 <Input

@@ -48,7 +48,7 @@ export default function PlanPage() {
   if (!data?.plan) {
     return (
       <main className="p-6 max-w-2xl mx-auto space-y-6 text-center py-16">
-        <div className="text-6xl">🗓️</div>
+        <div className="text-4xl sm:text-6xl">🗓️</div>
         <h1 className="text-3xl font-extrabold tracking-tight">Aktif Çalışma Planı Yok</h1>
         <p className="text-sm text-muted-foreground max-w-md mx-auto">
           Sınav dönemine kadar saat-saat çalışma takviminizi oluşturmak için ilk planınızı şimdi oluşturun.

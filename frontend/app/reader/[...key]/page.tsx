@@ -25,7 +25,7 @@ export default async function ReaderPage({
   const course = key[1] ? safeDecode(key[1]) : "(unknown)";
 
   return (
-    <main className="h-screen flex flex-col overflow-hidden">
+    <main className="h-dvh flex flex-col overflow-hidden">
       <ReaderShell url={url} course={course} pdfKey={decodedKey} />
     </main>
   );

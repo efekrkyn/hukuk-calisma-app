@@ -95,7 +95,7 @@ export default function IracClient() {
       <div className="space-y-6">
         <div className="text-center py-6">
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
-            <span className="text-4xl font-black text-primary">{result.overall}</span>
+            <span className="text-3xl sm:text-4xl font-black text-primary">{result.overall}</span>
           </div>
           <h2 className="text-2xl font-bold text-gradient">Genel Puan: {result.overall}/100</h2>
           <p className="text-sm text-muted-foreground mt-2 max-w-lg mx-auto">{result.overallFeedback}</p>

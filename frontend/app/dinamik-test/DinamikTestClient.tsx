@@ -90,7 +90,7 @@ export default function DinamikTestClient() {
         <Card className="glass border-primary/20 text-center py-12">
           <CardContent className="space-y-4">
             <h2 className="text-2xl font-bold text-gradient">Test Bitti!</h2>
-            <div className="text-5xl font-black">{score} / {questions.length}</div>
+            <div className="text-3xl sm:text-5xl font-black">{score} / {questions.length}</div>
             <Button onClick={() => setQuestions(null)} className="mt-4 hover-glow">Yeni Test Üret</Button>
           </CardContent>
         </Card>
