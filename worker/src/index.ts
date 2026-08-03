@@ -12,6 +12,7 @@ import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
 import { plan } from "./routes/plan";
 import { hmgs } from "./routes/hmgs";
+import { mevzuat } from "./routes/mevzuat";
 import { caseLaw } from "./routes/case-law";
 
 type Bindings = {
@@ -99,5 +100,6 @@ app.route("/flashcards", flashcardsRouter);
 app.route("/quiz", quizRouter);
 app.route("/plan", plan);
 app.route("/hmgs", hmgs);
+app.route("/mevzuat", mevzuat);
 
 export default app;
