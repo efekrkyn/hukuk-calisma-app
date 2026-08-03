@@ -125,13 +125,23 @@ hmgs.get("/exam", async (c) => {
 
   const onlyVerified = c.req.query("verified") === "1";
 
+  // ?subject=X → tek alan çalışması. Ana sayfadaki alan kartları buraya
+  // bağlanıyor; o alanın tamamı istenen sayı kadar soruyla geliyor.
+  const onlySubject = c.req.query("subject");
+  const pool = onlySubject
+    ? HMGS_SUBJECTS.filter((s) => s.id === onlySubject)
+    : HMGS_SUBJECTS;
+  if (onlySubject && pool.length === 0) {
+    return c.json({ error: "geçersiz subject" }, 400);
+  }
+
   // Alan başına round() toplamı tutturmuyordu (20 istenince 26 dönüyordu).
-  const quota = apportion(HMGS_SUBJECTS.map((s) => s.count), size);
+  const quota = apportion(pool.map((s) => s.count), size);
 
   const picked: any[] = [];
   const shortfall: Array<{ subject: string; needed: number; have: number }> = [];
 
-  for (const [si, s] of HMGS_SUBJECTS.entries()) {
+  for (const [si, s] of pool.entries()) {
     const need = quota[si];
     if (need === 0) continue;
     // Tekrar elenince kota açık kalmasın: fazladan aday çek, kotayı dolduran
@@ -191,6 +201,8 @@ hmgs.get("/exam", async (c) => {
     shortfall,
     verified_count: picked.filter((q) => q.verified).length,
     only_verified: onlyVerified,
+    subject: onlySubject ?? null,
+    subject_name: onlySubject ? pool[0].name : null,
   });
 });
 

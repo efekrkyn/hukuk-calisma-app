@@ -2,7 +2,12 @@ import HmgsClient from "./HmgsClient";
 import Link from "next/link";
 import { ArrowLeft, BookOpenCheck } from "lucide-react";
 
-export default function HmgsPage() {
+export default async function HmgsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ subject?: string }>;
+}) {
+  const { subject } = await searchParams;
   return (
     <main className="min-h-dvh bg-background p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
@@ -20,13 +25,13 @@ export default function HmgsPage() {
               HMGS Simülasyonu
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              Tüm derslerden rastgele seçilmiş sorularla gerçek bir sınav provası yap.
+              ÖSYM\u2019nin resmî alan dağılımına göre deneme çöz, ya da tek bir alana çalış.
             </p>
           </div>
         </div>
 
         <div className="glass rounded-xl p-4 md:p-6 border-primary/20 bg-card/50">
-          <HmgsClient />
+          <HmgsClient subject={subject} />
         </div>
       </div>
     </main>

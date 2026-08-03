@@ -25,7 +25,7 @@ type Answer = {
 
 const EXAM_DURATION_SECONDS = 40 * 60; // 40 dakika (20 soru için orantılı)
 
-export default function HmgsClient() {
+export default function HmgsClient({ subject }: { subject?: string }) {
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,10 +41,14 @@ export default function HmgsClient() {
   const submittedRef = useRef(false);
   const [shortfall, setShortfall] = useState<Array<{ subject: string; needed: number; have: number }>>([]);
   const [verifiedCount, setVerifiedCount] = useState(0);
+  const [subjectName, setSubjectName] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    fetch("/api/worker/hmgs/exam?count=20")
+    // ?subject=X → tek alan çalışması (ana sayfadaki alan kartları)
+    const qs = new URLSearchParams({ count: subject ? "10" : "20" });
+    if (subject) qs.set("subject", subject);
+    fetch(`/api/worker/hmgs/exam?${qs}`)
       .then((res) => {
         if (!res.ok) throw new Error("Sınav soruları yüklenemedi.");
         return res.json();
@@ -56,13 +60,14 @@ export default function HmgsClient() {
         setExamId(data.exam_id ?? null);
         setShortfall(data.shortfall ?? []);
         setVerifiedCount(data.verified_count ?? 0);
+        setSubjectName(data.subject_name ?? null);
         setLoading(false);
       })
       .catch((err) => {
         setError(err.message);
         setLoading(false);
       });
-  }, []);
+  }, [subject]);
 
   // Sonucu bir kez kaydet (süre dolarak da bitebilir, elle de — ikisinde de çalışsın)
   useEffect(() => {
@@ -149,7 +154,9 @@ export default function HmgsClient() {
         <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
           <Clock className="w-10 h-10 text-primary" />
         </div>
-        <h2 className="text-2xl font-bold text-gradient">HMGS Zamanlı Deneme Sınavı</h2>
+        <h2 className="text-2xl font-bold text-gradient">
+          {subjectName ? `${subjectName} — Alan Çalışması` : "HMGS Zamanlı Deneme Sınavı"}
+        </h2>
         <div className="max-w-md mx-auto text-sm text-muted-foreground space-y-2">
           <p>📝 <strong>{questions.length} Soru</strong> — ÖSYM'nin resmî alan dağılımına göre</p>
           <p>

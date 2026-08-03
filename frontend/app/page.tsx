@@ -111,14 +111,15 @@ export default function Home() {
         {/* Alan kapsamı */}
         <section className="space-y-2">
           <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            Alan kapsamı
+            Alan kapsamı — tıkla, o alana çalış
           </h2>
           {!subjects && <p className="text-sm text-muted-foreground">Yükleniyor…</p>}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {subjects?.map((s) => {
               const full = s.have >= s.needed;
               return (
-                <Card key={s.id} className="glass border-border/40">
+                <Link key={s.id} href={`/hmgs?subject=${s.id}`} className="block">
+                  <Card className="glass border-border/40 hover-glow transition-transform active:scale-[0.99]">
                   <CardContent className="p-3 flex items-center justify-between gap-3">
                     <span className="text-sm leading-tight">{s.name}</span>
                     <span
@@ -132,7 +133,8 @@ export default function Home() {
                       {s.have}/{s.needed}
                     </span>
                   </CardContent>
-                </Card>
+                  </Card>
+                </Link>
               );
             })}
           </div>
