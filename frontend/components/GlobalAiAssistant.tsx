@@ -365,7 +365,7 @@ export default function GlobalAiAssistant() {
   };
 
   return (
-    <div className={`flex flex-col bg-card/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden h-[600px] w-full max-w-2xl mx-auto transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 !h-[calc(100vh-32px)] !max-w-none" : "relative"}`}>
+    <div className={`flex flex-col bg-card/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden h-[70dvh] max-h-[600px] min-h-[380px] w-full max-w-2xl mx-auto transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 !h-[calc(100dvh-32px)] !max-w-none" : "relative"}`}>
       {/* Header */}
       <div className="p-4 border-b border-white/10 bg-muted/30 flex items-center justify-between">
         <div className="flex items-center gap-3">

@@ -106,6 +106,15 @@ export default function Home() {
           </div>
         </div>
 
+        {/* AI asistan: sayfanın en altındaydı, her seferinde aşağı kaydırmak
+            gerekiyordu. Ana eylemin hemen altına alındı. */}
+        <section className="space-y-2">
+          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            AI Asistan
+          </h2>
+          <GlobalAiAssistant />
+        </section>
+
         <TodayCard />
 
         {/* Alan kapsamı */}
@@ -172,7 +181,6 @@ export default function Home() {
         </p>
       </div>
 
-      <GlobalAiAssistant />
     </main>
   );
 }
