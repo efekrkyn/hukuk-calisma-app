@@ -367,13 +367,16 @@ export default function GlobalAiAssistant() {
   return (
     <div className={`flex flex-col bg-card/80 backdrop-blur-md border border-white/20 rounded-2xl shadow-xl overflow-hidden h-[70dvh] max-h-[600px] min-h-[380px] w-full max-w-2xl mx-auto transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 !h-[calc(100dvh-32px)] !max-w-none" : "relative"}`}>
       {/* Header */}
-      <div className="p-4 border-b border-white/10 bg-muted/30 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-primary/10 text-primary shrink-0">
+      {/* Mobilde başlık ve anahtarlar üst üste biniyordu (simülatörde görüldü):
+          tek satıra sığmıyorlardı. Artık dar ekranda alt alta sarıyor ve
+          başlık taşmıyor. */}
+      <div className="p-3 sm:p-4 border-b border-white/10 bg-muted/30 flex flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+          <div className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-primary/10 text-primary shrink-0">
             <Sparkles className="w-5 h-5" />
           </div>
-          <div>
-            <h2 className="font-semibold text-lg text-gradient">İrem'in Asistanı</h2>
+          <div className="min-w-0">
+            <h2 className="font-semibold text-base sm:text-lg text-gradient truncate">İrem&apos;in Asistanı</h2>
             <p className="text-xs text-muted-foreground hidden sm:block">Akıllı Sınav Arkadaşın</p>
           </div>
         </div>

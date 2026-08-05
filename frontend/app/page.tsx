@@ -14,7 +14,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
-import GlobalAiAssistant from "@/components/GlobalAiAssistant";
 import { TodayCard } from "@/components/TodayCard";
 
 type SubjectStat = {
@@ -28,6 +27,7 @@ type SubjectStat = {
 type VerifyStats = { total: number; correct: number; unchecked: number };
 
 const TOOLS = [
+  { href: "/asistan", label: "AI Asistan", icon: "✨", desc: "Web arama + sınav modu" },
   { href: "/reader", label: "Kütüphane", icon: "📚", desc: "Kanun ve not PDF'leri" },
   { href: "/mevzuat", label: "Mevzuat Arama", icon: "⚖️", desc: "Canlı kanun + madde araması" },
   { href: "/emsal-kararlar", label: "Emsal Kararlar", icon: "🏛️", desc: "Yargıtay / Danıştay" },
@@ -105,15 +105,6 @@ export default function Home() {
             </p>
           </div>
         </div>
-
-        {/* AI asistan: sayfanın en altındaydı, her seferinde aşağı kaydırmak
-            gerekiyordu. Ana eylemin hemen altına alındı. */}
-        <section className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            AI Asistan
-          </h2>
-          <GlobalAiAssistant />
-        </section>
 
         <TodayCard />
 
