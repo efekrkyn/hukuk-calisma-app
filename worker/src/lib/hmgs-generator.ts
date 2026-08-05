@@ -64,6 +64,17 @@ export function validateQuestion(q: unknown): GeneratedQuestion | null {
   if (new Set(options).size !== 4) return null; // aynı şık iki kez olmasın
   if (explanation.length < 10) return null;
 
+  // UZUNLUK KAPISI. Bankada doğru şık %47 oranında en uzun olandı (şans %25):
+  // soru okunmadan cevap seçilebiliyordu. Prompt'a kural eklemek yetmedi,
+  // mekanik kapı gerekiyor.
+  //
+  // Eşik gerçek bankadan kalibre edildi: 1.4'te iz %47 → %28'e (şans
+  // seviyesi) düşüyor, üretimin ~%25'i eleniyor. Daha sıkı eşik (1.3) çok
+  // sağlam soruyu da atıyordu.
+  const otherLens = options.filter((_, i) => i !== correctAnswer).map((o) => o.length);
+  const meanOther = otherLens.reduce((a, b) => a + b, 0) / otherLens.length;
+  if (meanOther > 0 && options[correctAnswer].length / meanOther > 1.4) return null;
+
   const idx = Number(o.sourceIndex);
   const sourceIndex = Number.isInteger(idx) && idx >= 1 ? idx : null;
 
@@ -82,7 +93,16 @@ export async function generateQuestions(
 
   // 1) Alanın konusuyla ilgili kanun metnini çek. "kanunlar" course'u 23 kanun
   //    içerdiği için geniş alıp alanın kendi kanunlarına daraltıyoruz.
-  const query = `${subject.name}: ${subject.topic}`;
+  //
+  // ALT KONU ROTASYONU: sabit sorgu her seferinde aynı chunk'ları getiriyordu.
+  // Denetimde Borçlar'da 46 sorunun yalnızca 13 farklı kanun parçasından
+  // üretildiği görüldü — aynı maddeler dönüp duruyordu. Rastgele bir alt
+  // konu seçmek retrieval'ı kanunun farklı yerlerine taşıyor.
+  const subtopic =
+    subject.subtopics?.length
+      ? subject.subtopics[Math.floor(Math.random() * subject.subtopics.length)]
+      : "";
+  const query = `${subject.name}: ${subtopic || subject.topic}`;
   const qVec = await embedQuery(query, env.AI);
   const all = await retrieve(
     env.VECTORIZE, env.DB, query, qVec, env.AI, course, Math.max(count * 8, 40)
@@ -120,7 +140,7 @@ export async function generateQuestions(
     }
   }
 
-  const prompt = `<KAYNAK>\n${context}\n</KAYNAK>${avoid}\n\nYukarıdaki kanun metnine dayanarak "${subject.name}" alanında ${count} adet HMGS sorusu yaz.`;
+  const prompt = `<KAYNAK>\n${context}\n</KAYNAK>${avoid}\n\nYukarıdaki kanun metnine dayanarak "${subject.name}"${subtopic ? ` alanında, özellikle "${subtopic}" konusunda` : " alanında"} ${count} adet HMGS sorusu yaz.`;
 
   const provider = new DeepSeekProvider(env.DEEPSEEK_API_KEY, "deepseek-chat");
   let raw = "";

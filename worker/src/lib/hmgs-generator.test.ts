@@ -7,9 +7,17 @@
 import assert from "node:assert/strict";
 import { validateQuestion } from "./hmgs-generator.js";
 
+// Şık uzunlukları bilerek dengeli — uzunluk kapısı gerçek bir soruyu
+// elemesin diye. (İlk hâlinde "Yazılı sözleşme" diğerlerinin 1.73 katıydı
+// ve kapı testi haklı olarak reddetmişti.)
 const ok = {
   question: "TBK m.49 uyarınca haksız fiil sorumluluğunun unsurları arasında hangisi yer almaz?",
-  options: ["Hukuka aykırılık", "Kusur", "Zarar", "Yazılı sözleşme"],
+  options: [
+    "Fiilin hukuka aykırı olması",
+    "Failin kusurlu bulunması",
+    "Zararın meydana gelmesi",
+    "Sözleşmenin yazılı yapılması",
+  ],
   correctAnswer: 3,
   explanation: "TBK m.49'a göre unsurlar fiil, hukuka aykırılık, kusur, zarar ve illiyet bağıdır.",
   sourceIndex: 2,
@@ -65,5 +73,42 @@ assert.equal(validateQuestion({}), null);
 
 // correctAnswer 0 geçerli olmalı (falsy tuzağı)
 assert.ok(validateQuestion({ ...ok, correctAnswer: 0 }));
+
+// UZUNLUK KAPISI: doğru şık diğerlerinden belirgin uzunsa soru okunmadan
+// bilinebiliyor. Bankada bu oran %47'ydi (şans %25).
+assert.equal(
+  validateQuestion({
+    ...ok,
+    options: ["Evet", "Hayır", "Belki", "Ancak kanunda açıkça öngörülen hâllerde ve hâkim kararıyla mümkündür"],
+    correctAnswer: 3,
+  }),
+  null,
+  "doğru şık aşırı uzunsa reddedilmeli"
+);
+
+// dengeli şıklar geçmeli — kapı fazla sıkı olmamalı
+assert.ok(
+  validateQuestion({
+    ...ok,
+    options: [
+      "Kararın kesinleşme tarihinden itibaren",
+      "Davanın açıldığı tarihten itibaren",
+      "Tarafların ayrılık kararından itibaren",
+      "Mahkemenin karar tarihinden itibaren",
+    ],
+    correctAnswer: 1,
+  }),
+  "dengeli şıklar geçmeli"
+);
+
+// UZUN olan YANLIŞ şıksa sorun yok — kapı yalnızca doğru şıkka bakar
+assert.ok(
+  validateQuestion({
+    ...ok,
+    options: ["Kısa doğru cevap", "Bu şık çok daha uzun yazılmış ve ayrıntılı açıklama içermektedir", "Diğer şık", "Başka şık"],
+    correctAnswer: 0,
+  }),
+  "uzun olan yanlış şıksa reddedilmemeli"
+);
 
 console.log("validateQuestion: tüm kontroller geçti");
