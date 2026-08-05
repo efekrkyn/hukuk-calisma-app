@@ -148,10 +148,18 @@ export default function FloatingAssistant() {
     }
   }
 
-  /** Reasoner'ın <think> bloğunu gizle. */
+  /**
+   * Reasoner'ın <think> bloğunu gizler.
+   *
+   * Akış sırasında </think> henüz gelmemiş oluyor; sadece son kapanışa
+   * bakmak yetmiyordu ve modelin iç düşüncesi ekrana akıyordu (simülatörde
+   * görüldü). Kapanmamış <think> varsa hiçbir şey gösterme — çağıran
+   * "düşünüyor" göstergesini koyar.
+   */
   const clean = (s: string) => {
-    const i = s.lastIndexOf("</think>");
-    return (i === -1 ? s : s.slice(i + 8)).trim();
+    const close = s.lastIndexOf("</think>");
+    if (close !== -1) return s.slice(close + 8).trim();
+    return s.includes("<think>") ? "" : s.trim();
   };
 
   const bubbleLabel = ctx?.label ?? "Asistan";
@@ -244,8 +252,11 @@ export default function FloatingAssistant() {
                         : "bg-muted/60")
                     }
                   >
-                    {m.role === "ai" && !m.content && loading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                    {m.role === "ai" && !clean(m.content) ? (
+                      <span className="flex items-center gap-2 text-muted-foreground">
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <span className="text-xs">düşünüyor…</span>
+                      </span>
                     ) : (
                       clean(m.content)
                     )}
