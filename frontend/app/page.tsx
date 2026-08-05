@@ -11,6 +11,8 @@
  */
 
 import { useEffect, useState } from "react";
+import { motion } from "motion/react";
+import { spring, springSnappy } from "@/lib/motion";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
@@ -60,11 +62,14 @@ export default function Home() {
 
   return (
     <main className="min-h-dvh p-4 sm:p-6 lg:p-10 bg-background">
-      <div className="max-w-6xl mx-auto space-y-6">
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={spring}
+        className="max-w-6xl mx-auto space-y-6"
+      >
         <header className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-bold text-gradient">
-            HMGS Hazırlık
-          </h1>
+          <h1 className="type-display text-gradient">HMGS Hazırlık</h1>
           <p className="text-sm text-muted-foreground">
             Hukuk Mesleklerine Giriş Sınavı — 120 soru, 20 alan, geçme notu 70.
           </p>
@@ -78,20 +83,22 @@ export default function Home() {
 
         {/* Ana eylem */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <Link
+          <motion.a
             href="/hmgs"
-            className="sm:col-span-2 glass hover-glow rounded-2xl border border-primary/30 p-5 flex flex-col justify-between min-h-32 transition-transform active:scale-[0.99]"
+            whileTap={{ scale: 0.985 }}
+            transition={springSnappy}
+            className="sm:col-span-2 material-thick rounded-2xl p-5 flex flex-col justify-between min-h-32"
           >
             <div>
-              <p className="text-lg font-bold">🎯 Deneme Sınavı</p>
+              <p className="type-title">🎯 Deneme Sınavı</p>
               <p className="text-xs text-muted-foreground mt-1">
                 ÖSYM&apos;nin resmî alan dağılımına göre, zamanlı
               </p>
             </div>
             <p className="text-xs text-primary mt-3">Başla →</p>
-          </Link>
+          </motion.a>
 
-          <div className="glass rounded-2xl border border-border/40 p-5 space-y-2">
+          <div className="material-thin rounded-2xl p-5 space-y-2">
             <p className="text-3xl font-black tabular-nums">{total}</p>
             <p className="text-xs text-muted-foreground">soru bankada</p>
             {verify && (
@@ -118,8 +125,14 @@ export default function Home() {
             {subjects?.map((s) => {
               const full = s.have >= s.needed;
               return (
-                <Link key={s.id} href={`/hmgs?subject=${s.id}`} className="block">
-                  <Card className="glass border-border/40 hover-glow transition-transform active:scale-[0.99]">
+                <motion.a
+                  key={s.id}
+                  href={`/hmgs?subject=${s.id}`}
+                  whileTap={{ scale: 0.98 }}
+                  transition={springSnappy}
+                  className="block"
+                >
+                  <Card className="material-thin border-0">
                   <CardContent className="p-3 flex items-center justify-between gap-3">
                     <span className="text-sm leading-tight">{s.name}</span>
                     <span
@@ -134,7 +147,7 @@ export default function Home() {
                     </span>
                   </CardContent>
                   </Card>
-                </Link>
+                </motion.a>
               );
             })}
           </div>
@@ -147,12 +160,14 @@ export default function Home() {
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
             {TOOLS.map((t) => (
-              <Link
+              <motion.a
                 key={t.href}
                 href={t.href}
+                whileTap={{ scale: 0.97 }}
+                transition={springSnappy}
                 className={
                   buttonVariants({ variant: "outline" }) +
-                  " h-auto py-3 flex flex-col items-start gap-0.5 text-left"
+                  " h-auto py-3 flex flex-col items-start gap-0.5 text-left material-thin border-0"
                 }
               >
                 <span className="text-sm">
@@ -161,7 +176,7 @@ export default function Home() {
                 <span className="text-[11px] text-muted-foreground font-normal">
                   {t.desc}
                 </span>
-              </Link>
+              </motion.a>
             ))}
           </div>
         </section>
@@ -170,7 +185,7 @@ export default function Home() {
           Sorular kanun metninden yapay zekâ ile üretilir; &quot;denetlendi&quot; ikinci
           bir modelin kaynağa karşı kontrolüdür, insan onayı değildir.
         </p>
-      </div>
+      </motion.div>
 
     </main>
   );

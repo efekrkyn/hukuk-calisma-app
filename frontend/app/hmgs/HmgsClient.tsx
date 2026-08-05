@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { AnimatePresence, motion } from "motion/react";
+import { spring, springSnappy } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { useSetPageContext } from "@/lib/page-context";
 import { Card, CardContent } from "@/components/ui/card";
@@ -34,6 +36,13 @@ export default function HmgsClient({ subject }: { subject?: string }) {
   // Exam state
   const [started, setStarted] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  // Geçiş yönü — "bir yöne giden bir şey aynı yoldan dönmeli".
+  // İleri giderken sağdan, geri dönerken soldan gelir.
+  const [dir, setDir] = useState(1);
+  const goTo = useCallback((i: number) => {
+    setDir((d) => (i > currentIndex ? 1 : i < currentIndex ? -1 : d));
+    setCurrentIndex(i);
+  }, [currentIndex]);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [timeLeft, setTimeLeft] = useState(EXAM_DURATION_SECONDS);
   const [finished, setFinished] = useState(false);
@@ -311,7 +320,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
   return (
     <div className="space-y-4">
       {/* Top bar: timer + progress */}
-      <div className="flex items-center justify-between bg-muted/30 rounded-xl p-3 border border-border/20">
+      <div className="sticky top-2 z-20 rounded-2xl p-3 material-thick flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <Clock className={`w-5 h-5 ${timeLeft < 300 ? "text-red-500 animate-pulse" : "text-primary"}`} />
           <span className={`font-mono text-lg font-bold ${timeLeft < 300 ? "text-red-500" : ""}`}>
@@ -334,51 +343,91 @@ export default function HmgsClient({ subject }: { subject?: string }) {
           else cls += "bg-background ";
           if (a.flagged) cls += "ring-2 ring-yellow-500 ";
           return (
-            <button key={i} className={cls} onClick={() => setCurrentIndex(i)}>
+            <button key={i} className={cls} onClick={() => goTo(i)}>
               {a.flagged ? "⭐" : i + 1}
             </button>
           );
         })}
       </div>
 
+      {/* Soru bloğu — yay ile, YÖNÜ tutarlı: ileri sağdan, geri soldan.
+          "Bir yoldan giden aynı yoldan döner" ilkesi. */}
+      <div className="relative overflow-hidden">
+        <AnimatePresence mode="wait" initial={false} custom={dir}>
+          <motion.div
+            key={currentIndex}
+            custom={dir}
+            initial={{ opacity: 0, x: dir * 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: dir * -24 }}
+            transition={spring}
+            className="space-y-4"
+          >
       {/* Question */}
-      <div className="flex items-center justify-between text-sm text-muted-foreground">
-        <span>Soru {currentIndex + 1} / {questions.length}</span>
-        <div className="flex items-center gap-2">
-          <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs">{courseName}</span>
-          <button onClick={toggleFlag} className={`p-1 rounded ${ans.flagged ? "text-yellow-500" : "text-muted-foreground/50 hover:text-yellow-500"}`}>
-            <Star className="w-4 h-4" fill={ans.flagged ? "currentColor" : "none"} />
-          </button>
-        </div>
-      </div>
-
-      <h3 className="text-lg font-semibold leading-relaxed">{q.question}</h3>
-
-      <div className="space-y-2">
-        {q.options.map((opt, idx) => {
-          const isSelected = ans.selected === idx;
-          let cls = "w-full justify-start text-left h-auto py-3 px-4 border transition-all ";
-          if (isSelected) cls += "border-primary bg-primary/10 text-primary";
-          else cls += "hover:bg-muted";
-          return (
-            <Button key={idx} variant="outline" className={cls} onClick={() => handleSelect(idx)}>
-              <div className="flex items-start gap-3 w-full">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-background border flex items-center justify-center text-xs">
-                  {String.fromCharCode(65 + idx)}
-                </span>
-                <span className="flex-1 whitespace-normal break-words text-sm">{opt}</span>
+            <div className="flex items-center justify-between text-sm text-muted-foreground">
+              <span>Soru {currentIndex + 1} / {questions.length}</span>
+              <div className="flex items-center gap-2">
+                <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs">{courseName}</span>
+                <button onClick={toggleFlag} className={`p-1 rounded ${ans.flagged ? "text-yellow-500" : "text-muted-foreground/50 hover:text-yellow-500"}`}>
+                  <Star className="w-4 h-4" fill={ans.flagged ? "currentColor" : "none"} />
+                </button>
               </div>
-            </Button>
-          );
-        })}
+            </div>
+
+            <h3 className="type-title leading-relaxed">{q.question}</h3>
+
+            <div className="space-y-2">
+              {q.options.map((opt, idx) => {
+                const isSelected = ans.selected === idx;
+                return (
+                  // Geri bildirim BASMA anında, bırakışta değil — beklemek ölü hissettirir.
+                  // whileTap anlık, seçim durumu yayla oturuyor.
+                  <motion.button
+                    key={idx}
+                    onClick={() => handleSelect(idx)}
+                    whileTap={{ scale: 0.985 }}
+                    transition={springSnappy}
+                    animate={{
+                      backgroundColor: isSelected
+                        ? "color-mix(in oklab, var(--primary) 12%, transparent)"
+                        : "color-mix(in oklab, var(--card) 40%, transparent)",
+                    }}
+                    className={
+                      "w-full text-left rounded-xl py-3 px-4 border " +
+                      (isSelected
+                        ? "border-primary/60 text-primary"
+                        : "border-border/50 text-foreground")
+                    }
+                  >
+                    <div className="flex items-start gap-3 w-full">
+                      <motion.span
+                        animate={{ scale: isSelected ? 1.08 : 1 }}
+                        transition={springSnappy}
+                        className={
+                          "shrink-0 w-6 h-6 rounded-full border grid place-items-center text-xs font-medium " +
+                          (isSelected ? "bg-primary text-primary-foreground border-primary" : "bg-background")
+                        }
+                      >
+                        {String.fromCharCode(65 + idx)}
+                      </motion.span>
+                      <span className="flex-1 whitespace-normal break-words text-sm type-body">{opt}</span>
+                    </div>
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Navigation */}
+
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Navigation */}
       <div className="flex justify-between pt-2 pb-24 sm:pb-4">
-        <Button variant="outline" disabled={currentIndex === 0} onClick={() => setCurrentIndex((i) => i - 1)}>
+        <Button variant="outline" disabled={currentIndex === 0} onClick={() => goTo(currentIndex - 1)}>
           ← Önceki
         </Button>
-        <Button disabled={currentIndex === questions.length - 1} onClick={() => setCurrentIndex((i) => i + 1)} className="hover-glow">
+        <Button disabled={currentIndex === questions.length - 1} onClick={() => goTo(currentIndex + 1)} className="hover-glow">
           Sonraki →
         </Button>
       </div>

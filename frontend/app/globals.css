@@ -169,3 +169,106 @@
     @apply font-sans;
   }
 }
+/* ─────────────────────────────────────────────────────────────
+   APPLE-DESIGN TEMELİ
+   Malzeme, tipografi ve erişilebilirlik katmanı.
+   ───────────────────────────────────────────────────────────── */
+
+/**
+ * Malzeme katmanları.
+ *
+ * Saydamlık hiyerarşi taşır: ağır malzeme yapısal bölgeleri ayırır,
+ * hafif malzeme etkileşimli öğeleri öne çıkarır. Hafif saydam yüzeyi
+ * başka bir hafif saydam yüzeyin üstüne KOYMA — okunabilirlik çöker.
+ */
+@utility material-thin {
+  background: color-mix(in oklab, var(--card) 55%, transparent);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  /* Üst kenardaki parlaklık = malzemeye çarpan ışık */
+  border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+@utility material-thick {
+  background: color-mix(in oklab, var(--card) 82%, transparent);
+  backdrop-filter: blur(32px) saturate(160%);
+  -webkit-backdrop-filter: blur(32px) saturate(160%);
+  border: 1px solid color-mix(in oklab, var(--foreground) 10%, transparent);
+  /* Büyük yüzey daha kalın okunmalı: daha derin gölge */
+  box-shadow: 0 12px 40px -12px rgb(0 0 0 / 45%);
+}
+
+/**
+ * Kayan içerikle yüzen çubuk arasındaki geçiş.
+ * 1px çizgi yerine kısa bir maske — Apple'ın "scroll edge effect"i.
+ */
+@utility scroll-edge {
+  mask-image: linear-gradient(to bottom, transparent, black 12px);
+}
+
+/**
+ * Tipografi: harf aralığı BOYUTA ÖZGÜ olmalı.
+ * Büyük metin büyüdükçe harfler fazla açık durur → negatif tracking.
+ * Küçük metin okunurluk için hafif pozitif ister.
+ * Tek bir letter-spacing değeri bir yerde mutlaka yanlıştır.
+ */
+@utility type-display {
+  font-size: clamp(1.75rem, 5vw, 2.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+  font-optical-sizing: auto;
+}
+
+@utility type-title {
+  font-size: clamp(1.125rem, 2.5vw, 1.375rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 650;
+}
+
+@utility type-body {
+  line-height: 1.55;
+  letter-spacing: 0;
+}
+
+/** Saydam yüzey üzerindeki metin: düz gri yerine daha kontrastlı ve
+    hafif daha ağır — canlılık (vibrancy) okunurluğu korur. */
+@utility type-vibrant {
+  letter-spacing: 0.01em;
+  font-weight: 500;
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+}
+
+/**
+ * Erişilebilirlik — üç bağımsız sinyal.
+ * Azalan hareket "hareket yok" demek değil; vestibüler olmayan eşdeğeri.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.12s !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .material-thin,
+  .material-thick {
+    background: var(--card);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .material-thin,
+  .material-thick {
+    background: var(--card);
+    backdrop-filter: none;
+    border-color: var(--foreground);
+  }
+}
