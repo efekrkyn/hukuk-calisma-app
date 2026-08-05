@@ -16,7 +16,7 @@ type Props = {
   selectedText: string | null;
   course: string;
   pdfKey: string;
-  /** "law"  kanun-modu (madde açıklama presets'i + worker tarafında özel system prompt). */
+  /** "law" → kanun-modu (madde açıklama presets'i + worker tarafında özel system prompt). */
   mode?: "default" | "law";
 };
 

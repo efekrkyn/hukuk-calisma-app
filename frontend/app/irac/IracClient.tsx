@@ -169,7 +169,7 @@ export default function IracClient() {
           />
           <div className="flex justify-between">
             <Button variant="outline" disabled={currentStep === 0} onClick={() => setCurrentStep((i) => i - 1)}>
-               Önceki Adım
+              ← Önceki Adım
             </Button>
             {currentStep < STEPS.length - 1 ? (
               <Button onClick={() => setCurrentStep((i) => i + 1)} className="hover-glow">

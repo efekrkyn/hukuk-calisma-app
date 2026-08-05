@@ -79,7 +79,7 @@ export default function PlanPage() {
           </p>
         </div>
         <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500 hover:underline">
-           Ana sayfa
+          ← Ana sayfa
         </Link>
       </div>
 

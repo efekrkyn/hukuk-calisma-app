@@ -72,7 +72,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    // ?subject=X  tek alan çalışması (ana sayfadaki alan kartları)
+    // ?subject=X → tek alan çalışması (ana sayfadaki alan kartları)
     const qs = new URLSearchParams({ count: subject ? "10" : "20" });
     if (subject) qs.set("subject", subject);
     fetch(`/api/worker/hmgs/exam?${qs}`)
@@ -302,7 +302,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
                     href={`/reader/${q.source_pdf}#page=${q.source_page ?? 1}`}
                     className="inline-block text-[11px] text-primary/80 hover:text-primary underline underline-offset-2"
                   >
-                    Kaynak: {q.source_pdf.split("/").pop()} s.{q.source_page} 
+                    Kaynak: {q.source_pdf.split("/").pop()} s.{q.source_page} →
                   </a>
                 )}
               </CardContent>
@@ -427,10 +427,10 @@ export default function HmgsClient({ subject }: { subject?: string }) {
 
       <div className="flex justify-between pt-2 pb-24 sm:pb-4">
         <Button variant="outline" disabled={currentIndex === 0} onClick={() => goTo(currentIndex - 1)}>
-           Önceki
+          ← Önceki
         </Button>
         <Button disabled={currentIndex === questions.length - 1} onClick={() => goTo(currentIndex + 1)} className="hover-glow">
-          Sonraki 
+          Sonraki →
         </Button>
       </div>
     </div>

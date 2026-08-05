@@ -21,7 +21,7 @@ export default async function ReaderPage({
   // pdfUrl içeride tekrar encodeURIComponent yapıyor, bu sayede tek encoded URL.
   const decodedKey = key.map(safeDecode).join("/");
   const url = pdfUrl(decodedKey);
-  // dersler/borclar_ozel/foo.pdf  course = "borclar_ozel"
+  // dersler/borclar_ozel/foo.pdf → course = "borclar_ozel"
   const course = key[1] ? safeDecode(key[1]) : "(unknown)";
 
   return (

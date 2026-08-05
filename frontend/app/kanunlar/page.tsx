@@ -42,7 +42,7 @@ export default function KanunlarLanding() {
           href="/"
           className="text-sm text-muted-foreground hover:text-foreground whitespace-nowrap"
         >
-           Ana sayfa
+          ← Ana sayfa
         </Link>
       </div>
 

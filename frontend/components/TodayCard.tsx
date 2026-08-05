@@ -73,7 +73,7 @@ export function TodayCard() {
         <div className="flex items-center gap-3">
           <div className="text-2xl"></div>
           <div>
-            <span className="font-bold text-blue-900 dark:text-blue-100 block">İlk Çalışma Planını Oluştur </span>
+            <span className="font-bold text-blue-900 dark:text-blue-100 block">İlk Çalışma Planını Oluştur →</span>
             <p className="text-xs text-blue-700/80 dark:text-blue-300/80 mt-1 leading-normal font-medium">
               Yapay zeka sınav tarihine kadar saat-saat çalışma takvimi hazırlar.
             </p>
@@ -93,7 +93,7 @@ export function TodayCard() {
           href="/plan"
           className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
         >
-          Çalışma programının tamamı 
+          Çalışma programının tamamı →
         </Link>
       </div>
     );

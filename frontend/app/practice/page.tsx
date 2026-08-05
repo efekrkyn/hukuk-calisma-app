@@ -28,11 +28,11 @@ export default function PracticeLanding() {
           href="/"
           className="text-sm text-muted-foreground hover:text-foreground"
         >
-           Ana sayfa
+          ← Ana sayfa
         </Link>
       </div>
       <p className="text-sm text-muted-foreground">
-        Olay senaryosunu oku  kendi çözümünü yaz  AI değerlendirir, ideal
+        Olay senaryosunu oku → kendi çözümünü yaz → AI değerlendirir, ideal
         çözümü gösterir, puan verir.
       </p>
       {COURSES.map((c) => {

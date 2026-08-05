@@ -15,7 +15,7 @@ export default function IracPage() {
             IRAC Olay Çözme Sihirbazı
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Hukuki olayları 4 adımda (Issue  Rule  Analysis  Conclusion) çöz, yapay zeka her adımını puanlasın.
+            Hukuki olayları 4 adımda (Issue → Rule → Analysis → Conclusion) çöz, yapay zeka her adımını puanlasın.
           </p>
         </div>
         <IracClient />

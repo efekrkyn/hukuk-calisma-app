@@ -23,7 +23,7 @@ type Msg = { role: "user" | "ai"; content: string };
 const STORAGE_KEY = "hmgs_asistan_gecmis_v1";
 const MAX_REMEMBERED = 40;
 
-/** Yol  okunur sayfa adı; asistan "neredeyim" bilsin. */
+/** Yol → okunur sayfa adı; asistan "neredeyim" bilsin. */
 function pageName(path: string): string {
   if (path.startsWith("/hmgs")) return "HMGS deneme sınavı";
   if (path.startsWith("/reader")) return "PDF okuyucu";

@@ -48,7 +48,7 @@
 }
 
 :root {
-  --background: oklch(0.985 0.006 85);
+  --background: oklch(0.972 0.007 85);
   --foreground: oklch(0.245 0.010 65);
   --card: oklch(1 0.004 85);
   --card-foreground: oklch(0.245 0.010 65);
@@ -187,6 +187,14 @@
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   /* Üst kenardaki parlaklık = malzemeye çarpan ışık */
   border: 1px solid color-mix(in oklab, var(--foreground) 8%, transparent);
+  /* Açık temada yüzey ile zemin arasındaki fark küçük; kart kart gibi
+     okunmuyordu (simülatörde görüldü). Ayrımı gölge taşıyor — koyu temada
+     gölge işe yaramaz, orada zaten parlaklık farkı var. */
+  box-shadow: 0 1px 2px rgb(0 0 0 / 4%), 0 4px 16px -8px rgb(0 0 0 / 8%);
+}
+
+.dark .material-thin {
+  box-shadow: none;
 }
 
 @utility material-thick {

@@ -68,7 +68,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
           href="/practice"
           className="text-sm text-muted-foreground hover:text-foreground"
         >
-           Pratikler
+          ← Pratikler
         </Link>
         <span
           className={

@@ -101,7 +101,7 @@ export default function Home() {
                 ÖSYM&apos;nin resmî alan dağılımına göre, zamanlı
               </p>
             </div>
-            <p className="text-xs text-primary mt-3">Başla </p>
+            <p className="text-xs text-primary mt-3">Başla →</p>
           </motion.a>
 
           <div className="material-thin rounded-2xl p-5 space-y-2">
