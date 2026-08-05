@@ -41,6 +41,19 @@ KURALLAR:
 FORMAT:
 [{"question":"...","options":["...","...","...","..."],"correctAnswer":0,"explanation":"...","sourceIndex":1}]`;
 
+/**
+ * Doğru şıkkın, diğerlerinin ortalamasına oranı. 1'e yakın = dengeli.
+ * Üretimde kapı, denemede eleme olarak aynı ölçü kullanılıyor — iki yerde
+ * ayrı eşik tutmak kaçınılmaz olarak birbirinden kayardı.
+ */
+export const MAX_LENGTH_RATIO = 1.4;
+
+export function lengthRatio(options: string[], correctAnswer: number): number {
+  const others = options.filter((_, i) => i !== correctAnswer).map((o) => o.length);
+  const mean = others.reduce((a, b) => a + b, 0) / others.length;
+  return mean > 0 ? options[correctAnswer].length / mean : 1;
+}
+
 /** Üretilen ham nesneyi doğrular; şema bozuksa null döner. */
 export function validateQuestion(q: unknown): GeneratedQuestion | null {
   if (!q || typeof q !== "object") return null;
@@ -71,9 +84,7 @@ export function validateQuestion(q: unknown): GeneratedQuestion | null {
   // Eşik gerçek bankadan kalibre edildi: 1.4'te iz %47 → %28'e (şans
   // seviyesi) düşüyor, üretimin ~%25'i eleniyor. Daha sıkı eşik (1.3) çok
   // sağlam soruyu da atıyordu.
-  const otherLens = options.filter((_, i) => i !== correctAnswer).map((o) => o.length);
-  const meanOther = otherLens.reduce((a, b) => a + b, 0) / otherLens.length;
-  if (meanOther > 0 && options[correctAnswer].length / meanOther > 1.4) return null;
+  if (lengthRatio(options, correctAnswer) > MAX_LENGTH_RATIO) return null;
 
   const idx = Number(o.sourceIndex);
   const sourceIndex = Number.isInteger(idx) && idx >= 1 ? idx : null;

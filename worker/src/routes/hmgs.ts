@@ -5,7 +5,7 @@ import {
   HMGS_PASS_SCORE,
   getSubject,
 } from "../lib/hmgs-subjects";
-import { generateQuestions } from "../lib/hmgs-generator";
+import { generateQuestions, lengthRatio, MAX_LENGTH_RATIO } from "../lib/hmgs-generator";
 import { apportion } from "../lib/apportion";
 import { shuffleOptions } from "../lib/shuffle-options";
 import { isNearDuplicate } from "../lib/near-duplicate";
@@ -166,13 +166,19 @@ hmgs.get("/exam", async (c) => {
       // fazla içerebiliyor; aynı denemede iki kez sormanın anlamı yok.
       if (picked.some((p) => isNearDuplicate(p.question, r.question))) continue;
 
+      // Uzunluk kapısı üretimde var ama ondan ÖNCE üretilmiş 604 soru izi
+      // taşıyor (doğru şık %46 oranında en uzun olan). Silmek yerine
+      // denemeye sokmuyoruz — banka 1440'a çıktığı için bu artık karşılanabilir.
+      const opts = JSON.parse(r.options) as string[];
+      if (lengthRatio(opts, r.correct_answer as number) > MAX_LENGTH_RATIO) continue;
+
       picked.push(
         shuffleOptions({
           id: r.id,
           subject: r.subject,
           subject_name: s.name,
           question: r.question,
-          options: JSON.parse(r.options) as string[],
+          options: opts,
           correctAnswer: r.correct_answer as number,
           explanation: r.explanation,
           source_pdf: r.source_pdf,
