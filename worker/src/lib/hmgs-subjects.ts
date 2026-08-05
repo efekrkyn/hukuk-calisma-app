@@ -41,6 +41,15 @@ export type HmgsSubject = {
    * Alt konu rotasyonu kanunun farklı yerlerine dağıtıyor.
    */
   subtopics?: string[];
+  /**
+   * Kanunla düzenlenmemiş, içtihat/doktrinle gelişmiş alt konular.
+   *
+   * Türk idare hukukunda "hizmet kusuru" ve "kusursuz sorumluluk" hiçbir
+   * kanunda tanımlı değil — denetimde İdare'nin 15 sorusu bu yüzden
+   * "kaynakta yok" damgası yemişti. Sorular yanlış değildi; kanun metni
+   * onları destekleyemezdi. Bu alt konular makale korpusundan besleniyor.
+   */
+  doctrineSubtopics?: string[];
 };
 
 export const HMGS_TOTAL_QUESTIONS = 120;
@@ -49,7 +58,7 @@ export const HMGS_PASS_SCORE = 70;
 export const HMGS_SUBJECTS: HmgsSubject[] = [
   { id: "anayasa", name: "Anayasa Hukuku", percent: 5, count: 6, topic: "1982 Anayasası temel hak ve hürriyetler, yasama yürütme yargı", lawFiles: ["anayasa.pdf"], subtopics: ["temel hak ve hürriyetlerin sınırlanması", "yasama dokunulmazlığı ve TBMM", "cumhurbaşkanı yetkileri ve kararname", "yargı bağımsızlığı ve hâkimlik teminatı", "olağanüstü hâl rejimi", "seçme seçilme ve siyasi partiler", "eşitlik ilkesi ve ayrımcılık yasağı", "sosyal ve ekonomik haklar"] },
   { id: "anayasa_yargisi", name: "Anayasa Yargısı", percent: 2.5, count: 3, topic: "Anayasa Mahkemesi, iptal davası, bireysel başvuru", lawFiles: ["anayasa-mahkemesi-6216.md", "anayasa.pdf"], subtopics: ["iptal davası şartları ve süre", "bireysel başvuru kabul edilebilirlik", "itiraz yolu somut norm denetimi", "AYM kararlarının bağlayıcılığı ve yürürlük", "siyasi parti kapatma", "Yüce Divan sıfatı"] },
-  { id: "idare", name: "İdare Hukuku", percent: 5, count: 6, topic: "idari işlem, idari sözleşme, kamu görevlileri, idarenin sorumluluğu", lawFiles: ["devlet-memurlari-657.md", "kamulastirma-2942.md", "imar-3194.md", "idari-yargilama-2577.pdf"], subtopics: ["idari işlemin unsurları ve sakatlık", "kamu görevlileri disiplin ve sorumluluk", "kamulaştırma usulü ve bedel", "imar planları ve ruhsat", "idarenin kusursuz sorumluluğu", "kamu ihalesi ve idari sözleşme", "memur atama ve özlük hakları"] },
+  { id: "idare", name: "İdare Hukuku", percent: 5, count: 6, topic: "idari işlem, idari sözleşme, kamu görevlileri, idarenin sorumluluğu", lawFiles: ["devlet-memurlari-657.md", "kamulastirma-2942.md", "imar-3194.md", "idari-yargilama-2577.pdf"], subtopics: ["idari işlemin unsurları ve sakatlık", "kamu görevlileri disiplin ve sorumluluk", "kamulaştırma usulü ve bedel", "imar planları ve ruhsat", "kamu ihalesi ve idari sözleşme", "memur atama ve özlük hakları"], doctrineSubtopics: ["idarenin hizmet kusuru sorumluluğu", "idarenin kusursuz sorumluluğu ve risk ilkesi", "idari işlemin geri alınması ve kaldırılması", "kamu hizmeti ilkeleri"] },
   { id: "idari_yargilama", name: "İdari Yargılama Usulü", percent: 2.5, count: 3, topic: "İYUK 2577 iptal ve tam yargı davası, süreler, yürütmenin durdurulması", lawFiles: ["idari-yargilama-2577.pdf"], subtopics: ["iptal davası ve menfaat", "tam yargı davası ve zarar", "dava açma süreleri ve durması", "yürütmenin durdurulması şartları", "görev ve yetki kuralları", "istinaf ve temyiz", "ilk inceleme ve dilekçe reddi"] },
   { id: "medeni", name: "Medeni Hukuk", percent: 12.5, count: 15, topic: "TMK kişiler, aile, miras, eşya hukuku", lawFiles: ["medeni-kanun-4721.pdf"], subtopics: ["kişiliğin korunması ve saldırı", "hısımlık ve velayet", "evlenme boşanma ve mal rejimi", "yasal mirasçılık ve saklı pay", "vasiyetname ve miras sözleşmesi", "zilyetlik ve tapu sicili", "mülkiyet ve sınırlı ayni haklar", "vesayet ve kısıtlılık"] },
   { id: "borclar", name: "Borçlar Hukuku", percent: 10, count: 12, topic: "TBK genel hükümler, sözleşme, haksız fiil, sebepsiz zenginleşme", lawFiles: ["borclar-kanunu-6098.pdf"], subtopics: ["sözleşmenin kurulması ve irade sakatlıkları", "haksız fiil ve kusursuz sorumluluk", "sebepsiz zenginleşme", "borçlunun temerrüdü ve sonuçları", "müteselsil borçluluk", "alacağın devri ve borcun üstlenilmesi", "zamanaşımı ve kesilmesi", "kira sözleşmesi ve tahliye", "eser ve vekâlet sözleşmesi", "satış sözleşmesi ve ayıp"] },

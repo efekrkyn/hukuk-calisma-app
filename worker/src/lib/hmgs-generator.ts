@@ -99,8 +99,7 @@ export async function generateQuestions(
 ): Promise<GeneratedQuestion[]> {
   // Doktrin konularında kanun yok; makale korpusundan besleniyorlar.
   // Ne kanun ne makale kaynağı varsa üretme — dayanaksız soru uydurma olur.
-  const course = subject.ragCourse ?? "kanunlar";
-  if (subject.lawFiles.length === 0 && !subject.ragCourse) return [];
+  if (subject.lawFiles.length === 0 && !subject.ragCourse && !subject.doctrineSubtopics?.length) return [];
 
   // 1) Alanın konusuyla ilgili kanun metnini çek. "kanunlar" course'u 23 kanun
   //    içerdiği için geniş alıp alanın kendi kanunlarına daraltıyoruz.
@@ -109,10 +108,17 @@ export async function generateQuestions(
   // Denetimde Borçlar'da 46 sorunun yalnızca 13 farklı kanun parçasından
   // üretildiği görüldü — aynı maddeler dönüp duruyordu. Rastgele bir alt
   // konu seçmek retrieval'ı kanunun farklı yerlerine taşıyor.
-  const subtopic =
-    subject.subtopics?.length
-      ? subject.subtopics[Math.floor(Math.random() * subject.subtopics.length)]
-      : "";
+  // Kanun + doktrin alt konuları tek havuzda; hangisinin seçildiğine göre
+  // retrieval farklı korpusa gidiyor. Doktrin konusu kanunda yok, kanun
+  // korpusunda aramak "kaynakta yok" üretiyordu.
+  const lawSubs = subject.subtopics ?? [];
+  const docSubs = subject.doctrineSubtopics ?? [];
+  const pool = [...lawSubs, ...docSubs];
+  const subtopic = pool.length
+    ? pool[Math.floor(Math.random() * pool.length)]
+    : "";
+  const isDoctrine = docSubs.includes(subtopic);
+  const course = isDoctrine ? "hmgs_ozet" : (subject.ragCourse ?? "kanunlar");
   const query = `${subject.name}: ${subtopic || subject.topic}`;
   const qVec = await embedQuery(query, env.AI);
   const all = await retrieve(
@@ -121,7 +127,7 @@ export async function generateQuestions(
 
   // lawFiles boşsa (doktrin konusu) course filtresi zaten daraltıyor,
   // dosya bazlı çapa uygulanmaz.
-  const chunks = subject.lawFiles.length
+  const chunks = subject.lawFiles.length && !isDoctrine
     ? all.filter((c) => subject.lawFiles.some((f) => c.pdf.includes(f)))
     : all;
 
