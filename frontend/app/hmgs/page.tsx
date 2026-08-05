@@ -25,7 +25,7 @@ export default async function HmgsPage({
               HMGS Simülasyonu
             </h1>
             <p className="text-sm text-muted-foreground mt-1">
-              ÖSYM\u2019nin resmî alan dağılımına göre deneme çöz, ya da tek bir alana çalış.
+              ÖSYM'nin resmî alan dağılımına göre deneme çöz, ya da tek bir alana çalış.
             </p>
           </div>
         </div>

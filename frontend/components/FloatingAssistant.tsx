@@ -66,6 +66,24 @@ export default function FloatingAssistant() {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [msgs, open]);
 
+  // Sabit baloncuk kaydırılan içerikte hep bir şeyin üstüne denk geliyor —
+  // simülatörde şıkların üzerinde durduğu görüldü, yanlış dokunma riski var.
+  // Kaydırırken gizle, durunca geri getir.
+  const [scrolling, setScrolling] = useState(false);
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const onScroll = () => {
+      setScrolling(true);
+      clearTimeout(timer);
+      timer = setTimeout(() => setScrolling(false), 500);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      clearTimeout(timer);
+    };
+  }, []);
+
   async function send(text: string) {
     const q = text.trim();
     if (!q || loading) return;
@@ -148,12 +166,21 @@ export default function FloatingAssistant() {
       {!open && (
         <button
           onClick={() => setOpen(true)}
-          aria-label="AI asistanı aç"
-          className="fixed right-4 z-40 flex items-center gap-2 rounded-full bg-primary text-primary-foreground shadow-2xl px-4 py-3 text-sm font-medium active:scale-95 transition-transform"
+          aria-label={`AI asistanı aç${ctx?.label ? ` — ${ctx.label}` : ""}`}
+          title={bubbleLabel}
+          className={
+            "fixed right-4 z-40 grid place-items-center h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-2xl active:scale-95 transition-all duration-200 " +
+            (scrolling ? "opacity-0 translate-y-4 pointer-events-none" : "opacity-100")
+          }
           style={{ bottom: "calc(1rem + env(safe-area-inset-bottom))" }}
         >
-          <Sparkles className="w-4 h-4 shrink-0" />
-          <span className="max-w-[9rem] truncate">{bubbleLabel}</span>
+          <Sparkles className="w-6 h-6" />
+          {/* Bağlam rozeti — hangi soruda olduğumuz baloncukta görünsün */}
+          {ctx?.label && (
+            <span className="absolute -top-1 -left-1 max-w-[5rem] truncate rounded-full bg-background text-foreground border border-primary/40 px-1.5 py-0.5 text-[10px] font-semibold shadow">
+              {ctx.label}
+            </span>
+          )}
         </button>
       )}
 
