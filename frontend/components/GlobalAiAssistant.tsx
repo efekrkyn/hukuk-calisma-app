@@ -388,7 +388,7 @@ export default function GlobalAiAssistant() {
                 <Globe className="w-4 h-4 shrink-0" aria-hidden />Web Arama</span>
             <button 
               onClick={() => setIsWebSearch(!isWebSearch)}
-              className={`w-10 h-5 rounded-full relative transition-colors ${isWebSearch ? "bg-blue-500" : "bg-muted-foreground/30"}`}
+              className={`w-10 h-5 rounded-full relative transition-colors ${isWebSearch ? "bg-primary" : "bg-muted-foreground/30"}`}
             >
               <div className={`w-3 h-3 bg-white rounded-full absolute top-1 transition-transform ${isWebSearch ? "right-1" : "left-1"}`} />
             </button>

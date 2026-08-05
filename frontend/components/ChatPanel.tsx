@@ -283,7 +283,7 @@ export function ChatPanel({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs h-7 gap-1 bg-blue-500/5 text-blue-600 dark:text-blue-400 hover:bg-blue-500/15 border-blue-500/15 rounded-full"
+                  className="text-xs h-7 gap-1 bg-primary/5 text-primary hover:bg-primary/15 border-primary/20 rounded-full"
                   onClick={() =>
                     send(
                       "Bu kanun maddesini SADE ve DETAYLI açıkla. Önce yalın bir özet, sonra her cümleyi ve teknik kavramı yorumla. Maddenin hangi durumlarda uygulanacağını pratik örneklerle anlat."
@@ -325,7 +325,7 @@ export function ChatPanel({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs h-7 gap-1 bg-purple-500/5 text-purple-600 dark:text-purple-400 hover:bg-purple-500/15 border-purple-500/15 rounded-full"
+                  className="text-xs h-7 gap-1 bg-purple-500/5 text-primary dark:text-primary hover:bg-purple-500/15 border-purple-500/15 rounded-full"
                   onClick={() =>
                     send(
                       "Bu maddeyle ilişkili veya bağlantılı diğer kanun maddelerini (aynı kanun veya başka kanunlar — TBK, TMK, TCK, HMK, CMK, TTK, İK, İYUK, vb.) bul. Her birinin nasıl bağlantılı olduğunu kısaca açıkla."
@@ -339,7 +339,7 @@ export function ChatPanel({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs h-7 gap-1 bg-indigo-500/5 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/15 border-indigo-500/15 rounded-full"
+                  className="text-xs h-7 gap-1 bg-primary/10 text-primary dark:text-primary hover:bg-primary/10 border-indigo-500/15 rounded-full"
                   onClick={() =>
                     send(
                       "Bu kanun maddesinin uygulanmasındaki istisnalar ve sınırlamalar nelerdir?"
@@ -375,7 +375,7 @@ export function ChatPanel({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs h-7 gap-1 bg-blue-500/5 text-blue-600 dark:text-blue-400 hover:bg-blue-500/15 border-blue-500/15 rounded-full"
+                  className="text-xs h-7 gap-1 bg-primary/5 text-primary hover:bg-primary/15 border-primary/20 rounded-full"
                   onClick={() => send("Bu metni sade Türkçe ile açıkla.")}
                   disabled={loading}
                 >
@@ -405,7 +405,7 @@ export function ChatPanel({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="text-xs h-7 gap-1 bg-purple-500/5 text-purple-600 dark:text-purple-400 hover:bg-purple-500/15 border-purple-500/15 rounded-full"
+                  className="text-xs h-7 gap-1 bg-purple-500/5 text-primary dark:text-primary hover:bg-purple-500/15 border-purple-500/15 rounded-full"
                   onClick={() => send("Bu metne dayalı olarak çözmem için bana bir pratik olay sor (cevabımı sonra ben yazacağım).")}
                   disabled={loading}
                 >
@@ -439,7 +439,7 @@ export function ChatPanel({
             <Button
               size="sm"
               variant="outline"
-              className="text-xs h-7 gap-1 bg-purple-500/5 text-purple-600 dark:text-purple-400 hover:bg-purple-500/15 border-purple-500/15 rounded-full"
+              className="text-xs h-7 gap-1 bg-purple-500/5 text-primary dark:text-primary hover:bg-purple-500/15 border-purple-500/15 rounded-full"
               onClick={() => send(`Bu dersin (${course}) en temel 5 kavramını ve kısa hukuki tanımlarını benim için listeler misin?`)}
               disabled={loading}
             >
@@ -490,7 +490,7 @@ export function ChatPanel({
             <span className="text-[11px] font-medium text-muted-foreground">
                 <Globe className="w-4 h-4 shrink-0" aria-hidden />Web Arama</span>
             <button 
-              className={`w-7 h-4 rounded-full relative transition-colors ${isWebSearch ? "bg-blue-500" : "bg-muted-foreground/30"}`}
+              className={`w-7 h-4 rounded-full relative transition-colors ${isWebSearch ? "bg-primary" : "bg-muted-foreground/30"}`}
             >
               <div className={`w-2.5 h-2.5 bg-white rounded-full absolute top-[3px] transition-transform ${isWebSearch ? "right-[3px]" : "left-[3px]"}`} />
             </button>

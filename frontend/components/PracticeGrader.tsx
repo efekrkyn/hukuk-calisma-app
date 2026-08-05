@@ -180,7 +180,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
 
               {result.law_refs && result.law_refs.length > 0 && (
                 <div>
-                  <h3 className="font-semibold text-blue-600 mb-1">
+                  <h3 className="font-semibold text-primary mb-1">
                 <ScrollText className="w-4 h-4 shrink-0" aria-hidden />AI'ın referans aldığı kanun pasajları
                   </h3>
                   <div className="flex flex-wrap gap-1">
@@ -194,7 +194,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
                         <Link
                           key={i}
                           href={`/reader/${ref.pdf}#page=${ref.page_start}`}
-                          className="text-xs inline-flex items-center px-2 py-0.5 rounded bg-blue-500/10 hover:bg-blue-500/20 border border-blue-500/30"
+                          className="text-xs inline-flex items-center px-2 py-0.5 rounded bg-primary/10 hover:bg-primary/20 border border-primary/30"
                           title={`${name} s.${ref.page_start}-${ref.page_end}`}
                         >
                           {name} s.{ref.page_start}

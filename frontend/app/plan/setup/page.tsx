@@ -129,14 +129,14 @@ export default function PlanSetupPage() {
     <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
                 <Calendar className="w-4 h-4 shrink-0" aria-hidden />Çalışma Programı Üreticisi
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Yapay zeka ile kişiselleştirilmiş, saat-saat çalışma takviminizi oluşturun.
           </p>
         </div>
-        <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500 hover:underline">
+        <Link href="/" className="text-sm font-medium text-primary hover:text-primary/80 hover:underline">
           ← Ana sayfa
         </Link>
       </div>
@@ -170,13 +170,13 @@ export default function PlanSetupPage() {
               {courses.map((c, i) => (
                 <div key={i} className="p-3 border rounded-lg bg-neutral-50 dark:bg-neutral-900/50 space-y-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-blue-600">Ders {i + 1}</span>
+                    <span className="text-xs font-bold text-primary">Ders {i + 1}</span>
                   </div>
                   <div>
                     <select
                       value={c.selectedId}
                       onChange={(e) => updateCourse(i, "selectedId", e.target.value)}
-                      className="w-full text-sm border p-2 rounded-md bg-white dark:bg-black focus:ring-2 focus:ring-blue-500"
+                      className="w-full text-sm border p-2 rounded-md bg-white dark:bg-black focus:ring-2 focus:ring-primary"
                     >
                       <option value="">-- Ders Seçiniz --</option>
                       {COURSES.filter(x => x.id !== "kanunlar" && x.id !== "kisisel").map((course) => (
@@ -288,7 +288,7 @@ export default function PlanSetupPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Örnek: Salı akşamları 18:00 sonrası ders çalışamam, Cuma günleri stajım var vb."
-                className="w-full min-h-[90px] p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full min-h-[90px] p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </CardContent>
           </Card>

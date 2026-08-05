@@ -63,10 +63,10 @@ export default function ExamCountdown() {
       </Card>
 
       {/* HMGS */}
-      <Card className="border-blue-500/20 shadow-sm relative overflow-hidden group">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent z-0" />
+      <Card className="border-primary/20 shadow-sm relative overflow-hidden group">
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent z-0" />
         <CardContent className="p-6 relative z-10">
-          <div className="flex items-center gap-2 text-blue-500 font-semibold mb-4">
+          <div className="flex items-center gap-2 text-primary font-semibold mb-4">
             <Calendar className="w-5 h-5" />
             HMGS (27 Eylül 2026)
           </div>

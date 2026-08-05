@@ -23,7 +23,7 @@ export default function PlanPage() {
   if (loading) {
     return (
       <main className="p-6 text-sm text-muted-foreground flex flex-col items-center justify-center min-h-[300px] space-y-3">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         <p className="font-medium">Plan yükleniyor...</p>
       </main>
     );
@@ -71,14 +71,14 @@ export default function PlanPage() {
     <main className="p-4 md:p-6 max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
                 <Calendar className="w-4 h-4 shrink-0" aria-hidden />Çalışma Planım
           </h1>
           <p className="text-xs text-muted-foreground mt-1">
             Yapay zeka tarafından üretilen çalışma programınız.
           </p>
         </div>
-        <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500 hover:underline">
+        <Link href="/" className="text-sm font-medium text-primary hover:text-primary/80 hover:underline">
           ← Ana sayfa
         </Link>
       </div>
@@ -113,7 +113,7 @@ export default function PlanPage() {
             onClick={() => {
               window.location.href = "/plan/setup";
             }}
-            className="font-semibold text-blue-600 hover:text-blue-500"
+            className="font-semibold text-primary hover:text-primary/80"
           >
             Yenile
           </Button>

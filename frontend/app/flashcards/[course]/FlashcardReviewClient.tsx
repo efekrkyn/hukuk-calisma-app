@@ -198,7 +198,7 @@ export default function FlashcardReviewClient({
           <Button
             variant="outline"
             size="lg"
-            className="flex flex-col h-16 border-blue-500/50 hover:bg-blue-500/10 hover:text-blue-500"
+            className="flex flex-col h-16 border-primary/50 hover:bg-primary/10 hover:text-primary"
             onClick={() => handleReview(3)}
             disabled={submitting}
           >

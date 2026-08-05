@@ -68,13 +68,13 @@ export function TodayCard() {
     return (
       <Link
         href="/plan/setup"
-        className="block rounded-xl border border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 p-5 text-sm transition-all duration-200 shadow-sm"
+        className="block rounded-xl border border-primary/30 bg-primary/5 hover:bg-primary/10 p-5 text-sm transition-all duration-200 shadow-sm"
       >
         <div className="flex items-center gap-3">
           <div className="text-2xl"></div>
           <div>
-            <span className="font-bold text-blue-900 dark:text-blue-100 block">İlk Çalışma Planını Oluştur →</span>
-            <p className="text-xs text-blue-700/80 dark:text-blue-300/80 mt-1 leading-normal font-medium">
+            <span className="font-bold text-foreground block">İlk Çalışma Planını Oluştur →</span>
+            <p className="text-xs text-muted-foreground mt-1 leading-normal font-medium">
               Yapay zeka sınav tarihine kadar saat-saat çalışma takvimi hazırlar.
             </p>
           </div>
@@ -91,7 +91,7 @@ export function TodayCard() {
         </p>
         <Link
           href="/plan"
-          className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
+          className="inline-flex items-center text-xs font-semibold text-primary hover:text-primary/80 hover:underline"
         >
           Çalışma programının tamamı →
         </Link>
@@ -115,7 +115,7 @@ export function TodayCard() {
           </span>
         </div>
         <div className="text-right">
-          <span className="text-xs font-bold text-blue-600 bg-blue-500/10 px-2 py-0.5 rounded-full">
+          <span className="text-xs font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
              {done}/{total} (%{progress})
           </span>
         </div>
@@ -133,7 +133,7 @@ export function TodayCard() {
       <div className="pt-1">
         <Link
           href="/plan"
-          className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
+          className="inline-flex items-center text-xs font-semibold text-primary hover:text-primary/80 hover:underline"
         >
           Çalışma programının tamamı 
         </Link>

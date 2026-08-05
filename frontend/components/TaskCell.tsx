@@ -12,8 +12,8 @@ type Props = {
 };
 
 const TYPE_BADGES: Record<Task["task_type"], { label: string; cls: string }> = {
-  read: { label: "Okuma", cls: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
-  practice: { label: "Pratik", cls: "bg-purple-500/10 text-purple-600 dark:text-purple-400" },
+  read: { label: "Okuma", cls: "bg-primary/10 text-primary" },
+  practice: { label: "Pratik", cls: "bg-purple-500/10 text-primary dark:text-primary" },
   review: { label: "Tekrar", cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
 };
 
@@ -58,7 +58,7 @@ export function TaskCell({ task, completed, onToggle }: Props) {
           checked={completed}
           onChange={handleToggle}
           disabled={pending}
-          className="mt-0.5 h-4 w-4 rounded border-neutral-300 dark:border-neutral-700 text-blue-600 focus:ring-blue-500 cursor-pointer disabled:opacity-50"
+          className="mt-0.5 h-4 w-4 rounded border-neutral-300 dark:border-neutral-700 text-primary focus:ring-primary cursor-pointer disabled:opacity-50"
         />
         <div className="flex-1 min-w-0 space-y-1">
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-semibold">
@@ -73,7 +73,7 @@ export function TaskCell({ task, completed, onToggle }: Props) {
           {targetHref ? (
             <Link
               href={targetHref}
-              className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline text-[10px] font-medium pt-1"
+              className="inline-flex items-center gap-1 text-primary hover:underline text-[10px] font-medium pt-1"
             >
                {task.target_ref}
             </Link>

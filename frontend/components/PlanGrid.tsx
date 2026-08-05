@@ -95,12 +95,12 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
               onClick={() => setActiveWeek(i)}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex flex-col items-center gap-1 min-w-[90px] border ${
                 i === activeWeek
-                  ? "bg-blue-600 text-white border-blue-600 shadow-sm"
+                  ? "bg-primary text-white border-primary shadow-sm"
                   : "bg-card text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 border-neutral-200 dark:border-neutral-800"
               }`}
             >
               <span>Hafta {w.week_index}</span>
-              <span className={`text-[10px] ${i === activeWeek ? "text-blue-100" : "text-muted-foreground"}`}>
+              <span className={`text-[10px] ${i === activeWeek ? "text-primary-foreground" : "text-muted-foreground"}`}>
                 <Zap className="w-4 h-4 shrink-0" aria-hidden />%{progress}
               </span>
             </button>
@@ -112,7 +112,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
       <div className="flex items-center justify-between text-xs text-muted-foreground px-1 bg-neutral-50 dark:bg-neutral-800/40 p-2 rounded-lg">
         <span className="font-semibold">
                 <Calendar className="w-4 h-4 shrink-0" aria-hidden />Tarih Aralığı: {week.start_date}  {week.end_date}</span>
-        <span className="font-medium text-blue-600">
+        <span className="font-medium text-primary">
           Toplam Görev: {week.days.reduce((acc, curr) => acc + curr.tasks.length, 0)}
         </span>
       </div>
@@ -127,12 +127,12 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
               key={day.date}
               className={`border rounded-xl p-3 flex flex-col space-y-2 transition-all duration-200 ${
                 isToday
-                  ? "border-blue-500 bg-blue-500/5 dark:bg-blue-500/10 ring-2 ring-blue-500/20"
+                  ? "border-primary bg-primary/5 dark:bg-primary/10 ring-2 ring-primary/20"
                   : "border-neutral-200 dark:border-neutral-800 bg-card"
               }`}
             >
               <div className="flex justify-between items-center border-b pb-1.5">
-                <span className={`text-xs font-bold ${isToday ? "text-blue-600 dark:text-blue-400" : ""}`}>
+                <span className={`text-xs font-bold ${isToday ? "text-primary" : ""}`}>
                   {day.weekday}
                 </span>
                 <span className="text-[10px] text-muted-foreground font-medium">
@@ -163,7 +163,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
                   setAddCourse("");
                   setShowAddModal(true);
                 }}
-                className="mt-2 w-full py-1.5 text-[10px] font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/20 dark:text-blue-400 rounded-md transition-colors"
+                className="mt-2 w-full py-1.5 text-[10px] font-bold text-primary bg-primary/10 hover:bg-primary/20 rounded-md transition-colors"
               >
                 + Ders Ekle
               </button>
@@ -218,7 +218,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
               <button 
                 onClick={handleAddTask}
                 disabled={isSubmitting}
-                className="px-3 py-1.5 text-sm font-semibold rounded-md bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                className="px-3 py-1.5 text-sm font-semibold rounded-md bg-primary text-white hover:bg-primary disabled:opacity-50"
               >
                 {isSubmitting ? "Ekleniyor..." : "Ekle"}
               </button>
