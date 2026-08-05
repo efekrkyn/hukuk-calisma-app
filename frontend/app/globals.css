@@ -8,7 +8,7 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-inter);
-  --font-heading: var(--font-outfit);
+  --font-heading: var(--font-serif-display);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -54,18 +54,18 @@
   --card-foreground: oklch(0.245 0.010 65);
   --popover: oklch(1 0.004 85);
   --popover-foreground: oklch(0.245 0.010 65);
-  --primary: oklch(0.52 0.105 195);
-  --primary-foreground: oklch(0.99 0.004 85);
+  --primary: oklch(0.38 0.098 258);
+  --primary-foreground: oklch(0.985 0.006 85);
   --secondary: oklch(0.955 0.008 85);
   --secondary-foreground: oklch(0.245 0.010 65);
   --muted: oklch(0.955 0.008 85);
   --muted-foreground: oklch(0.48 0.012 65);
-  --accent: oklch(0.93 0.020 195);
+  --accent: oklch(0.93 0.022 258);
   --accent-foreground: oklch(0.245 0.010 65);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.30 0.015 65 / 13%);
   --input: oklch(0.30 0.015 65 / 16%);
-  --ring: oklch(0.52 0.105 195 / 45%);
+  --ring: oklch(0.38 0.098 258 / 40%);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -96,8 +96,8 @@
   --popover-foreground: oklch(0.92 0.004 75);
   
   /* Primary: Neon Violet / Indigo */
-  --primary: oklch(0.70 0.105 195);
-  --primary-foreground: oklch(0.16 0.01 200);
+  --primary: oklch(0.66 0.105 258);
+  --primary-foreground: oklch(0.15 0.02 258);
   
   /* Secondary: Soft Blue-Gray */
   --secondary: oklch(0.26 0.010 65);
@@ -108,7 +108,7 @@
   --muted-foreground: oklch(0.675 0.010 70);
   
   /* Accent */
-  --accent: oklch(0.28 0.020 195);
+  --accent: oklch(0.28 0.030 258);
   --accent-foreground: oklch(0.92 0.004 75);
   
   /* Destructive */
@@ -117,7 +117,7 @@
   /* Borders and Inputs */
   --border: oklch(0.85 0.015 70 / 13%);
   --input: oklch(0.85 0.015 70 / 15%);
-  --ring: oklch(0.70 0.105 195 / 55%);
+  --ring: oklch(0.66 0.105 258 / 55%);
   
   --chart-1: oklch(0.65 0.25 290);
   --chart-2: oklch(0.70 0.20 240);
@@ -147,14 +147,14 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, oklch(0.74 0.10 195), oklch(0.80 0.08 165));
+  background-image: linear-gradient(to right, oklch(0.62 0.11 258), oklch(0.72 0.08 232));
 }
 
 @utility hover-glow {
   transition: all 0.3s ease;
   &:hover {
-    box-shadow: 0 0 20px oklch(0.70 0.105 195 / 18%);
-    border-color: oklch(0.70 0.105 195 / 45%);
+    box-shadow: 0 0 20px oklch(0.66 0.105 258 / 16%);
+    border-color: oklch(0.66 0.105 258 / 42%);
   }
 }
 
@@ -288,4 +288,62 @@
   html.theme-ready body {
     transition: background-color 280ms ease, color 280ms ease;
   }
+}
+
+
+/* ─────────────────────────────────────────────────────────────
+   OXFORD — akademik karakter, ölçülü.
+   Arma yok, sahte parşömen yok. Karakter seriften, kıl payı
+   çizgilerden ve nefes alan satır aralığından geliyor.
+   ───────────────────────────────────────────────────────────── */
+
+/** Başlıklar serif. Gövde sans kalıyor — ekranda okunurluk için. */
+@utility type-display {
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-size: clamp(1.9rem, 5.2vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.018em;   /* serif, sans kadar sıkı istemez */
+  font-weight: 500;           /* serifte 700 kaba durur */
+  font-optical-sizing: auto;
+}
+
+@utility type-title {
+  font-family: var(--font-serif-display), Georgia, serif;
+  font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+  line-height: 1.25;
+  letter-spacing: -0.008em;
+  font-weight: 500;
+  font-optical-sizing: auto;
+}
+
+/** Gövde: akademik metin daha çok nefes ister. */
+@utility type-body {
+  line-height: 1.62;
+  letter-spacing: 0;
+}
+
+/**
+ * Bölüm etiketleri — küçük kapital hissi.
+ * Büyük harf + geniş aralık akademik başlık geleneği; kalın punto
+ * yerine aralıkla ayrışıyor, o yüzden bağırmıyor.
+ */
+@utility label-academic {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  color: color-mix(in oklab, var(--foreground) 55%, transparent);
+}
+
+/** Kıl payı çizgi — kalın kenarlık yerine. Akademik dizgide ayrım
+    çizgiyle yapılır, kutuyla değil. */
+@utility rule-hairline {
+  border: 0;
+  border-top: 1px solid color-mix(in oklab, var(--foreground) 12%, transparent);
+}
+
+/** Sayılar hizalı olsun — sayaç ve istatistikler zıplamasın. */
+@utility nums-tabular {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
 }

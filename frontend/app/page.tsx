@@ -105,7 +105,7 @@ export default function Home() {
           </motion.a>
 
           <div className="material-thin rounded-2xl p-5 space-y-2">
-            <p className="text-3xl font-black tabular-nums">{total}</p>
+            <p className="text-3xl font-black nums-tabular">{total}</p>
             <p className="text-xs text-muted-foreground">soru bankada</p>
             {verify && (
               <p className="text-xs">
@@ -123,7 +123,7 @@ export default function Home() {
 
         {/* Alan kapsamı */}
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <h2 className="label-academic">
             Alan kapsamı — tıkla, o alana çalış
           </h2>
           {!subjects && <p className="text-sm text-muted-foreground">Yükleniyor…</p>}
@@ -161,7 +161,7 @@ export default function Home() {
 
         {/* Araçlar */}
         <section className="space-y-2">
-          <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <h2 className="label-academic">
             Çalışma araçları
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">

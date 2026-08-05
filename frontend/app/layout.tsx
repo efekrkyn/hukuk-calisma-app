@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Newsreader } from "next/font/google";
 import "./globals.css";
 import FloatingAssistant from "@/components/FloatingAssistant";
 import { PageContextProvider } from "@/lib/page-context";
@@ -8,9 +8,22 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
-  subsets: ["latin"],
+/**
+ * Başlık serifi — Oxford karakteri buradan geliyor.
+ *
+ * apple-design "sistem fontunu geç, ancak sebebin varsa" diyor; akademik
+ * karakter geçerli bir sebep. Ama YALNIZCA başlıklarda: gövde metni
+ * ekranda okunurluk için sans kalıyor.
+ *
+ * Newsreader ekran için tasarlanmış editoryal bir serif ve optik boyut
+ * (optical sizing) destekliyor — harf biçimi boyuta göre değişiyor,
+ * ki tipografi bölümünün istediği tam bu.
+ */
+const newsreader = Newsreader({
+  variable: "--font-serif-display",
+  subsets: ["latin", "latin-ext"],
+  style: ["normal", "italic"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -39,7 +52,7 @@ export default function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
+      className={`${inter.variable} ${newsreader.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
