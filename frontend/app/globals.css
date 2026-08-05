@@ -96,8 +96,8 @@
   --popover-foreground: oklch(0.92 0.004 75);
   
   /* Primary: Neon Violet / Indigo */
-  --primary: oklch(0.765 0.098 82);
-  --primary-foreground: oklch(0.18 0.02 82);
+  --primary: oklch(0.835 0.145 92);
+  --primary-foreground: oklch(0.20 0.03 92);
   
   /* Secondary: Soft Blue-Gray */
   --secondary: oklch(0.26 0.010 65);
@@ -108,7 +108,7 @@
   --muted-foreground: oklch(0.675 0.010 70);
   
   /* Accent */
-  --accent: oklch(0.285 0.028 82);
+  --accent: oklch(0.30 0.040 92);
   --accent-foreground: oklch(0.92 0.004 75);
   
   /* Destructive */
@@ -117,7 +117,7 @@
   /* Borders and Inputs */
   --border: oklch(0.85 0.015 70 / 13%);
   --input: oklch(0.85 0.015 70 / 15%);
-  --ring: oklch(0.765 0.098 82 / 52%);
+  --ring: oklch(0.835 0.145 92 / 55%);
   
   --chart-1: oklch(0.65 0.25 290);
   --chart-2: oklch(0.70 0.20 240);
@@ -356,12 +356,12 @@
 .dark .text-gradient {
   background-image: linear-gradient(
     to right,
-    oklch(0.80 0.098 82),
-    oklch(0.86 0.070 68)
+    oklch(0.86 0.145 92),
+    oklch(0.90 0.110 78)
   );
 }
 
 .dark .hover-glow:hover {
-  box-shadow: 0 0 20px oklch(0.765 0.098 82 / 16%);
-  border-color: oklch(0.765 0.098 82 / 42%);
+  box-shadow: 0 0 20px oklch(0.835 0.145 92 / 20%);
+  border-color: oklch(0.835 0.145 92 / 50%);
 }
