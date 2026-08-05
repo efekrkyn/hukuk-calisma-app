@@ -12,9 +12,9 @@ type Props = {
 };
 
 const TYPE_BADGES: Record<Task["task_type"], { label: string; cls: string }> = {
-  read: { label: "📖 Okuma", cls: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
-  practice: { label: "⚖️ Pratik", cls: "bg-purple-500/10 text-purple-600 dark:text-purple-400" },
-  review: { label: "🔁 Tekrar", cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
+  read: { label: "Okuma", cls: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
+  practice: { label: "Pratik", cls: "bg-purple-500/10 text-purple-600 dark:text-purple-400" },
+  review: { label: "Tekrar", cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
 };
 
 export function TaskCell({ task, completed, onToggle }: Props) {
@@ -62,7 +62,7 @@ export function TaskCell({ task, completed, onToggle }: Props) {
         />
         <div className="flex-1 min-w-0 space-y-1">
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-semibold">
-            <span>⏱️ {task.time_start}–{task.time_end}</span>
+            <span>⏱ {task.time_start}–{task.time_end}</span>
             <span className={`px-1.5 py-0.5 rounded-full ${badge.cls} text-[9px] font-bold uppercase tracking-wider`}>
               {badge.label}
             </span>
@@ -75,12 +75,12 @@ export function TaskCell({ task, completed, onToggle }: Props) {
               href={targetHref}
               className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline text-[10px] font-medium pt-1"
             >
-              🔗 {task.target_ref}
+               {task.target_ref}
             </Link>
           ) : null}
           {task.tip && (
             <div className="text-[10px] text-amber-700 dark:text-amber-400 italic pt-1 border-t border-amber-500/10 mt-1">
-              💡 {task.tip}
+               {task.tip}
             </div>
           )}
         </div>

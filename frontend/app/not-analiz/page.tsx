@@ -15,7 +15,7 @@ export default function NotAnalizPage() {
               <ArrowLeft className="w-4 h-4 mr-1" />
               Ana sayfa
             </Link>
-            <h1 className="text-3xl font-bold flex items-center gap-2 text-gradient">
+            <h1 className="type-display flex items-center gap-2 text-gradient">
               <FileSearch className="w-8 h-8 text-primary" />
               Canlı Not Analizi
             </h1>

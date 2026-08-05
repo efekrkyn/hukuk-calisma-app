@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Calendar } from "lucide-react";
 import Link from "next/link";
 import { TaskCell } from "./TaskCell";
 import { getActivePlan } from "@/lib/plan-api";
@@ -56,7 +57,8 @@ export function TodayCard() {
   if (loading) {
     return (
       <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 text-xs text-muted-foreground animate-pulse flex items-center justify-between">
-        <span>📅 Günlük plan yükleniyor...</span>
+        <span>
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Günlük plan yükleniyor...</span>
         <div className="h-4 w-4 bg-muted rounded-full"></div>
       </div>
     );
@@ -69,9 +71,9 @@ export function TodayCard() {
         className="block rounded-xl border border-blue-500/30 bg-blue-500/5 hover:bg-blue-500/10 p-5 text-sm transition-all duration-200 shadow-sm"
       >
         <div className="flex items-center gap-3">
-          <div className="text-2xl">🗓️</div>
+          <div className="text-2xl"></div>
           <div>
-            <span className="font-bold text-blue-900 dark:text-blue-100 block">İlk Çalışma Planını Oluştur →</span>
+            <span className="font-bold text-blue-900 dark:text-blue-100 block">İlk Çalışma Planını Oluştur </span>
             <p className="text-xs text-blue-700/80 dark:text-blue-300/80 mt-1 leading-normal font-medium">
               Yapay zeka sınav tarihine kadar saat-saat çalışma takvimi hazırlar.
             </p>
@@ -85,13 +87,13 @@ export function TodayCard() {
     return (
       <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 p-4 bg-neutral-50/50 dark:bg-neutral-800/10 space-y-2">
         <p className="text-sm font-semibold text-neutral-800 dark:text-neutral-200">
-          📅 Bugün için planlanmış ders yok. (Dinlenme günü)
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Bugün için planlanmış ders yok. (Dinlenme günü)
         </p>
         <Link
           href="/plan"
           className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
         >
-          Çalışma programının tamamı →
+          Çalışma programının tamamı 
         </Link>
       </div>
     );
@@ -106,7 +108,7 @@ export function TodayCard() {
       <div className="flex items-center justify-between border-b pb-2">
         <div>
           <span className="font-bold text-sm text-neutral-800 dark:text-neutral-200 block">
-            📅 Bugünün Görevleri
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Bugünün Görevleri
           </span>
           <span className="text-[10px] text-muted-foreground font-semibold">
             {today.weekday} · {today.date}
@@ -114,7 +116,7 @@ export function TodayCard() {
         </div>
         <div className="text-right">
           <span className="text-xs font-bold text-blue-600 bg-blue-500/10 px-2 py-0.5 rounded-full">
-            ⚡ {done}/{total} (%{progress})
+             {done}/{total} (%{progress})
           </span>
         </div>
       </div>
@@ -133,7 +135,7 @@ export function TodayCard() {
           href="/plan"
           className="inline-flex items-center text-xs font-semibold text-blue-600 hover:text-blue-500 hover:underline"
         >
-          Çalışma programının tamamı →
+          Çalışma programının tamamı 
         </Link>
       </div>
     </div>

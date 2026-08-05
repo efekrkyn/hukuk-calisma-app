@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ScrollText } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -30,7 +31,8 @@ export default function KanunlarLanding() {
     <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">📜 Kanunlar</h1>
+          <h1 className="type-display">
+                <ScrollText className="w-4 h-4 shrink-0" aria-hidden />Kanunlar</h1>
           <p className="text-sm text-muted-foreground mt-1">
             Türkiye Cumhuriyeti'nin temel kanunları. PDF üzerinden paragraf seç,
             AI'a sade ve detaylı açıklama iste.
@@ -40,7 +42,7 @@ export default function KanunlarLanding() {
           href="/"
           className="text-sm text-muted-foreground hover:text-foreground whitespace-nowrap"
         >
-          ← Ana sayfa
+           Ana sayfa
         </Link>
       </div>
 

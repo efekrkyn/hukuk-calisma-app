@@ -65,9 +65,9 @@ export default function FlashcardsPage() {
     <div className="container max-w-4xl py-12">
       <div className="mb-8 flex items-center gap-3">
         <BrainCircuit className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Flashcards (SRS)</h1>
+        <h1 className="type-display tracking-tight">Flashcards (SRS)</h1>
       </div>
-      
+
       <p className="text-muted-foreground mb-8">
         Spaced Repetition System (Aralıklı Tekrar Sistemi) ile ezber gerektiren konuları kalıcı olarak öğrenin.
       </p>

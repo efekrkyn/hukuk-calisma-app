@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Calendar, Zap } from "lucide-react";
 import { TaskCell } from "./TaskCell";
 import type { Week, Day } from "@/types/plan";
 import { addTaskToPlan } from "@/lib/plan-api";
@@ -69,7 +70,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
     const y = baseDate.getFullYear();
     const m = String(baseDate.getMonth() + 1).padStart(2, "0");
     const d = String(baseDate.getDate()).padStart(2, "0");
-    
+
     return {
       date: `${y}-${m}-${d}`,
       weekday: wd,
@@ -100,7 +101,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
             >
               <span>Hafta {w.week_index}</span>
               <span className={`text-[10px] ${i === activeWeek ? "text-blue-100" : "text-muted-foreground"}`}>
-                ⚡ %{progress}
+                <Zap className="w-4 h-4 shrink-0" aria-hidden />%{progress}
               </span>
             </button>
           );
@@ -109,7 +110,8 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
 
       {/* Date Range & Summary */}
       <div className="flex items-center justify-between text-xs text-muted-foreground px-1 bg-neutral-50 dark:bg-neutral-800/40 p-2 rounded-lg">
-        <span className="font-semibold">📅 Tarih Aralığı: {week.start_date} → {week.end_date}</span>
+        <span className="font-semibold">
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Tarih Aralığı: {week.start_date}  {week.end_date}</span>
         <span className="font-medium text-blue-600">
           Toplam Görev: {week.days.reduce((acc, curr) => acc + curr.tasks.length, 0)}
         </span>
@@ -141,7 +143,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
               <div className="flex-1 space-y-2">
                 {day.tasks.length === 0 ? (
                   <div className="h-full flex items-center justify-center py-6">
-                    <p className="text-[10px] text-muted-foreground italic text-center">🌴 Boş Gün / Dinlenme</p>
+                    <p className="text-[10px] text-muted-foreground italic text-center"> Boş Gün / Dinlenme</p>
                   </div>
                 ) : (
                   day.tasks.map((t) => (
@@ -154,7 +156,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
                   ))
                 )}
               </div>
-              
+
               <button
                 onClick={() => {
                   setAddDate(day.date);

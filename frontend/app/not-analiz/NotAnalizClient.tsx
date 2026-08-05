@@ -68,9 +68,9 @@ export default function NotAnalizClient() {
     const isFinished = currentIndex >= questions.length;
     if (isFinished) {
       return (
-        <Card className="glass border-primary/20 text-center py-12">
+        <Card className="material-thin border-primary/20 text-center py-12">
           <CardContent className="space-y-4">
-            <h2 className="text-2xl font-bold text-gradient">Not Testi Bitti!</h2>
+            <h2 className="type-display text-gradient">Not Testi Bitti!</h2>
             <div className="text-3xl sm:text-5xl font-black">{score} / {questions.length}</div>
             <p className="text-muted-foreground text-sm">Notlarından üretilen sorularda başarın bu kadar.</p>
             <Button onClick={() => setQuestions(null)} className="mt-4 hover-glow">Yeni Not Analiz Et</Button>
@@ -80,7 +80,7 @@ export default function NotAnalizClient() {
     }
     const q = questions[currentIndex];
     return (
-      <Card className="glass border-primary/20 animate-in fade-in">
+      <Card className="material-thin border-primary/20 animate-in fade-in">
         <CardHeader className="border-b border-border/10 bg-primary/5">
           <div className="flex justify-between text-sm font-medium text-muted-foreground">
             <span>Soru {currentIndex + 1} / {questions.length}</span>
@@ -113,7 +113,7 @@ export default function NotAnalizClient() {
             })}
           </div>
           {showResult && (
-            <div className="p-4 rounded-xl bg-muted/30 border border-border/50 animate-in slide-in-from-bottom-2">
+            <div className="p-4 rounded-xl material-thin border-border/50 animate-in slide-in-from-bottom-2">
               <h4 className="font-semibold text-primary mb-2">Açıklama</h4>
               <p className="text-sm text-muted-foreground">{q.explanation}</p>
               <div className="mt-4 flex justify-end">
@@ -128,7 +128,7 @@ export default function NotAnalizClient() {
 
   // Input UI
   return (
-    <Card className="glass border-primary/20 max-w-3xl mx-auto">
+    <Card className="material-thin border-primary/20 max-w-3xl mx-auto">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <FileSearch className="w-5 h-5 text-primary" /> Ders Notunu Yapıştır

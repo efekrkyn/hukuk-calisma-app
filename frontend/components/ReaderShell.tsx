@@ -10,12 +10,12 @@ type Props = {
   pdfKey: string;
   /** Üst banner'da gösterilecek isim (verilmezse pdfKey'in son segmenti). */
   title?: string;
-  /** "← Dersler" linkinin yönü ve etiketi. */
+  /** "Dersler" linkinin yönü ve etiketi. */
   backHref?: string;
   backLabel?: string;
   /** Sağ panelde gösterilecek alt yazı (verilmezse course adı). */
   subtitle?: string;
-  /** ChatPanel modunu zorla. "law" → kanun-açıklama prompt'ları + butonlar. */
+  /** ChatPanel modunu zorla. "law"  kanun-açıklama prompt'ları + butonlar. */
   mode?: "default" | "law";
 };
 
@@ -25,7 +25,7 @@ export function ReaderShell({
   pdfKey,
   title,
   backHref = "/reader",
-  backLabel = "← Dersler",
+  backLabel = "Dersler",
   subtitle,
   mode = "default",
 }: Props) {

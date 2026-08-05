@@ -6,7 +6,7 @@ import { spring, springSnappy } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { useSetPageContext } from "@/lib/page-context";
 import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle2, XCircle, Loader2, Trophy, Clock, Star, Flag } from "lucide-react";
+import { Check, CheckCircle2, ClipboardList, Clock, Flag, Hash, Loader2, RefreshCw, Rocket, Star, Trophy, XCircle } from "lucide-react";
 
 type QuizQuestion = {
   id: string;
@@ -72,7 +72,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    // ?subject=X → tek alan çalışması (ana sayfadaki alan kartları)
+    // ?subject=X  tek alan çalışması (ana sayfadaki alan kartları)
     const qs = new URLSearchParams({ count: subject ? "10" : "20" });
     if (subject) qs.set("subject", subject);
     fetch(`/api/worker/hmgs/exam?${qs}`)
@@ -181,22 +181,24 @@ export default function HmgsClient({ subject }: { subject?: string }) {
         <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
           <Clock className="w-10 h-10 text-primary" />
         </div>
-        <h2 className="text-2xl font-bold text-gradient">
+        <h2 className="type-display text-gradient">
           {subjectName ? `${subjectName} — Alan Çalışması` : "HMGS Zamanlı Deneme Sınavı"}
         </h2>
         <div className="max-w-md mx-auto text-sm text-muted-foreground space-y-2">
-          <p>📝 <strong>{questions.length} Soru</strong> — ÖSYM'nin resmî alan dağılımına göre</p>
+          <p> <strong>{questions.length} Soru</strong> — ÖSYM'nin resmî alan dağılımına göre</p>
           <p>
-            ✅ <strong>{verifiedCount}</strong> soru kanun metnine karşı denetlendi
+             <strong>{verifiedCount}</strong> soru kanun metnine karşı denetlendi
             {verifiedCount < questions.length && (
               <span className="text-muted-foreground">
                 , {questions.length - verifiedCount} tanesi denetlenmedi
               </span>
             )}
           </p>
-          <p>⏱️ <strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</p>
-          <p>⭐ Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</p>
-          <p>🔢 Soru numaralarına tıklayarak istediğin soruya atlayabilirsin</p>
+          <p>⏱ <strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</p>
+          <p>
+                <Star className="w-4 h-4 shrink-0" aria-hidden />Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</p>
+          <p>
+                <Hash className="w-4 h-4 shrink-0" aria-hidden />Soru numaralarına tıklayarak istediğin soruya atlayabilirsin</p>
         </div>
         {shortfall.length > 0 && (
           <div className="max-w-md mx-auto text-xs text-amber-500/90 border border-amber-500/25 rounded-lg p-3 text-left">
@@ -210,7 +212,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
           </div>
         )}
         <Button size="lg" className="hover-glow mt-4" onClick={() => setStarted(true)}>
-          🚀 Sınava Başla
+                <Rocket className="w-4 h-4 shrink-0" aria-hidden />Sınava Başla
         </Button>
       </div>
     );
@@ -228,21 +230,21 @@ export default function HmgsClient({ subject }: { subject?: string }) {
         <div className="w-24 h-24 bg-primary/10 rounded-full flex items-center justify-center mx-auto">
           <Trophy className="w-12 h-12 text-primary" />
         </div>
-        <h2 className="text-3xl font-bold text-gradient">Sınav Tamamlandı!</h2>
+        <h2 className="type-display text-gradient">Sınav Tamamlandı!</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-lg mx-auto">
-          <div className="glass rounded-xl p-4">
+          <div className="material-thin rounded-xl p-4">
             <div className="text-3xl font-black text-green-500">{correct}</div>
             <div className="text-xs text-muted-foreground">Doğru</div>
           </div>
-          <div className="glass rounded-xl p-4">
+          <div className="material-thin rounded-xl p-4">
             <div className="text-3xl font-black text-red-500">{wrong}</div>
             <div className="text-xs text-muted-foreground">Yanlış</div>
           </div>
-          <div className="glass rounded-xl p-4">
+          <div className="material-thin rounded-xl p-4">
             <div className="text-3xl font-black text-yellow-500">{blank}</div>
             <div className="text-xs text-muted-foreground">Boş</div>
           </div>
-          <div className="glass rounded-xl p-4 border-primary/30">
+          <div className="material-thin rounded-xl p-4 border-primary/30">
             <div className="text-3xl font-black text-primary">{net.toFixed(2)}</div>
             <div className="text-xs text-muted-foreground">Net</div>
           </div>
@@ -252,10 +254,10 @@ export default function HmgsClient({ subject }: { subject?: string }) {
         </p>
         <div className="flex gap-3 justify-center">
           <Button variant="outline" onClick={() => setShowReview(true)}>
-            📋 Cevap Anahtarını Gör
+                <ClipboardList className="w-4 h-4 shrink-0" aria-hidden />Cevap Anahtarını Gör
           </Button>
           <Button onClick={() => window.location.reload()} className="hover-glow">
-            🔄 Yeni Deneme
+                <RefreshCw className="w-4 h-4 shrink-0" aria-hidden />Yeni Deneme
           </Button>
         </div>
       </div>
@@ -272,14 +274,14 @@ export default function HmgsClient({ subject }: { subject?: string }) {
           insan onayı değildir. Şüphelendiğin soruda kaynak bağlantısından maddeyi kontrol et.
         </p>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-xl font-bold text-gradient">Cevap Anahtarı</h3>
+          <h3 className="type-title text-gradient">Cevap Anahtarı</h3>
           <Button variant="outline" size="sm" onClick={() => window.location.reload()}>Yeni Deneme</Button>
         </div>
         {questions.map((q, i) => {
           const ans = answers[i];
           const isCorrect = ans.selected === q.correctAnswer;
           return (
-            <Card key={i} className={`glass border ${isCorrect ? "border-green-500/30" : ans.selected === null ? "border-yellow-500/30" : "border-red-500/30"}`}>
+            <Card key={i} className={`material-thin border ${isCorrect ? "border-green-500/30" : ans.selected === null ? "border-yellow-500/30" : "border-red-500/30"}`}>
               <CardContent className="pt-4 space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-sm font-medium"><strong>S{i + 1}:</strong> {q.question}</p>
@@ -292,7 +294,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
                 <p className="text-xs text-muted-foreground">{q.explanation}</p>
                 {q.verified && (
                   <span className="inline-block text-[10px] font-medium px-1.5 py-0.5 rounded bg-green-500/15 text-green-600 dark:text-green-400 mr-2">
-                    ✓ kaynağa karşı denetlendi
+                <Check className="w-4 h-4 shrink-0" aria-hidden />kaynağa karşı denetlendi
                   </span>
                 )}
                 {q.source_pdf && (
@@ -300,7 +302,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
                     href={`/reader/${q.source_pdf}#page=${q.source_page ?? 1}`}
                     className="inline-block text-[11px] text-primary/80 hover:text-primary underline underline-offset-2"
                   >
-                    Kaynak: {q.source_pdf.split("/").pop()} s.{q.source_page} →
+                    Kaynak: {q.source_pdf.split("/").pop()} s.{q.source_page} 
                   </a>
                 )}
               </CardContent>
@@ -344,7 +346,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
           if (a.flagged) cls += "ring-2 ring-yellow-500 ";
           return (
             <button key={i} className={cls} onClick={() => goTo(i)}>
-              {a.flagged ? "⭐" : i + 1}
+              {a.flagged ? "" : i + 1}
             </button>
           );
         })}
@@ -425,10 +427,10 @@ export default function HmgsClient({ subject }: { subject?: string }) {
 
       <div className="flex justify-between pt-2 pb-24 sm:pb-4">
         <Button variant="outline" disabled={currentIndex === 0} onClick={() => goTo(currentIndex - 1)}>
-          ← Önceki
+           Önceki
         </Button>
         <Button disabled={currentIndex === questions.length - 1} onClick={() => goTo(currentIndex + 1)} className="hover-glow">
-          Sonraki →
+          Sonraki 
         </Button>
       </div>
     </div>

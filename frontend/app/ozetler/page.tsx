@@ -31,7 +31,7 @@ export default async function OzetlerLanding() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             Ana sayfa
           </Link>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="type-display flex items-center gap-2">
             <Zap className="w-8 h-8 text-yellow-500" />
             Son Gece Özetleri
           </h1>
@@ -44,7 +44,7 @@ export default async function OzetlerLanding() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {coursesWithSummaries.map((c) => (
           <Link href={`/ozetler/${c.id}`} key={c.id} className="block group">
-            <Card className={`h-full transition-all duration-300 ${c.hasSummary ? "glass hover-glow border-primary/20" : "bg-card/30 opacity-70 border-dashed"}`}>
+            <Card className={`h-full transition-all duration-300 ${c.hasSummary ? "material-thin hover-glow border-primary/20" : "bg-card/30 opacity-70 border-dashed"}`}>
               <CardHeader className="pb-3">
                 <CardTitle className="text-lg flex items-center gap-2">
                   <div className={`p-2 rounded-lg shrink-0 transition-transform group-hover:scale-110 ${c.hasSummary ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"}`}>

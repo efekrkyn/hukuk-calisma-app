@@ -75,7 +75,7 @@ export default function IracClient() {
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Bir Olay Seç</h3>
         {SAMPLE_CASES.map((c) => (
-          <Card key={c.id} className="glass border-primary/20 hover-glow cursor-pointer transition-all" onClick={() => setSelectedCase(c)}>
+          <Card key={c.id} className="material-thin border-primary/20 hover-glow cursor-pointer transition-all" onClick={() => setSelectedCase(c)}>
             <CardHeader className="pb-2">
               <CardTitle className="text-lg text-gradient">{c.title}</CardTitle>
             </CardHeader>
@@ -97,12 +97,12 @@ export default function IracClient() {
           <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <span className="text-3xl sm:text-4xl font-black text-primary">{result.overall}</span>
           </div>
-          <h2 className="text-2xl font-bold text-gradient">Genel Puan: {result.overall}/100</h2>
+          <h2 className="type-display text-gradient">Genel Puan: {result.overall}/100</h2>
           <p className="text-sm text-muted-foreground mt-2 max-w-lg mx-auto">{result.overallFeedback}</p>
         </div>
 
         {stepKeys.map((key, i) => (
-          <Card key={key} className={`glass border ${result.scores[key] >= 70 ? "border-green-500/30" : result.scores[key] >= 40 ? "border-yellow-500/30" : "border-red-500/30"}`}>
+          <Card key={key} className={`material-thin border ${result.scores[key] >= 70 ? "border-green-500/30" : result.scores[key] >= 40 ? "border-yellow-500/30" : "border-red-500/30"}`}>
             <CardHeader className="pb-2">
               <CardTitle className="text-md flex items-center justify-between">
                 <span>{STEPS[i].label}</span>
@@ -136,7 +136,7 @@ export default function IracClient() {
   return (
     <div className="space-y-6">
       {/* Scenario */}
-      <Card className="glass border-primary/20">
+      <Card className="material-thin border-primary/20">
         <CardHeader className="pb-2">
           <CardTitle className="text-lg">{selectedCase.title}</CardTitle>
         </CardHeader>
@@ -153,7 +153,7 @@ export default function IracClient() {
       </div>
 
       {/* Current step */}
-      <Card className="glass">
+      <Card className="material-thin">
         <CardHeader>
           <CardTitle className="text-lg flex items-center gap-2">
             <span className="w-8 h-8 bg-primary/20 text-primary rounded-full flex items-center justify-center text-sm font-bold">{currentStep + 1}</span>
@@ -169,7 +169,7 @@ export default function IracClient() {
           />
           <div className="flex justify-between">
             <Button variant="outline" disabled={currentStep === 0} onClick={() => setCurrentStep((i) => i - 1)}>
-              ← Önceki Adım
+               Önceki Adım
             </Button>
             {currentStep < STEPS.length - 1 ? (
               <Button onClick={() => setCurrentStep((i) => i + 1)} className="hover-glow">

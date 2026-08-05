@@ -76,7 +76,7 @@ export default function NotlarimPage() {
             <Link href="/" className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-2">
               <ArrowLeft className="w-4 h-4 mr-1" /> Ana sayfa
             </Link>
-            <h1 className="text-3xl font-bold flex items-center gap-2 text-gradient">
+            <h1 className="type-display flex items-center gap-2 text-gradient">
               <StickyNote className="w-8 h-8 text-primary" />
               Madde Bağlantılı Notlarım
             </h1>
@@ -103,7 +103,7 @@ export default function NotlarimPage() {
 
         {/* Form */}
         {showForm && (
-          <Card className="glass border-primary/20 animate-in slide-in-from-top-2">
+          <Card className="material-thin border-primary/20 animate-in slide-in-from-top-2">
             <CardHeader className="pb-3">
               <CardTitle className="text-lg">Yeni Not Ekle</CardTitle>
             </CardHeader>
@@ -143,7 +143,7 @@ export default function NotlarimPage() {
         {/* Notes list */}
         <div className="space-y-4">
           {filtered.length === 0 && (
-            <div className="text-center py-16 glass rounded-2xl border border-border">
+            <div className="text-center py-16 material-thin rounded-2xl border border-border">
               <StickyNote className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
               <h3 className="text-lg font-medium">{notes.length === 0 ? "Henüz not eklenmemiş" : "Arama sonucu bulunamadı"}</h3>
               <p className="text-sm text-muted-foreground mt-1">
@@ -153,7 +153,7 @@ export default function NotlarimPage() {
           )}
 
           {filtered.map((note) => (
-            <Card key={note.id} className="glass border-primary/10 hover-glow transition-all">
+            <Card key={note.id} className="material-thin border-primary/10 hover-glow transition-all">
               <CardHeader className="pb-2">
                 <div className="flex items-start justify-between gap-2">
                   <div>

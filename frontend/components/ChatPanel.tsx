@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { streamChat, searchCaseLaw, type ChatSource } from "@/lib/api";
-import { Sparkles, HelpCircle, BookOpen, Lightbulb, GraduationCap, RefreshCw, ArrowRight, Loader2, Scale } from "lucide-react";
+import { ArrowRight, BookOpen, Globe, GraduationCap, HelpCircle, Lightbulb, Loader2, RefreshCw, Scale, ScrollText, Sparkles } from "lucide-react";
 
 type Msg = {
   role: "user" | "ai";
@@ -16,7 +16,7 @@ type Props = {
   selectedText: string | null;
   course: string;
   pdfKey: string;
-  /** "law" → kanun-modu (madde açıklama presets'i + worker tarafında özel system prompt). */
+  /** "law"  kanun-modu (madde açıklama presets'i + worker tarafında özel system prompt). */
   mode?: "default" | "law";
 };
 
@@ -169,13 +169,13 @@ export function ChatPanel({
         if (last) query = last.content.slice(0, 100);
       }
       if (!query) query = "haksız fiil";
-      
+
       setMessages((m) => [
         ...m,
         { role: "user", content: `(Yargıtay emsali aranıyor: ${query})` },
         { role: "ai", content: "" }
       ]);
-      
+
       const res = await searchCaseLaw({ query, court: "yargitay" });
       if (!res.results || res.results.length === 0) {
         setMessages((m) => {
@@ -185,9 +185,9 @@ export function ChatPanel({
         });
         return;
       }
-      
+
       const formatted = res.results.map((r) => `**${r.case_no || "Karar"}** (${r.date || "Tarihsiz"}):\n${r.summary || ""}`).join("\n\n");
-      
+
       setMessages((m) => {
         const a = [...m];
         a[a.length - 1] = { role: "ai", content: `Bulunan Yargıtay Emsalleri:\n\n${formatted}` };
@@ -367,7 +367,7 @@ export function ChatPanel({
                   disabled={loading}
                 >
                   <Scale className="w-3.5 h-3.5" />
-                  📜 Yargıtay Emsali Bul
+                <ScrollText className="w-4 h-4 shrink-0" aria-hidden />Yargıtay Emsali Bul
                 </Button>
               </>
             ) : (
@@ -465,7 +465,7 @@ export function ChatPanel({
                 disabled={loading}
               >
                 <Scale className="w-3.5 h-3.5" />
-                📜 Yargıtay Emsali Bul
+                <ScrollText className="w-4 h-4 shrink-0" aria-hidden />Yargıtay Emsali Bul
               </Button>
             )}
             {messages.length > 0 && (
@@ -487,7 +487,8 @@ export function ChatPanel({
       <div className="p-2 border-t bg-muted/30 flex flex-col gap-2">
         <div className="flex items-center justify-start px-1">
           <div className="flex items-center gap-1.5 cursor-pointer" onClick={() => setIsWebSearch(!isWebSearch)}>
-            <span className="text-[11px] font-medium text-muted-foreground">🌐 Web Arama</span>
+            <span className="text-[11px] font-medium text-muted-foreground">
+                <Globe className="w-4 h-4 shrink-0" aria-hidden />Web Arama</span>
             <button 
               className={`w-7 h-4 rounded-full relative transition-colors ${isWebSearch ? "bg-blue-500" : "bg-muted-foreground/30"}`}
             >

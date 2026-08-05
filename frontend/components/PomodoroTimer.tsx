@@ -34,7 +34,7 @@ export default function PomodoroTimer() {
       } catch (e) {
         // ignore
       }
-      
+
       if (mode === "pomodoro") {
         const newSessions = sessions + 1;
         setSessions(newSessions);

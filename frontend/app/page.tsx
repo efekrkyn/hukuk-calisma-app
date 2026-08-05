@@ -11,12 +11,14 @@
  */
 
 import { useEffect, useState } from "react";
+import { Target } from "lucide-react";
 import { motion } from "motion/react";
 import { spring, springSnappy } from "@/lib/motion";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { TodayCard } from "@/components/TodayCard";
+import ThemeToggle from "@/components/ThemeToggle";
 
 type SubjectStat = {
   id: string;
@@ -29,15 +31,15 @@ type SubjectStat = {
 type VerifyStats = { total: number; correct: number; unchecked: number };
 
 const TOOLS = [
-  { href: "/asistan", label: "AI Asistan", icon: "✨", desc: "Web arama + sınav modu" },
-  { href: "/reader", label: "Kütüphane", icon: "📚", desc: "Kanun ve not PDF'leri" },
-  { href: "/mevzuat", label: "Mevzuat Arama", icon: "⚖️", desc: "Canlı kanun + madde araması" },
-  { href: "/emsal-kararlar", label: "Emsal Kararlar", icon: "🏛️", desc: "Yargıtay / Danıştay" },
-  { href: "/flashcards", label: "Flashcard", icon: "🗂️", desc: "Aralıklı tekrar (FSRS)" },
-  { href: "/sozluk", label: "Hukuk Sözlüğü", icon: "📖", desc: "Terim arama" },
-  { href: "/notlarim", label: "Akıllı Notlar", icon: "📝", desc: "Kendi notların" },
-  { href: "/irac", label: "IRAC Olay Çözme", icon: "🧠", desc: "Olay analizi pratiği" },
-  { href: "/plan", label: "Çalışma Planı", icon: "📅", desc: "Program üreticisi" },
+  { href: "/asistan", label: "AI Asistan", icon: "", desc: "Web arama + sınav modu" },
+  { href: "/reader", label: "Kütüphane", icon: "", desc: "Kanun ve not PDF'leri" },
+  { href: "/mevzuat", label: "Mevzuat Arama", icon: "", desc: "Canlı kanun + madde araması" },
+  { href: "/emsal-kararlar", label: "Emsal Kararlar", icon: "", desc: "Yargıtay / Danıştay" },
+  { href: "/flashcards", label: "Flashcard", icon: "", desc: "Aralıklı tekrar (FSRS)" },
+  { href: "/sozluk", label: "Hukuk Sözlüğü", icon: "", desc: "Terim arama" },
+  { href: "/notlarim", label: "Akıllı Notlar", icon: "", desc: "Kendi notların" },
+  { href: "/irac", label: "IRAC Olay Çözme", icon: "", desc: "Olay analizi pratiği" },
+  { href: "/plan", label: "Çalışma Planı", icon: "", desc: "Program üreticisi" },
 ];
 
 export default function Home() {
@@ -69,7 +71,10 @@ export default function Home() {
         className="max-w-6xl mx-auto space-y-6"
       >
         <header className="space-y-1">
-          <h1 className="type-display text-gradient">HMGS Hazırlık</h1>
+          <div className="flex items-start justify-between gap-3">
+            <h1 className="type-display text-gradient">HMGS Hazırlık</h1>
+            <ThemeToggle />
+          </div>
           <p className="text-sm text-muted-foreground">
             Hukuk Mesleklerine Giriş Sınavı — 120 soru, 20 alan, geçme notu 70.
           </p>
@@ -90,12 +95,13 @@ export default function Home() {
             className="sm:col-span-2 material-thick rounded-2xl p-5 flex flex-col justify-between min-h-32"
           >
             <div>
-              <p className="type-title">🎯 Deneme Sınavı</p>
+              <p className="type-title">
+                <Target className="w-4 h-4 shrink-0" aria-hidden />Deneme Sınavı</p>
               <p className="text-xs text-muted-foreground mt-1">
                 ÖSYM&apos;nin resmî alan dağılımına göre, zamanlı
               </p>
             </div>
-            <p className="text-xs text-primary mt-3">Başla →</p>
+            <p className="text-xs text-primary mt-3">Başla </p>
           </motion.a>
 
           <div className="material-thin rounded-2xl p-5 space-y-2">

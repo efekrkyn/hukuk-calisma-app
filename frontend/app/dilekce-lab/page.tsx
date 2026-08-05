@@ -15,7 +15,7 @@ export default function DilekceLabPage() {
               <ArrowLeft className="w-4 h-4 mr-1" />
               Ana sayfa
             </Link>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
+            <h1 className="type-display flex items-center gap-2">
               <PenTool className="w-8 h-8 text-primary" />
               Dilekçe & Sözleşme Laboratuvarı
             </h1>

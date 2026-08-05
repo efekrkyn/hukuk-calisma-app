@@ -95,7 +95,7 @@ export default function MevzuatArama() {
           <ArrowLeft className="w-4 h-4 mr-1" />
           Ana sayfa
         </Link>
-        <h1 className="text-3xl font-bold flex items-center gap-2">
+        <h1 className="type-display flex items-center gap-2">
           <Scale className="w-8 h-8 text-primary" />
           Mevzuat Arama
         </h1>
@@ -136,7 +136,7 @@ export default function MevzuatArama() {
 
       <div className="space-y-3">
         {results?.map((k) => (
-          <Card key={k.mevzuat_id} className="glass border-primary/20">
+          <Card key={k.mevzuat_id} className="material-thin border-primary/20">
             <CardContent className="pt-4 space-y-3">
               <div className="flex items-start justify-between gap-3">
                 <div className="flex-1">

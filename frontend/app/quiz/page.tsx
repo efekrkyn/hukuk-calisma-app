@@ -22,7 +22,7 @@ export default function QuizLandingPage() {
     async function load() {
       // Sadece borclar_genel için mock veri var şimdilik, onu öne çıkaralım.
       const availableIds = ["borclar_genel"];
-      
+
       const initial = availableIds.map(id => {
         const c = COURSES.find(c => c.id === id);
         return {
@@ -54,9 +54,9 @@ export default function QuizLandingPage() {
     <div className="container max-w-4xl py-12">
       <div className="mb-8 flex items-center gap-3">
         <GraduationCap className="h-8 w-8 text-primary" />
-        <h1 className="text-3xl font-bold tracking-tight">Quiz & Deneme (HMGS)</h1>
+        <h1 className="type-display tracking-tight">Quiz & Deneme (HMGS)</h1>
       </div>
-      
+
       <p className="text-muted-foreground mb-8">
         Konu bazlı testler çözün, zayıf olduğunuz alanları tespit edin ve çoktan seçmeli HMGS sınavına hazırlanın.
       </p>
@@ -86,7 +86,7 @@ export default function QuizLandingPage() {
                     </div>
                   </div>
                 )}
-                
+
                 {!course.loading && course.stats && course.stats.weakTopics?.length > 0 && (
                   <div className="mb-4">
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Zayıf Konular:</span>

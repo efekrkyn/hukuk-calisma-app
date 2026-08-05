@@ -48,7 +48,7 @@ export default async function KanunPage({
         pdfKey={law.r2_key}
         title={title}
         backHref="/kanunlar"
-        backLabel="← Kanunlar"
+        backLabel="Kanunlar"
         subtitle={subtitle}
         mode="law"
       />

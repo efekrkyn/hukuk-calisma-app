@@ -16,7 +16,7 @@ export default function QuizClient({
   questions: QuizQuestion[];
 }) {
   const router = useRouter();
-  
+
   // We can randomize questions for the session
   const [shuffledQuestions] = useState(() => 
     [...questions].sort(() => Math.random() - 0.5)
@@ -40,7 +40,7 @@ export default function QuizClient({
     setSubmitting(true);
 
     const isCorrect = selectedOption === currentQuestion.correctAnswer;
-    
+
     try {
       await submitQuizAttempt({
         course: courseId,
@@ -49,7 +49,7 @@ export default function QuizClient({
         selected_answer: selectedOption,
         is_correct: isCorrect ? 1 : 0
       });
-      
+
       if (isCorrect) {
         setSessionScore(prev => prev + 1);
       }
@@ -125,7 +125,7 @@ export default function QuizClient({
             {currentQuestion.options.map((option, idx) => {
               const isSelected = selectedOption === idx;
               const isCorrectOpt = currentQuestion.correctAnswer === idx;
-              
+
               let buttonStyle = "justify-start h-auto p-4 text-left font-normal border-2 hover:bg-muted/50 transition-all";
               let icon = null;
 

@@ -39,8 +39,18 @@ export default function RootLayout({
   return (
     <html
       lang="tr"
-      className={`${inter.variable} ${outfit.variable} dark h-full antialiased`}
+      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        {/* Tema ilk boyamadan ÖNCE uygulanmalı, yoksa yanlış temada bir
+            kare görünür (FOUC) ve karanlıkta beyaz flaş göze vurur. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var m=localStorage.getItem('hmgs_tema')||'system';var d=m==='dark'||(m==='system'&&matchMedia('(prefers-color-scheme: dark)').matches);document.documentElement.classList.toggle('dark',d);document.documentElement.classList.add('theme-ready');}catch(e){document.documentElement.classList.add('dark')}})()`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col font-sans bg-background text-foreground selection:bg-primary/30">
         <PageContextProvider>
           {children}

@@ -21,7 +21,7 @@ export default function ExamCountdown() {
   const getRemaining = (target: number) => {
     const diff = target - now;
     if (diff <= 0) return { days: 0, hours: 0, minutes: 0 };
-    
+
     return {
       days: Math.floor(diff / (1000 * 60 * 60 * 24)),
       hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
@@ -42,7 +42,7 @@ export default function ExamCountdown() {
             <AlertCircle className="w-5 h-5" />
             Finaller (30 Haziran 2026)
           </div>
-          
+
           <div className="flex items-baseline gap-4">
             <div className="flex flex-col items-center">
               <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums">{finals.days}</span>
@@ -70,7 +70,7 @@ export default function ExamCountdown() {
             <Calendar className="w-5 h-5" />
             HMGS (27 Eylül 2026)
           </div>
-          
+
           <div className="flex items-baseline gap-4">
             <div className="flex flex-col items-center">
               <span className="text-3xl sm:text-4xl font-bold tracking-tighter tabular-nums">{hmgs.days}</span>

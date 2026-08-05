@@ -50,7 +50,7 @@ export default function SozlukClient() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filtered.map((t) => (
-          <Card key={t.term} className="glass border-primary/10 hover-glow transition-all">
+          <Card key={t.term} className="material-thin border-primary/10 hover-glow transition-all">
             <CardHeader className="pb-2">
               <CardTitle className="text-lg flex items-center justify-between">
                 <span className="text-gradient font-bold">{t.term}</span>

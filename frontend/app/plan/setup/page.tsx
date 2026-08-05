@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { Calendar, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -129,14 +130,14 @@ export default function PlanSetupPage() {
       <div className="flex items-center justify-between border-b pb-4">
         <div>
           <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            🗓️ Çalışma Programı Üreticisi
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Çalışma Programı Üreticisi
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
             Yapay zeka ile kişiselleştirilmiş, saat-saat çalışma takviminizi oluşturun.
           </p>
         </div>
         <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500 hover:underline">
-          ← Ana sayfa
+           Ana sayfa
         </Link>
       </div>
 
@@ -183,7 +184,7 @@ export default function PlanSetupPage() {
                           {course.name}
                         </option>
                       ))}
-                      <option value="other">➕ Diğer (Yeni Ders Ekle)</option>
+                      <option value="other"> Diğer (Yeni Ders Ekle)</option>
                     </select>
                   </div>
                   {c.selectedId === "other" && (
@@ -296,7 +297,7 @@ export default function PlanSetupPage() {
 
       {error && (
         <div className="border border-red-500/30 bg-red-500/5 dark:bg-red-500/10 rounded-xl p-4 text-sm text-red-600 dark:text-red-400 font-medium">
-          ⚠️ Hata oluştu: {error}
+                <TriangleAlert className="w-4 h-4 shrink-0" aria-hidden />Hata oluştu: {error}
         </div>
       )}
 
@@ -306,7 +307,7 @@ export default function PlanSetupPage() {
         className="w-full py-6 text-base font-bold shadow-md transition-all duration-200"
         size="lg"
       >
-        {submitting ? "🤖 Yapay Zeka Programı Oluşturuyor (~10-15 sn)..." : "⚡ Programı Oluştur"}
+        {submitting ? "Yapay Zeka Programı Oluşturuyor (~10-15 sn)..." : "Programı Oluştur"}
       </Button>
     </main>
   );

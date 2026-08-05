@@ -53,7 +53,7 @@ export default function ReaderLanding() {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    
+
     setUploading(true);
     try {
       await api.uploadPdf(file);
@@ -90,7 +90,7 @@ export default function ReaderLanding() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             Ana sayfa
           </Link>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="type-display flex items-center gap-2">
             <BookOpen className="w-8 h-8 text-primary" />
             Kütüphane
           </h1>
@@ -121,7 +121,7 @@ export default function ReaderLanding() {
               placeholder="PDF veya Ders Ara..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-card/50 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all glass"
+              className="w-full pl-9 pr-4 py-2 material-thin border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all material-thin"
             />
           </div>
         </div>
@@ -136,13 +136,13 @@ export default function ReaderLanding() {
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="glass animate-pulse h-48" />
+            <Card key={i} className="material-thin animate-pulse h-48" />
           ))}
         </div>
       )}
 
       {!loading && filteredCourses.length === 0 && (
-        <div className="text-center py-12 glass rounded-2xl border border-border">
+        <div className="text-center py-12 material-thin rounded-2xl border border-border">
           <FileText className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
           <h3 className="text-lg font-medium">Sonuç Bulunamadı</h3>
           <p className="text-sm text-muted-foreground mt-1">
@@ -154,7 +154,7 @@ export default function ReaderLanding() {
       {!loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredCourses.map((c) => (
-            <Card key={c.id} className="glass hover-glow border-border/50 flex flex-col h-full">
+            <Card key={c.id} className="material-thin hover-glow border-border/50 flex flex-col h-full">
               <CardHeader className="pb-3 border-b border-border/10 bg-muted/10">
                 <CardTitle className="text-lg flex items-center justify-between">
                   <span className="font-semibold text-gradient truncate">{c.name}</span>

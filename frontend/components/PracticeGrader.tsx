@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { Check, ScrollText, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -67,7 +68,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
           href="/practice"
           className="text-sm text-muted-foreground hover:text-foreground"
         >
-          ← Pratikler
+           Pratikler
         </Link>
         <span
           className={
@@ -141,7 +142,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
               {result.hit_points.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-green-600 mb-1">
-                    ✓ Yakaladığın
+                <Check className="w-4 h-4 shrink-0" aria-hidden />Yakaladığın
                   </h3>
                   <ul className="list-disc pl-5 space-y-0.5">
                     {result.hit_points.map((p, i) => (
@@ -154,7 +155,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
               {result.missed_points.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-yellow-600 mb-1">
-                    ⚠ Atladığın
+                <TriangleAlert className="w-4 h-4 shrink-0" aria-hidden />Atladığın
                   </h3>
                   <ul className="list-disc pl-5 space-y-0.5">
                     {result.missed_points.map((p, i) => (
@@ -167,7 +168,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
               {result.errors.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-red-500 mb-1">
-                    ✗ Hatalı Yorumlar
+                     Hatalı Yorumlar
                   </h3>
                   <ul className="list-disc pl-5 space-y-0.5">
                     {result.errors.map((p, i) => (
@@ -180,7 +181,7 @@ export function PracticeGrader({ case_: pc }: { case_: PracticeCase }) {
               {result.law_refs && result.law_refs.length > 0 && (
                 <div>
                   <h3 className="font-semibold text-blue-600 mb-1">
-                    📜 AI'ın referans aldığı kanun pasajları
+                <ScrollText className="w-4 h-4 shrink-0" aria-hidden />AI'ın referans aldığı kanun pasajları
                   </h3>
                   <div className="flex flex-wrap gap-1">
                     {result.law_refs.map((ref, i) => {

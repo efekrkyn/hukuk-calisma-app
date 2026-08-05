@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Bot, Calendar, Rocket, Target, Timer, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlanGrid } from "@/components/PlanGrid";
@@ -31,7 +32,8 @@ export default function PlanPage() {
   if (error) {
     return (
       <main className="p-6 max-w-2xl mx-auto space-y-4 text-center">
-        <h1 className="text-2xl font-bold text-red-500">⚠️ Bağlantı Hatası</h1>
+        <h1 className="type-display text-red-500">
+                <TriangleAlert className="w-4 h-4 shrink-0" aria-hidden />Bağlantı Hatası</h1>
         <p className="text-sm text-muted-foreground">
           Sunucuya bağlanırken bir hata oluştu: {error}
         </p>
@@ -48,7 +50,7 @@ export default function PlanPage() {
   if (!data?.plan) {
     return (
       <main className="p-6 max-w-2xl mx-auto space-y-6 text-center py-16">
-        <div className="text-4xl sm:text-6xl">🗓️</div>
+        <div className="text-4xl sm:text-6xl"></div>
         <h1 className="text-3xl font-extrabold tracking-tight">Aktif Çalışma Planı Yok</h1>
         <p className="text-sm text-muted-foreground max-w-md mx-auto">
           Sınav dönemine kadar saat-saat çalışma takviminizi oluşturmak için ilk planınızı şimdi oluşturun.
@@ -70,29 +72,34 @@ export default function PlanPage() {
       <div className="flex items-center justify-between border-b pb-4">
         <div>
           <h1 className="text-3xl font-extrabold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-            🗓️ Çalışma Planım
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Çalışma Planım
           </h1>
           <p className="text-xs text-muted-foreground mt-1">
             Yapay zeka tarafından üretilen çalışma programınız.
           </p>
         </div>
         <Link href="/" className="text-sm font-medium text-blue-600 hover:text-blue-500 hover:underline">
-          ← Ana sayfa
+           Ana sayfa
         </Link>
       </div>
 
       <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-muted/40 p-4 space-y-3">
         <div className="space-y-1">
-          <h2 className="text-sm font-bold text-neutral-800 dark:text-neutral-200">🚀 Plan Özeti</h2>
+          <h2 className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                <Rocket className="w-4 h-4 shrink-0" aria-hidden />Plan Özeti</h2>
           <p className="text-sm text-neutral-600 dark:text-neutral-400 font-medium leading-relaxed">
             {plan.ai_output.summary}
           </p>
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground font-medium border-t pt-2">
-          <span>🎯 Hedef Dersler: {plan.form_input.courses?.length || 0} adet</span>
-          <span>⏱️ Kalan Hafta: {plan.form_input.weeks_remaining}</span>
-          <span>🗓️ Oluşturuldu: {generatedDate}</span>
-          <span>🤖 Model: {plan.ai_model}</span>
+          <span>
+                <Target className="w-4 h-4 shrink-0" aria-hidden />Hedef Dersler: {plan.form_input.courses?.length || 0} adet</span>
+          <span>
+                <Timer className="w-4 h-4 shrink-0" aria-hidden />Kalan Hafta: {plan.form_input.weeks_remaining}</span>
+          <span>
+                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Oluşturuldu: {generatedDate}</span>
+          <span>
+                <Bot className="w-4 h-4 shrink-0" aria-hidden />Model: {plan.ai_model}</span>
         </div>
         <div className="flex gap-2 pt-1 border-t">
           <Link href="/plan/setup">

@@ -39,7 +39,7 @@ export default function FlashcardReviewClient({
         const due = flashcards.filter(
           (c) => !stateMap[c.id] || stateMap[c.id].next_review <= now
         );
-        
+
         // Shuffle due cards
         const shuffled = [...due].sort(() => Math.random() - 0.5);
         setDueCards(shuffled);

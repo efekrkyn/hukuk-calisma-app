@@ -27,7 +27,7 @@ export default function DilekceClient() {
 
   const handleGenerate = async () => {
     if (!details.trim() || !finalDocType.trim()) return;
-    
+
     setIsGenerating(true);
     setGeneratedText("");
     setCopied(false);
@@ -62,7 +62,7 @@ export default function DilekceClient() {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
       {/* Sol Panel: Giriş */}
-      <Card className="lg:col-span-5 glass border-primary/20">
+      <Card className="lg:col-span-5 material-thin border-primary/20">
         <CardHeader className="bg-primary/5 pb-4 border-b border-border/10">
           <CardTitle className="text-lg">Metin Detayları</CardTitle>
         </CardHeader>
@@ -128,7 +128,7 @@ export default function DilekceClient() {
       </Card>
 
       {/* Sağ Panel: Çıktı */}
-      <Card className="lg:col-span-7 glass border-primary/20 min-h-[500px] flex flex-col relative overflow-hidden">
+      <Card className="lg:col-span-7 material-thin border-primary/20 min-h-[500px] flex flex-col relative overflow-hidden">
         {generatedText ? (
           <>
             <div className="flex items-center justify-between p-3 border-b border-border/10 bg-primary/5">

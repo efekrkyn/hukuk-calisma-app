@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { Send, Bot, Sparkles, Loader2, Info, Mic, Volume2, Maximize2, Minimize2, Trash2, Copy, FileText, CheckCircle2 } from "lucide-react";
+import { BarChart3, Bot, Brain, CheckCircle2, Copy, FileText, Globe, Info, Loader2, Maximize2, Mic, Minimize2, PenLine, RefreshCw, Scale, ScrollText, Send, Sparkles, Trash2, Volume2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { streamChat, getQuizStats, getFlashcardState, ChatSource, pdfUrl } from "@/lib/api";
 import { COURSES } from "@/lib/courses";
@@ -76,7 +76,7 @@ export default function GlobalAiAssistant() {
         </div>
       );
     }
-    
+
     if (content.includes("<think>")) {
       const thinking = content.replace("<think>", "").trim();
       return (
@@ -128,13 +128,13 @@ export default function GlobalAiAssistant() {
       try {
         const statsInfo: string[] = [];
         const courses = ["borclar_genel"];
-        
+
         for (const courseId of courses) {
           try {
             const courseName = COURSES.find(c => c.id === courseId)?.name || courseId;
             const qStats = await getQuizStats(courseId).catch(() => null);
             const fState = await getFlashcardState(courseId).catch(() => null);
-            
+
             let info = `Ders: ${courseName}.`;
             if (qStats && qStats.total_attempts > 0) {
               const acc = Math.round((qStats.correct_count / qStats.total_attempts) * 100);
@@ -152,7 +152,7 @@ export default function GlobalAiAssistant() {
             // ignore
           }
         }
-        
+
         if (statsInfo.length > 0) {
           setPersonalContext(`Kullanıcının sistemdeki senkronize çalışma durumu:\n${statsInfo.join("\n")}\n\nEğer kullanıcı durumunu sorarsa motive edici ve akademik bir analiz yap.`);
         }
@@ -179,7 +179,7 @@ export default function GlobalAiAssistant() {
       recognitionRef.current.onerror = () => {
         setIsListening(false);
       };
-      
+
       recognitionRef.current.onend = () => {
         setIsListening(false);
       };
@@ -234,7 +234,7 @@ export default function GlobalAiAssistant() {
     if (!textToSend.trim() || isLoading) return;
 
     if (!overrideText) setInput("");
-    
+
     let userText = textToSend.trim();
     if (isExamMode && !overrideText) {
       userText = `[Sınav Modu Aktif - Bana soruyu doğrudan cevaplama, yönlendir veya konudan bir test sorusu sor.]\n` + userText;
@@ -242,7 +242,7 @@ export default function GlobalAiAssistant() {
     if (isSimplify) {
       userText = `Lütfen şu konuyu/cevabını 5 yaşındaki birinin anlayacağı kadar basit, avukat argosundan uzak bir şekilde anlat: ` + userText;
     }
-    
+
     const displayMessage = overrideText || input.trim();
     setUserScrolled(false);
     const newMessages: Message[] = [...messages, { role: "user", content: displayMessage }];
@@ -296,7 +296,7 @@ export default function GlobalAiAssistant() {
       console.error(e);
       setMessages(prev => {
         const arr = [...prev];
-        arr[arr.length - 1] = { ...arr[arr.length - 1], content: `❌ Hata: ${String(e)}` };
+        arr[arr.length - 1] = { ...arr[arr.length - 1], content: ` Hata: ${String(e)}` };
         return arr;
       });
     } finally {
@@ -314,9 +314,9 @@ export default function GlobalAiAssistant() {
         const meaningfulUserMsg = [...messages].reverse().find(
           (m) => m.role === "user" && m.content.length > 30 && !m.content.toLowerCase().includes("basit") && !m.content.toLowerCase().includes("soru sor") && !m.content.includes("Yargıtay emsali")
         );
-        
+
         const targetMsg = meaningfulUserMsg || [...messages].reverse().find((m) => m.content && !m.content.includes("Yargıtay emsali"));
-        
+
         if (targetMsg) {
           let content = targetMsg.content;
           if (content.includes("<think>") && content.includes("</think>")) {
@@ -326,17 +326,17 @@ export default function GlobalAiAssistant() {
         }
       }
       if (!query) query = "haksız fiil tazminat kusur";
-      
+
       setMessages((m) => [
         ...m,
         { role: "user", content: `(Yargıtay emsali aranıyor: ${query})` },
         { role: "ai", content: "" }
       ]);
       setUserScrolled(false);
-      
+
       const { searchCaseLaw } = await import("@/lib/api");
       const res = await searchCaseLaw({ query, court: "yargitay" });
-      
+
       if (!res.results || res.results.length === 0) {
         setMessages((m) => {
           const a = [...m];
@@ -345,9 +345,9 @@ export default function GlobalAiAssistant() {
         });
         return;
       }
-      
+
       const formatted = res.results.map((r: any) => `**${r.case_no || "Karar"}** (${r.date || "Tarihsiz"}):\n${r.summary || ""}`).join("\n\n");
-      
+
       setMessages((m) => {
         const a = [...m];
         a[a.length - 1] = { role: "ai", content: `Bulunan Yargıtay Emsalleri:\n\n${formatted}` };
@@ -380,11 +380,12 @@ export default function GlobalAiAssistant() {
             <p className="text-xs text-muted-foreground hidden sm:block">Akıllı Sınav Arkadaşın</p>
           </div>
         </div>
-        
+
         <div className="flex items-center gap-2">
           {/* Web Search Toggle */}
           <div className="flex items-center gap-2 mr-2">
-            <span className="text-xs font-medium text-muted-foreground">🌐 Web Arama</span>
+            <span className="text-xs font-medium text-muted-foreground">
+                <Globe className="w-4 h-4 shrink-0" aria-hidden />Web Arama</span>
             <button 
               onClick={() => setIsWebSearch(!isWebSearch)}
               className={`w-10 h-5 rounded-full relative transition-colors ${isWebSearch ? "bg-blue-500" : "bg-muted-foreground/30"}`}
@@ -430,23 +431,23 @@ export default function GlobalAiAssistant() {
               <p className="font-medium text-lg text-foreground">Sana nasıl yardımcı olabilirim?</p>
               <p className="text-sm text-muted-foreground">Tüm ders kitaplarına, kanunlara ve senin performans verilerine erişimim var.</p>
             </div>
-            
+
             {/* 2. Quick Prompts */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-4 w-full max-w-lg">
               <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2" onClick={() => handleSend("Benim zayıf olduğum hukuki konular neler ve ne yapmalıyım?")}>
-                📊 Çalışma Durumumu Analiz Et
+                <BarChart3 className="w-4 h-4 shrink-0" aria-hidden />Çalışma Durumumu Analiz Et
               </Button>
               <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2" onClick={() => handleSend("Bana Borçlar Genel'den zor bir deneme sorusu sor.")}>
-                📝 Bana Rastgele Soru Sor
+                <PenLine className="w-4 h-4 shrink-0" aria-hidden />Bana Rastgele Soru Sor
               </Button>
               <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2" onClick={() => handleSend("Haksız fiil şartlarını kısa bir şekilde özetler misin?")}>
-                ⚖️ Haksız Fiili Özetle
+                <Scale className="w-4 h-4 shrink-0" aria-hidden />Haksız Fiili Özetle
               </Button>
               <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2" onClick={() => handleSend("Maddi tazminat ile manevi tazminat arasındaki farklar nelerdir?")}>
-                🔄 Tazminat Türlerini Karşılaştır
+                <RefreshCw className="w-4 h-4 shrink-0" aria-hidden />Tazminat Türlerini Karşılaştır
               </Button>
               <Button variant="outline" size="sm" className="justify-start text-xs h-auto py-2 text-red-600 dark:text-red-400 border-red-500/20 hover:bg-red-500/10" onClick={handleCaseLawSearch}>
-                📜 Yargıtay Emsali Bul
+                <ScrollText className="w-4 h-4 shrink-0" aria-hidden />Yargıtay Emsali Bul
               </Button>
             </div>
           </div>
@@ -473,7 +474,7 @@ export default function GlobalAiAssistant() {
                   ))}
                 </div>
               )}
-              
+
               <div className={`prose prose-sm md:prose-base dark:prose-invert max-w-none ${m.role === "user" ? "text-primary-foreground" : ""}`}>
                 {m.content ? (
                   renderMessageContent(m.content)
@@ -496,23 +497,23 @@ export default function GlobalAiAssistant() {
                   </Button>
                   <div className="flex-1" />
                   <Button variant="outline" size="sm" className="h-8 text-xs bg-background/50 hover:bg-background" onClick={() => handleSend("Lütfen bu anlattığını daha basit, günlük bir dille, avukat argosundan uzak şekilde açıklar mısın?", true)}>
-                    👶 Daha Basit Anlat
+                     Daha Basit Anlat
                   </Button>
                 </div>
               )}
             </div>
-            
+
             {/* 10. Dynamic Follow-ups */}
             {m.role === "ai" && m.content && i === messages.length - 1 && (
               <div className="flex flex-wrap gap-2 mt-3 ml-2">
                 <Button variant="secondary" size="sm" className="text-[11px] h-7 rounded-full" onClick={() => handleSend("Bu konuyu pratik bir olay/örnek üzerinden açıklar mısın?")}>
-                  ✨ Örnek Olay Ver
+                <Sparkles className="w-4 h-4 shrink-0" aria-hidden />Örnek Olay Ver
                 </Button>
                 <Button variant="secondary" size="sm" className="text-[11px] h-7 rounded-full" onClick={() => handleSend("Bana bu konudan kısa bir test sorusu sorar mısın?")}>
-                  🧠 Konudan Soru Sor
+                <Brain className="w-4 h-4 shrink-0" aria-hidden />Konudan Soru Sor
                 </Button>
                 <Button variant="secondary" size="sm" className="text-[11px] h-7 rounded-full text-red-600 dark:text-red-400 bg-red-500/10 hover:bg-red-500/20" onClick={handleCaseLawSearch}>
-                  📜 Yargıtay Emsali Bul
+                <ScrollText className="w-4 h-4 shrink-0" aria-hidden />Yargıtay Emsali Bul
                 </Button>
               </div>
             )}
@@ -555,7 +556,7 @@ export default function GlobalAiAssistant() {
               </Button>
             )}
           </div>
-          
+
           <Button 
             type="submit" 
             size="icon" 

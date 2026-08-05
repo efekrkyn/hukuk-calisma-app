@@ -20,7 +20,7 @@ export default async function HmgsPage({
               <ArrowLeft className="w-4 h-4 mr-1" />
               Ana sayfa
             </Link>
-            <h1 className="text-3xl font-bold flex items-center gap-2">
+            <h1 className="type-display flex items-center gap-2">
               <BookOpenCheck className="w-8 h-8 text-primary" />
               HMGS Simülasyonu
             </h1>
@@ -30,7 +30,7 @@ export default async function HmgsPage({
           </div>
         </div>
 
-        <div className="glass rounded-xl p-4 md:p-6 border-primary/20 bg-card/50">
+        <div className="material-thin rounded-xl p-4 md:p-6 border-primary/20 material-thin">
           <HmgsClient subject={subject} />
         </div>
       </div>

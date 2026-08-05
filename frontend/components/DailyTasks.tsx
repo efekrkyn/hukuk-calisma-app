@@ -37,7 +37,7 @@ export default function DailyTasks() {
   const addTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTask.trim()) return;
-    
+
     setTasks([
       ...tasks,
       { id: Date.now().toString(), text: newTask.trim(), completed: false },
@@ -65,7 +65,7 @@ export default function DailyTasks() {
             {completedCount} / {tasks.length}
           </span>
         </h3>
-        
+
         <div className="mt-4 h-2 bg-muted rounded-full overflow-hidden">
           <div 
             className="h-full bg-primary transition-all duration-500" 
@@ -91,11 +91,11 @@ export default function DailyTasks() {
               >
                 {task.completed && <Check className="w-3.5 h-3.5" />}
               </button>
-              
+
               <span className={`flex-1 text-sm transition-all ${task.completed ? 'text-muted-foreground line-through' : 'text-foreground font-medium'}`}>
                 {task.text}
               </span>
-              
+
               <button
                 onClick={() => removeTask(task.id)}
                 className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all"

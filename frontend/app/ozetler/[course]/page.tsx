@@ -19,7 +19,7 @@ export default async function OzetReader({ params }: { params: Promise<Params> }
 
   let summary: SummaryData | null = null;
   const filePath = path.join(process.cwd(), "data", "summaries", `${course}.json`);
-  
+
   try {
     const fileContent = fs.readFileSync(filePath, "utf-8");
     summary = JSON.parse(fileContent);
@@ -37,7 +37,7 @@ export default async function OzetReader({ params }: { params: Promise<Params> }
           <ArrowLeft className="w-5 h-5" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2 text-gradient">
+          <h1 className="type-display flex items-center gap-2 text-gradient">
             <BookOpen className="w-6 h-6 text-primary" />
             {summary ? summary.title : `${courseName} - Özet`}
           </h1>
@@ -46,7 +46,7 @@ export default async function OzetReader({ params }: { params: Promise<Params> }
       </div>
 
       {!summary ? (
-        <div className="text-center py-20 glass rounded-2xl border border-border">
+        <div className="text-center py-20 material-thin rounded-2xl border border-border">
           <AlertCircle className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
           <h3 className="text-lg font-medium">Özet Bulunamadı</h3>
           <p className="text-sm text-muted-foreground mt-1 max-w-md mx-auto">
@@ -56,7 +56,7 @@ export default async function OzetReader({ params }: { params: Promise<Params> }
       ) : (
         <div className="space-y-6">
           {summary.items.map((item, idx) => (
-            <Card key={idx} className="glass hover-glow border-primary/20">
+            <Card key={idx} className="material-thin hover-glow border-primary/20">
               <CardHeader className="bg-primary/5 pb-3 border-b border-primary/10">
                 <CardTitle className="text-lg font-semibold text-primary/90 flex items-center gap-2">
                   <span className="bg-primary/20 text-primary w-6 h-6 rounded flex items-center justify-center text-sm">

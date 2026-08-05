@@ -46,7 +46,7 @@ export default async function EmsalKararlar() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             Ana sayfa
           </Link>
-          <h1 className="text-3xl font-bold flex items-center gap-2">
+          <h1 className="type-display flex items-center gap-2">
             <Scale className="w-8 h-8 text-primary" />
             Emsal Kararlar
           </h1>
@@ -57,7 +57,7 @@ export default async function EmsalKararlar() {
       </div>
 
       {kararlar.length === 0 && (
-        <div className="text-center py-12 glass rounded-2xl border border-border">
+        <div className="text-center py-12 material-thin rounded-2xl border border-border">
           <Scale className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
           <h3 className="text-lg font-medium">Karar Bulunamadı</h3>
           <p className="text-sm text-muted-foreground mt-1">
@@ -69,15 +69,15 @@ export default async function EmsalKararlar() {
       {categories.map((cat) => (
         <div key={cat} className="space-y-4">
           <div className="flex items-center gap-2 border-b border-border/50 pb-2">
-            <h2 className="text-xl font-bold text-gradient">{cat}</h2>
+            <h2 className="type-title text-gradient">{cat}</h2>
             <span className="text-xs font-medium px-2 py-0.5 bg-primary/10 text-primary rounded-full">
               {grouped[cat].length} Karar
             </span>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {grouped[cat].map((karar) => (
-              <Card key={karar.id} className="glass hover-glow border-primary/10 flex flex-col h-full">
+              <Card key={karar.id} className="material-thin hover-glow border-primary/10 flex flex-col h-full">
                 <CardHeader className="bg-muted/5 pb-3 border-b border-border/5">
                   <div className="flex flex-col gap-2">
                     <CardTitle className="text-base font-bold leading-tight">

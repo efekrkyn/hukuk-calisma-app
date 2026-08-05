@@ -12,7 +12,7 @@ export default function DinamikTestClient() {
   const [topic, setTopic] = useState("");
   const [difficulty, setDifficulty] = useState("Orta");
   const [count, setCount] = useState(5);
-  
+
   const [isGenerating, setIsGenerating] = useState(false);
   const [questions, setQuestions] = useState<DynamicQuizQuestion[] | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function DinamikTestClient() {
       alert("Lütfen bir konu girin (Örn: Haksız Fiil Unsurları)");
       return;
     }
-    
+
     setIsGenerating(true);
     setError(null);
     setQuestions(null);
@@ -87,9 +87,9 @@ export default function DinamikTestClient() {
     const isFinished = currentIndex >= questions.length;
     if (isFinished) {
       return (
-        <Card className="glass border-primary/20 text-center py-12">
+        <Card className="material-thin border-primary/20 text-center py-12">
           <CardContent className="space-y-4">
-            <h2 className="text-2xl font-bold text-gradient">Test Bitti!</h2>
+            <h2 className="type-display text-gradient">Test Bitti!</h2>
             <div className="text-3xl sm:text-5xl font-black">{score} / {questions.length}</div>
             <Button onClick={() => setQuestions(null)} className="mt-4 hover-glow">Yeni Test Üret</Button>
           </CardContent>
@@ -99,7 +99,7 @@ export default function DinamikTestClient() {
 
     const q = questions[currentIndex];
     return (
-      <Card className="glass border-primary/20 animate-in fade-in">
+      <Card className="material-thin border-primary/20 animate-in fade-in">
         <CardHeader className="border-b border-border/10 bg-primary/5">
           <div className="flex justify-between text-sm font-medium text-muted-foreground">
             <span>Soru {currentIndex + 1} / {questions.length}</span>
@@ -115,9 +115,9 @@ export default function DinamikTestClient() {
             {q.options.map((opt, idx) => {
               const isSelected = selectedOpt === idx;
               const isCorrect = idx === q.correctAnswer;
-              
+
               let btnClass = "w-full justify-start text-left h-auto py-3 px-4 border transition-all";
-              
+
               if (showResult) {
                 if (isCorrect) {
                   btnClass += " border-green-500 bg-green-500/10 text-green-700 dark:text-green-400";
@@ -148,7 +148,7 @@ export default function DinamikTestClient() {
           </div>
 
           {showResult && (
-            <div className="p-4 rounded-xl bg-muted/30 border border-border/50 animate-in slide-in-from-bottom-2">
+            <div className="p-4 rounded-xl material-thin border-border/50 animate-in slide-in-from-bottom-2">
               <h4 className="font-semibold text-primary mb-2">Çözüm ve Açıklama</h4>
               <p className="text-sm text-muted-foreground">{q.explanation}</p>
               <div className="mt-4 flex justify-end">
@@ -162,13 +162,13 @@ export default function DinamikTestClient() {
   }
 
   return (
-    <Card className="glass border-primary/20 max-w-2xl mx-auto">
+    <Card className="material-thin border-primary/20 max-w-2xl mx-auto">
       <CardHeader>
         <CardTitle>Sınav Parametrelerini Belirle</CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {error && <div className="p-3 text-sm text-destructive bg-destructive/10 rounded-md border border-destructive/20">{error}</div>}
-        
+
         <div className="space-y-2">
           <label className="text-sm font-medium">Ders</label>
           <select value={course} onChange={e => setCourse(e.target.value)} className="w-full p-2 border rounded-md bg-background text-sm">

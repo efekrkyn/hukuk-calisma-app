@@ -23,16 +23,16 @@ export default function PracticeLanding() {
   return (
     <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Pratik Olaylar ⚖️</h1>
+        <h1 className="type-display">Pratik Olaylar </h1>
         <Link
           href="/"
           className="text-sm text-muted-foreground hover:text-foreground"
         >
-          ← Ana sayfa
+           Ana sayfa
         </Link>
       </div>
       <p className="text-sm text-muted-foreground">
-        Olay senaryosunu oku → kendi çözümünü yaz → AI değerlendirir, ideal
+        Olay senaryosunu oku  kendi çözümünü yaz  AI değerlendirir, ideal
         çözümü gösterir, puan verir.
       </p>
       {COURSES.map((c) => {

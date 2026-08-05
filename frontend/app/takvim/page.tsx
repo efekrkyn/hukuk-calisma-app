@@ -55,7 +55,7 @@ export default function TakvimPage() {
             <ArrowLeft className="w-4 h-4 mr-1" />
             Ana sayfa
           </Link>
-          <h1 className="text-3xl font-bold flex items-center gap-2 text-gradient">
+          <h1 className="type-display flex items-center gap-2 text-gradient">
             <Calendar className="w-8 h-8 text-primary" />
             Sınav Takvimi & Görev Yöneticisi
           </h1>
@@ -65,7 +65,7 @@ export default function TakvimPage() {
         </div>
 
         {/* Add Task */}
-        <Card className="glass border-primary/20">
+        <Card className="material-thin border-primary/20">
           <CardHeader className="pb-3">
             <CardTitle className="text-lg">Yeni Görev Ekle</CardTitle>
           </CardHeader>
@@ -95,7 +95,7 @@ export default function TakvimPage() {
         {/* Task List */}
         <div className="space-y-3">
           {sortedTasks.length === 0 && (
-            <div className="text-center py-16 glass rounded-2xl border border-border">
+            <div className="text-center py-16 material-thin rounded-2xl border border-border">
               <Calendar className="w-12 h-12 text-muted-foreground/50 mx-auto mb-3" />
               <h3 className="text-lg font-medium">Henüz görev eklenmemiş</h3>
               <p className="text-sm text-muted-foreground mt-1">Yukarıdan yeni görevler ekleyerek çalışma planını oluştur.</p>
@@ -106,7 +106,7 @@ export default function TakvimPage() {
             return (
               <Card
                 key={task.id}
-                className={`glass border transition-all ${
+                className={`material-thin border transition-all ${
                   task.done
                     ? "border-green-500/30 bg-green-500/5 opacity-70"
                     : isOverdue
@@ -130,7 +130,7 @@ export default function TakvimPage() {
                       {task.text}
                     </p>
                     <p className={`text-xs ${isOverdue ? "text-red-500 font-semibold" : "text-muted-foreground"}`}>
-                      {isOverdue ? "⚠️ Gecikmiş — " : ""}{task.date}
+                      {isOverdue ? "Gecikmiş —" : ""}{task.date}
                     </p>
                   </div>
                   <button
