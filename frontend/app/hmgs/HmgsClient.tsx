@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
+import { useSetPageContext } from "@/lib/page-context";
 import { Card, CardContent } from "@/components/ui/card";
 import { CheckCircle2, XCircle, Loader2, Trophy, Clock, Star, Flag } from "lucide-react";
 
@@ -39,6 +40,23 @@ export default function HmgsClient({ subject }: { subject?: string }) {
   const [showReview, setShowReview] = useState(false);
   const [examId, setExamId] = useState<string | null>(null);
   const submittedRef = useRef(false);
+
+  // Asistan hangi soruyu çözdüğümüzü bilsin — "bu nedir?" dediğimizde
+  // neyi kastettiğimizi anlaması buna bağlı.
+  const activeQ = questions[currentIndex];
+  useSetPageContext(
+    started && !finished && activeQ
+      ? {
+          label: `Soru ${currentIndex + 1}`,
+          detail: [
+            `Alan: ${activeQ.subject_name}`,
+            `Soru: ${activeQ.question}`,
+            "Şıklar:",
+            ...activeQ.options.map((o, i) => `${String.fromCharCode(65 + i)}) ${o}`),
+          ].join("\n"),
+        }
+      : null
+  );
   const [shortfall, setShortfall] = useState<Array<{ subject: string; needed: number; have: number }>>([]);
   const [verifiedCount, setVerifiedCount] = useState(0);
   const [subjectName, setSubjectName] = useState<string | null>(null);
@@ -356,7 +374,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
       </div>
 
       {/* Navigation */}
-      <div className="flex justify-between pt-2">
+      <div className="flex justify-between pt-2 pb-24 sm:pb-4">
         <Button variant="outline" disabled={currentIndex === 0} onClick={() => setCurrentIndex((i) => i - 1)}>
           ← Önceki
         </Button>
