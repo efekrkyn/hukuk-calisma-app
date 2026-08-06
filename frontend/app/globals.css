@@ -54,18 +54,18 @@
   --card-foreground: oklch(0.245 0.010 65);
   --popover: oklch(1 0.004 85);
   --popover-foreground: oklch(0.245 0.010 65);
-  --primary: oklch(0.38 0.098 258);
+  --primary: oklch(0.322 0.089 254);
   --primary-foreground: oklch(0.985 0.006 85);
   --secondary: oklch(0.955 0.008 85);
   --secondary-foreground: oklch(0.245 0.010 65);
   --muted: oklch(0.955 0.008 85);
   --muted-foreground: oklch(0.48 0.012 65);
-  --accent: oklch(0.93 0.022 258);
+  --accent: oklch(0.93 0.022 254);
   --accent-foreground: oklch(0.245 0.010 65);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.30 0.015 65 / 13%);
   --input: oklch(0.30 0.015 65 / 16%);
-  --ring: oklch(0.38 0.098 258 / 40%);
+  --ring: oklch(0.322 0.089 254 / 42%);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -96,8 +96,8 @@
   --popover-foreground: oklch(0.92 0.004 75);
   
   /* Primary: Neon Violet / Indigo */
-  --primary: oklch(0.835 0.145 92);
-  --primary-foreground: oklch(0.20 0.03 92);
+  --primary: oklch(0.836 0.110 89);
+  --primary-foreground: oklch(0.20 0.028 89);
   
   /* Secondary: Soft Blue-Gray */
   --secondary: oklch(0.26 0.010 65);
@@ -108,7 +108,7 @@
   --muted-foreground: oklch(0.675 0.010 70);
   
   /* Accent */
-  --accent: oklch(0.30 0.040 92);
+  --accent: oklch(0.30 0.034 89);
   --accent-foreground: oklch(0.92 0.004 75);
   
   /* Destructive */
@@ -117,7 +117,7 @@
   /* Borders and Inputs */
   --border: oklch(0.85 0.015 70 / 13%);
   --input: oklch(0.85 0.015 70 / 15%);
-  --ring: oklch(0.835 0.145 92 / 55%);
+  --ring: oklch(0.836 0.110 89 / 55%);
   
   --chart-1: oklch(0.65 0.25 290);
   --chart-2: oklch(0.70 0.20 240);
@@ -147,7 +147,7 @@
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(to right, oklch(0.62 0.11 258), oklch(0.72 0.08 232));
+  background-image: linear-gradient(to right, oklch(0.38 0.089 254), oklch(0.50 0.070 240));
 }
 
 @utility hover-glow {
@@ -292,9 +292,13 @@
 
 
 /* ─────────────────────────────────────────────────────────────
-   OXFORD — akademik karakter, ölçülü.
-   Arma yok, sahte parşömen yok. Karakter seriften, kıl payı
-   çizgilerden ve nefes alan satır aralığından geliyor.
+   AÜHF — akademik karakter, ölçülü.
+   Renkler AÜ'nün kendi sitesinden ölçüldü: lacivert #003366,
+   altın/buğday #E5C97B. Arma yok, sahte parşömen yok — karakter
+   seriften, kıl payı çizgilerden ve satır aralığından geliyor.
+
+   Altının doygunluğu AÜ'nün resmî tonundan (.083) biraz yüksek (.110):
+   ekranda buğday fazla soluk kalıyordu.
    ───────────────────────────────────────────────────────────── */
 
 /** Başlıklar serif. Gövde sans kalıyor — ekranda okunurluk için. */
@@ -356,12 +360,12 @@
 .dark .text-gradient {
   background-image: linear-gradient(
     to right,
-    oklch(0.86 0.145 92),
-    oklch(0.90 0.110 78)
+    oklch(0.86 0.110 89),
+    oklch(0.90 0.085 76)
   );
 }
 
 .dark .hover-glow:hover {
-  box-shadow: 0 0 20px oklch(0.835 0.145 92 / 20%);
-  border-color: oklch(0.835 0.145 92 / 50%);
+  box-shadow: 0 0 20px oklch(0.836 0.110 89 / 20%);
+  border-color: oklch(0.836 0.110 89 / 50%);
 }

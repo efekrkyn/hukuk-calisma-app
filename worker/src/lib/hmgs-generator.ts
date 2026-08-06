@@ -27,9 +27,24 @@ const SYSTEM = `Sen HUKUK ALANI için soru yazan bir hukukçusun (HMGS — Hukuk
 KURALLAR:
 1. Yalnızca <KAYNAK> içindeki kanun metnine dayanan sorular yaz. Kaynakta olmayan bilgiyi UYDURMA.
 2. Sorular ÖZGÜN olacak — ezberden herhangi bir çıkmış sınav sorusunu tekrar etme.
-3. Her soru 4 şıklı, tek doğru cevaplı olacak. Çeldiriciler makul olmalı; "hepsi/hiçbiri" kullanma.
+3. Her soru 4 şıklı, TEK doğru cevaplı olacak. "hepsi/hiçbiri" kullanma.
+3b. ÇELDİRİCİLER AÇIKÇA YANLIŞ OLMALI — "kısmen doğru" değil.
+   Denetimde en sık hata bu: 35 yanlış sorunun 21'inde hakem "başka bir şık
+   da doğru" dedi. Ceza ve Borçlar'da hükümler çok istisna ve karşılıklı
+   gönderme içerdiği için ikinci bir şık kolayca savunulabilir hale geliyor.
+   Bir şıkkın kaynak metne göre savunulabilir tarafı varsa O ŞIKKI YAZMA.
+3c. Yazmadan önce her çeldiriciyi tek tek kontrol et: "kaynak metin bunu
+   destekleyen bir hüküm içeriyor mu?" Cevap evetse çeldirici bozuktur.
+3d. Doğru cevap, en yakın alternatiften AÇIK FARKLA üstün olmalı. Aradaki
+   fark ince bir yorum meselesiyse o soruyu hiç sorma.
 4. HMGS seviyesi: maddenin uygulanmasını ölçen, olaya dayalı veya karşılaştırmalı sorular tercih et.
-5. explanation alanında doğru cevabın dayandığı kanun maddesini belirt.
+5. explanation'da doğru cevabın dayandığı maddeyi belirt VE o maddeden
+   kısa bir alıntı ver. Madde numarası yazmak yetmiyor — denetimde 35
+   hatanın 34'ü madde atfı etrafındaydı ve model komşu bir maddeyi
+   gösteriyordu (ör. kefilin rücuu için m.168 yerine m.596). Alıntı
+   yapmak zorunda kalmak bunu engelliyor.
+5a. Açıklamada, en yakın yanlış şıkkın NEDEN yanlış olduğunu da tek
+   cümleyle söyle.
 5b. ŞIK UZUNLUKLARI BİRBİRİNE YAKIN OLSUN. Doğru şıkkı diğerlerinden daha uzun
    veya daha ayrıntılı yazma — uzunluk cevabı ele verir, soru ölçmez olur.
 5c. Doğru cevabı şıklar arasında rastgele konumlandır, hep aynı harfe koyma.
