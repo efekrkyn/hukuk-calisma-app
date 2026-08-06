@@ -602,7 +602,7 @@ hmgs.post("/verify", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
   if (!c.env.DEEPSEEK_API_KEY) return c.json({ error: "DEEPSEEK_API_KEY yok" }, 503);
 
-  let body: { subject?: string; limit?: number; recheck?: boolean };
+  let body: { subject?: string; limit?: number; recheck?: boolean; scope?: string; before?: number };
   try {
     body = await c.req.json();
   } catch {
@@ -615,22 +615,44 @@ hmgs.post("/verify", async (c) => {
   // Aynı anda çok soru göndermek hakemi sulandırıyor; küçük parti tut.
   const limit = Math.min(Math.max(Number(body.limit ?? 5), 1), 8);
 
-  // recheck=1: "unsupported" damgalıları yeniden dene. Çoğu kötü soru değil,
-  // hakemin doğru maddeyi görememesiydi.
-  const recheck = body.recheck === true;
-  const rows = await c.env.DB.prepare(
-    recheck
-      ? `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
-           FROM hmgs_questions q
-           JOIN hmgs_verdicts v ON v.question_id = q.id
-          WHERE q.subject = ? AND v.verified = 0
-          LIMIT ?`
-      : `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
-           FROM hmgs_questions q
-           LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
-          WHERE q.subject = ? AND v.question_id IS NULL
-          LIMIT ?`
-  ).bind(subject.id, limit).all<any>();
+  // scope:
+  //   "new"         (varsayılan) hiç denetlenmemişler
+  //   "unsupported" eski recheck=1 — "kaynakta doğrulanamadı" damgalılar.
+  //                 Çoğu kötü soru değil, hakemin doğru maddeyi görememesiydi.
+  //   "verified"    ONAYLI olanları yeniden denetle. Hakeme "çeldirici de
+  //                 doğru olabilir mi?" görevi sonradan eklendi; ondan önce
+  //                 onaylanan sorular bu kontrolden hiç geçmedi.
+  const scope = body.recheck === true ? "unsupported" : String(body.scope ?? "new");
+
+  // "verified" turunun bitebilmesi için: yalnızca `before`dan ESKİ denetimler
+  // seçiliyor. Yeniden denetlenen sorunun checked_at'i şimdiye çekildiğinden
+  // seçimden düşüyor, aksi hâlde döngü aynı soruları sonsuza dek çevirirdi.
+  const before = Number(body.before) || Date.now();
+
+  const SQL: Record<string, string> = {
+    unsupported: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+                    FROM hmgs_questions q
+                    JOIN hmgs_verdicts v ON v.question_id = q.id
+                   WHERE q.subject = ? AND v.verified = 0
+                   LIMIT ?`,
+    verified: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+                 FROM hmgs_questions q
+                 JOIN hmgs_verdicts v ON v.question_id = q.id
+                WHERE q.subject = ? AND v.verdict = 'correct' AND v.checked_at < ?
+                LIMIT ?`,
+    new: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+            FROM hmgs_questions q
+            LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+           WHERE q.subject = ? AND v.question_id IS NULL
+           LIMIT ?`,
+  };
+  if (!SQL[scope]) return c.json({ error: "geçersiz scope" }, 400);
+
+  const selStmt = c.env.DB.prepare(SQL[scope]);
+  const rows = await (scope === "verified"
+    ? selStmt.bind(subject.id, before, limit)
+    : selStmt.bind(subject.id, limit)
+  ).all<any>();
 
   if (rows.results.length === 0) {
     return c.json({ ok: true, subject: subject.id, checked: 0, remaining: 0 });
@@ -687,19 +709,29 @@ hmgs.post("/verify", async (c) => {
     )
   );
 
-  const left = await c.env.DB.prepare(
-    recheck
-      ? `SELECT COUNT(*) as n FROM hmgs_questions q
-           JOIN hmgs_verdicts v ON v.question_id = q.id
-          WHERE q.subject = ? AND v.verified = 0`
-      : `SELECT COUNT(*) as n FROM hmgs_questions q
-           LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
-          WHERE q.subject = ? AND v.question_id IS NULL`
-  ).bind(subject.id).first<{ n: number }>();
+  // Kalan sayısı seçim sorgusuyla AYNI ölçüte bakmalı; yoksa çağıran taraf
+  // "remaining: 0" görüp turu erken kapatır.
+  const LEFT_SQL: Record<string, string> = {
+    unsupported: `SELECT COUNT(*) as n FROM hmgs_questions q
+                    JOIN hmgs_verdicts v ON v.question_id = q.id
+                   WHERE q.subject = ? AND v.verified = 0`,
+    verified: `SELECT COUNT(*) as n FROM hmgs_questions q
+                 JOIN hmgs_verdicts v ON v.question_id = q.id
+                WHERE q.subject = ? AND v.verdict = 'correct' AND v.checked_at < ?`,
+    new: `SELECT COUNT(*) as n FROM hmgs_questions q
+            LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+           WHERE q.subject = ? AND v.question_id IS NULL`,
+  };
+  const leftStmt = c.env.DB.prepare(LEFT_SQL[scope]);
+  const left = await (scope === "verified"
+    ? leftStmt.bind(subject.id, before)
+    : leftStmt.bind(subject.id)
+  ).first<{ n: number }>();
 
   return c.json({
     ok: true,
     subject: subject.id,
+    scope,
     checked: verdicts.length,
     remaining: left?.n ?? 0,
     verdicts,
