@@ -84,40 +84,40 @@
 
 .dark {
   /* Deep Dark Navy Background */
-  --background: oklch(0.175 0.008 65);
-  --foreground: oklch(0.92 0.004 75);
+  --background: oklch(0.172 0.020 254);
+  --foreground: oklch(0.92 0.006 254);
   
   /* Glassmorphic Cards (Translucent Navy) */
-  --card: oklch(0.225 0.010 65 / 62%);
-  --card-foreground: oklch(0.92 0.004 75);
+  --card: oklch(0.232 0.026 254 / 62%);
+  --card-foreground: oklch(0.92 0.006 254);
   
   /* Popovers */
-  --popover: oklch(0.21 0.010 65);
-  --popover-foreground: oklch(0.92 0.004 75);
+  --popover: oklch(0.215 0.026 254);
+  --popover-foreground: oklch(0.92 0.006 254);
   
   /* Primary: Neon Violet / Indigo */
-  --primary: oklch(0.836 0.110 89);
-  --primary-foreground: oklch(0.20 0.028 89);
+  --primary: oklch(0.775 0.058 254);
+  --primary-foreground: oklch(0.18 0.028 254);
   
   /* Secondary: Soft Blue-Gray */
-  --secondary: oklch(0.26 0.010 65);
-  --secondary-foreground: oklch(0.92 0.004 75);
+  --secondary: oklch(0.265 0.026 254);
+  --secondary-foreground: oklch(0.92 0.006 254);
   
   /* Muted */
-  --muted: oklch(0.245 0.009 65);
-  --muted-foreground: oklch(0.675 0.010 70);
+  --muted: oklch(0.252 0.024 254);
+  --muted-foreground: oklch(0.675 0.018 254);
   
   /* Accent */
-  --accent: oklch(0.30 0.034 89);
-  --accent-foreground: oklch(0.92 0.004 75);
+  --accent: oklch(0.30 0.036 254);
+  --accent-foreground: oklch(0.92 0.006 254);
   
   /* Destructive */
   --destructive: oklch(0.60 0.20 20);
   
   /* Borders and Inputs */
-  --border: oklch(0.85 0.015 70 / 13%);
-  --input: oklch(0.85 0.015 70 / 15%);
-  --ring: oklch(0.836 0.110 89 / 55%);
+  --border: oklch(0.85 0.020 254 / 14%);
+  --input: oklch(0.85 0.020 254 / 16%);
+  --ring: oklch(0.775 0.058 254 / 52%);
   
   --chart-1: oklch(0.65 0.25 290);
   --chart-2: oklch(0.70 0.20 240);
@@ -297,8 +297,14 @@
    altın/buğday #E5C97B. Arma yok, sahte parşömen yok — karakter
    seriften, kıl payı çizgilerden ve satır aralığından geliyor.
 
-   Altının doygunluğu AÜ'nün resmî tonundan (.083) biraz yüksek (.110):
-   ekranda buğday fazla soluk kalıyordu.
+   Lacivert her iki temada da var ama farklı rolde: açık temada VURGU
+   (butonlar, linkler), koyu temada ATMOSFER (zemin ve kart yüzeyleri).
+   Lacivert koyu zeminde okunmadığı için vurgu olamıyor; onun yerine
+   açık akrabası (çelik mavisi) kullanılıyor — gövde metninden ayrışacak
+   kadar farklı, "genel parlak mavi" olmayacak kadar doygunluğu düşük.
+
+   Koyu zeminin lacivert eğimi bilerek zayıf (chroma .020): gece
+   çalışmasında mavi ışık yükünü artırmamak için tam maviye çekilmedi.
    ───────────────────────────────────────────────────────────── */
 
 /** Başlıklar serif. Gövde sans kalıyor — ekranda okunurluk için. */
@@ -360,12 +366,12 @@
 .dark .text-gradient {
   background-image: linear-gradient(
     to right,
-    oklch(0.86 0.110 89),
-    oklch(0.90 0.085 76)
+    oklch(0.82 0.062 254),
+    oklch(0.87 0.045 240)
   );
 }
 
 .dark .hover-glow:hover {
-  box-shadow: 0 0 20px oklch(0.836 0.110 89 / 20%);
-  border-color: oklch(0.836 0.110 89 / 50%);
+  box-shadow: 0 0 20px oklch(0.775 0.058 254 / 18%);
+  border-color: oklch(0.775 0.058 254 / 48%);
 }
