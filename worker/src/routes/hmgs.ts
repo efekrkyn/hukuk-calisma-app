@@ -10,6 +10,7 @@ import { apportion } from "../lib/apportion";
 import { shuffleOptions } from "../lib/shuffle-options";
 import { isNearDuplicate } from "../lib/near-duplicate";
 import { verifyBatch, type QuestionToCheck } from "../lib/hmgs-verify";
+import { schedule } from "../lib/srs";
 
 type Bindings = {
   AI: Ai;
@@ -251,6 +252,22 @@ hmgs.post("/submit", async (c) => {
     )
   );
 
+  // Bilinmeyen soru tekrar kuyruğuna girer. Boş bırakılan da dahil: boş,
+  // "biliyordum ama işaretlemedim"den çok "bilmiyordum" demek.
+  const missed = answers.filter((a) => !a.correct);
+  if (missed.length > 0) {
+    const enq = c.env.DB.prepare(
+      `INSERT INTO hmgs_review (question_id, subject, next_review, added_at)
+       VALUES (?, ?, ?, ?)
+       ON CONFLICT(question_id) DO UPDATE SET
+         next_review = excluded.next_review,
+         lapses = lapses + 1`
+    );
+    await c.env.DB.batch(
+      missed.map((a) => enq.bind(String(a.question_id), String(a.subject), now, now))
+    );
+  }
+
   const correct = answers.filter((a) => a.correct).length;
   const score = Math.round((correct / answers.length) * 100);
 
@@ -260,6 +277,156 @@ hmgs.post("/submit", async (c) => {
     total: answers.length,
     score,
     passed: score >= HMGS_PASS_SCORE,
+    queued_for_review: missed.length,
+  });
+});
+
+/**
+ * Kendi performansın: deneme bazında net ve alan bazında doğruluk.
+ *
+ * hmgs_attempts baştan beri yazılıyordu ama hiçbir yerden okunmuyordu —
+ * uygulama her cevabı kaydedip kullanıcıya hiçbir şey göstermiyordu.
+ */
+hmgs.get("/performance", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const [exams, subjects] = await Promise.all([
+    c.env.DB.prepare(
+      `SELECT exam_id, MIN(created_at) AS at, COUNT(*) AS n, SUM(is_correct) AS dogru
+         FROM hmgs_attempts GROUP BY exam_id ORDER BY at DESC LIMIT 30`
+    ).all<{ exam_id: string; at: number; n: number; dogru: number }>(),
+    c.env.DB.prepare(
+      `SELECT subject, COUNT(*) AS n, SUM(is_correct) AS dogru
+         FROM hmgs_attempts GROUP BY subject`
+    ).all<{ subject: string; n: number; dogru: number }>(),
+  ]);
+
+  const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
+  const bySubject = subjects.results
+    .map((r) => ({
+      id: r.subject,
+      name: name.get(r.subject) ?? r.subject,
+      answered: r.n,
+      correct: r.dogru,
+      accuracy: r.n > 0 ? Math.round((r.dogru / r.n) * 100) : 0,
+    }))
+    .sort((a, b) => a.accuracy - b.accuracy);
+
+  const byExam = exams.results.map((r) => ({
+    exam_id: r.exam_id,
+    at: r.at,
+    total: r.n,
+    correct: r.dogru,
+    score: r.n > 0 ? Math.round((r.dogru / r.n) * 100) : 0,
+  }));
+
+  const answered = subjects.results.reduce((a, r) => a + r.n, 0);
+  const correct = subjects.results.reduce((a, r) => a + r.dogru, 0);
+
+  const due = await c.env.DB.prepare(
+    `SELECT COUNT(*) AS n FROM hmgs_review WHERE next_review <= ?`
+  ).bind(Date.now()).first<{ n: number }>();
+
+  return c.json({
+    exams: byExam,
+    subjects: bySubject,
+    // Az veriyle alan sıralaması gürültüden ibaret; eşiği UI'ya bildir.
+    min_answers_for_ranking: 5,
+    overall: {
+      exams: byExam.length,
+      answered,
+      correct,
+      accuracy: answered > 0 ? Math.round((correct / answered) * 100) : 0,
+      pass_score: HMGS_PASS_SCORE,
+    },
+    review_due: due?.n ?? 0,
+  });
+});
+
+/** Tekrar kuyruğunda vakti gelmiş sorular. */
+hmgs.get("/review", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const limit = Math.min(Math.max(Number(c.req.query("count") ?? 20), 1), 50);
+  const rows = await c.env.DB.prepare(
+    `SELECT q.id, q.subject, q.question, q.options, q.correct_answer, q.explanation,
+            r.reps, r.lapses, r.next_review
+       FROM hmgs_review r JOIN hmgs_questions q ON q.id = r.question_id
+       LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+      WHERE r.next_review <= ? AND (v.verified IS NULL OR v.verified >= 0)
+      ORDER BY r.next_review LIMIT ?`
+  ).bind(Date.now(), limit).all<any>();
+
+  const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
+  const questions = rows.results.map((r) => {
+    // JSON.parse `any` döner; tip açıkça yazılmazsa shuffleOptions'ın generic
+    // kısıtı devre dışı kalıyor ve yanlış imzayla çağrı tsc'den geçiyor.
+    const options: string[] = JSON.parse(r.options);
+    const shuffled = shuffleOptions({
+      options,
+      correctAnswer: r.correct_answer as number,
+    });
+    return {
+      id: r.id,
+      subject: r.subject,
+      subject_name: name.get(r.subject) ?? r.subject,
+      question: r.question,
+      options: shuffled.options,
+      correctAnswer: shuffled.correctAnswer,
+      explanation: r.explanation,
+      reps: r.reps,
+      lapses: r.lapses,
+    };
+  });
+
+  const total = await c.env.DB.prepare(
+    `SELECT COUNT(*) AS n FROM hmgs_review WHERE next_review <= ?`
+  ).bind(Date.now()).first<{ n: number }>();
+
+  return c.json({ questions, due_total: total?.n ?? 0 });
+});
+
+/** Tekrar sonucunu işle: FSRS bir sonraki tarihi belirler. */
+hmgs.post("/review/grade", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  let body: { question_id?: string; grade?: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const id = String(body.question_id ?? "");
+  const grade = Number(body.grade);
+  if (!id || !Number.isFinite(grade) || grade < 0 || grade > 3) {
+    return c.json({ error: "question_id ve grade (0-3) gerekli" }, 400);
+  }
+
+  const row = await c.env.DB.prepare(
+    `SELECT stability, difficulty, elapsed_days, scheduled_days, reps, lapses,
+            fsrs_state, last_review
+       FROM hmgs_review WHERE question_id = ?`
+  ).bind(id).first<any>();
+  if (!row) return c.json({ error: "soru tekrar kuyruğunda değil" }, 404);
+
+  const next = schedule(row, grade);
+
+  await c.env.DB.prepare(
+    `UPDATE hmgs_review SET
+       stability = ?, difficulty = ?, elapsed_days = ?, scheduled_days = ?,
+       reps = ?, lapses = ?, fsrs_state = ?, next_review = ?, last_review = ?
+     WHERE question_id = ?`
+  ).bind(
+    next.stability, next.difficulty, next.elapsed_days, next.scheduled_days,
+    next.reps, next.lapses, next.fsrs_state, next.next_review, next.last_review,
+    id
+  ).run();
+
+  return c.json({
+    ok: true,
+    next_review: next.next_review,
+    interval_days: next.scheduled_days,
   });
 });
 

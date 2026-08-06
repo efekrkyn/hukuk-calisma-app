@@ -18,6 +18,7 @@ import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { TodayCard } from "@/components/TodayCard";
+import { PerformanceCard } from "@/components/PerformanceCard";
 import ThemeToggle from "@/components/ThemeToggle";
 
 type SubjectStat = {
@@ -31,15 +32,14 @@ type SubjectStat = {
 type VerifyStats = { total: number; correct: number; unchecked: number };
 
 const TOOLS = [
-  { href: "/asistan", label: "AI Asistan", icon: "", desc: "Web arama + sınav modu" },
-  { href: "/reader", label: "Kütüphane", icon: "", desc: "Kanun ve not PDF'leri" },
-  { href: "/mevzuat", label: "Mevzuat Arama", icon: "", desc: "Canlı kanun + madde araması" },
-  { href: "/emsal-kararlar", label: "Emsal Kararlar", icon: "", desc: "Yargıtay / Danıştay" },
-  { href: "/flashcards", label: "Flashcard", icon: "", desc: "Aralıklı tekrar (FSRS)" },
-  { href: "/sozluk", label: "Hukuk Sözlüğü", icon: "", desc: "Terim arama" },
-  { href: "/notlarim", label: "Akıllı Notlar", icon: "", desc: "Kendi notların" },
-  { href: "/irac", label: "IRAC Olay Çözme", icon: "", desc: "Olay analizi pratiği" },
-  { href: "/plan", label: "Çalışma Planı", icon: "", desc: "Program üreticisi" },
+  { href: "/tekrar", label: "Yanlışlarım", desc: "Bilemediklerin aralıklı tekrarla" },
+  { href: "/asistan", label: "AI Asistan", desc: "Web arama + sınav modu" },
+  { href: "/reader", label: "Kütüphane", desc: "Kanun ve not PDF'leri" },
+  { href: "/mevzuat", label: "Mevzuat Arama", desc: "Canlı kanun + madde araması" },
+  { href: "/emsal-kararlar", label: "Emsal Kararlar", desc: "Yargıtay / Danıştay" },
+  { href: "/sozluk", label: "Hukuk Sözlüğü", desc: "Terim arama" },
+  { href: "/notlarim", label: "Akıllı Notlar", desc: "Kendi notların" },
+  { href: "/plan", label: "Çalışma Planı", desc: "Program üreticisi" },
 ];
 
 export default function Home() {
@@ -119,6 +119,8 @@ export default function Home() {
           </div>
         </div>
 
+        <PerformanceCard />
+
         <TodayCard />
 
         {/* Alan kapsamı */}
@@ -176,9 +178,7 @@ export default function Home() {
                   " h-auto py-3 flex flex-col items-start gap-0.5 text-left material-thin border-0"
                 }
               >
-                <span className="text-sm">
-                  {t.icon} {t.label}
-                </span>
+                <span className="text-sm">{t.label}</span>
                 <span className="text-[11px] text-muted-foreground font-normal">
                   {t.desc}
                 </span>
