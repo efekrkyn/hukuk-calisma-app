@@ -37,7 +37,33 @@ KURALLAR:
    destekleyen bir hüküm içeriyor mu?" Cevap evetse çeldirici bozuktur.
 3d. Doğru cevap, en yakın alternatiften AÇIK FARKLA üstün olmalı. Aradaki
    fark ince bir yorum meselesiyse o soruyu hiç sorma.
-4. HMGS seviyesi: maddenin uygulanmasını ölçen, olaya dayalı veya karşılaştırmalı sorular tercih et.
+4. OLAY SORUSU AĞIRLIĞI — bu partideki soruların EN AZ %60'ı olay tipi olacak.
+   Bankadaki 1841 sorunun yalnızca %29'u olay içeriyor, %55'i "aşağıdakilerden
+   hangisi ...dir/değildir" saf hatırlama kalıbında. Gerçek HMGS ağırlıklı
+   olarak somut vakıa verip hukuki sonucu sordurur; madde ezberi ölçen soru
+   sınavı temsil etmiyor.
+4a. OLAY SORUSU NASIL KURULUR:
+   - Somut vakıa ver: taraflar (A, B, C), tarih veya süre, gerçekleşen eylemler.
+   - Vakıa çözüm için gereken TÜM olguları içersin; aday varsayım yapmak
+     zorunda kalmasın.
+   - Soru kökü hukuki SONUCU sorsun: "...hukuki durumu aşağıdakilerden
+     hangisidir?", "...talebi bakımından aşağıdakilerden hangisi doğrudur?",
+     "...sözleşmenin akıbeti ne olur?"
+   - Şıklar hukuki sonuç olsun (geçerli/geçersiz, sorumlu/sorumsuz, hak
+     kazanır/kazanamaz, süre işlemeye başlar/başlamaz) — tanım listesi değil.
+   - Vakıanın çözümü <KAYNAK>'taki hükümden ÇIKARILABİLİR olmalı. Hükmün
+     kapsamadığı bir olay kurma; kurgu vakıa uydurmakla kaynak dışına
+     çıkmak aynı hatadır.
+   ÖRNEK OLAY SORUSU:
+   "A, B'ye ait taşınmazı 10 yıl boyunca malik sıfatıyla ve davasız olarak
+   elinde bulundurmuştur. Tapu kütüğünde kayıtlı malik C'dir. A'nın taşınmaz
+   üzerindeki hukuki durumu aşağıdakilerden hangisidir?"
+4b. Kalan en fazla %40'ta saf tanım/sayma sorusu ("aşağıdakilerden hangisi
+   X'in unsurlarından biri DEĞİLDİR") yazabilirsin — ama sadece hüküm
+   gerçekten sayma niteliğindeyse. Aynı hükümden olay sorusu kurulabiliyorken
+   tanım sorusu yazma.
+4c. Olay sorusunda da 3b–3d geçerli: çeldirici sonuçlar açıkça yanlış olacak
+   ve doğru sonuç en yakın alternatiften açık farkla üstün olacak.
 5. explanation'da doğru cevabın dayandığı maddeyi belirt VE o maddeden
    kısa bir alıntı ver. Madde numarası yazmak yetmiyor — denetimde 35
    hatanın 34'ü madde atfı etrafındaydı ve model komşu bir maddeyi
@@ -47,7 +73,11 @@ KURALLAR:
    cümleyle söyle.
 5b. ŞIK UZUNLUKLARI BİRBİRİNE YAKIN OLSUN. Doğru şıkkı diğerlerinden daha uzun
    veya daha ayrıntılı yazma — uzunluk cevabı ele verir, soru ölçmez olur.
-5c. Doğru cevabı şıklar arasında rastgele konumlandır, hep aynı harfe koyma.
+5c. DOĞRU CEVABI HARFLERE DENGELİ DAĞIT. Bankada dağılım bozuk: doğru cevap
+   %41 oranında B, yalnızca %7,7 oranında D (dengeli olsa her biri %25).
+   Bu partide correctAnswer değerlerini 0/1/2/3 arasında yaklaşık eşit
+   paylaştır, art arda iki soruda aynı indeksi kullanma ve JSON'u
+   döndürmeden önce dağılımı gözden geçir.
 6. sourceIndex: soruyu hangi <KAYNAK> parçasından yazdığını [n] numarasıyla bildir.
 7. İSTENEN ALAN DIŞINA ÇIKMA. Kaynak parçaları istenen alanı karşılamıyorsa o soruyu
    hiç yazma — az soru döndürmek, yanlış alandan soru döndürmekten iyidir.
@@ -172,7 +202,11 @@ export async function generateQuestions(
     }
   }
 
-  const prompt = `<KAYNAK>\n${context}\n</KAYNAK>${avoid}\n\nYukarıdaki kanun metnine dayanarak "${subject.name}"${subtopic ? ` alanında, özellikle "${subtopic}" konusunda` : " alanında"} ${count} adet HMGS sorusu yaz.`;
+  // %60 olay kuralını ADET olarak da söylüyoruz: küçük partide yüzde belirsiz
+  // kalıyor (3 soruluk partide "%60" model için 1 de 2 de olabilir), somut
+  // sayı ise kontrol edilebilir bir hedef.
+  const scenarioCount = Math.ceil(count * 0.6);
+  const prompt = `<KAYNAK>\n${context}\n</KAYNAK>${avoid}\n\nYukarıdaki kanun metnine dayanarak "${subject.name}"${subtopic ? ` alanında, özellikle "${subtopic}" konusunda` : " alanında"} ${count} adet HMGS sorusu yaz.\n\nBunlardan EN AZ ${scenarioCount} tanesi OLAY sorusu olacak (KURAL 4/4a): somut vakıa — taraflar, süre/tarih, eylemler — verilip hukuki sonucu sorulacak. Kalanlar tanım/sayma sorusu olabilir.\n\nDoğru cevapları A/B/C/D arasında dengeli dağıt (KURAL 5c).`;
 
   const provider = new DeepSeekProvider(env.DEEPSEEK_API_KEY, "deepseek-chat");
   let raw = "";

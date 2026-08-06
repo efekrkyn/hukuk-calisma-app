@@ -89,6 +89,32 @@ hmgs.post("/generate", async (c) => {
     return c.json({ error: "soru üretilemedi", subject: subject.id, inserted: 0 }, 502);
   }
 
+  // Tekrar kapısı INSERT'ten ÖNCE. Daha önce yalnızca deneme kurulurken
+  // (/exam) eleniyordu; banka yazarken elenmediği için 1841 sorunun %13'ü
+  // (239 soru) kendi alanı içinde yakın eşe sahipti, üç çift birebir aynıydı.
+  // Model bankada ne olduğunu bilmediğinden aynı soruyu tekrar üretiyor.
+  // Yalnızca bu alanın `question` sütunu yeterli — tekrar alanlar arası olmaz.
+  const existing = await c.env.DB.prepare(
+    `SELECT question FROM hmgs_questions WHERE subject = ?`
+  ).bind(subject.id).all<{ question: string }>();
+
+  const seen = existing.results.map((r) => r.question);
+  const fresh = questions.filter((q) => {
+    // Bankaya karşı VE aynı partide tutulanlara karşı: model tek çağrıda da
+    // aynı soruyu iki kez üretebiliyor.
+    if (seen.some((s) => isNearDuplicate(s, q.question))) return false;
+    seen.push(q.question);
+    return true;
+  });
+
+  const skipped = questions.length - fresh.length;
+
+  // Hepsi elendiyse hata değil — alan doymuş ya da model tekrar etmiş demek.
+  // Üretim betiği farkı görsün diye `skipped` her koşulda yanıtta.
+  if (fresh.length === 0) {
+    return c.json({ ok: true, subject: subject.id, inserted: 0, skipped });
+  }
+
   const now = Date.now();
   const stmt = c.env.DB.prepare(
     `INSERT INTO hmgs_questions
@@ -96,7 +122,7 @@ hmgs.post("/generate", async (c) => {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
   await c.env.DB.batch(
-    questions.map((q) =>
+    fresh.map((q) =>
       stmt.bind(
         crypto.randomUUID(),
         subject.id,
@@ -111,7 +137,7 @@ hmgs.post("/generate", async (c) => {
     )
   );
 
-  return c.json({ ok: true, subject: subject.id, inserted: questions.length });
+  return c.json({ ok: true, subject: subject.id, inserted: fresh.length, skipped });
 });
 
 /**
