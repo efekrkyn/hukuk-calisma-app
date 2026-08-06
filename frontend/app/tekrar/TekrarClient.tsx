@@ -197,7 +197,9 @@ export default function TekrarClient() {
             <p className="text-xs text-muted-foreground mb-2">
               Ne kadar zorlandın? Sorunun ne zaman geri geleceğini bu belirler.
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {/* Sağ alttaki asistan baloncuğu son düğmenin üstüne biniyordu;
+                son sütuna baloncuk genişliği kadar boşluk bırakılıyor. */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pb-20 sm:pb-0 sm:pr-20">
               {GRADES.map((g) => (
                 <motion.button
                   key={g.value}
