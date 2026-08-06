@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { normalizeVerdict } from "./hmgs-verify.js";
 
 // gecerli kararlar
-for (const v of ["correct", "wrong", "unsupported"]) {
+for (const v of ["correct", "wrong", "unsupported", "ambiguous"]) {
   const r = normalizeVerdict({ id: "q1", verdict: v, reason: "gerekçe" });
   assert.equal(r?.verdict, v);
 }

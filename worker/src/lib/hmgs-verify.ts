@@ -68,26 +68,74 @@ export type QuestionToCheck = {
 
 export type Verdict = {
   id: string;
-  verdict: "correct" | "wrong" | "unsupported";
+  verdict: "correct" | "wrong" | "unsupported" | "ambiguous";
   reason: string;
 };
 
+/**
+ * İSTEMİN İKİ GÖREVLİ OLMASININ SEBEBİ — ölçüm:
+ * 50 onaylı sorudan oluşan rastgele örneklem elle denetlendi. İşaretli cevabın
+ * düpedüz yanlış olduğu TEK soru çıkmadı; bulunan kusurların HEPSİ aynı türdendi:
+ * birden fazla şık kanun metnine göre doğru. Sebebi hakem istemiydi — yalnızca
+ * "işaretli cevap destekleniyor mu?" diye soruyordu, sorduğu bu olduğu için
+ * cevabı hep buluyordu ama "çeldiricilerden biri de destekleniyor mu?" diye HİÇ
+ * sormuyordu. Belirsiz soruyu yapısal olarak göremiyordu.
+ * Çözüm ayrı bir LLM çağrısı değil (maliyet iki katına çıkardı): aynı çağrıda
+ * ikinci görev + iki somut örnek. Soyut talimat ("çeldiricileri de kontrol et")
+ * bu kusurda soluk kalıyor, gerçek örnek çalışıyor.
+ */
 const SYSTEM = `Sen bir hukuk sınavı sorularını DENETLEYEN kıdemli hukukçusun.
 Görevin soruları onaylamak değil, HATA BULMAK.
 
 Her soru için <KANUN> ve varsa <EK_MEVZUAT> bölümündeki metne bakarak karar ver.
 <EK_MEVZUAT>, korpusta bulunmayan kanunlardan canlı çekilmiş hükümlerdir; o da kaynaktır.
-- "correct"     : Kanun metni, işaretlenen doğru cevabı açıkça destekliyor.
+
+HER SORU İÇİN İKİ AYRI GÖREVİN VAR. İKİSİNİ DE YAP:
+
+GÖREV 1 — İşaretlenen doğru cevap kaynak metince destekleniyor mu?
+
+GÖREV 2 — ÇELDİRİCİLERİ TEK TEK OKU. İşaretli cevap dışındaki her şık için
+kaynak metne bakarak şu soruyu açıkça cevapla: "bu şık da kanun metnine göre
+DOĞRU olabilir mi?" Bir denetimde 50 onaylı soru elle incelendi; işaretli cevabı
+düpedüz yanlış olan tek soru bile çıkmadı, bulunan kusurların TAMAMI "birden
+fazla şık doğru" türündeydi. Yalnızca Görev 1'i yapan hakem bu kusuru göremez.
+
+KARARLAR:
+- "correct"     : Kanun metni işaretlenen cevabı açıkça destekliyor VE hiçbir
+                  çeldirici metne göre savunulabilir değil.
+- "ambiguous"   : İşaretli cevabın DIŞINDA en az bir şık daha kanun metnine göre
+                  doğru/savunulabilir. Sorunun tek doğru cevabı yok. İşaretli
+                  cevap doğru olsa BİLE bu kararı ver — soru bozuk.
 - "wrong"       : Kanun metni farklı bir şıkkı destekliyor VEYA açıklama
                   kendi içinde çelişiyor (bir şeyi söyleyip tersini işaretlemek).
 - "unsupported" : Kanun metninde bu soruyu karara bağlayacak hüküm yok.
+
+"ambiguous" İÇİN İKİ GERÇEK ÖRNEK (ikisi de bu bankadan çıktı):
+
+ÖRNEK 1 — İYUK m.34/2. Soru köyün il sınırı değişikliğinde yetkili mahkemeyi
+soruyor, işaretli cevap "köyün yeni bağlandığı yer idare mahkemesi". Ama madde
+metni: "...köy, belediye veya mahallenin bulunduğu YAHUT yeni bağlandığı yer
+idare mahkemesidir." Kanun ikisini de yetkili sayıyor, dolayısıyla "köyün
+bulunduğu yer idare mahkemesi" şıkkı DA doğru → ambiguous.
+
+ÖRNEK 2 — Anayasa m.153. Soru "iptal kararının yürürlüğe gireceği tarih hangisi
+OLABİLİR?" diye soruyor. Hem "Resmî Gazete'de yayımlandığı tarih" (kural) hem
+"bir yıl sonrası" (azami erteleme süresi) olabilir; iki şık da savunulabilir
+→ ambiguous.
+
+Kalıp uyarısı: maddede "yahut / veya / ya da" bağlacıyla sayılan seçenekler ve
+soruda "olabilir / mümkündür" kalıbı, birden fazla şıkkı doğru yapan tipik
+kaynaklardır. Bu kalıpları gördüğünde çeldiricileri iki kez oku.
 
 KURALLAR:
 1. YALNIZCA <KANUN> ve <EK_MEVZUAT> metnine dayan. Kendi hukuk bilginle boşluk DOLDURMA —
    metinde yoksa "unsupported" de. Bu kural denetimin tüm değeri.
 2. Açıklamanın kendi içinde tutarlı olup olmadığını ayrıca kontrol et.
-3. reason alanına kısa ve somut gerekçe yaz (hangi madde, neden).
-4. SADECE JSON dizisi döndür.
+3. reason alanına kısa ve somut gerekçe yaz (hangi madde, neden). "ambiguous"
+   verdiysen HANGİ ŞIKKIN (harfiyle) neden doğru olduğunu da yaz.
+4. Bir çeldirici sadece "kulağa mantıklı geliyor" diye ambiguous DEME; o şıkkı
+   doğru kılan hükmü kaynak metinde gösterebiliyor olman gerekir.
+5. SADECE JSON dizisi döndür.
 
 FORMAT: [{"id":"...","verdict":"correct","reason":"..."}]`;
 
@@ -171,7 +219,12 @@ export function normalizeVerdict(item: unknown): Verdict | null {
   const id = typeof o.id === "string" ? o.id.trim() : "";
   const verdict = String(o.verdict ?? "").toLowerCase().trim();
   if (!id) return null;
-  if (verdict !== "correct" && verdict !== "wrong" && verdict !== "unsupported") {
+  if (
+    verdict !== "correct" &&
+    verdict !== "wrong" &&
+    verdict !== "unsupported" &&
+    verdict !== "ambiguous"
+  ) {
     return null;
   }
   return {

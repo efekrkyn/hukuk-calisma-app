@@ -100,12 +100,56 @@ export function lengthRatio(options: string[], correctAnswer: number): number {
 }
 
 /** Üretilen ham nesneyi doğrular; şema bozuksa null döner. */
+/**
+ * Açıklamadan iç kaynak atıflarını temizler.
+ *
+ * Model, isteme koyduğumuz `sourceIndex` alanını açıklamanın METNİNE de
+ * yazıyor: "(sourceIndex: 6)", "(Kaynak [1] ve [2])", "kaynak [9]'daki madde
+ * metnine dayanılarak hazırlanmıştır." Bunlar bizim iç numaralandırmamız;
+ * çalışan kişi için anlamsız. Bankanın %4'ünde (2136 sorunun 87'si) vardı.
+ *
+ * Atıf alanının kendisi (`sourceIndex`) korunuyor — sorunun hangi parçadan
+ * yazıldığını denetimde hâlâ görebilmemiz gerekiyor; temizlenen yalnızca
+ * kullanıcıya gösterilen metin.
+ */
+export function stripSourceRefs(s: string): string {
+  const out = s
+    // ÖNCE parantezli hâl: "(sourceIndex: 6)", "[sourceIndex: 37]",
+    // "(Kaynak [1] ve [2])", "(kaynak [2])". Cümle kalıbından önce çalışmalı;
+    // aksi hâlde "(kaynak [2])." girdisinde cümle kalıbı kapanış parantezini
+    // de yutup açılış parantezini metinde bırakıyor.
+    .replace(
+      /\s*[([]\s*(?:source\s*index|kaynak)\s*:?\s*\[?\d+\]?(?:\s*(?:ve|,)\s*\[?\d+\]?)*\s*[)\]]/giu,
+      ""
+    )
+    // SONRA yalnızca meta cümlesi: "... kaynak [9]'daki madde metnine
+    // DAYANILARAK hazırlanmıştır." "dayanıl" şartı olmadan bu kalıp,
+    // "Kaynak [76]'da belirtildiği üzere Hume..." gibi ANLATIMA dahil
+    // atıflarda ilk noktaya kadar her şeyi siliyor ve açıklamayı tamamen
+    // boşaltıyordu (bankada 8 satır böyleydi; üretimde de bu soruları
+    // sessizce elerdi, çünkü validateQuestion boş açıklamayı reddediyor).
+    .replace(/[,;]?\s*(?:bu\s+\w+\s+)?kaynak\s*\[\d+\][^.]*dayanıl[^.]*\./giu, "")
+    // Anlatıma dahil kalan atıflar silinmiyor, NÖTRLEŞTİRİLİYOR: cümlenin
+    // öznesi onlar. "Kaynak [76]'da belirtildiği üzere" → "Kaynak metninde
+    // belirtildiği üzere". Ek ('da/'te/'de) atıfla birlikte gidiyor.
+    .replace(/\bkaynak\s*\[\d+\](?:['’]\p{L}+)?/giu, "Kaynak metninde")
+    .replace(/\.\s*\./g, ".")
+    .replace(/\s+([.,;])/g, "$1")
+    .replace(/\s{2,}/g, " ")
+    .trim()
+    // Atıf cümlenin sonundaysa geriye "… olup," gibi askıda bir bağlaç kalıyor.
+    .replace(/[,;]+$/, "");
+
+  return /[.!?]$/.test(out) || out === "" ? out : out + ".";
+}
+
 export function validateQuestion(q: unknown): GeneratedQuestion | null {
   if (!q || typeof q !== "object") return null;
   const o = q as Record<string, unknown>;
 
   const question = typeof o.question === "string" ? o.question.trim() : "";
-  const explanation = typeof o.explanation === "string" ? o.explanation.trim() : "";
+  const explanation =
+    typeof o.explanation === "string" ? stripSourceRefs(o.explanation) : "";
   const options = Array.isArray(o.options) ? o.options.map((x) => String(x).trim()) : [];
 
   // Number(null) ve Number("") 0 döner — cevap anahtarı olmayan soru sessizce

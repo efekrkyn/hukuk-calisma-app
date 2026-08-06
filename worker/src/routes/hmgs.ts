@@ -663,9 +663,23 @@ hmgs.post("/verify", async (c) => {
     verdicts.map((v) =>
       // correct = 1 (onaylı) · unsupported = 0 (kaynakta doğrulanamadı, YANLIŞ
       // demek değil — retrieval doğru maddeyi getirmemiş olabilir) · wrong = -1
+      //
+      // ambiguous = -2. NEDEN NEGATİF: havuz sorguları (/exam, /review) sınırı
+      // `verified >= 0` diye çekiyor; birden fazla şıkkı doğru olan soruyu
+      // sormak çalışmayı bozar (kullanıcı doğru şıkkı işaretleyip yanlış sayılır),
+      // o yüzden havuza GİRMEMELİ.
+      // NEDEN -1 DEĞİL: ayrı sayı, ayrı kusur. wrong = cevap yanlış, düzeltilmesi
+      // şıkkı değiştirmeyi gerektirir; ambiguous = cevap doğru ama çeldirici de
+      // doğru, düzeltmesi çeldiriciyi değiştirmek. İkisini aynı kutuya atarsak
+      // /verify-stats bunları ayıramaz ve düzeltme işi kör kalır.
+      // recheck=1 akışı `verified = 0` seçtiği için ambiguous'u yeniden denemez;
+      // kasıtlı — bu retrieval eksikliği değil, doğrulanmış soru kusuru.
       stmt.bind(
         v.id,
-        v.verdict === "correct" ? 1 : v.verdict === "unsupported" ? 0 : -1,
+        v.verdict === "correct" ? 1
+          : v.verdict === "unsupported" ? 0
+          : v.verdict === "ambiguous" ? -2
+          : -1,
         v.verdict,
         v.reason,
         now
