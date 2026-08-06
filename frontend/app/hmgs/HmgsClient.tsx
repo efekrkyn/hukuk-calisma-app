@@ -6,6 +6,7 @@ import { spring, springSnappy } from "@/lib/motion";
 import { Button } from "@/components/ui/button";
 import { useSetPageContext } from "@/lib/page-context";
 import { Card, CardContent } from "@/components/ui/card";
+import ReportQuestion from "@/components/ReportQuestion";
 import { Check, CheckCircle2, ClipboardList, Clock, Flag, Hash, Loader2, RefreshCw, Rocket, Star, Trophy, XCircle } from "lucide-react";
 
 type QuizQuestion = {
@@ -305,6 +306,10 @@ export default function HmgsClient({ subject }: { subject?: string }) {
                     Kaynak: {q.source_pdf.split("/").pop()} s.{q.source_page} →
                   </a>
                 )}
+                {/* Bildirim düğmesi cevap anahtarında: doğru cevabı ve açıklamayı
+                    gördükten sonra "bu yanlış" demek anlamlı. Sınav sürerken
+                    kullanıcının elinde karşılaştıracağı bir şey yok. */}
+                <ReportQuestion questionId={q.id} className="pt-1" />
               </CardContent>
             </Card>
           );

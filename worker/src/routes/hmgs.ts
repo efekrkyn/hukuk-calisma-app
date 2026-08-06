@@ -175,13 +175,17 @@ hmgs.get("/exam", async (c) => {
     // ilk `need` tanesini al. (20 istenip 19 dönüyordu.)
     // Denetimde ELENEN soru hiçbir koşulda denemeye girmez — hakem "yanlış"
     // dediyse onu sormak çalışmayı bozar. verified=1 ise yalnızca onaylılar.
+    // Kullanıcının "hatalı" diye bildirdiği ve sahibinin henüz karara bağlamadığı
+    // soru da aynı sebeple gelmez: şüpheli soruyu sormaya devam etmenin faydası yok.
     const rows = await c.env.DB.prepare(
       `SELECT q.id, q.subject, q.question, q.options, q.correct_answer,
               q.explanation, q.source_pdf, q.source_page, v.verified
          FROM hmgs_questions q
          LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+         LEFT JOIN hmgs_reports rp ON rp.question_id = q.id AND rp.resolved = 0
         WHERE q.subject = ?
           AND (v.verified IS NULL OR v.verified >= 0)
+          AND rp.question_id IS NULL
           ${onlyVerified ? "AND v.verified = 1" : ""}
         ORDER BY RANDOM() LIMIT ?`
     ).bind(s.id, need * 3).all<any>();
@@ -379,7 +383,9 @@ hmgs.get("/review", async (c) => {
             r.reps, r.lapses, r.next_review
        FROM hmgs_review r JOIN hmgs_questions q ON q.id = r.question_id
        LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
+       LEFT JOIN hmgs_reports rp ON rp.question_id = q.id AND rp.resolved = 0
       WHERE r.next_review <= ? AND (v.verified IS NULL OR v.verified >= 0)
+        AND rp.question_id IS NULL
       ORDER BY r.next_review LIMIT ?`
   ).bind(Date.now(), limit).all<any>();
 
@@ -456,6 +462,140 @@ hmgs.post("/review/grade", async (c) => {
   });
 });
 
+
+/**
+ * "Bu soru hatalı" bildirimi — soruyu çözen kişiden gelen tek gerçek denetim.
+ *
+ * Bildirilen soru, sahibi karara varana kadar /exam ve /review havuzlarından düşer.
+ * subject istemciden ALINMAZ, sorunun kendi kaydından okunur: istemcinin
+ * gönderdiği alan adına güvenmek raporu yanlış alana yazmaya açık kapı bırakır.
+ */
+hmgs.post("/report", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  let body: { question_id?: string; reason?: string };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const id = String(body.question_id ?? "");
+  if (!id) return c.json({ error: "question_id gerekli" }, 400);
+
+  const q = await c.env.DB.prepare(
+    `SELECT subject FROM hmgs_questions WHERE id = ?`
+  ).bind(id).first<{ subject: string }>();
+  if (!q) return c.json({ error: "soru bulunamadı" }, 404);
+
+  // Serbest metin; sahibine okunmak için var, uzunluğu sınırlı tutuluyor.
+  const reason = String(body.reason ?? "").trim().slice(0, 1000);
+
+  // question_id UNIQUE olduğu için tekrar bildirim yeni satır açmaz (gerekçe
+  // 007-hmgs-reports.sql'de). "keep" ile kapatılmış bir kayıt yeniden bildirilirse
+  // resolved sıfırlanır: kullanıcı hâlâ itiraz ediyorsa soru yine havuzdan düşmeli.
+  // Boş gerekçe eskisini EZMEZ — ilk bildirimdeki açıklama sahibinin elindeki
+  // tek bilgi olabilir.
+  await c.env.DB.prepare(
+    `INSERT INTO hmgs_reports (id, question_id, subject, reason, created_at, resolved)
+     VALUES (?, ?, ?, ?, ?, 0)
+     ON CONFLICT(question_id) DO UPDATE SET
+       reason = COALESCE(NULLIF(excluded.reason, ''), reason),
+       created_at = excluded.created_at,
+       resolved = 0`
+  ).bind(crypto.randomUUID(), id, q.subject, reason, Date.now()).run();
+
+  return c.json({ ok: true, question_id: id });
+});
+
+/**
+ * Açık bildirimler — sahibinin karar ekranı.
+ *
+ * Soru metni, şıklar, doğru cevap, açıklama ve varsa makine denetiminin gerekçesi
+ * birlikte döner: karar vermek için başka bir sorgu gerekmesin.
+ */
+hmgs.get("/reports", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const rows = await c.env.DB.prepare(
+    `SELECT r.id, r.question_id, r.subject, r.reason, r.created_at,
+            q.question, q.options, q.correct_answer, q.explanation,
+            q.source_pdf, q.source_page,
+            v.verified, v.verdict, v.reason AS verdict_reason
+       FROM hmgs_reports r
+       JOIN hmgs_questions q ON q.id = r.question_id
+       LEFT JOIN hmgs_verdicts v ON v.question_id = r.question_id
+      WHERE r.resolved = 0
+      ORDER BY r.created_at DESC`
+  ).all<any>();
+
+  const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
+  const reports = rows.results.map((r) => {
+    const options: string[] = JSON.parse(r.options);
+    return {
+      id: r.id,
+      question_id: r.question_id,
+      subject: r.subject,
+      subject_name: name.get(r.subject) ?? r.subject,
+      reason: r.reason ?? "",
+      reported_at: r.created_at,
+      question: r.question,
+      // Şıklar bankadaki sırayla — kullanıcı karıştırılmış hâlini gördü ama
+      // sahibinin kaynakla karşılaştıracağı sıra bu.
+      options,
+      correctAnswer: r.correct_answer as number,
+      correct_option: options[r.correct_answer as number],
+      explanation: r.explanation,
+      source_pdf: r.source_pdf,
+      source_page: r.source_page,
+      // Makine denetimi varsa gerekçesiyle: kullanıcının itirazıyla aynı yöne
+      // işaret ediyorsa karar kolaylaşır.
+      verdict: r.verdict ?? null,
+      verdict_reason: r.verdict_reason ?? null,
+      verified: r.verified ?? null,
+    };
+  });
+
+  return c.json({ reports, total: reports.length });
+});
+
+/** Bildirimi kapat: soruyu sil ya da tut. */
+hmgs.post("/reports/resolve", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  let body: { question_id?: string; action?: string };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const id = String(body.question_id ?? "");
+  const action = String(body.action ?? "");
+  if (!id || (action !== "delete" && action !== "keep")) {
+    return c.json({ error: "question_id ve action (delete|keep) gerekli" }, 400);
+  }
+
+  if (action === "delete") {
+    // Soruya bağlı her şey gider; hmgs_attempts KALIR — geçmiş performans
+    // kaydı silinen soruyla birlikte yok olursa netler geriye dönük değişir.
+    await c.env.DB.batch([
+      c.env.DB.prepare(`DELETE FROM hmgs_questions WHERE id = ?`).bind(id),
+      c.env.DB.prepare(`DELETE FROM hmgs_verdicts WHERE question_id = ?`).bind(id),
+      c.env.DB.prepare(`DELETE FROM hmgs_review WHERE question_id = ?`).bind(id),
+      c.env.DB.prepare(`DELETE FROM hmgs_reports WHERE question_id = ?`).bind(id),
+    ]);
+    return c.json({ ok: true, question_id: id, action });
+  }
+
+  // keep: soru havuza döner. Kullanıcı yine bildirirse resolved sıfırlanır.
+  const res = await c.env.DB.prepare(
+    `UPDATE hmgs_reports SET resolved = 1 WHERE question_id = ?`
+  ).bind(id).run();
+  if (!res.meta.changes) return c.json({ error: "bildirim bulunamadı" }, 404);
+
+  return c.json({ ok: true, question_id: id, action });
+});
 
 /** Bir alandaki denetlenmemiş soruları kanun metnine karşı denetler. */
 hmgs.post("/verify", async (c) => {

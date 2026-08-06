@@ -14,6 +14,7 @@ import { ArrowLeft, Check, X } from "lucide-react";
 import { motion } from "motion/react";
 import { spring, springSnappy } from "@/lib/motion";
 import { useSetPageContext } from "@/lib/page-context";
+import ReportQuestion from "@/components/ReportQuestion";
 
 type ReviewQuestion = {
   id: string;
@@ -191,6 +192,9 @@ export default function TekrarClient() {
               {isRight ? "Doğru" : "Doğru cevap"}
             </p>
             <p className="text-sm leading-relaxed">{active.explanation}</p>
+            {/* Açıklamanın altında: itiraz ancak gerekçe okunduktan sonra anlamlı.
+                Kart genişliğinde duruyor ki açılan sebep alanı sıkışmasın. */}
+            <ReportQuestion questionId={active.id} className="mt-2 -ml-2" />
           </div>
 
           <div>
