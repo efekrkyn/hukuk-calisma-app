@@ -375,3 +375,12 @@
   box-shadow: 0 0 20px oklch(0.775 0.058 254 / 18%);
   border-color: oklch(0.775 0.058 254 / 48%);
 }
+
+/* Asistan baloncuğu sağ altta sabit (56px + kenar boşluğu). Sayfaların
+   sonuna onun yüksekliği kadar boşluk bırakılmazsa son satırın üstüne
+   biniyor — /tekrar'da düğmeyi, ana sayfada yüzdeyi kapatıyordu. Sayfa
+   sayfa pb eklemek yerine tek kural: her main'in altında baloncuk kadar
+   yer var. Giriş sayfasında baloncuk yok ama fazladan boşluk zarar vermiyor. */
+main {
+  padding-bottom: 5.5rem;
+}
