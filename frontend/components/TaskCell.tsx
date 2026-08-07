@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Clock } from "lucide-react";
 import { toggleTask } from "@/lib/plan-api";
 import type { Task } from "@/types/plan";
 
@@ -62,7 +63,10 @@ export function TaskCell({ task, completed, onToggle }: Props) {
         />
         <div className="flex-1 min-w-0 space-y-1">
           <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-semibold">
-            <span>⏱ {task.time_start}–{task.time_end}</span>
+            <span className="inline-flex items-center gap-1">
+              <Clock className="w-3 h-3 shrink-0" aria-hidden />
+              {task.time_start}–{task.time_end}
+            </span>
             <span className={`px-1.5 py-0.5 rounded-full ${badge.cls} text-[9px] font-bold uppercase tracking-wider`}>
               {badge.label}
             </span>

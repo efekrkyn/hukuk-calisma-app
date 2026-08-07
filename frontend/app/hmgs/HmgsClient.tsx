@@ -195,7 +195,10 @@ export default function HmgsClient({ subject }: { subject?: string }) {
               </span>
             )}
           </p>
-          <p>⏱ <strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</p>
+          <p className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden />
+            <span><strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</span>
+          </p>
           <p>
                 <Star className="w-4 h-4 shrink-0" aria-hidden />Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</p>
           <p>
