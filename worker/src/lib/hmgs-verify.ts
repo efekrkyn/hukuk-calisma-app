@@ -35,6 +35,52 @@ const MEVZUAT_MCP_URL = "https://mevzuat.surucu.dev/mcp";
  */
 const MAX_LOOKUPS = 3;
 
+/**
+ * Atıf yapılan madde metinde geçiyor mu.
+ *
+ * `\b` kullanılmıyor: "Madde 6" araması "Madde 60"u da yakalamamalı, o yüzden
+ * rakam devamı açıkça dışlanıyor. Madde bilgisi olmayan atıf (yalnızca kanun
+ * adı) doğrulanamaz — o durumda "var" sayıp dışarı çıkmıyoruz, eski davranış.
+ */
+export function hasArticle(text: string, madde: string | null): boolean {
+  if (!madde) return true;
+  return new RegExp(`madde\\s*${madde}(?!\\d)|m\\.\\s*${madde}(?!\\d)`, "i").test(text);
+}
+
+/**
+ * Eksik maddeleri korpusun FTS indeksinden çeker.
+ *
+ * Kanun numarası dosya adının sonunda duruyor (ceza-kanunu-5237.pdf), bağ
+ * bunun üzerinden kuruluyor. FTS5 tümce araması token bazlı olduğu için
+ * "madde 6" ile "madde 60" karışmıyor.
+ */
+async function fetchCorpusArticles(
+  db: D1Database,
+  refs: Array<{ mevzuatNo: string; madde: string | null }>
+): Promise<string> {
+  const out: string[] = [];
+  for (const ref of refs.slice(0, MAX_LOOKUPS)) {
+    if (!ref.madde) continue;
+    try {
+      const rows = await db
+        .prepare(
+          `SELECT text FROM fts_chunks
+            WHERE fts_chunks MATCH ? AND pdf LIKE ?
+            LIMIT 2`
+        )
+        .bind(`"madde ${ref.madde}"`, `%-${ref.mevzuatNo}.pdf`)
+        .all<{ text: string }>();
+      for (const r of rows.results) {
+        out.push(`### ${ref.mevzuatNo} sayılı Kanun m.${ref.madde} (korpus)\n${r.text}`);
+      }
+    } catch (e) {
+      // FTS sorgusu patlarsa denetimi durdurma; dışarıdan çekme yolu duruyor.
+      console.error(`korpus m.${ref.madde} çekilemedi:`, e);
+    }
+  }
+  return out.join("\n\n");
+}
+
 async function fetchExternalLaws(
   refs: Array<{ mevzuatNo: string; madde: string | null }>,
   keyword: string
@@ -178,21 +224,37 @@ export async function verifyBatch(
     )
     .join("\n\n---\n\n");
 
-  // Açıklamalarda geçen ama korpusta olmayan kanunları canlı çek.
-  const corpusNos = new Set(
-    chunks.flatMap((c) => (c.pdf.match(/-(\d{3,5})\.pdf$/) ?? []).slice(1))
-  );
-  const refs = extractLawRefs(questions.map((q) => q.explanation).join(" "))
-    .filter((r) => !corpusNos.has(r.mevzuatNo));
-  const external = refs.length
-    ? await fetchExternalLaws(refs, questions[0].question)
+  // Atıf yapılan MADDE getirilen metinde var mı — kanun var mı değil.
+  //
+  // Eski filtre `corpusNos` üzerinden çalışıyordu: o an getirilen parçaların
+  // dosya adından kanun numarasını çıkarıp, o kanuna yapılan atıfları "zaten
+  // kapsandı" sayıyordu. Ama eksik kanun düzeyinde değil madde düzeyindeydi:
+  // soru TCK m.6'ya dayanırken retrieval m.265 çevresini getiriyor, filtre
+  // "5237 zaten var" deyip dışarıdan da çekmiyordu. Madde ne korpustan ne
+  // dışarıdan geliyor, hakem de haklı olarak "metinde yer almamaktadır"
+  // diyordu. 132 unsupported kararın 97'si (%73) bu sebepten.
+  const refs = extractLawRefs(questions.map((q) => q.explanation).join(" "));
+  const eksik = refs.filter((r) => !hasArticle(law, r.madde));
+
+  // Eksik maddeyi ÖNCE korpusun tam metninden çek: kanunlar korpusta
+  // eksiksiz (TCK 223 parça, TTK 766 parça); sorun yalnızca retrieval'ın
+  // o parçayı getirmemesi. FTS'ten çekmek bedava ve tam metin, canlı
+  // mevzuata düşmek ise ağ çağrısı.
+  const fromCorpus = env.DB ? await fetchCorpusArticles(env.DB, eksik) : "";
+  const halaEksik = eksik.filter((r) => !hasArticle(fromCorpus, r.madde));
+  const external = halaEksik.length
+    ? await fetchExternalLaws(halaEksik, questions[0].question)
     : "";
 
   const provider = new DeepSeekProvider(env.DEEPSEEK_API_KEY, "deepseek-reasoner");
   let raw = "";
   for await (const tok of provider.streamChat(
+    // Korpustan hedefli çekilen maddeler de EK_MEVZUAT'a giriyor: retrieval'ın
+    // kaçırdığı madde burada, hakemin göreceği yerde olmalı.
     `<KANUN>\n${law}\n</KANUN>` +
-      (external ? `\n\n<EK_MEVZUAT>\n${external}\n</EK_MEVZUAT>` : "") +
+      (fromCorpus || external
+        ? `\n\n<EK_MEVZUAT>\n${[fromCorpus, external].filter(Boolean).join("\n\n")}\n</EK_MEVZUAT>`
+        : "") +
       `\n\n<SORULAR>\n${body}\n</SORULAR>`,
     SYSTEM
   )) {
