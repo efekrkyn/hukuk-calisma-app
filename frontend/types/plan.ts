@@ -1,24 +1,41 @@
 // frontend/types/plan.ts
 // Worker plan-schemas.ts ile birebir senkron — değiştirirsen iki yeri de güncelle.
 
+export const WEEKDAYS = [
+  "Pazartesi",
+  "Salı",
+  "Çarşamba",
+  "Perşembe",
+  "Cuma",
+  "Cumartesi",
+  "Pazar",
+] as const;
+
+export type Weekday = (typeof WEEKDAYS)[number];
+
 export type FormInput = {
-  courses: { name: string; exam_date: string }[];
-  weeks_remaining: number;
-  weekly_hours_weekday: number;
-  weekly_hours_weekend: number;
+  /** Tek HMGS tarihi — ders başına final tarihi kavramı kalktı. */
+  exam_date: string;
+  daily_hours: number;
   study_window_start: string;
   study_window_end: string;
   break_minutes: number;
+  days_off: Weekday[];
   notes: string;
 };
+
+/** Her tür uygulamada gerçekten var olan bir sayfaya gider; `serbest` elle eklenen görev. */
+export type TaskType = "konu" | "soru" | "tekrar" | "deneme" | "serbest";
 
 export type Task = {
   uuid: string;
   time_start: string;
   time_end: string;
-  course: string;
+  /** HMGS alan id'si; tekrar/deneme/serbest görevlerinde null. */
+  subject: string | null;
   topic: string;
-  task_type: "read" | "practice" | "review";
+  task_type: TaskType;
+  /** Worker tarafında üretilir, uygulama içi göreli yol ("hmgs?subject=ceza"). */
   target_ref?: string | null;
   tip?: string | null;
 };
@@ -59,4 +76,7 @@ export type GenerateResponse = {
   plan_id: string;
   ai_output: AiOutput;
   summary: string;
+  /** Hedefi doğrulanamadığı için düşen görev sayısı. */
+  dropped?: number;
+  repaired?: number;
 };

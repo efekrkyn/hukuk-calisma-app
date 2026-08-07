@@ -12,10 +12,13 @@ type Props = {
   onToggle: (uuid: string, next: boolean) => void;
 };
 
-const TYPE_BADGES: Record<Task["task_type"], { label: string; cls: string }> = {
-  read: { label: "Okuma", cls: "bg-primary/10 text-primary" },
-  practice: { label: "Pratik", cls: "bg-purple-500/10 text-primary dark:text-primary" },
-  review: { label: "Tekrar", cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
+/** Her tür, uygulamada gerçekten var olan bir eyleme karşılık gelir. */
+const TYPE_BADGES: Record<Task["task_type"], { label: string; cta: string; cls: string }> = {
+  konu: { label: "Konu", cta: "Konu anlatımını aç", cls: "bg-primary/10 text-primary" },
+  soru: { label: "Soru", cta: "Soru çözmeye başla", cls: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
+  tekrar: { label: "Tekrar", cta: "Yanlışlarım kuyruğu", cls: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
+  deneme: { label: "Deneme", cta: "Tam denemeyi başlat (155 dk)", cls: "bg-rose-500/10 text-rose-600 dark:text-rose-400" },
+  serbest: { label: "Serbest", cta: "", cls: "bg-neutral-500/10 text-neutral-600 dark:text-neutral-400" },
 };
 
 export function TaskCell({ task, completed, onToggle }: Props) {
@@ -36,14 +39,10 @@ export function TaskCell({ task, completed, onToggle }: Props) {
     }
   }
 
-  // target_ref URL mapping
-  const targetHref = task.target_ref
-    ? task.target_ref.startsWith("kanunlar/")
-      ? `/${task.target_ref}`
-      : task.target_ref.startsWith("practice/")
-        ? `/${task.target_ref}`
-        : `/reader/${task.target_ref.replace(/^reader\//, "")}`
-    : null;
+  // target_ref worker tarafında doğrulanıp kanonik biçimde üretiliyor
+  // ("hmgs?subject=ceza", "konular?subject=...&konu=...", "tekrar") — burada
+  // eşleme tablosu tutmaya gerek yok, başına "/" koymak yeterli.
+  const targetHref = task.target_ref ? `/${task.target_ref}` : null;
 
   return (
     <div
@@ -79,7 +78,7 @@ export function TaskCell({ task, completed, onToggle }: Props) {
               href={targetHref}
               className="inline-flex items-center gap-1 text-primary hover:underline text-[10px] font-medium pt-1"
             >
-               {task.target_ref}
+              {badge.cta} →
             </Link>
           ) : null}
           {task.tip && (

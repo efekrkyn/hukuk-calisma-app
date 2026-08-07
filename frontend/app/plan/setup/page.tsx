@@ -12,104 +12,64 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { COURSES } from "@/lib/courses";
 import { generatePlan } from "@/lib/plan-api";
-import type { FormInput } from "@/types/plan";
+import { WEEKDAYS, type FormInput, type Weekday } from "@/types/plan";
 
-type CourseEntry = {
-  selectedId: string;
-  customName: string;
-  examDate: string;
-};
-
+/**
+ * Plan formu — HMGS sürümü.
+ *
+ * Ders seçimi yok: HMGS'nin 20 alanı sabit ve ağırlıkları kılavuzdan geliyor.
+ * Kullanıcıdan yalnızca takvimi kuran bilgiler isteniyor.
+ */
 export default function PlanSetupPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const [courseCount, setCourseCount] = useState(3);
-  const [courses, setCourses] = useState<CourseEntry[]>(
-    Array.from({ length: 3 }).map(() => ({
-      selectedId: "",
-      customName: "",
-      examDate: "2026-06-30",
-    }))
-  );
-
-  const [hoursWeekday, setHoursWeekday] = useState(4);
-  const [hoursWeekend, setHoursWeekend] = useState(8);
+  const [examDate, setExamDate] = useState("");
+  const [dailyHours, setDailyHours] = useState(4);
   const [windowStart, setWindowStart] = useState("09:00");
   const [windowEnd, setWindowEnd] = useState("18:00");
   const [breakMinutes, setBreakMinutes] = useState(15);
+  const [daysOff, setDaysOff] = useState<Weekday[]>([]);
   const [notes, setNotes] = useState("");
 
-  function handleCourseCountChange(val: number) {
-    if (val < 1 || val > 25) return;
-    setCourseCount(val);
-    setCourses((prev) => {
-      const copy = [...prev];
-      if (val > prev.length) {
-        for (let i = prev.length; i < val; i++) {
-          copy.push({ selectedId: "", customName: "", examDate: "2026-06-30" });
-        }
-      } else {
-        copy.splice(val);
-      }
-      return copy;
-    });
+  function toggleDayOff(d: Weekday) {
+    setDaysOff((prev) => (prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]));
   }
 
-  function updateCourse(index: number, field: keyof CourseEntry, value: string) {
-    setCourses((prev) => {
-      const copy = [...prev];
-      copy[index] = { ...copy[index], [field]: value };
-      return copy;
-    });
-  }
-
-  function computeWeeksRemaining(): number {
-    if (courses.length === 0) return 1;
-    let maxDate = new Date();
-    for (const c of courses) {
-      if (c.examDate) {
-        const d = new Date(c.examDate);
-        if (d > maxDate) maxDate = d;
-      }
-    }
-    const today = new Date();
-    const ms = maxDate.getTime() - today.getTime();
-    return Math.max(1, Math.ceil(ms / (7 * 24 * 60 * 60 * 1000)));
-  }
+  const daysLeft = examDate
+    ? Math.ceil((new Date(examDate).getTime() - Date.now()) / 86_400_000)
+    : null;
 
   async function submit() {
     setError(null);
-
-    // Validate courses
-    const finalCourses: { name: string; exam_date: string }[] = [];
-    for (let i = 0; i < courses.length; i++) {
-      const c = courses[i];
-      const name = c.selectedId === "other" ? c.customName.trim() : (COURSES.find(x => x.id === c.selectedId)?.name || "");
-      if (!name) {
-        setError(`${i + 1}. dersin adını seçin veya yazın.`);
-        return;
-      }
-      if (!c.examDate) {
-        setError(`${name} dersinin final tarihini girin.`);
-        return;
-      }
-      finalCourses.push({ name, exam_date: c.examDate });
+    if (!examDate) {
+      setError("HMGS tarihini girin.");
+      return;
+    }
+    if (daysLeft !== null && daysLeft < 1) {
+      setError("Sınav tarihi bugünden sonra olmalı.");
+      return;
+    }
+    if (daysOff.length >= 7) {
+      setError("Haftanın tamamını tatil seçerseniz plan kuracak gün kalmıyor.");
+      return;
+    }
+    if (windowEnd <= windowStart) {
+      setError("Çalışma penceresinin bitişi başlangıcından sonra olmalı.");
+      return;
     }
 
     setSubmitting(true);
     try {
       const form: FormInput = {
-        courses: finalCourses,
-        weeks_remaining: computeWeeksRemaining(),
-        weekly_hours_weekday: hoursWeekday,
-        weekly_hours_weekend: hoursWeekend,
+        exam_date: examDate,
+        daily_hours: dailyHours,
         study_window_start: windowStart,
         study_window_end: windowEnd,
         break_minutes: breakMinutes,
+        days_off: daysOff,
         notes,
       };
       const r = await generatePlan(form);
@@ -129,11 +89,13 @@ export default function PlanSetupPage() {
     <main className="p-4 md:p-6 max-w-4xl mx-auto space-y-6">
       <div className="flex items-center justify-between border-b pb-4">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Çalışma Programı Üreticisi
+          <h1 className="text-3xl font-extrabold tracking-tight flex items-center gap-2">
+            <Calendar className="w-7 h-7 text-primary shrink-0" aria-hidden />
+            HMGS Çalışma Programı
           </h1>
           <p className="text-sm text-muted-foreground mt-1">
-            Yapay zeka ile kişiselleştirilmiş, saat-saat çalışma takviminizi oluşturun.
+            20 alanın sınav ağırlığı ve senin doğruluk oranların dikkate alınarak
+            iki haftalık, saat-saat takvim üretilir.
           </p>
         </div>
         <Link href="/" className="text-sm font-medium text-primary hover:text-primary/80 hover:underline">
@@ -145,105 +107,70 @@ export default function PlanSetupPage() {
         <div className="space-y-6">
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">1) Kaç Dersiniz Var?</CardTitle>
+              <CardTitle className="text-base font-semibold">1) Sınav Tarihi</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="space-y-2">
               <Input
-                type="number"
-                min={1}
-                max={25}
-                value={courseCount}
-                onChange={(e) => handleCourseCountChange(Number(e.target.value))}
+                type="date"
+                value={examDate}
+                onChange={(e) => setExamDate(e.target.value)}
                 className="w-full"
               />
-              <p className="text-xs text-muted-foreground mt-2 font-medium">
-                Bu sayıya göre aşağıda ders ve tarih seçim alanları açılacaktır.
+              <p className="text-xs text-muted-foreground font-medium">
+                {daysLeft !== null && daysLeft > 0
+                  ? `Sınava ${daysLeft} gün kaldı. Kalan süreye göre konu / soru / deneme dengesi değişir.`
+                  : "HMGS'nin yapılacağı tarihi girin."}
               </p>
             </CardContent>
           </Card>
 
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">2) Dersler ve Final Tarihleri</CardTitle>
+              <CardTitle className="text-base font-semibold">2) Günlük Çalışma Süresi</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 max-h-[400px] overflow-y-auto scrollbar-thin pr-2">
-              {courses.map((c, i) => (
-                <div key={i} className="p-3 border rounded-lg bg-neutral-50 dark:bg-neutral-900/50 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-primary">Ders {i + 1}</span>
-                  </div>
-                  <div>
-                    <select
-                      value={c.selectedId}
-                      onChange={(e) => updateCourse(i, "selectedId", e.target.value)}
-                      className="w-full text-sm border p-2 rounded-md bg-white dark:bg-black focus:ring-2 focus:ring-primary"
-                    >
-                      <option value="">-- Ders Seçiniz --</option>
-                      {COURSES.filter(x => x.id !== "kanunlar" && x.id !== "kisisel").map((course) => (
-                        <option key={course.id} value={course.id}>
-                          {course.name}
-                        </option>
-                      ))}
-                      <option value="other"> Diğer (Yeni Ders Ekle)</option>
-                    </select>
-                  </div>
-                  {c.selectedId === "other" && (
-                    <div>
-                      <Input
-                        type="text"
-                        placeholder="Ders adını yazınız..."
-                        value={c.customName}
-                        onChange={(e) => updateCourse(i, "customName", e.target.value)}
-                        className="w-full"
-                      />
-                    </div>
-                  )}
-                  <div>
-                    <label className="text-xs text-muted-foreground font-medium mb-1 block">Final Tarihi</label>
-                    <Input
-                      type="date"
-                      value={c.examDate}
-                      onChange={(e) => updateCourse(i, "examDate", e.target.value)}
-                      className="w-full"
-                    />
-                  </div>
-                </div>
-              ))}
+            <CardContent>
+              <Input
+                type="number"
+                min={0.5}
+                max={14}
+                step={0.5}
+                value={dailyHours}
+                onChange={(e) => setDailyHours(Number(e.target.value))}
+              />
+              <p className="text-xs text-muted-foreground mt-2 font-medium">
+                Çalışma günü başına hedef saat (mola hariç).
+              </p>
+            </CardContent>
+          </Card>
+
+          <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold">3) Tatil Günleri</CardTitle>
+            </CardHeader>
+            <CardContent className="flex flex-wrap gap-2">
+              {WEEKDAYS.map((d) => {
+                const on = daysOff.includes(d);
+                return (
+                  <button
+                    key={d}
+                    type="button"
+                    aria-pressed={on}
+                    onClick={() => toggleDayOff(d)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
+                      on
+                        ? "bg-primary text-white border-primary"
+                        : "bg-card border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
+                    }`}
+                  >
+                    {d}
+                  </button>
+                );
+              })}
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-6">
-          <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">3) Günlük Çalışma Süresi (Saat)</CardTitle>
-            </CardHeader>
-            <CardContent className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="text-xs text-muted-foreground font-medium mb-1 block">Hafta İçi (Saat)</label>
-                <Input
-                  type="number"
-                  min={0}
-                  max={12}
-                  step={0.5}
-                  value={hoursWeekday}
-                  onChange={(e) => setHoursWeekday(Number(e.target.value))}
-                />
-              </div>
-              <div>
-                <label className="text-xs text-muted-foreground font-medium mb-1 block">Hafta Sonu (Saat)</label>
-                <Input
-                  type="number"
-                  min={0}
-                  max={12}
-                  step={0.5}
-                  value={hoursWeekend}
-                  onChange={(e) => setHoursWeekend(Number(e.target.value))}
-                />
-              </div>
-            </CardContent>
-          </Card>
-
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
               <CardTitle className="text-base font-semibold">4) Çalışma Penceresi & Mola</CardTitle>
@@ -281,13 +208,13 @@ export default function PlanSetupPage() {
 
           <Card className="shadow-sm border-neutral-200/80 dark:border-neutral-800">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">5) Özel Kısıtlamalar ve Notlar (Opsiyonel)</CardTitle>
+              <CardTitle className="text-base font-semibold">5) Özel Kısıtlamalar (Opsiyonel)</CardTitle>
             </CardHeader>
             <CardContent>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Örnek: Salı akşamları 18:00 sonrası ders çalışamam, Cuma günleri stajım var vb."
+                placeholder="Örnek: Salı akşamları 18:00 sonrası çalışamam, Cuma günleri stajım var vb."
                 className="w-full min-h-[90px] p-3 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-background text-sm focus:outline-none focus:ring-2 focus:ring-primary"
               />
             </CardContent>
@@ -296,8 +223,9 @@ export default function PlanSetupPage() {
       </div>
 
       {error && (
-        <div className="border border-red-500/30 bg-red-500/5 dark:bg-red-500/10 rounded-xl p-4 text-sm text-red-600 dark:text-red-400 font-medium">
-                <TriangleAlert className="w-4 h-4 shrink-0" aria-hidden />Hata oluştu: {error}
+        <div className="border border-red-500/30 bg-red-500/5 dark:bg-red-500/10 rounded-xl p-4 text-sm text-red-600 dark:text-red-400 font-medium flex items-center gap-2">
+          <TriangleAlert className="w-4 h-4 shrink-0" aria-hidden />
+          {error}
         </div>
       )}
 
@@ -307,7 +235,7 @@ export default function PlanSetupPage() {
         className="w-full py-6 text-base font-bold shadow-md transition-all duration-200"
         size="lg"
       >
-        {submitting ? "Yapay Zeka Programı Oluşturuyor (~10-15 sn)..." : "Programı Oluştur"}
+        {submitting ? "Program oluşturuluyor (~15 sn)..." : "Programı Oluştur"}
       </Button>
     </main>
   );

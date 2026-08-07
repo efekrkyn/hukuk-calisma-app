@@ -66,6 +66,9 @@ export default function PlanPage() {
 
   const { plan, completions } = data;
   const generatedDate = new Date(plan.generated_at).toLocaleString("tr-TR");
+  const daysLeft = Math.ceil(
+    (new Date(plan.form_input.exam_date).getTime() - Date.now()) / 86_400_000
+  );
 
   return (
     <main className="p-4 md:p-6 max-w-7xl mx-auto space-y-6">
@@ -92,14 +95,22 @@ export default function PlanPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground font-medium border-t pt-2">
-          <span>
-                <Target className="w-4 h-4 shrink-0" aria-hidden />Hedef Dersler: {plan.form_input.courses?.length || 0} adet</span>
-          <span>
-                <Timer className="w-4 h-4 shrink-0" aria-hidden />Kalan Hafta: {plan.form_input.weeks_remaining}</span>
-          <span>
-                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Oluşturuldu: {generatedDate}</span>
-          <span>
-                <Bot className="w-4 h-4 shrink-0" aria-hidden />Model: {plan.ai_model}</span>
+          <span className="inline-flex items-center gap-1">
+            <Target className="w-4 h-4 shrink-0" aria-hidden />
+            Sınav: {plan.form_input.exam_date}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Timer className="w-4 h-4 shrink-0" aria-hidden />
+            {daysLeft > 0 ? `${daysLeft} gün kaldı` : "Sınav tarihi geçti"}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Calendar className="w-4 h-4 shrink-0" aria-hidden />
+            Oluşturuldu: {generatedDate}
+          </span>
+          <span className="inline-flex items-center gap-1">
+            <Bot className="w-4 h-4 shrink-0" aria-hidden />
+            Model: {plan.ai_model}
+          </span>
         </div>
         <div className="flex gap-2 pt-1 border-t">
           <Link href="/plan/setup">

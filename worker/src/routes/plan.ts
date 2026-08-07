@@ -2,17 +2,26 @@ import { Hono } from "hono";
 import {
   FormInputSchema,
   AiOutputSchema,
+  TaskSchema,
   type AiOutput,
 } from "../lib/plan-schemas";
-import { buildPlanPrompt } from "../lib/plan-prompt";
+import {
+  buildPlanPrompt,
+  buildDays,
+  daysBetween,
+  istanbulToday,
+  PLAN_WEEKS,
+} from "../lib/plan-prompt";
+import { sanitizePlan, canonicalTask } from "../lib/plan-validate";
 import {
   getActivePlan,
   insertPlan,
-  fetchPracticeStats,
-  fetchTickHistory,
+  fetchStudyStats,
+  fetchPlanProgress,
   setCompletion,
   fetchCompletions,
 } from "../lib/plan-store";
+import { parseLlmJson } from "../lib/llm-json";
 import { DeepSeekProvider } from "../lib/ai-provider";
 
 type Bindings = {
@@ -23,7 +32,8 @@ type Bindings = {
 
 export const plan = new Hono<{ Bindings: Bindings }>();
 
-const MODEL_ID = "deepseek-v4-flash";
+/** Üretim modeli — projenin geri kalanıyla aynı (denetim tarafı reasoner). */
+const MODEL_ID = "deepseek-chat";
 
 plan.post("/generate", async (c) => {
   let body: { form: unknown };
@@ -42,70 +52,73 @@ plan.post("/generate", async (c) => {
   }
   const form = formParsed.data;
 
-  // 1) practice_stats
-  const practiceStats = await fetchPracticeStats(c.env.DB);
+  const today = istanbulToday();
+  const daysLeft = daysBetween(today, form.exam_date);
+  if (daysLeft < 1) {
+    return c.json({ error: "sınav tarihi bugünden sonra olmalı" }, 400);
+  }
 
-  // 2) eski plan varsa tick history
+  const stats = await fetchStudyStats(c.env.DB);
+
   const existing = await getActivePlan(c.env.DB);
-  const tickHistory = existing
-    ? await fetchTickHistory(c.env.DB, existing.id)
-    : [];
+  const previous = existing ? await fetchPlanProgress(c.env.DB, existing) : null;
 
-  // 3) prompt
-  const prompt = buildPlanPrompt(form, practiceStats, tickHistory);
+  // Sınav uzaksa bile plan penceresi PLAN_WEEKS ile sınırlı; kalan süre daha
+  // kısaysa takvim sınav gününde biter.
+  const weeks = Math.min(PLAN_WEEKS, Math.ceil(daysLeft / 7));
+  const days = buildDays(today, weeks, form.days_off).filter(
+    (d) => d.date <= form.exam_date
+  );
 
-  // 4) AI call
+  const prompt = buildPlanPrompt({ form, stats, today, days, previous });
+
   const apiKey = c.env.DEEPSEEK_API_KEY ?? c.env.GEMINI_KEY;
   const provider = new DeepSeekProvider(apiKey ?? "", MODEL_ID);
   let raw = "";
   for await (const tok of provider.streamChat(prompt)) raw += tok;
 
-  // 5) JSON cleanup + parse
-  const thinkEnd = raw.lastIndexOf("</think>");
-  if (thinkEnd !== -1) {
-    raw = raw.slice(thinkEnd + 8).trim();
+  const json = parseLlmJson<unknown>(raw);
+  if (json === null) {
+    return c.json({ error: "AI output not JSON", raw: raw.slice(0, 2000) }, 502);
   }
 
-  const firstBrace = raw.indexOf("{");
-  const lastBrace = raw.lastIndexOf("}");
-  if (firstBrace !== -1 && lastBrace !== -1 && firstBrace < lastBrace) {
-    raw = raw.slice(firstBrace, lastBrace + 1);
-  } else {
-    raw = raw
-      .trim()
-      .replace(/^```(?:json)?\s*/i, "")
-      .replace(/\s*```\s*$/, "")
-      .trim();
-  }
-
-  let parsed: AiOutput;
-  try {
-    const j = JSON.parse(raw);
-    const v = AiOutputSchema.safeParse(j);
-    if (!v.success) {
-      return c.json(
-        { error: "AI output schema invalid", details: v.error.format(), raw: raw },
-        502
-      );
-    }
-    parsed = v.data;
-  } catch (e) {
+  const v = AiOutputSchema.safeParse(json);
+  if (!v.success) {
     return c.json(
-      { error: "AI output not JSON", raw: raw },
+      { error: "AI output schema invalid", details: v.error.format(), raw: raw.slice(0, 2000) },
       502
     );
   }
 
-  // 6) insert plan
+  // Hedefler kaydedilmeden önce HMGS_SUBJECTS'e karşı doğrulanır; tıklanınca
+  // 404 veren bir plan hiç plan olmamasından kötüdür.
+  const clean = sanitizePlan(v.data);
+  const remaining = clean.output.weeks.reduce(
+    (a, w) => a + w.days.reduce((b, d) => b + d.tasks.length, 0),
+    0
+  );
+  if (remaining === 0) {
+    return c.json(
+      { error: "planın tüm görevleri geçersiz hedef taşıyordu", dropped: clean.dropped },
+      502
+    );
+  }
+
   const id = crypto.randomUUID();
   await insertPlan(c.env.DB, {
     id,
     form_input: form,
-    ai_output: parsed,
+    ai_output: clean.output,
     ai_model: MODEL_ID,
   });
 
-  return c.json({ plan_id: id, ai_output: parsed, summary: parsed.summary });
+  return c.json({
+    plan_id: id,
+    ai_output: clean.output,
+    summary: clean.output.summary,
+    dropped: clean.dropped,
+    repaired: clean.repaired,
+  });
 });
 
 plan.post("/task-toggle", async (c) => {
@@ -132,42 +145,49 @@ plan.post("/task-toggle", async (c) => {
 });
 
 plan.post("/add-task", async (c) => {
-  let body: { date: string; task: any };
+  let body: { date?: string; task?: unknown };
   try {
     body = await c.req.json();
   } catch {
     return c.json({ error: "invalid JSON" }, 400);
   }
-  if (!body.date || !body.task || !body.task.uuid) {
-    return c.json({ error: "date and task object with uuid required" }, 400);
+  if (!body.date) return c.json({ error: "date required" }, 400);
+
+  // Elle eklenen görev de aynı kapıdan geçiyor: şema + hedef doğrulaması.
+  // Aksi hâlde plana AI'ın yazamayacağı bir hedef elle sokulabilirdi.
+  const taskParsed = TaskSchema.safeParse(body.task);
+  if (!taskParsed.success) {
+    return c.json({ error: "task validation failed", details: taskParsed.error.format() }, 400);
   }
+  const task = canonicalTask(taskParsed.data);
+  if (!task) return c.json({ error: "görevin alanı HMGS alanlarından biri değil" }, 400);
 
   const active = await getActivePlan(c.env.DB);
   if (!active) return c.json({ error: "no active plan" }, 404);
 
-  const planData = active.ai_output;
+  const planData: AiOutput = active.ai_output;
   let dayFound = false;
 
   for (const week of planData.weeks) {
-    let day = week.days.find((d: any) => d.date === body.date);
+    const day = week.days.find((d) => d.date === body.date);
     if (day) {
-      day.tasks.push(body.task);
-      day.tasks.sort((a: any, b: any) => a.time_start.localeCompare(b.time_start));
+      day.tasks.push(task);
+      day.tasks.sort((a, b) => a.time_start.localeCompare(b.time_start));
       dayFound = true;
       break;
     }
   }
 
   if (!dayFound) {
-    // If the day doesn't exist, we find the right week and insert the day
+    // Gün planda yoksa doğru haftaya ekle
     for (const week of planData.weeks) {
       if (body.date >= week.start_date && body.date <= week.end_date) {
         week.days.push({
           date: body.date,
           weekday: new Date(body.date).toLocaleDateString("tr-TR", { weekday: "long" }),
-          tasks: [body.task]
+          tasks: [task],
         });
-        week.days.sort((a: any, b: any) => a.date.localeCompare(b.date));
+        week.days.sort((a, b) => a.date.localeCompare(b.date));
         dayFound = true;
         break;
       }
@@ -179,12 +199,9 @@ plan.post("/add-task", async (c) => {
   }
 
   try {
-    await c.env.DB.prepare(
-      `UPDATE study_plans SET ai_output = ? WHERE id = ?`
-    ).bind(
-      JSON.stringify(planData),
-      active.id
-    ).run();
+    await c.env.DB.prepare(`UPDATE study_plans SET ai_output = ? WHERE id = ?`)
+      .bind(JSON.stringify(planData), active.id)
+      .run();
   } catch (e) {
     console.error("Failed to update plan:", e);
     return c.json({ error: "DB update failed" }, 500);

@@ -35,14 +35,15 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
   }
 
   async function handleAddTask() {
-    if (!addCourse.trim()) return alert("Ders adı giriniz.");
+    if (!addCourse.trim()) return alert("Görev adı giriniz.");
     setIsSubmitting(true);
     try {
+      // Elle eklenen görev "serbest": HMGS alanına bağlı değil, hedefi de yok.
       await addTaskToPlan(addDate, {
         uuid: crypto.randomUUID(),
-        course: addCourse.trim(),
-        topic: "Özel Görev",
-        task_type: "read",
+        subject: null,
+        topic: addCourse.trim(),
+        task_type: "serbest",
         time_start: addStart,
         time_end: addEnd,
       });
@@ -165,7 +166,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
                 }}
                 className="mt-2 w-full py-1.5 text-[10px] font-bold text-primary bg-primary/10 hover:bg-primary/20 rounded-md transition-colors"
               >
-                + Ders Ekle
+                + Görev Ekle
               </button>
             </div>
           );
@@ -175,15 +176,15 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white dark:bg-neutral-900 p-5 rounded-xl shadow-xl max-w-sm w-full space-y-4">
-            <h3 className="font-bold text-lg border-b pb-2">Yeni Ders Ekle ({addDate})</h3>
+            <h3 className="font-bold text-lg border-b pb-2">Yeni Görev Ekle ({addDate})</h3>
             <div className="space-y-3">
               <div>
-                <label className="text-xs font-semibold mb-1 block">Çalışılacak Ders</label>
-                <input 
-                  type="text" 
-                  value={addCourse} 
-                  onChange={e => setAddCourse(e.target.value)} 
-                  placeholder="Örn: Uzay Hukuku, Borçlar Özel..." 
+                <label className="text-xs font-semibold mb-1 block">Görev</label>
+                <input
+                  type="text"
+                  value={addCourse}
+                  onChange={e => setAddCourse(e.target.value)}
+                  placeholder="Örn: Ders notu yaz, kanun oku..."
                   className="w-full text-sm border p-2 rounded-md bg-transparent"
                 />
               </div>

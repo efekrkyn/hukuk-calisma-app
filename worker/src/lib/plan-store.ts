@@ -1,4 +1,5 @@
-import type { FormInput, AiOutput, PracticeStats, TickHistory } from "./plan-schemas";
+import type { FormInput, AiOutput } from "./plan-schemas";
+import { HMGS_SUBJECTS } from "./hmgs-subjects";
 
 export type StoredPlan = {
   id: string;
@@ -16,6 +17,41 @@ export type PlanRow = {
   ai_model: string;
   generated_at: number;
   is_active: number;
+};
+
+/**
+ * Bir alanı "zayıf" ilan etmek için gereken en az cevap sayısı.
+ *
+ * 2 soruda 1 yanlış %50 doğruluk demek ama hiçbir şey ölçmüyor; bu eşik
+ * olmadan plan, kullanıcının şans eseri kaçırdığı alana en çok saati verir.
+ * hmgs.ts'teki /performance ile aynı sayı (5) — iki yer aynı alana "zayıf"
+ * demeli, yoksa panel ile plan çelişir.
+ */
+export const MIN_SUBJECT_ANSWERS = 5;
+
+/**
+ * Alt konu eşiği daha düşük: bir alanın 7-10 alt konusu var, cevaplar oraya
+ * bölününce alan eşiğini (5) beklemek 40+ cevaba kadar hiçbir alt konunun
+ * görünmemesi demek. 3, "tesadüf" ile "eğilim" arasındaki en ucuz sınır.
+ */
+export const MIN_SUBTOPIC_ANSWERS = 3;
+
+/** Alt konu başına en fazla kaç zayıf kayıt isteme gireceği — istem şişmesin. */
+const MAX_WEAK_SUBTOPICS = 3;
+
+export type SubjectStat = {
+  id: string;
+  answered: number;
+  correct: number;
+  /** Eşiğin altındaysa null — "veri yok" ile "kötü" karıştırılmasın. */
+  accuracy: number | null;
+  weak_subtopics: Array<{ name: string; answered: number; accuracy: number }>;
+};
+
+export type StudyStats = {
+  subjects: SubjectStat[];
+  /** Tekrar kuyruğunda vakti gelmiş soru sayısı. */
+  review_due: number;
 };
 
 function parseRow(row: PlanRow): StoredPlan {
@@ -72,78 +108,101 @@ export async function insertPlan(
   ]);
 }
 
-export async function fetchPracticeStats(db: D1Database): Promise<PracticeStats> {
-  // practice_responses tablosundan course bazlı average + count
-  const rows = await db
-    .prepare(
-      `SELECT
-         case_id,
-         AVG(score) as avg_score,
-         COUNT(*) as case_count
-       FROM practice_responses
-       GROUP BY case_id`
-    )
-    .all<{ case_id: string; avg_score: number; case_count: number }>();
-  // case_id format: "borc_001" → course = "borclar_ozel" gibi
-  // Pratik: case_id prefix → course mapping (manual yapay; veya sadece prefix kullan)
-  const byCourse = new Map<string, { sum: number; n: number }>();
-  for (const r of rows.results) {
-    const prefix = r.case_id ? r.case_id.split("_")[0] : "";
-    if (!prefix) continue;
-    const cur = byCourse.get(prefix) ?? { sum: 0, n: 0 };
-    cur.sum += (r.avg_score ?? 0) * (r.case_count ?? 0);
-    cur.n += r.case_count ?? 0;
-    byCourse.set(prefix, cur);
+/**
+ * Planın besleneceği zayıflık verisi.
+ *
+ * Eskiden `practice_responses` okunuyordu; o tablo ölü, uygulamanın gerçek
+ * cevap kaydı `hmgs_attempts`. Alan doğruluğu oradan, alt konu doğruluğu
+ * `hmgs_questions.subtopic` ile join'den geliyor.
+ */
+export async function fetchStudyStats(db: D1Database): Promise<StudyStats> {
+  const now = Date.now();
+  const [bySubject, bySubtopic, due] = await Promise.all([
+    db
+      .prepare(
+        `SELECT subject, COUNT(*) AS n, SUM(is_correct) AS dogru
+           FROM hmgs_attempts GROUP BY subject`
+      )
+      .all<{ subject: string; n: number; dogru: number }>(),
+    db
+      .prepare(
+        // subtopic 009 migration'ıyla geldi, eski sorularda NULL. Join'de
+        // eleniyor: NULL alt konu "bilinmeyen konu" grubu üretir, plana
+        // yazılabilecek bir ad değil.
+        `SELECT q.subject AS subject, q.subtopic AS subtopic,
+                COUNT(*) AS n, SUM(a.is_correct) AS dogru
+           FROM hmgs_attempts a
+           JOIN hmgs_questions q ON q.id = a.question_id
+          WHERE q.subtopic IS NOT NULL AND q.subtopic <> ''
+          GROUP BY q.subject, q.subtopic`
+      )
+      .all<{ subject: string; subtopic: string; n: number; dogru: number }>(),
+    db
+      .prepare(
+        // Ölçüt /tekrar'ı besleyen sorguyla aynı: bildirilmiş veya denetimden
+        // geçmemiş soru kuyrukta görünmüyor, sayaç da onları saymamalı —
+        // yoksa plan "40 soru tekrar et" der, kuyrukta 12 soru çıkar.
+        `SELECT COUNT(*) AS n
+           FROM hmgs_review r
+           JOIN hmgs_verdicts v ON v.question_id = r.question_id
+           LEFT JOIN hmgs_reports rp ON rp.question_id = r.question_id AND rp.resolved = 0
+          WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
+      )
+      .bind(now)
+      .first<{ n: number }>(),
+  ]);
+
+  const weakBySubject = new Map<string, SubjectStat["weak_subtopics"]>();
+  for (const r of bySubtopic.results) {
+    if (r.n < MIN_SUBTOPIC_ANSWERS) continue;
+    const list = weakBySubject.get(r.subject) ?? [];
+    list.push({
+      name: r.subtopic,
+      answered: r.n,
+      accuracy: Math.round((r.dogru / r.n) * 100),
+    });
+    weakBySubject.set(r.subject, list);
   }
-  const PREFIX_TO_COURSE: Record<string, string> = {
-    borc: "borclar_ozel",
-    borcg: "borclar_genel",
-    miras: "miras_hukuku",
-    esya: "esya_hukuku",
-    is: "is_hukuku",
-    vergi: "vergi_hukuku",
-    ticaret: "ticaret_hukuku",
-    kev: "kiymetli_evrak",
-    deniz: "deniz_ticareti",
-    musul: "medeni_usul",
-    icra: "icra_iflas",
-    cezag: "ceza_genel",
-    cezao: "ceza_ozel",
-    cezam: "ceza_muhakemesi",
-    idy: "idari_yargilama",
-    mlk: "milletlerarasi_kamu",
-    mohuk: "milletlerarasi_ozel",
-  };
-  const out: PracticeStats = [];
-  for (const [prefix, { sum, n }] of byCourse.entries()) {
-    const course = PREFIX_TO_COURSE[prefix] ?? prefix;
-    out.push({
-      course,
-      avg_score: Math.round(sum / Math.max(n, 1)),
-      case_count: n,
+
+  const known = new Set(HMGS_SUBJECTS.map((s) => s.id));
+  const subjects: SubjectStat[] = [];
+  for (const r of bySubject.results) {
+    // Eski/başıboş alan id'leri plana taşınmasın; plan yalnızca 20 alanı bilir.
+    if (!known.has(r.subject)) continue;
+    subjects.push({
+      id: r.subject,
+      answered: r.n,
+      correct: r.dogru,
+      accuracy: r.n >= MIN_SUBJECT_ANSWERS ? Math.round((r.dogru / r.n) * 100) : null,
+      weak_subtopics: (weakBySubject.get(r.subject) ?? [])
+        .sort((a, b) => a.accuracy - b.accuracy)
+        .slice(0, MAX_WEAK_SUBTOPICS),
     });
   }
-  return out;
+
+  return { subjects, review_due: due?.n ?? 0 };
 }
 
-export async function fetchTickHistory(
+/**
+ * Önceki planın ne kadarının tiklendiği.
+ *
+ * Eski `fetchTickHistory` 50 uuid'i boş `course` alanıyla isteme yazıyordu —
+ * model bundan hiçbir şey çıkaramazdı. Tek işe yarar sinyal orandır: geçen
+ * planın %20'si yapıldıysa yeni plan daha az görev içermeli.
+ */
+export async function fetchPlanProgress(
   db: D1Database,
-  planId: string
-): Promise<TickHistory> {
-  const rows = await db
-    .prepare(
-      `SELECT task_uuid, completed_at FROM study_task_completions WHERE plan_id = ? ORDER BY completed_at DESC LIMIT 50`
-    )
-    .bind(planId)
-    .all<{ task_uuid: string; completed_at: number }>();
-  // course bilgisini plan ai_output'tan çekmek gerek, ama burada plan_id'den çekiliyor
-  // Basitlik için course'u kaldırıyoruz; sadece task_uuid + completed_at döner.
-  // AI prompt için ham veri yeterli — course tahmin gerekiyorsa ileride parse edilir.
-  return rows.results.map((r) => ({
-    task_uuid: r.task_uuid,
-    course: "",
-    completed_at: r.completed_at,
-  }));
+  plan: StoredPlan
+): Promise<{ planned: number; done: number }> {
+  const planned = plan.ai_output.weeks.reduce(
+    (a, w) => a + w.days.reduce((b, d) => b + d.tasks.length, 0),
+    0
+  );
+  const row = await db
+    .prepare(`SELECT COUNT(*) AS n FROM study_task_completions WHERE plan_id = ?`)
+    .bind(plan.id)
+    .first<{ n: number }>();
+  return { planned, done: row?.n ?? 0 };
 }
 
 export async function setCompletion(

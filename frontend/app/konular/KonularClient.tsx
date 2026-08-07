@@ -45,9 +45,32 @@ type TopicDoc = {
  * Uzun metin için iki şey belirleyici: satır aralığı ve satır uzunluğu.
  * Gövde 1.75 satır aralığında, kap 68ch ile sınırlı.
  */
+/**
+ * Başlık metnini bağlantı verilebilir bir id'ye çevirir.
+ *
+ * Anlatımlar uzun (bir konu 10-14 bin karakter); baştan sona kaydırmak
+ * telefonda 50+ hamle sürüyordu. Başlıklara id verilince üstteki bölüm
+ * şeridi doğrudan atlayabiliyor.
+ */
+function slug(node: React.ReactNode): string {
+  const text = typeof node === "string" ? node : String(node ?? "");
+  return text
+    .toLocaleLowerCase("tr")
+    .replace(/[^\p{L}\p{N}]+/gu, "-")
+    .replace(/^-|-$/g, "");
+}
+
 const MD: Components = {
-  h1: ({ children }) => <h2 className="type-title mt-7 mb-2 first:mt-0">{children}</h2>,
-  h2: ({ children }) => <h2 className="type-title mt-7 mb-2 first:mt-0">{children}</h2>,
+  h1: ({ children }) => (
+    <h2 id={slug(children)} className="type-title mt-7 mb-2 first:mt-0 scroll-mt-4">
+      {children}
+    </h2>
+  ),
+  h2: ({ children }) => (
+    <h2 id={slug(children)} className="type-title mt-7 mb-2 first:mt-0 scroll-mt-4">
+      {children}
+    </h2>
+  ),
   h3: ({ children }) => (
     <h3 className="mt-5 mb-1.5 font-semibold text-[0.95rem]">{children}</h3>
   ),
@@ -442,6 +465,30 @@ export default function KonularClient({
           </header>
 
           <hr className="rule-hairline my-4" />
+
+          {/* Bölüm şeridi: uzun anlatımda hedefe atlamak için. Başlıklar
+              içerikten okunuyor, sabit liste değil — üretim istemi değişirse
+              şerit kendiliğinden uyum sağlar. */}
+          {(() => {
+            const basliklar = Array.from(
+              doc.content.matchAll(/^##\s+(.+)$/gm),
+              (m) => m[1].trim()
+            );
+            if (basliklar.length < 2) return null;
+            return (
+              <nav className="flex flex-wrap gap-1.5 mb-5">
+                {basliklar.map((b) => (
+                  <a
+                    key={b}
+                    href={`#${slug(b)}`}
+                    className="material-thin rounded-full px-3 py-1 text-[11px] text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    {b}
+                  </a>
+                ))}
+              </nav>
+            );
+          })()}
 
           <div className="max-w-[68ch] type-body text-[0.95rem]">
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={MD}>
