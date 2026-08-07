@@ -27,7 +27,12 @@ authRouter.post("/login", async (c) => {
   const token = await sign(
     {
       sub: "efe",
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // 30 days
+      // 1 yıl. Şifre kalkmıyor çünkü aynı API'nin arkasında para harcayan
+      // uçlar var (/hmgs/generate, /hmgs/verify, /ai/*) ve workers.dev
+      // adresleri taranabiliyor. Ama sınava hazırlanan kişinin ayda bir
+      // tekrar giriş yapmasının da bir güvenlik faydası yok — tek cihazda
+      // yıllık oturum, sürtünmeyi sıfırlarken korumayı aynı bırakıyor.
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 365,
     },
     c.env.ADMIN_SECRET
   );

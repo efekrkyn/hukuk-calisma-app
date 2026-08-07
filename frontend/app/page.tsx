@@ -32,6 +32,7 @@ type SubjectStat = {
 type VerifyStats = { total: number; correct: number; unchecked: number };
 
 const TOOLS = [
+  { href: "/konular", label: "Konu Anlatımı", desc: "Kanun metninden alan alan" },
   { href: "/tekrar", label: "Yanlışlarım", desc: "Bilemediklerin aralıklı tekrarla" },
   { href: "/asistan", label: "AI Asistan", desc: "Web arama + sınav modu" },
   { href: "/reader", label: "Kütüphane", desc: "Kanun ve not PDF'leri" },

@@ -6,6 +6,7 @@ import {
   getSubject,
 } from "../lib/hmgs-subjects";
 import { generateQuestions, lengthRatio, MAX_LENGTH_RATIO } from "../lib/hmgs-generator";
+import { generateTopic } from "../lib/hmgs-topic";
 import { apportion } from "../lib/apportion";
 import { shuffleOptions } from "../lib/shuffle-options";
 import { isNearDuplicate } from "../lib/near-duplicate";
@@ -759,4 +760,133 @@ hmgs.get("/verify-stats", async (c) => {
     if (key === "unchecked") unchecked += r.n;
   }
   return c.json({ total, correct, unchecked, by_subject: by });
+});
+
+/**
+ * Bir alanın anlatılabilir alt konuları: kanun konuları + doktrin konuları.
+ *
+ * İkisi tek listede birleşiyor çünkü kullanıcı açısından ayrım yok — "hizmet
+ * kusuru" da "kamulaştırma usulü" de İdare Hukuku'nun bir konusu. Ayrım
+ * yalnızca retrieval'ın hangi korpusa gideceğini belirliyor ve orası
+ * generateTopic'in içinde kalıyor.
+ */
+function allSubtopics(s: { subtopics?: string[]; doctrineSubtopics?: string[] }): string[] {
+  return [...(s.subtopics ?? []), ...(s.doctrineSubtopics ?? [])];
+}
+
+/**
+ * Alt konu anlatımı. Önbellekte varsa oradan, yoksa üretip yazar.
+ *
+ * subtopic İSTEMCİDEN GELEN SERBEST METİNLE ÇALIŞMAZ: alanın kendi listesinde
+ * geçmiyorsa 400. Gerekçe, /report'ta subject'i istemciden almamakla aynı —
+ * doğrulanmamış girdiyle üretim tetiklemek hem para harcatır hem de bankaya
+ * (burada önbelleğe) alanla ilgisiz kayıt açar.
+ */
+hmgs.post("/topic", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  let body: { subject?: string; subtopic?: string; refresh?: boolean };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const subject = getSubject(String(body.subject ?? ""));
+  if (!subject) return c.json({ error: "geçersiz subject" }, 400);
+
+  const subtopic = String(body.subtopic ?? "");
+  if (!allSubtopics(subject).includes(subtopic)) {
+    return c.json({ error: "geçersiz subtopic" }, 400);
+  }
+
+  // Önbellek. refresh=true ise hiç bakılmıyor — kullanıcı bilerek yeniden
+  // üretmek istiyor (anlatım kötü çıkmış olabilir).
+  if (body.refresh !== true) {
+    const hit = await c.env.DB.prepare(
+      `SELECT content, sources FROM hmgs_topics WHERE subject = ? AND subtopic = ?`
+    ).bind(subject.id, subtopic).first<{ content: string; sources: string }>();
+
+    if (hit) {
+      return c.json({
+        ok: true,
+        subject: subject.id,
+        subtopic,
+        subject_name: subject.name,
+        content: hit.content,
+        sources: JSON.parse(hit.sources),
+        cached: true,
+      });
+    }
+  }
+
+  // Üretim buradan sonra; anahtar kontrolü de buraya kadar ertelendi ki
+  // önbellekteki anlatım anahtar olmadan da okunabilsin.
+  if (!c.env.DEEPSEEK_API_KEY) {
+    return c.json({ error: "DEEPSEEK_API_KEY tanımlı değil" }, 503);
+  }
+
+  const topic = await generateTopic(
+    { AI: c.env.AI, VECTORIZE: c.env.VECTORIZE, DB: c.env.DB, DEEPSEEK_API_KEY: c.env.DEEPSEEK_API_KEY },
+    subject,
+    subtopic
+  );
+
+  if (!topic) {
+    return c.json({ error: "konu anlatımı üretilemedi (kaynak metin bulunamadı)" }, 502);
+  }
+
+  // INSERT OR REPLACE: refresh akışında eski satır üzerine yazılsın.
+  await c.env.DB.prepare(
+    `INSERT OR REPLACE INTO hmgs_topics (subject, subtopic, content, sources, created_at)
+     VALUES (?, ?, ?, ?, ?)`
+  ).bind(
+    subject.id,
+    subtopic,
+    topic.content,
+    JSON.stringify(topic.sources),
+    Date.now()
+  ).run();
+
+  return c.json({
+    ok: true,
+    subject: subject.id,
+    subtopic,
+    subject_name: subject.name,
+    content: topic.content,
+    sources: topic.sources,
+    cached: false,
+  });
+});
+
+/**
+ * Anlatım menüsü: tüm alanlar, alt konuları ve o konunun hazır olup olmadığı.
+ *
+ * ready, arayüzün "bu konu anında açılır mı yoksa üretim mi bekleyeceksin"
+ * ayrımını yapabilmesi için — üretim saniyeler sürüyor, kullanıcı tıklamadan
+ * önce bilsin.
+ */
+hmgs.get("/topics", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  // Tek sorgu, alan başına sorgu değil: 20 alan × ~8 alt konu için 157 sorgu
+  // atmanın anlamı yok, tablonun tamamı zaten bu kadar satır.
+  const rows = await c.env.DB.prepare(
+    `SELECT subject, subtopic FROM hmgs_topics`
+  ).all<{ subject: string; subtopic: string }>();
+
+  // Ayraç olarak satır sonu: alt konu adlarında boşluk var, kayıt anahtarının
+  // iki alanı birbirine karışmasın.
+  const ready = new Set(rows.results.map((r) => `${r.subject}\n${r.subtopic}`));
+
+  return c.json({
+    subjects: HMGS_SUBJECTS.map((s) => ({
+      id: s.id,
+      name: s.name,
+      subtopics: allSubtopics(s).map((name) => ({
+        name,
+        ready: ready.has(`${s.id}\n${name}`),
+      })),
+    })),
+  });
 });
