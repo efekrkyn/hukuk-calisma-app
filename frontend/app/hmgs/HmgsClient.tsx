@@ -46,6 +46,31 @@ function parseCount(raw: string | undefined, subject?: string): number {
   return subject ? 10 : 20;
 }
 
+/** Gezinme ızgarasındaki tek soru düğmesi — açık ve kapalı ızgara aynı
+ *  görünümü paylaşsın diye ayrıldı. */
+function QNavButton({
+  i,
+  a,
+  active,
+  onGo,
+}: {
+  i: number;
+  a: Answer;
+  active: boolean;
+  onGo: (i: number) => void;
+}) {
+  let cls = "w-8 h-8 text-xs rounded-lg border transition-all ";
+  if (active) cls += "ring-2 ring-primary ";
+  if (a.selected !== null) cls += "bg-primary/20 border-primary/50 text-primary ";
+  else cls += "bg-background ";
+  if (a.flagged) cls += "ring-2 ring-yellow-500 ";
+  return (
+    <button type="button" className={cls} onClick={() => onGo(i)}>
+      {i + 1}
+    </button>
+  );
+}
+
 export default function HmgsClient({
   subject,
   count,
@@ -387,6 +412,9 @@ export default function HmgsClient({
   const ans = answers[currentIndex];
   const courseName = q.subject_name || q.subject;
   const answeredCount = answers.filter((a) => a.selected !== null).length;
+  // Kapalı ızgarada "kaç soruyu işaretledim" bilgisi başlıkta görünmeli,
+  // yoksa açmadan bilinmiyor.
+  const flaggedCount = answers.filter((a) => a.flagged).length;
 
   return (
     <div className="space-y-4">
@@ -404,22 +432,33 @@ export default function HmgsClient({
         </Button>
       </div>
 
-      {/* Question navigation */}
-      <div className="flex flex-wrap gap-1.5">
-        {questions.map((_, i) => {
-          const a = answers[i];
-          let cls = "w-8 h-8 text-xs rounded-lg border transition-all ";
-          if (i === currentIndex) cls += "ring-2 ring-primary ";
-          if (a.selected !== null) cls += "bg-primary/20 border-primary/50 text-primary ";
-          else cls += "bg-background ";
-          if (a.flagged) cls += "ring-2 ring-yellow-500 ";
-          return (
-            <button key={i} className={cls} onClick={() => goTo(i)}>
-              {a.flagged ? "" : i + 1}
-            </button>
-          );
-        })}
-      </div>
+      {/* Soru gezinme ızgarası.
+          120 soruda 12 satır ediyor ve soruyu katlamanın altına itiyordu —
+          gerçek sınavda soruyu görmek için kaydırmak gerekiyordu. 40'tan
+          çok soruda varsayılan kapalı; 20'lik turda eskisi gibi açık, orada
+          2 satır yer kaplıyor ve kapatmanın faydası yok. */}
+      {questions.length > 40 ? (
+        <details className="material-thin rounded-xl px-3 py-2">
+          <summary className="text-xs text-muted-foreground cursor-pointer list-none flex items-center justify-between">
+            <span>Soru listesi</span>
+            <span className="nums-tabular">
+              {flaggedCount > 0 && `${flaggedCount} işaretli · `}
+              {answeredCount}/{questions.length}
+            </span>
+          </summary>
+          <div className="flex flex-wrap gap-1.5 pt-3">
+            {questions.map((_, i) => (
+              <QNavButton key={i} i={i} a={answers[i]} active={i === currentIndex} onGo={goTo} />
+            ))}
+          </div>
+        </details>
+      ) : (
+        <div className="flex flex-wrap gap-1.5">
+          {questions.map((_, i) => (
+            <QNavButton key={i} i={i} a={answers[i]} active={i === currentIndex} onGo={goTo} />
+          ))}
+        </div>
+      )}
 
       {/* Soru bloğu — yay ile, YÖNÜ tutarlı: ileri sağdan, geri soldan.
           "Bir yoldan giden aynı yoldan döner" ilkesi. */}
