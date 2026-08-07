@@ -353,6 +353,17 @@ hmgs.get("/performance", async (c) => {
     ).all<{ subject: string; n: number; dogru: number }>(),
   ]);
 
+  // Alan-altı zayıflık. "Borçlar'da zayıfsın" eyleme dönüşmüyor — Borçlar'ın
+  // 10 alt konusu var; hangisine çalışacağını söylemiyor. Alt konu etiketi
+  // sonradan eklendi ve 3051 sorunun tamamına atandı, artık bu kırılım
+  // çıkarılabiliyor. NULL etikete karşı korumalı: etiketsiz soru sayılmaz.
+  const subs = await c.env.DB.prepare(
+    `SELECT q.subject, q.subtopic, COUNT(*) AS n, SUM(a.is_correct) AS dogru
+       FROM hmgs_attempts a JOIN hmgs_questions q ON q.id = a.question_id
+      WHERE q.subtopic IS NOT NULL
+      GROUP BY q.subject, q.subtopic`
+  ).all<{ subject: string; subtopic: string; n: number; dogru: number }>();
+
   const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
   const bySubject = subjects.results
     .map((r) => ({
@@ -385,11 +396,29 @@ hmgs.get("/performance", async (c) => {
       WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
   ).bind(Date.now()).first<{ n: number }>();
 
+  // Alt konu eşiği alandan DÜŞÜK (3): bir alt konu bir denemede 1-2 soru
+  // görüyor, 5 eşiği tutulursa kırılım aylarca boş kalır. Az veriyi de
+  // gösteriyoruz ama `answered` alanı yanında, UI temkinli yazabilsin.
+  const bySubtopic = subs.results
+    .filter((r) => r.n >= 3)
+    .map((r) => ({
+      subject: r.subject,
+      subject_name: name.get(r.subject) ?? r.subject,
+      subtopic: r.subtopic,
+      answered: r.n,
+      correct: r.dogru,
+      accuracy: r.n > 0 ? Math.round((r.dogru / r.n) * 100) : 0,
+    }))
+    .sort((a, b) => a.accuracy - b.accuracy)
+    .slice(0, 8);
+
   return c.json({
     exams: byExam,
     subjects: bySubject,
+    subtopics: bySubtopic,
     // Az veriyle alan sıralaması gürültüden ibaret; eşiği UI'ya bildir.
     min_answers_for_ranking: 5,
+    min_answers_for_subtopic: 3,
     overall: {
       exams: byExam.length,
       answered,

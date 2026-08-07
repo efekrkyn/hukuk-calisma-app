@@ -1,4 +1,5 @@
 import { HMGS_SUBJECTS, HMGS_PASS_SCORE, HMGS_TOTAL_QUESTIONS } from "./hmgs-subjects";
+import { allSubtopics } from "./hmgs-classify";
 import { apportion } from "./apportion";
 import { WEEKDAYS, type FormInput } from "./plan-schemas";
 import type { StudyStats } from "./plan-store";
@@ -50,6 +51,11 @@ export function daysBetween(fromIso: string, toIso_: string): number {
   return Math.round((toUtcMs(toIso_) - toUtcMs(fromIso)) / 86_400_000);
 }
 
+/** "2026-08-07" → "Cuma". Plan ızgarası günleri gün adına göre sütunluyor. */
+export function weekdayOf(iso: string): string {
+  return TR_WEEKDAY[new Date(toUtcMs(iso)).getUTCDay()];
+}
+
 /** Plan penceresindeki günler; tatil günleri işaretli. */
 export function buildDays(
   startIso: string,
@@ -61,8 +67,9 @@ export function buildDays(
   const out: PlanDay[] = [];
   for (let i = 0; i < weeks * 7; i++) {
     const ms = start + i * 86_400_000;
-    const weekday = TR_WEEKDAY[new Date(ms).getUTCDay()];
-    out.push({ date: toIso(ms), weekday, off: off.has(weekday) });
+    const date = toIso(ms);
+    const weekday = weekdayOf(date);
+    out.push({ date, weekday, off: off.has(weekday) });
   }
   return out;
 }
@@ -101,7 +108,7 @@ export function subjectShares(stats: StudyStats): SubjectShare[] {
       accuracy: acc,
       answered: st?.answered ?? 0,
       priority: s.count * factor,
-      subtopics: [...(s.subtopics ?? []), ...(s.doctrineSubtopics ?? [])],
+      subtopics: allSubtopics(s),
       weak_subtopics: (st?.weak_subtopics ?? []).map((w) => ({
         name: w.name,
         accuracy: w.accuracy,
@@ -171,10 +178,10 @@ const RULES = `KURALLAR:
    break_minutes kadar boşluk. Günlük toplam süre ≈ daily_hours.
 4. Blok süreleri: konu 45-60 dk, soru 30-45 dk, tekrar 20-30 dk, deneme 155 dk.
 5. task_type ve target_ref ZORUNLU olarak eşleşir:
-   - "konu"   → "konular?subject=<alan_id>&konu=<alt_konu>"  konu anlatımını oku
-   - "soru"   → "hmgs?subject=<alan_id>"                     o alandan soru çöz
-   - "tekrar" → "tekrar"                                     yanlışlar kuyruğu
-   - "deneme" → "hmgs?count=${HMGS_TOTAL_QUESTIONS}"                          tam deneme (155 dk)
+   - "konu"   → "konular?subject=<alan_id>&konu=<alt_konu>" (konu anlatımını oku)
+   - "soru"   → "hmgs?subject=<alan_id>" (o alandan soru çöz)
+   - "tekrar" → "tekrar" (yanlışlar kuyruğu)
+   - "deneme" → "hmgs?count=${HMGS_TOTAL_QUESTIONS}" (tam deneme, 155 dk)
    Başka target_ref biçimi YOK. PDF, kanun, case bağlantısı YOK.
 6. subject alanı: konu/soru görevlerinde ALANLAR tablosundaki id, tekrar ve
    deneme görevlerinde null. Tabloda olmayan id yazarsan görev silinir.

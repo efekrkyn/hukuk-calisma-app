@@ -71,22 +71,29 @@ export default function PlanPage() {
   );
 
   return (
-    <main className="p-4 md:p-6 max-w-7xl mx-auto space-y-6">
-      <div className="flex items-center justify-between border-b pb-4">
-        <div>
-          <h1 className="text-3xl font-extrabold bg-gradient-to-r from-primary to-indigo-600 bg-clip-text text-transparent">
-                <Calendar className="w-4 h-4 shrink-0" aria-hidden />Çalışma Planım
-          </h1>
-          <p className="text-xs text-muted-foreground mt-1">
-            Yapay zeka tarafından üretilen çalışma programınız.
-          </p>
-        </div>
-        <Link href="/" className="text-sm font-medium text-primary hover:text-primary/80 hover:underline">
+    <main className="min-h-dvh bg-background p-4 md:p-8">
+      <div className="max-w-7xl mx-auto space-y-6">
+      {/* Başlık uygulamanın geri kalanıyla aynı dizgide: type-display
+          (Newsreader serif) ve AÜHF laciverti. Önceki hâli mor-indigo
+          gradyanlı ayrı bir kimlikti ve sayfa yabancı duruyordu.
+          Dil de "programınız"dan "sen"e çekildi — diğer sayfalar sen diyor. */}
+      <div>
+        <Link
+          href="/"
+          className="inline-flex items-center text-sm font-medium text-muted-foreground hover:text-primary transition-colors mb-2"
+        >
           ← Ana sayfa
         </Link>
+        <h1 className="type-display flex items-center gap-2">
+          <Calendar className="w-7 h-7 text-primary shrink-0" aria-hidden />
+          Çalışma Planı
+        </h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Alan ağırlıklarına ve zayıf olduğun konulara göre kurulur.
+        </p>
       </div>
 
-      <div className="rounded-xl border border-neutral-200 dark:border-neutral-800 bg-muted/40 p-4 space-y-3">
+      <div className="material-thin rounded-xl p-4 space-y-3">
         <div className="space-y-1">
           <h2 className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
                 <Rocket className="w-4 h-4 shrink-0" aria-hidden />Plan Özeti</h2>
@@ -132,6 +139,7 @@ export default function PlanPage() {
       </div>
 
       <PlanGrid weeks={plan.ai_output.weeks} completions={completions} />
+      </div>
     </main>
   );
 }

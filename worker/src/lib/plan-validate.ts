@@ -1,4 +1,6 @@
 import { HMGS_SUBJECTS, HMGS_TOTAL_QUESTIONS, getSubject } from "./hmgs-subjects";
+import { allSubtopics } from "./hmgs-classify";
+import { weekdayOf } from "./plan-prompt";
 import type { AiOutput, Task } from "./plan-schemas";
 
 /**
@@ -35,12 +37,15 @@ function norm(s: string): string {
   return s.trim().replace(/\s+/g, " ").toLocaleLowerCase("tr");
 }
 
-/** Alan id'si → (normalize alt konu → kanonik alt konu). */
+/**
+ * Alan id'si → (normalize alt konu → kanonik alt konu).
+ *
+ * Liste `allSubtopics` üzerinden kuruluyor: konu anlatımı sayfası ve soru
+ * sınıflandırıcı da aynı fonksiyonu kullanıyor, "geçerli alt konu" tanımı üç
+ * yerde ayrışırsa plan var olmayan bir konuya bağlantı verir.
+ */
 const SUBTOPIC_INDEX = new Map<string, Map<string, string>>(
-  HMGS_SUBJECTS.map((s) => [
-    s.id,
-    new Map([...(s.subtopics ?? []), ...(s.doctrineSubtopics ?? [])].map((t) => [norm(t), t])),
-  ])
+  HMGS_SUBJECTS.map((s) => [s.id, new Map(allSubtopics(s).map((t) => [norm(t), t]))])
 );
 
 /** Modelin yazdığı alt konu adını alanın kendi listesine oturt; oturmazsa null. */
@@ -130,7 +135,10 @@ export function sanitizePlan(output: AiOutput): SanitizeResult {
         }
         tasks.push(fixed);
       }
-      return { ...d, tasks };
+      // weekday tarihten yeniden hesaplanıyor: takvim ızgarası günleri gün
+      // adına göre sütuna yerleştiriyor, model "Salı"yı bir günü kaydırıp
+      // yazdığında o gün ızgaradan sessizce düşüyordu.
+      return { ...d, weekday: weekdayOf(d.date), tasks };
     }),
   }));
 

@@ -83,7 +83,7 @@ assert.equal(canonicalTask({ ...base, task_type: "serbest", subject: "x" })!.tar
         days: [
           {
             date: "2026-08-10",
-            weekday: "Pazartesi",
+            weekday: "Perşembe", // yanlış: 10 Ağustos 2026 Pazartesi
             tasks: [
               { ...base, subject: "medeni", target_ref: "konular?subject=medeni&konu=vesayet ve kısıtlılık" },
               { ...base, subject: "yok_boyle_bir_alan" },
@@ -95,6 +95,8 @@ assert.equal(canonicalTask({ ...base, task_type: "serbest", subject: "x" })!.tar
     ],
   };
   const r = sanitizePlan(out);
+  // gün adı tarihten yeniden hesaplanır, yoksa gün ızgaradan düşer
+  assert.equal(r.output.weeks[0].days[0].weekday, "Pazartesi");
   assert.equal(r.dropped, 1);
   assert.equal(r.repaired, 1); // yalnızca "tekrar" görevinin hedefi değişti
   assert.equal(r.output.weeks[0].days[0].tasks.length, 2);

@@ -14,6 +14,13 @@ import { spring } from "@/lib/motion";
 type Perf = {
   exams: Array<{ exam_id: string; at: number; total: number; correct: number; score: number }>;
   subjects: Array<{ id: string; name: string; answered: number; correct: number; accuracy: number }>;
+  subtopics?: Array<{
+    subject: string;
+    subject_name: string;
+    subtopic: string;
+    answered: number;
+    accuracy: number;
+  }>;
   min_answers_for_ranking: number;
   overall: { exams: number; answered: number; correct: number; accuracy: number; pass_score: number };
   review_due: number;
@@ -126,6 +133,32 @@ export function PerformanceCard() {
           Alan sıralaması için alan başına en az {p.min_answers_for_ranking} cevap
           gerekiyor — biraz daha deneme çöz.
         </p>
+      )}
+
+      {/* Alan-altı kırılım. "Borçlar'da zayıfsın" eyleme dönüşmüyor; hangi
+          alt konu olduğunu söylemek doğrudan bir sonraki adımı veriyor —
+          bağlantı o konunun anlatımına gidiyor. */}
+      {p.subtopics && p.subtopics.length > 0 && (
+        <div className="space-y-1.5 pt-1">
+          <p className="text-xs text-muted-foreground">Zorlandığın konular</p>
+          {p.subtopics.slice(0, 4).map((s) => (
+            <Link
+              key={`${s.subject}-${s.subtopic}`}
+              href={`/konular?subject=${encodeURIComponent(s.subject)}&konu=${encodeURIComponent(s.subtopic)}`}
+              className="flex items-baseline gap-2 group"
+            >
+              <span className="text-sm leading-tight flex-1 group-hover:text-primary transition-colors">
+                {s.subtopic}
+                <span className="block text-[11px] text-muted-foreground">
+                  {s.subject_name} · {s.answered} soru
+                </span>
+              </span>
+              <span className="text-xs nums-tabular text-muted-foreground shrink-0">
+                %{s.accuracy}
+              </span>
+            </Link>
+          ))}
+        </div>
       )}
     </motion.section>
   );
