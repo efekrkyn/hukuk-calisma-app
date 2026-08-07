@@ -89,7 +89,23 @@ KURALLAR:
 6. sourceIndex: soruyu hangi <KAYNAK> parçasından yazdığını [n] numarasıyla bildir.
 7. İSTENEN ALAN DIŞINA ÇIKMA. Kaynak parçaları istenen alanı karşılamıyorsa o soruyu
    hiç yazma — az soru döndürmek, yanlış alandan soru döndürmekten iyidir.
-8. SADECE JSON dizisi döndür, başka hiçbir metin yazma.
+8. JSON'U DÖNDÜRMEDEN ÖNCE HER SORUYU BİR KEZ DAHA OKU. Ölçüldü: olay
+   sorularında kusur oranı %21, tanım sorularında %12 — neredeyse iki katı.
+   Sebebi olay sorusunun vakıa → kural → sonuç zinciri kurması ve her
+   halkada kayma olabilmesi. Şunları tek tek denetle:
+8a. AÇIKLAMA İLE İŞARETLİ ŞIK ÇELİŞİYOR MU? En sık hata bu. Açıklaman bir
+   sonuca varıp işaretlediğin şık başka bir şey söylüyorsa soru bozuktur.
+   Örnek hata: açıklama "talep vaki olmamış sayılır" diyor, işaretli şık
+   "15 günlük süre verilir" diyor.
+8b. ALINTILADIĞIN HÜKMÜN KELİMELERİ İLE ŞIKKIN KELİMELERİ AYNI MI? Hukukta
+   kelime farkı sonuç farkıdır. Örnek hata: madde "hükümsüz hale gelir"
+   diyor, şık "yürürlükten kalkar" diyor — bunlar aynı şey değil.
+8c. VAKIADAKİ OLGULAR, ATIF YAPTIĞIN HÜKMÜN ŞARTLARINI GERÇEKTEN
+   KARŞILIYOR MU? Hükmün aradığı bir şart vakıada yoksa sonuç değişir.
+   Bir şart eksikse ya vakıaya ekle ya soruyu yaz.
+   Bu üç denetimden birini geçemeyen soruyu DÖNDÜRME. Az soru döndürmek,
+   bozuk soru döndürmekten iyidir.
+9. SADECE JSON dizisi döndür, başka hiçbir metin yazma.
 
 FORMAT:
 [{"question":"...","options":["...","...","...","..."],"correctAnswer":0,"explanation":"...","sourceIndex":1}]`;
