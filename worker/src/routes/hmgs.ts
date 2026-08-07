@@ -69,7 +69,7 @@ hmgs.post("/generate", async (c) => {
     return c.json({ error: "DEEPSEEK_API_KEY tanımlı değil" }, 503);
   }
 
-  let body: { subject?: string; count?: number };
+  let body: { subject?: string; count?: number; subtopic?: string };
   try {
     body = await c.req.json();
   } catch {
@@ -81,10 +81,22 @@ hmgs.post("/generate", async (c) => {
 
   const count = Math.min(Math.max(Number(body.count ?? 5), 1), 10);
 
+  // Hedefli üretim: bankanın ince kaldığı alt konuyu doğrudan doldurmak için.
+  // Doğrulama üreticinin içinde de var ama burada erken hata vermek, sessizce
+  // rastgele bir konudan üretip "oldu" demekten iyi.
+  const wantSubtopic = body.subtopic ? String(body.subtopic) : undefined;
+  if (wantSubtopic) {
+    const gecerli = [...(subject.subtopics ?? []), ...(subject.doctrineSubtopics ?? [])];
+    if (!gecerli.includes(wantSubtopic)) {
+      return c.json({ error: "geçersiz subtopic" }, 400);
+    }
+  }
+
   const questions = await generateQuestions(
     { AI: c.env.AI, VECTORIZE: c.env.VECTORIZE, DB: c.env.DB, DEEPSEEK_API_KEY: c.env.DEEPSEEK_API_KEY },
     subject,
-    count
+    count,
+    wantSubtopic
   );
 
   if (questions.length === 0) {

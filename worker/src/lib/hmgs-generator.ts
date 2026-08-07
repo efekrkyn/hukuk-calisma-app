@@ -192,7 +192,10 @@ export function validateQuestion(q: unknown): GeneratedQuestion | null {
 export async function generateQuestions(
   env: { AI: Ai; VECTORIZE: VectorizeIndex; DB?: D1Database; DEEPSEEK_API_KEY: string },
   subject: HmgsSubject,
-  count: number
+  count: number,
+  /** Verilirse rastgele rotasyon yerine bu alt konudan üretir. Listede
+   *  yoksa yok sayılır — istemciden gelen serbest metinle üretim olmasın. */
+  wantSubtopic?: string
 ): Promise<GeneratedQuestion[]> {
   // Doktrin konularında kanun yok; makale korpusundan besleniyorlar.
   // Ne kanun ne makale kaynağı varsa üretme — dayanaksız soru uydurma olur.
@@ -208,12 +211,20 @@ export async function generateQuestions(
   // Kanun + doktrin alt konuları tek havuzda; hangisinin seçildiğine göre
   // retrieval farklı korpusa gidiyor. Doktrin konusu kanunda yok, kanun
   // korpusunda aramak "kaynakta yok" üretiyordu.
+  //
+  // `wantSubtopic` verilirse rastgele seçim yapılmaz: bazı alt konularda
+  // banka ince kalıyor (30 alt konu örneklendi, ikisinde 5'ten az soru vardı)
+  // ve rastgele rotasyonla o boşluğu doldurmak şansa kalıyordu. Hedefli
+  // üretim boşluğu doğrudan kapatıyor.
   const lawSubs = subject.subtopics ?? [];
   const docSubs = subject.doctrineSubtopics ?? [];
   const pool = [...lawSubs, ...docSubs];
-  const subtopic = pool.length
-    ? pool[Math.floor(Math.random() * pool.length)]
-    : "";
+  const subtopic =
+    wantSubtopic && pool.includes(wantSubtopic)
+      ? wantSubtopic
+      : pool.length
+        ? pool[Math.floor(Math.random() * pool.length)]
+        : "";
   const isDoctrine = docSubs.includes(subtopic);
   const course = isDoctrine ? "hmgs_ozet" : (subject.ragCourse ?? "kanunlar");
   const query = `${subject.name}: ${subtopic || subject.topic}`;
