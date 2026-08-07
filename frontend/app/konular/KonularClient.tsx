@@ -451,6 +451,22 @@ export default function KonularClient({
 
           <hr className="rule-hairline my-5" />
 
+          {/* Okuma → çözme köprüsü. Anlatımı bitiren kişinin bir sonraki
+              adımı aramak zorunda kalmaması, çalışma döngüsünü kapatıyor:
+              oku → çöz → bilemediklerin tekrar kuyruğuna düşer. */}
+          <a
+            href={`/hmgs?subject=${encodeURIComponent(doc.subject)}&subtopic=${encodeURIComponent(doc.subtopic)}&count=10`}
+            className="material-thin rounded-xl px-4 py-3 flex items-center justify-between gap-3 mb-5 hover:border-primary/40 transition-colors"
+          >
+            <span className="text-sm">
+              Bu konudan soru çöz
+              <span className="block text-[11px] text-muted-foreground">
+                10 soru, sadece {doc.subtopic}
+              </span>
+            </span>
+            <span className="text-primary text-sm shrink-0">→</span>
+          </a>
+
           <footer className="space-y-2">
             {doc.sources?.length > 0 && (
               <div>

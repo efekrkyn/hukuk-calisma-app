@@ -46,7 +46,15 @@ function parseCount(raw: string | undefined, subject?: string): number {
   return subject ? 10 : 20;
 }
 
-export default function HmgsClient({ subject, count }: { subject?: string; count?: string }) {
+export default function HmgsClient({
+  subject,
+  count,
+  subtopic,
+}: {
+  subject?: string;
+  count?: string;
+  subtopic?: string;
+}) {
   const examSize = parseCount(count, subject);
   const isFullExam = !subject && examSize >= REAL_TOTAL_QUESTIONS;
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -101,6 +109,8 @@ export default function HmgsClient({ subject, count }: { subject?: string; count
     // ?subject=X → tek alan çalışması (ana sayfadaki alan kartları)
     const qs = new URLSearchParams({ count: String(examSize) });
     if (subject) qs.set("subject", subject);
+    // Alt konu yalnızca alanla birlikte anlamlı — uç de böyle doğruluyor.
+    if (subject && subtopic) qs.set("subtopic", subtopic);
     fetch(`/api/worker/hmgs/exam?${qs}`)
       .then((res) => {
         if (!res.ok) throw new Error("Sınav soruları yüklenemedi.");

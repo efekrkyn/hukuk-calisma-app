@@ -170,6 +170,19 @@ hmgs.get("/exam", async (c) => {
     return c.json({ error: "geçersiz subject" }, 400);
   }
 
+  // ?subtopic=X → konu anlatımından "bu konuyu çöz" bağlantısı. Yalnızca
+  // alanla birlikte anlamlı; alt konu adları alanlar arasında benzersiz değil
+  // ("zamanaşımı" birden çok alanda geçiyor), tek başına filtrelemek karışık
+  // alan döndürürdü.
+  const onlySubtopic = onlySubject ? c.req.query("subtopic") : null;
+  if (onlySubtopic) {
+    const s = pool[0];
+    const gecerli = [...(s.subtopics ?? []), ...(s.doctrineSubtopics ?? [])];
+    if (!gecerli.includes(onlySubtopic)) {
+      return c.json({ error: "geçersiz subtopic" }, 400);
+    }
+  }
+
   // Alan başına round() toplamı tutturmuyordu (20 istenince 26 dönüyordu).
   const quota = apportion(pool.map((s) => s.count), size);
 
@@ -195,8 +208,9 @@ hmgs.get("/exam", async (c) => {
           AND (v.verified IS NULL OR v.verified >= 0)
           AND rp.question_id IS NULL
           ${onlyVerified ? "AND v.verified = 1" : ""}
+          ${onlySubtopic ? "AND q.subtopic = ?" : ""}
         ORDER BY RANDOM() LIMIT ?`
-    ).bind(s.id, need * 3).all<any>();
+    ).bind(...(onlySubtopic ? [s.id, onlySubtopic, need * 3] : [s.id, need * 3])).all<any>();
 
     let taken = 0;
     for (const r of rows.results) {
