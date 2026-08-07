@@ -20,6 +20,7 @@ import remarkGfm from "remark-gfm";
 import { ArrowLeft, Check, ChevronRight, Loader2, RefreshCw } from "lucide-react";
 import { spring, springSnappy } from "@/lib/motion";
 import { useSetPageContext } from "@/lib/page-context";
+import { konuOku, konuYaz } from "@/lib/topic-cache";
 
 type Subtopic = { name: string; ready: boolean };
 type Subject = { id: string; name: string; subtopics: Subtopic[] };
@@ -137,6 +138,8 @@ export default function KonularClient({
 
   const [doc, setDoc] = useState<TopicDoc | null>(null);
   const [docError, setDocError] = useState<string | null>(null);
+  // Yerel kopyadan mı okuyoruz — kullanıcı neye baktığını bilsin.
+  const [cevrimdisi, setCevrimdisi] = useState(false);
   /** Geçen saniye — 30-60 sn'lik üretimde "takıldı mı?" sorusunu önlüyor. */
   const [elapsed, setElapsed] = useState(0);
   /** Artınca aynı konu `refresh:true` ile yeniden üretilir. */
@@ -213,6 +216,11 @@ export default function KonularClient({
           throw new Error(data?.error ?? `Sunucu ${r.status}`);
         }
         setDoc(data as TopicDoc);
+        setCevrimdisi(false);
+        // Anlatım değişmez (kanun metninden bir kez üretilip saklanıyor),
+        // o yüzden yerelde tutmak güvenli. Çevrimdışı çalışmanın gövdesi bu:
+        // POST yanıtını servis çalışanı önbellekleyemiyor.
+        konuYaz(subjectId, konu, data.content, data.sources);
         // Üretim bitti; listedeki "hazırlanacak" ipucu artık yanlış.
         setTopics((prev) =>
           prev?.map((s) =>
@@ -228,6 +236,22 @@ export default function KonularClient({
         );
       } catch (e) {
         if (ac.signal.aborted) return;
+        // Ağ yoksa yerel kopyaya düş. Anlatım değişmediği için eski kopya
+        // "bayat" değil, aynı içerik — çevrimdışı çalışmayı bu kurtarıyor.
+        const yerel = konuOku(subjectId, konu);
+        if (yerel) {
+          setDoc({
+            subject: subjectId,
+            subtopic: konu,
+            subject_name:
+              topics?.find((s) => s.id === subjectId)?.name ?? subjectId,
+            content: yerel.content,
+            sources: (yerel.sources as TopicDoc["sources"]) ?? [],
+            cached: true,
+          } as TopicDoc);
+          setCevrimdisi(true);
+          return;
+        }
         setDocError(e instanceof Error ? e.message : String(e));
       } finally {
         clearInterval(timer);
@@ -462,6 +486,11 @@ export default function KonularClient({
           <header className="space-y-1">
             <p className="label-academic">{doc.subject_name}</p>
             <h2 className="type-title">{doc.subtopic}</h2>
+            {cevrimdisi && (
+              <p className="text-[11px] text-amber-500/90">
+                Çevrimdışısın — bu anlatım cihazındaki kopyadan açıldı.
+              </p>
+            )}
           </header>
 
           <hr className="rule-hairline my-4" />

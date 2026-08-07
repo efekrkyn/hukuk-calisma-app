@@ -442,6 +442,164 @@ hmgs.get("/performance", async (c) => {
   });
 });
 
+/**
+ * Deneme geçmişi — liste.
+ *
+ * /performance zaten deneme başına net veriyor ama geçme barajı ve boş
+ * sayısı yok; "3 Ağustos'ta ne yaptım" sorusuna cevap vermeyen bir özet.
+ * Alan kırılımı bilerek YOK: liste 30 satır, her satır için ikinci bir
+ * GROUP BY taraması sayfanın açılışını yavaşlatır — kırılım detayda.
+ */
+hmgs.get("/exams", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const limit = Math.min(Math.max(Number(c.req.query("limit") ?? 30), 1), 100);
+
+  const rows = await c.env.DB.prepare(
+    `SELECT exam_id,
+            MIN(created_at) AS at,
+            COUNT(*) AS n,
+            SUM(is_correct) AS dogru,
+            SUM(CASE WHEN selected_answer IS NULL THEN 1 ELSE 0 END) AS bos
+       FROM hmgs_attempts
+      GROUP BY exam_id
+      ORDER BY at DESC
+      LIMIT ?`
+  ).bind(limit).all<{ exam_id: string; at: number; n: number; dogru: number; bos: number }>();
+
+  return c.json({
+    pass_score: HMGS_PASS_SCORE,
+    exams: rows.results.map((r) => {
+      const score = r.n > 0 ? Math.round((r.dogru / r.n) * 100) : 0;
+      return {
+        exam_id: r.exam_id,
+        at: r.at,
+        total: r.n,
+        correct: r.dogru,
+        // Yanlış türetiliyor: is_correct=0 hem yanlışı hem boşu kapsıyor,
+        // boş ayrıca sayılmasa "yanlış" şişik görünürdü.
+        wrong: r.n - r.dogru - r.bos,
+        blank: r.bos,
+        score,
+        passed: score >= HMGS_PASS_SCORE,
+      };
+    }),
+  });
+});
+
+/**
+ * Tek denemenin soru soru dökümü.
+ *
+ * İKİ VERİ SINIRI var, ikisi de yanıt şemasında açıkça işaretli:
+ *
+ * 1) Silinen soru. Bildirilip bankadan kaldırılmış olabilir; JOIN düşerse
+ *    satır ATLANMIYOR (`available: false` ile dönüyor). Atlansaydı geçmişteki
+ *    120 soruluk deneme bugün 118 soru görünürdü — geriye dönük değişen net
+ *    kullanıcının kendi kaydına güvenini bitirir.
+ *
+ * 2) İşaretlenen şıkkın METNİ bilinmiyor. /exam şıkları `shuffleOptions` ile
+ *    KARIŞTIRARAK sunuyor ve permütasyon hiçbir yere yazılmıyor (Math.random,
+ *    tohumsuz). `selected_answer` o karıştırılmış sıradaki indeks; bankadaki
+ *    `options` sırasıyla eşleşmiyor. Bu yüzden indeks dışarı hiç verilmiyor:
+ *    yanlış şık metni göstermek hiç göstermemekten kötü. Elde kesin bilinen
+ *    tek şey `is_correct` ve boş olup olmadığı — `status` bunu taşıyor.
+ *    (Doğru cevaplarda işaretlenen şık zaten doğru şık, ayrıca söylemeye gerek yok.)
+ */
+hmgs.get("/exams/:examId", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const examId = c.req.param("examId");
+
+  // rowid = ekleme sırası; /submit sorular hangi sırayla sunulduysa o sırayla
+  // batch'liyor, yani denemedeki soru sırası buradan geliyor. UUID id'ye göre
+  // sıralamak rastgele bir sıra verirdi.
+  const rows = await c.env.DB.prepare(
+    `SELECT a.question_id, a.subject, a.is_correct, a.selected_answer, a.created_at,
+            q.id AS qid, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
+       FROM hmgs_attempts a
+       LEFT JOIN hmgs_questions q ON q.id = a.question_id
+      WHERE a.exam_id = ?
+      ORDER BY a.rowid`
+  ).bind(examId).all<{
+    question_id: string;
+    subject: string;
+    is_correct: number;
+    selected_answer: number | null;
+    created_at: number;
+    qid: string | null;
+    question: string | null;
+    options: string | null;
+    correct_answer: number | null;
+    explanation: string | null;
+    subtopic: string | null;
+  }>();
+
+  if (rows.results.length === 0) return c.json({ error: "deneme bulunamadı" }, 404);
+
+  const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
+
+  const questions = rows.results.map((r) => {
+    const status =
+      r.selected_answer === null ? "blank" : r.is_correct === 1 ? "correct" : "wrong";
+    const available = r.qid !== null;
+    return {
+      question_id: r.question_id,
+      subject: r.subject,
+      subject_name: name.get(r.subject) ?? r.subject,
+      subtopic: r.subtopic,
+      status,
+      /** Soru bankada duruyor mu — false ise metin/şık/açıklama yok. */
+      available,
+      question: available ? r.question : null,
+      options: available && r.options ? (JSON.parse(r.options) as string[]) : [],
+      correct_answer: available ? r.correct_answer : null,
+      explanation: available ? r.explanation : null,
+    };
+  });
+
+  // Alan özeti attempts'ten (q'dan değil) sayılıyor: silinen soru da alanının
+  // toplamına dahil kalsın, yoksa özet dökümle tutmaz.
+  const bySubject = new Map<string, { total: number; correct: number; blank: number }>();
+  for (const q of questions) {
+    const acc = bySubject.get(q.subject) ?? { total: 0, correct: 0, blank: 0 };
+    acc.total++;
+    if (q.status === "correct") acc.correct++;
+    if (q.status === "blank") acc.blank++;
+    bySubject.set(q.subject, acc);
+  }
+
+  const total = questions.length;
+  const correct = questions.filter((q) => q.status === "correct").length;
+  const blank = questions.filter((q) => q.status === "blank").length;
+  const score = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+  return c.json({
+    exam_id: examId,
+    at: Math.min(...rows.results.map((r) => r.created_at)),
+    total,
+    correct,
+    wrong: total - correct - blank,
+    blank,
+    score,
+    passed: score >= HMGS_PASS_SCORE,
+    pass_score: HMGS_PASS_SCORE,
+    // Arayüz "senin cevabın: C" yazmaya kalkmasın diye açık uyarı.
+    selected_option_known: false,
+    by_subject: [...bySubject.entries()]
+      .map(([id, v]) => ({
+        id,
+        name: name.get(id) ?? id,
+        total: v.total,
+        correct: v.correct,
+        wrong: v.total - v.correct - v.blank,
+        blank: v.blank,
+        accuracy: v.total > 0 ? Math.round((v.correct / v.total) * 100) : 0,
+      }))
+      .sort((a, b) => a.accuracy - b.accuracy),
+    questions,
+  });
+});
+
 /** Tekrar kuyruğunda vakti gelmiş sorular. */
 hmgs.get("/review", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);

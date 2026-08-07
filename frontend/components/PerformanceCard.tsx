@@ -95,10 +95,15 @@ export function PerformanceCard() {
           </p>
           <p className="text-xs text-muted-foreground">son deneme</p>
         </div>
-        <div>
-          <p className="text-lg font-semibold nums-tabular">{overall.exams}</p>
+        {/* Deneme sayısı zaten burada duruyordu ama tıklanmıyordu — "hangi
+            soruyu yanlış yaptım" sorusunun cevabı geçmiş dökümünde. */}
+        <Link href="/denemelerim" className="group">
+          <p className="text-lg font-semibold nums-tabular group-hover:text-primary transition-colors">
+            {overall.exams}
+          </p>
           <p className="text-xs text-muted-foreground">deneme · {overall.answered} cevap</p>
-        </div>
+          <p className="text-xs text-primary">Denemelerim →</p>
+        </Link>
       </div>
 
       {weak.length > 0 ? (
