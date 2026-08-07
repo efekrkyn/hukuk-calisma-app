@@ -693,10 +693,15 @@ hmgs.post("/verify", async (c) => {
   const before = Number(body.before) || Date.now();
 
   const SQL: Record<string, string> = {
+    // `checked_at < ?` koruması BURADA DA gerekli. Yoksa kaynaksız kalan soru
+    // her turda yeniden seçilir: denetlenir, yine "unsupported" çıkar,
+    // verified 0 kaldığı için tekrar seçilir. Döngü kendini bitiremez ve
+    // aynı sorulara sonsuza dek para harcanır — ölçüldü, kaynaksız sayısı
+    // iki ayrı ölçümde 113'te çakılı kalırken işler dönmeye devam ediyordu.
     unsupported: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
                     FROM hmgs_questions q
                     JOIN hmgs_verdicts v ON v.question_id = q.id
-                   WHERE q.subject = ? AND v.verified = 0
+                   WHERE q.subject = ? AND v.verified = 0 AND v.checked_at < ?
                    LIMIT ?`,
     verified: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
                  FROM hmgs_questions q
@@ -711,8 +716,11 @@ hmgs.post("/verify", async (c) => {
   };
   if (!SQL[scope]) return c.json({ error: "geçersiz scope" }, 400);
 
+  // "new" dışındaki iki kip de zaten denetlenmiş satırlara bakıyor ve
+  // `before` koruması olmadan kendini bitiremiyor.
+  const zamanli = scope === "verified" || scope === "unsupported";
   const selStmt = c.env.DB.prepare(SQL[scope]);
-  const rows = await (scope === "verified"
+  const rows = await (zamanli
     ? selStmt.bind(subject.id, before, limit)
     : selStmt.bind(subject.id, limit)
   ).all<any>();
@@ -777,7 +785,7 @@ hmgs.post("/verify", async (c) => {
   const LEFT_SQL: Record<string, string> = {
     unsupported: `SELECT COUNT(*) as n FROM hmgs_questions q
                     JOIN hmgs_verdicts v ON v.question_id = q.id
-                   WHERE q.subject = ? AND v.verified = 0`,
+                   WHERE q.subject = ? AND v.verified = 0 AND v.checked_at < ?`,
     verified: `SELECT COUNT(*) as n FROM hmgs_questions q
                  JOIN hmgs_verdicts v ON v.question_id = q.id
                 WHERE q.subject = ? AND v.verdict = 'correct' AND v.checked_at < ?`,
@@ -786,7 +794,7 @@ hmgs.post("/verify", async (c) => {
            WHERE q.subject = ? AND v.question_id IS NULL`,
   };
   const leftStmt = c.env.DB.prepare(LEFT_SQL[scope]);
-  const left = await (scope === "verified"
+  const left = await (zamanli
     ? leftStmt.bind(subject.id, before)
     : leftStmt.bind(subject.id)
   ).first<{ n: number }>();
