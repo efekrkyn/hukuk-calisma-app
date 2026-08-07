@@ -20,6 +20,14 @@ export type GeneratedQuestion = {
   sourceIndex: number | null;
   source_pdf?: string;
   source_page?: number;
+  /**
+   * Sorunun üretildiği alt konu. Üretici zaten alt konu seçip isteme
+   * yazıyordu ama bilgiyi döndürmüyordu, dolayısıyla kaydedilmiyordu.
+   * Kaydedilince: konu anlatımından o konunun sorularına geçiş ve
+   * alan-altı zayıflık analizi mümkün oluyor ("Borçlar'da zayıfsın"
+   * yerine "Borçlar'ın zamanaşımı konusunda zayıfsın").
+   */
+  subtopic?: string;
 };
 
 const SYSTEM = `Sen HUKUK ALANI için soru yazan bir hukukçusun (HMGS — Hukuk Mesleklerine Giriş Sınavı).
@@ -268,6 +276,11 @@ export async function generateQuestions(
     .slice(0, count)
     .map((q) => {
       const src = chunks[q.sourceIndex! - 1];
-      return { ...q, source_pdf: src.pdf, source_page: src.page_start };
+      return {
+        ...q,
+        source_pdf: src.pdf,
+        source_page: src.page_start,
+        subtopic: subtopic || undefined,
+      };
     });
 }

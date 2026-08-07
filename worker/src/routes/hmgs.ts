@@ -7,6 +7,7 @@ import {
 } from "../lib/hmgs-subjects";
 import { generateQuestions, lengthRatio, MAX_LENGTH_RATIO } from "../lib/hmgs-generator";
 import { generateTopic } from "../lib/hmgs-topic";
+import { classifyQuestions } from "../lib/hmgs-classify";
 import { apportion } from "../lib/apportion";
 import { shuffleOptions } from "../lib/shuffle-options";
 import { isNearDuplicate } from "../lib/near-duplicate";
@@ -119,8 +120,8 @@ hmgs.post("/generate", async (c) => {
   const now = Date.now();
   const stmt = c.env.DB.prepare(
     `INSERT INTO hmgs_questions
-       (id, subject, question, options, correct_answer, explanation, source_pdf, source_page, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`
+       (id, subject, question, options, correct_answer, explanation, source_pdf, source_page, created_at, subtopic)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
   );
   await c.env.DB.batch(
     fresh.map((q) =>
@@ -133,7 +134,8 @@ hmgs.post("/generate", async (c) => {
         q.explanation,
         q.source_pdf ?? null,
         q.source_page ?? null,
-        now
+        now,
+        q.subtopic ?? null
       )
     )
   );
@@ -753,6 +755,61 @@ hmgs.post("/verify", async (c) => {
     checked: verdicts.length,
     remaining: left?.n ?? 0,
     verdicts,
+  });
+});
+
+/**
+ * Etiketsiz soruları alt konuya atar (geriye dönük doldurma).
+ *
+ * subtopic sütunu sonradan eklendi; ondan önceki ~3000 soruda bilgi yok.
+ */
+hmgs.post("/classify", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+  if (!c.env.DEEPSEEK_API_KEY) return c.json({ error: "DEEPSEEK_API_KEY yok" }, 503);
+
+  let body: { subject?: string; limit?: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const subject = getSubject(String(body.subject ?? ""));
+  if (!subject) return c.json({ error: "geçersiz subject" }, 400);
+  const limit = Math.min(Math.max(Number(body.limit ?? 20), 1), 40);
+
+  const rows = await c.env.DB.prepare(
+    `SELECT id, question, explanation FROM hmgs_questions
+      WHERE subject = ? AND subtopic IS NULL LIMIT ?`
+  ).bind(subject.id, limit).all<{ id: string; question: string; explanation: string }>();
+
+  if (rows.results.length === 0) {
+    return c.json({ ok: true, subject: subject.id, labeled: 0, remaining: 0 });
+  }
+
+  const atamalar = await classifyQuestions(
+    c.env.DEEPSEEK_API_KEY,
+    subject,
+    rows.results
+  );
+
+  if (atamalar.length > 0) {
+    const stmt = c.env.DB.prepare(
+      `UPDATE hmgs_questions SET subtopic = ? WHERE id = ?`
+    );
+    await c.env.DB.batch(atamalar.map((a) => stmt.bind(a.subtopic, a.id)));
+  }
+
+  const left = await c.env.DB.prepare(
+    `SELECT COUNT(*) AS n FROM hmgs_questions WHERE subject = ? AND subtopic IS NULL`
+  ).bind(subject.id).first<{ n: number }>();
+
+  return c.json({
+    ok: true,
+    subject: subject.id,
+    seen: rows.results.length,
+    labeled: atamalar.length,
+    remaining: left?.n ?? 0,
   });
 });
 
