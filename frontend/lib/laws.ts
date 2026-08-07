@@ -6,7 +6,6 @@
  *  - name: Tam kanun adı
  *  - number: Kanun numarası (sayısı)
  *  - year: Kabul / yürürlük yılı
- *  - emoji: UI'da görünür
  *  - description: Kısa açıklama (2-3 cümle)
  *  - r2_key: R2 bucket'taki PDF anahtarı (dersler/kanunlar/<file>.pdf)
  *  - category: Gruplama için
@@ -27,7 +26,6 @@ export type Law = {
   name: string;
   number: string;
   year: number;
-  emoji: string;
   description: string;
   r2_key: string;
   category: LawCategory;
@@ -39,7 +37,6 @@ export const LAWS: Law[] = [
     name: "Türkiye Cumhuriyeti Anayasası",
     number: "—",
     year: 1982,
-    emoji: "🇹🇷",
     description:
       "Türkiye Cumhuriyeti'nin temel kuruluş belgesi. Devletin nitelikleri, temel hak ve özgürlükler, yasama-yürütme-yargı kuvvetlerinin yapısı. Tüm diğer kanunların üzerinde, en üst hukuk normu.",
     r2_key: "dersler/kanunlar/anayasa.pdf",
@@ -50,7 +47,6 @@ export const LAWS: Law[] = [
     name: "Türk Borçlar Kanunu",
     number: "6098",
     year: 2011,
-    emoji: "📜",
     description:
       "Sözleşmeler, haksız fiil, sebepsiz zenginleşme; satım, kira, vekalet, eser, hizmet vb. tüm özel hukuk borç ilişkilerinin temel kaynağı. 1926'daki eski BK'nın yerini aldı.",
     r2_key: "dersler/kanunlar/borclar-kanunu-6098.pdf",
@@ -61,7 +57,6 @@ export const LAWS: Law[] = [
     name: "Türk Medeni Kanunu",
     number: "4721",
     year: 2001,
-    emoji: "⚖️",
     description:
       "Kişiler, aile, miras ve eşya hukukunun temel kaynağı. Doğum, evlilik, boşanma, vesayet, mülkiyet, zilyetlik, miras paylaşımı vb. konuları düzenler. İsviçre Medeni Kanunu kökenli.",
     r2_key: "dersler/kanunlar/medeni-kanun-4721.pdf",
@@ -72,7 +67,6 @@ export const LAWS: Law[] = [
     name: "Türk Ceza Kanunu",
     number: "5237",
     year: 2004,
-    emoji: "🚨",
     description:
       "Suç ve cezaların temel kaynağı. Genel hükümler (kasıt, taksir, iştirak, içtima) ve özel hükümler (kasten öldürme, hırsızlık, dolandırıcılık, cinsel suçlar, devlete karşı suçlar). 765 sayılı eski TCK'nın yerini aldı.",
     r2_key: "dersler/kanunlar/ceza-kanunu-5237.pdf",
@@ -83,7 +77,6 @@ export const LAWS: Law[] = [
     name: "Ceza Muhakemesi Kanunu",
     number: "5271",
     year: 2004,
-    emoji: "🔎",
     description:
       "Ceza yargılamasının usulü: soruşturma, kovuşturma, tutuklama, koruma tedbirleri, deliller, kanun yolları. CMUK'un (1412 sayılı) yerine geldi.",
     r2_key: "dersler/kanunlar/ceza-muhakemesi-5271.pdf",
@@ -94,7 +87,6 @@ export const LAWS: Law[] = [
     name: "Hukuk Muhakemeleri Kanunu",
     number: "6100",
     year: 2011,
-    emoji: "🏛️",
     description:
       "Hukuk davalarının usulü: görev, yetki, dava açma, ispat, hüküm, istinaf, temyiz, ihtiyati tedbir. 1086 sayılı HUMK'un yerine geldi.",
     r2_key: "dersler/kanunlar/hukuk-muhakemeleri-6100.pdf",
@@ -105,7 +97,6 @@ export const LAWS: Law[] = [
     name: "Türk Ticaret Kanunu",
     number: "6102",
     year: 2011,
-    emoji: "🏢",
     description:
       "Ticari işletme, ticaret şirketleri (AŞ, limited, kollektif, komandit), kıymetli evrak (bono, çek, poliçe), taşıma, deniz ticareti ve sigorta hukuku. 6762 sayılı eski TTK'nın yerine geldi.",
     r2_key: "dersler/kanunlar/ticaret-kanunu-6102.pdf",
@@ -116,7 +107,6 @@ export const LAWS: Law[] = [
     name: "İş Kanunu",
     number: "4857",
     year: 2003,
-    emoji: "👷",
     description:
       "İşçi-işveren ilişkilerinin temel kaynağı: iş sözleşmesi, fesih, ihbar, kıdem tazminatı, çalışma süreleri, fazla mesai, yıllık izin, iş güvencesi. 1475 sayılı eski İş Kanunu'nun (kıdem tazminatı dışında) yerine geldi.",
     r2_key: "dersler/kanunlar/is-kanunu-4857.pdf",
@@ -127,7 +117,6 @@ export const LAWS: Law[] = [
     name: "İcra ve İflas Kanunu",
     number: "2004",
     year: 1932,
-    emoji: "📋",
     description:
       "Para alacaklarının cebren tahsili (ilamsız/ilamlı icra, haciz, satış), iflas ve konkordato. En eski yürürlükteki kanunlarımızdan, defalarca değiştirilerek günümüze ulaştı.",
     r2_key: "dersler/kanunlar/icra-iflas-2004.pdf",
@@ -138,7 +127,6 @@ export const LAWS: Law[] = [
     name: "İdari Yargılama Usulü Kanunu",
     number: "2577",
     year: 1982,
-    emoji: "🏛️",
     description:
       "Danıştay, bölge idare mahkemeleri ve idare/vergi mahkemelerinde idari davaların usulü: iptal davası, tam yargı davası, yürütmenin durdurulması, kanun yolları.",
     r2_key: "dersler/kanunlar/idari-yargilama-2577.pdf",
@@ -149,7 +137,6 @@ export const LAWS: Law[] = [
     name: "Milletlerarası Özel Hukuk ve Usul Hukuku Kanunu",
     number: "5718",
     year: 2007,
-    emoji: "🌍",
     description:
       "Yabancı unsurlu özel hukuk uyuşmazlıklarında uygulanacak hukuk (kanunlar ihtilafı) ve yabancı mahkeme kararlarının tanınması/tenfizi. 2675 sayılı eski MÖHUK'un yerine geldi.",
     r2_key: "dersler/kanunlar/mohuk-5718.pdf",
@@ -160,7 +147,6 @@ export const LAWS: Law[] = [
     name: "Vergi Usul Kanunu",
     number: "213",
     year: 1961,
-    emoji: "💰",
     description:
       "Vergilendirmenin genel usulü: tarh, tebliğ, tahakkuk, tahsil, vergi incelemesi, ceza, uzlaşma, vergi suçları. Tüm vergi kanunlarının çatısı.",
     r2_key: "dersler/kanunlar/vergi-usul-213.pdf",
@@ -171,7 +157,6 @@ export const LAWS: Law[] = [
     name: "Avukatlık Kanunu",
     number: "1136",
     year: 1969,
-    emoji: "👨‍⚖️",
     description:
       "Avukatlık mesleğinin nitelikleri, ruhsata kabul, baro, görev ve sorumluluklar, disiplin. Hukuk fakültesi mezunlarının meslek yaşamını düzenler.",
     r2_key: "dersler/kanunlar/avukatlik-1136.pdf",
@@ -182,7 +167,6 @@ export const LAWS: Law[] = [
     name: "Fikir ve Sanat Eserleri Kanunu",
     number: "5846",
     year: 1951,
-    emoji: "🎨",
     description:
       "Telif hakları: ilim-edebiyat, musiki, güzel sanatlar ve sinema eserleri üzerinde maddi/manevi haklar. Eser sahibinin korunması, intifa ve devir, ihlal yaptırımları.",
     r2_key: "dersler/kanunlar/fsek-5846.pdf",
@@ -193,7 +177,6 @@ export const LAWS: Law[] = [
     name: "Sendikalar ve Toplu İş Sözleşmesi Kanunu",
     number: "6356",
     year: 2012,
-    emoji: "🤝",
     description:
       "İşçi-işveren sendikaları, üyelik, yetki, toplu iş sözleşmesi, grev ve lokavt. 2821 ve 2822 sayılı eski iki kanunu tek çatıda birleştirdi.",
     r2_key: "dersler/kanunlar/sendika-6356.pdf",
@@ -204,7 +187,6 @@ export const LAWS: Law[] = [
     name: "Tüketicinin Korunması Hakkında Kanun",
     number: "6502",
     year: 2013,
-    emoji: "🛍️",
     description:
       "Tüketici sözleşmeleri (taksitli, mesafeli, kapıdan, paket tur, devre tatil), ayıplı mal/hizmet, haksız şart, tüketici hakem heyetleri ve tüketici mahkemeleri. 4077 sayılı eski TKHK'nın yerine geldi.",
     r2_key: "dersler/kanunlar/tuketici-6502.pdf",

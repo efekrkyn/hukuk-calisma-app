@@ -33,7 +33,7 @@ export default async function KanunPage({
   if (!law) notFound();
 
   const url = pdfUrl(law.r2_key);
-  const title = `${law.emoji} ${law.name}${
+  const title = `${law.name}${
     law.number !== "—" ? ` (${law.number})` : ""
   }`;
   const subtitle = `${law.name}${

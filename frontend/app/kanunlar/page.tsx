@@ -59,10 +59,9 @@ export default function KanunlarLanding() {
                 <Link key={law.slug} href={`/kanunlar/${law.slug}`}>
                   <Card className="hover:bg-muted/40 transition-colors h-full">
                     <CardHeader className="pb-2">
+                      {/* Emoji kaldırıldı: projede bilinçli olarak emoji yok,
+                          "AI yapımı" görünmemesi isteniyor. */}
                       <CardTitle className="text-base flex items-start gap-2">
-                        <span className="text-xl leading-none mt-0.5">
-                          {law.emoji}
-                        </span>
                         <span className="flex-1">
                           {law.name}
                           {law.number !== "—" && (
