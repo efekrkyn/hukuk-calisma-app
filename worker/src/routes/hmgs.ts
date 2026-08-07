@@ -151,7 +151,12 @@ hmgs.get("/exam", async (c) => {
 
   const size = Math.min(Math.max(Number(c.req.query("count") ?? HMGS_TOTAL_QUESTIONS), 10), HMGS_TOTAL_QUESTIONS);
 
-  const onlyVerified = c.req.query("verified") === "1";
+  // VARSAYILAN: yalnızca denetlenmiş sorular. Eskiden tersiydi ve 120 soruluk
+  // denemenin 28'i denetlenmemiş çıkıyordu — hazırlık uygulamasında kabul
+  // edilemez bir oran. Ölçüldü: 2116 onaylı soruyla 20 alanın HEPSİ kotasını
+  // dolduruyor, yani filtre denemeyi kısaltmıyor.
+  // verified=0 ile kapatılabilir (banka bir alanda çökerse kaçış yolu).
+  const onlyVerified = c.req.query("verified") !== "0";
 
   // ?subject=X → tek alan çalışması. Ana sayfadaki alan kartları buraya
   // bağlanıyor; o alanın tamamı istenen sayı kadar soruyla geliyor.
@@ -355,7 +360,13 @@ hmgs.get("/performance", async (c) => {
   const correct = subjects.results.reduce((a, r) => a + r.dogru, 0);
 
   const due = await c.env.DB.prepare(
-    `SELECT COUNT(*) AS n FROM hmgs_review WHERE next_review <= ?`
+    // Sayaç, soruları GETİREN sorguyla aynı ölçütü kullanmalı; yoksa
+    // "22 soru tekrar bekliyor" deyip 20 soru gelir.
+    `SELECT COUNT(*) AS n
+       FROM hmgs_review r
+       JOIN hmgs_verdicts v ON v.question_id = r.question_id
+       LEFT JOIN hmgs_reports rp ON rp.question_id = r.question_id AND rp.resolved = 0
+      WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
   ).bind(Date.now()).first<{ n: number }>();
 
   return c.json({
@@ -385,7 +396,7 @@ hmgs.get("/review", async (c) => {
        FROM hmgs_review r JOIN hmgs_questions q ON q.id = r.question_id
        LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
        LEFT JOIN hmgs_reports rp ON rp.question_id = q.id AND rp.resolved = 0
-      WHERE r.next_review <= ? AND (v.verified IS NULL OR v.verified >= 0)
+      WHERE r.next_review <= ? AND v.verified = 1
         AND rp.question_id IS NULL
       ORDER BY r.next_review LIMIT ?`
   ).bind(Date.now(), limit).all<any>();
@@ -413,7 +424,13 @@ hmgs.get("/review", async (c) => {
   });
 
   const total = await c.env.DB.prepare(
-    `SELECT COUNT(*) AS n FROM hmgs_review WHERE next_review <= ?`
+    // Sayaç, soruları GETİREN sorguyla aynı ölçütü kullanmalı; yoksa
+    // "22 soru tekrar bekliyor" deyip 20 soru gelir.
+    `SELECT COUNT(*) AS n
+       FROM hmgs_review r
+       JOIN hmgs_verdicts v ON v.question_id = r.question_id
+       LEFT JOIN hmgs_reports rp ON rp.question_id = r.question_id AND rp.resolved = 0
+      WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
   ).bind(Date.now()).first<{ n: number }>();
 
   return c.json({ questions, due_total: total?.n ?? 0 });
