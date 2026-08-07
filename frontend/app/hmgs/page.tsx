@@ -5,9 +5,9 @@ import { ArrowLeft, BookOpenCheck } from "lucide-react";
 export default async function HmgsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ subject?: string }>;
+  searchParams: Promise<{ subject?: string; count?: string }>;
 }) {
-  const { subject } = await searchParams;
+  const { subject, count } = await searchParams;
   return (
     <main className="min-h-dvh bg-background p-4 md:p-8">
       <div className="mx-auto max-w-4xl space-y-6">
@@ -31,7 +31,7 @@ export default async function HmgsPage({
         </div>
 
         <div className="material-thin rounded-xl p-4 md:p-6 border-primary/20 material-thin">
-          <HmgsClient subject={subject} />
+          <HmgsClient subject={subject} count={count} />
         </div>
       </div>
     </main>

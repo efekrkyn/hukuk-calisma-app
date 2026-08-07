@@ -89,21 +89,29 @@ export default function Home() {
 
         {/* Ana eylem */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <motion.a
-            href="/hmgs"
+          {/* Kart bir <a> değil: içinde ikinci bir bağlantı var (kısa tur) ve
+              iç içe <a> geçersiz HTML. Dış kap div, tıklanabilir olan başlık. */}
+          <motion.div
             whileTap={{ scale: 0.985 }}
             transition={springSnappy}
             className="sm:col-span-2 material-thick rounded-2xl p-5 flex flex-col justify-between min-h-32"
           >
-            <div>
+            <a href="/hmgs?count=120" className="block">
               <p className="type-title">
                 <Target className="w-4 h-4 shrink-0" aria-hidden />Deneme Sınavı</p>
               <p className="text-xs text-muted-foreground mt-1">
-                ÖSYM&apos;nin resmî alan dağılımına göre, zamanlı
+                Gerçek format: 120 soru, 155 dakika, resmî alan dağılımı
               </p>
-            </div>
-            <p className="text-xs text-primary mt-3">Başla →</p>
-          </motion.a>
+            </a>
+            <p className="text-xs mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <a href="/hmgs?count=120" className="text-primary">Tam denemeye başla →</a>
+              {/* Tam deneme 2,5 saat, her gün yapılacak bir şey değil;
+                  günlük kısa tur da elin altında dursun. */}
+              <a href="/hmgs?count=20" className="text-muted-foreground underline underline-offset-4">
+                20 soruluk kısa tur
+              </a>
+            </p>
+          </motion.div>
 
           <div className="material-thin rounded-2xl p-5 space-y-2">
             <p className="text-3xl font-black nums-tabular">{total}</p>

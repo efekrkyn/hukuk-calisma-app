@@ -27,9 +27,28 @@ type Answer = {
   flagged: boolean;
 };
 
-const EXAM_DURATION_SECONDS = 40 * 60; // 40 dakika (20 soru için orantılı)
+/**
+ * Gerçek HMGS: 120 soru, 155 dakika → soru başına 77,5 saniye.
+ *
+ * Önceki hâl 20 soruya 40 dakika veriyordu, yani soru başına 2 dakika —
+ * gerçek sınavdan %55 daha cömert. Kısa denemede rahat yetişen tempo,
+ * gerçek sınavda yetişmez; bu bir hazırlık uygulamasında yanlış alışkanlık
+ * kazandırır. Süre artık soru sayısından türetiliyor, sabit değil.
+ */
+const REAL_TOTAL_QUESTIONS = 120;
+const REAL_DURATION_SECONDS = 155 * 60;
+const SECONDS_PER_QUESTION = REAL_DURATION_SECONDS / REAL_TOTAL_QUESTIONS;
 
-export default function HmgsClient({ subject }: { subject?: string }) {
+/** Alan çalışmasında 10, kısa denemede 20, tam denemede 120. */
+function parseCount(raw: string | undefined, subject?: string): number {
+  const n = Number(raw);
+  if (Number.isFinite(n) && n >= 5) return Math.min(Math.round(n), REAL_TOTAL_QUESTIONS);
+  return subject ? 10 : 20;
+}
+
+export default function HmgsClient({ subject, count }: { subject?: string; count?: string }) {
+  const examSize = parseCount(count, subject);
+  const isFullExam = !subject && examSize >= REAL_TOTAL_QUESTIONS;
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -45,7 +64,13 @@ export default function HmgsClient({ subject }: { subject?: string }) {
     setCurrentIndex(i);
   }, [currentIndex]);
   const [answers, setAnswers] = useState<Answer[]>([]);
-  const [timeLeft, setTimeLeft] = useState(EXAM_DURATION_SECONDS);
+  // Süre GELEN soru sayısından hesaplanıyor, istenenden değil: banka bir
+  // alanda eksikse 120 istenip 112 dönebiliyor ve 8 sorunun süresi hediye
+  // edilmiş oluyordu. Sorular yüklenince aşağıda düzeltiliyor.
+  const [totalSeconds, setTotalSeconds] = useState(
+    Math.round(examSize * SECONDS_PER_QUESTION)
+  );
+  const [timeLeft, setTimeLeft] = useState(totalSeconds);
   const [finished, setFinished] = useState(false);
   const [showReview, setShowReview] = useState(false);
   const [examId, setExamId] = useState<string | null>(null);
@@ -74,7 +99,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
 
   useEffect(() => {
     // ?subject=X → tek alan çalışması (ana sayfadaki alan kartları)
-    const qs = new URLSearchParams({ count: subject ? "10" : "20" });
+    const qs = new URLSearchParams({ count: String(examSize) });
     if (subject) qs.set("subject", subject);
     fetch(`/api/worker/hmgs/exam?${qs}`)
       .then((res) => {
@@ -85,6 +110,9 @@ export default function HmgsClient({ subject }: { subject?: string }) {
         const qs: QuizQuestion[] = data.questions ?? [];
         setQuestions(qs);
         setAnswers(qs.map(() => ({ selected: null, flagged: false })));
+        const secs = Math.round(qs.length * SECONDS_PER_QUESTION);
+        setTotalSeconds(secs);
+        setTimeLeft(secs);
         setExamId(data.exam_id ?? null);
         setShortfall(data.shortfall ?? []);
         setVerifiedCount(data.verified_count ?? 0);
@@ -197,12 +225,16 @@ export default function HmgsClient({ subject }: { subject?: string }) {
           </p>
           <p className="flex items-center gap-1.5">
             <Clock className="w-3.5 h-3.5 shrink-0" aria-hidden />
-            <span><strong>{Math.floor(EXAM_DURATION_SECONDS / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</span>
+            <span><strong>{Math.round(totalSeconds / 60)} Dakika</strong> — Süre dolunca sınav otomatik biter</span>
           </p>
-          <p>
-                <Star className="w-4 h-4 shrink-0" aria-hidden />Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</p>
-          <p>
-                <Hash className="w-4 h-4 shrink-0" aria-hidden />Soru numaralarına tıklayarak istediğin soruya atlayabilirsin</p>
+          <p className="flex items-center gap-1.5">
+            <Star className="w-3.5 h-3.5 shrink-0" aria-hidden />
+            <span>Soruları <strong>işaretleyip</strong> sonra geri dönebilirsin</span>
+          </p>
+          <p className="flex items-center gap-1.5">
+            <Hash className="w-3.5 h-3.5 shrink-0" aria-hidden />
+            <span>Soru numaralarına tıklayarak istediğin soruya atlayabilirsin</span>
+          </p>
         </div>
         {shortfall.length > 0 && (
           <div className="max-w-md mx-auto text-xs text-amber-500/90 border border-amber-500/25 rounded-lg p-3 text-left">
@@ -218,6 +250,25 @@ export default function HmgsClient({ subject }: { subject?: string }) {
         <Button size="lg" className="hover-glow mt-4" onClick={() => setStarted(true)}>
                 <Rocket className="w-4 h-4 shrink-0" aria-hidden />Sınava Başla
         </Button>
+
+        {/* Alan çalışmasında mod seçimi anlamsız — orası tek alana odaklı. */}
+        {!subject && (
+          <div className="pt-2">
+            <p className="text-xs text-muted-foreground mb-2">
+              {isFullExam
+                ? "Gerçek sınav formatı: 120 soru, 155 dakika."
+                : "Kısa tur. Gerçek sınav 120 soru ve 155 dakikadır."}
+            </p>
+            <a
+              href={isFullExam ? "/hmgs?count=20" : "/hmgs?count=120"}
+              className="text-sm text-primary underline underline-offset-4"
+            >
+              {isFullExam
+                ? "Kısa denemeye geç (20 soru)"
+                : "Tam denemeye geç (120 soru · 155 dk)"}
+            </a>
+          </div>
+        )}
       </div>
     );
   }
@@ -254,7 +305,7 @@ export default function HmgsClient({ subject }: { subject?: string }) {
           </div>
         </div>
         <p className="text-sm text-muted-foreground">
-          Süre: {formatTime(EXAM_DURATION_SECONDS - timeLeft)} kullanıldı
+          Süre: {formatTime(totalSeconds - timeLeft)} kullanıldı
         </p>
         <div className="flex gap-3 justify-center">
           <Button variant="outline" onClick={() => setShowReview(true)}>
