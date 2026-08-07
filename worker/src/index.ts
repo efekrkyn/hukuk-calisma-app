@@ -7,7 +7,7 @@ import { sync } from "./routes/sync";
 import { pdf } from "./routes/pdf";
 import { admin } from "./routes/admin";
 import { ai } from "./routes/ai";
-import { authRouter } from "./routes/auth";
+import { authRouter, resolveUserId } from "./routes/auth";
 import { flashcardsRouter } from "./routes/flashcards";
 import { quizRouter } from "./routes/quiz";
 import { plan } from "./routes/plan";
@@ -25,7 +25,18 @@ type Bindings = {
   DEEPSEEK_API_KEY?: string;
 };
 
-const app = new Hono<{ Bindings: Bindings }>();
+/**
+ * Kimliği doğrulanmış isteğin sahibi.
+ *
+ * Uçlar kullanıcı kimliğini gövdeden ya da sorgu dizesinden ALMAZ — istemciden
+ * gelen bir user_id, "başkasının verisini oku" isteğiyle aynı şey olurdu.
+ * Tek kaynak imzalı token; middleware onu çözüp buraya koyuyor.
+ */
+type Variables = {
+  userId: string;
+};
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 // CORS allowlist: vercel.app deployments + localhost dev + bilinen custom domain.
 // Echo-any-origin desenini kaldırdık — credentials:true ile herhangi bir origin'i
@@ -58,6 +69,11 @@ app.use("*", async (c, next) => {
 
   // Bypass: CORS preflight, public endpoints, ve /admin (kendi raw-secret
   // middleware'i var — script'ler JWT yerine ADMIN_SECRET ile çağırır).
+  //
+  // /auth/register BİLEREK bu listede DEĞİL: yeni hesap açmak geçerli bir
+  // oturum gerektiriyor. Açık kayıt, herkesin uygulama sahibinin faturasıyla
+  // soru ürettirmesi demek olurdu (/hmgs/generate, /ai/* para harcıyor).
+  // Sahibi ADMIN_SECRET ile /auth/login'den token alıp buradan geçiyor.
   if (
     c.req.method === "OPTIONS" ||
     path === "/" ||
@@ -80,7 +96,10 @@ app.use("*", async (c, next) => {
   }
 
   try {
-    await verify(token, c.env.ADMIN_SECRET, "HS256");
+    const payload = await verify(token, c.env.ADMIN_SECRET, "HS256");
+    // Kullanıcı kimliği burada, doğrulamanın hemen ardından iliştiriliyor.
+    // Uçlar `c.get("userId")` ile okuyor; hiçbiri tokenı yeniden çözmüyor.
+    c.set("userId", resolveUserId(payload.sub));
   } catch (e) {
     return c.json({ error: "Invalid token" }, 401);
   }

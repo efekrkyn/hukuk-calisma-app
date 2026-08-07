@@ -6,9 +6,10 @@ import { loginAction } from "./actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ShieldCheck, Lock, AlertCircle, Sparkles } from "lucide-react";
+import { ShieldCheck, Lock, User, AlertCircle, Sparkles } from "lucide-react";
 
 export default function LoginPage() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -21,7 +22,10 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const res = await loginAction(password);
+      // Kullanıcı adı İSTEĞE BAĞLI: boş bırakılırsa eski tek-şifre girişi
+      // aynen çalışıyor. Alanı zorunlu yapmak, açık oturumu olan ve şifreden
+      // başka bir şey bilmeyen kullanıcıyı kapıda bırakırdı.
+      const res = await loginAction(password, username);
       if (res.error) {
         setError(res.error);
         setLoading(false);
@@ -60,9 +64,25 @@ export default function LoginPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-2">
               <div className="relative">
+                <User className="absolute left-3 top-3 w-4 h-4 text-zinc-500" />
+                <Input
+                  type="text"
+                  autoComplete="username"
+                  placeholder="Kullanıcı Adı (isteğe bağlı)"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="pl-9 bg-zinc-900/40 border-zinc-800/80 focus-visible:ring-primary/40 focus-visible:border-primary/50 text-center text-sm rounded-xl h-10"
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="relative">
                 <Lock className="absolute left-3 top-3 w-4 h-4 text-zinc-500" />
                 <Input
                   type="password"
+                  autoComplete="current-password"
                   placeholder="Giriş Şifresi"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}

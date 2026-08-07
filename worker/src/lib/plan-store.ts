@@ -65,20 +65,22 @@ function parseRow(row: PlanRow): StoredPlan {
   };
 }
 
-export async function getActivePlan(db: D1Database): Promise<StoredPlan | null> {
-  const r = await db
-    .prepare(`SELECT * FROM study_plans WHERE is_active = 1 ORDER BY generated_at DESC LIMIT 1`)
-    .first<PlanRow>();
-  return r ? parseRow(r) : null;
-}
-
-export async function getPlanById(
+/**
+ * Bu dosyadaki HER fonksiyon `userId` alıyor — plan, tikler ve zayıflık verisi
+ * kullanıcıya ait. Parametre isteğe bağlı yapılmadı: varsayılanı olan bir
+ * userId, çağıran unuttuğunda sessizce başkasının planını döndürürdü. Zorunlu
+ * parametre, unutmayı derleme hatasına çeviriyor.
+ */
+export async function getActivePlan(
   db: D1Database,
-  id: string
+  userId: string
 ): Promise<StoredPlan | null> {
   const r = await db
-    .prepare(`SELECT * FROM study_plans WHERE id = ?`)
-    .bind(id)
+    .prepare(
+      `SELECT * FROM study_plans WHERE user_id = ? AND is_active = 1
+        ORDER BY generated_at DESC LIMIT 1`
+    )
+    .bind(userId)
     .first<PlanRow>();
   return r ? parseRow(r) : null;
 }
@@ -87,23 +89,27 @@ export async function insertPlan(
   db: D1Database,
   args: {
     id: string;
+    userId: string;
     form_input: FormInput;
     ai_output: AiOutput;
     ai_model: string;
   }
 ): Promise<void> {
-  // Yeni plan eklenirken eskiler arşivleniyor
+  // Yeni plan eklenirken eskiler arşivleniyor — YALNIZCA bu kullanıcının
+  // planları. WHERE olmadan, bir kullanıcının plan üretmesi diğerinin aktif
+  // planını da kapatırdı.
   await db.batch([
-    db.prepare(`UPDATE study_plans SET is_active = 0`),
+    db.prepare(`UPDATE study_plans SET is_active = 0 WHERE user_id = ?`).bind(args.userId),
     db.prepare(
-      `INSERT INTO study_plans (id, form_input, ai_output, ai_model, generated_at, is_active)
-       VALUES (?, ?, ?, ?, ?, 1)`
+      `INSERT INTO study_plans (id, form_input, ai_output, ai_model, generated_at, is_active, user_id)
+       VALUES (?, ?, ?, ?, ?, 1, ?)`
     ).bind(
       args.id,
       JSON.stringify(args.form_input),
       JSON.stringify(args.ai_output),
       args.ai_model,
-      Date.now()
+      Date.now(),
+      args.userId
     ),
   ]);
 }
@@ -114,15 +120,23 @@ export async function insertPlan(
  * Eskiden `practice_responses` okunuyordu; o tablo ölü, uygulamanın gerçek
  * cevap kaydı `hmgs_attempts`. Alan doğruluğu oradan, alt konu doğruluğu
  * `hmgs_questions.subtopic` ile join'den geliyor.
+ *
+ * Üç sorgu da kullanıcıya daralıyor: planın tamamı "senin zayıf olduğun
+ * alanlar" varsayımı üzerine kurulu. Başkasının cevapları karışırsa plan
+ * yanlış alana saat ayırır — bu, sessizce yanlış çalışan bir programdır.
  */
-export async function fetchStudyStats(db: D1Database): Promise<StudyStats> {
+export async function fetchStudyStats(
+  db: D1Database,
+  userId: string
+): Promise<StudyStats> {
   const now = Date.now();
   const [bySubject, bySubtopic, due] = await Promise.all([
     db
       .prepare(
         `SELECT subject, COUNT(*) AS n, SUM(is_correct) AS dogru
-           FROM hmgs_attempts GROUP BY subject`
+           FROM hmgs_attempts WHERE user_id = ? GROUP BY subject`
       )
+      .bind(userId)
       .all<{ subject: string; n: number; dogru: number }>(),
     db
       .prepare(
@@ -133,22 +147,25 @@ export async function fetchStudyStats(db: D1Database): Promise<StudyStats> {
                 COUNT(*) AS n, SUM(a.is_correct) AS dogru
            FROM hmgs_attempts a
            JOIN hmgs_questions q ON q.id = a.question_id
-          WHERE q.subtopic IS NOT NULL AND q.subtopic <> ''
+          WHERE a.user_id = ? AND q.subtopic IS NOT NULL AND q.subtopic <> ''
           GROUP BY q.subject, q.subtopic`
       )
+      .bind(userId)
       .all<{ subject: string; subtopic: string; n: number; dogru: number }>(),
     db
       .prepare(
         // Ölçüt /tekrar'ı besleyen sorguyla aynı: bildirilmiş veya denetimden
         // geçmemiş soru kuyrukta görünmüyor, sayaç da onları saymamalı —
         // yoksa plan "40 soru tekrar et" der, kuyrukta 12 soru çıkar.
+        // Kuyruk kullanıcıya ait, eleme ölçütleri paylaşılan havuza ait.
         `SELECT COUNT(*) AS n
            FROM hmgs_review r
            JOIN hmgs_verdicts v ON v.question_id = r.question_id
            LEFT JOIN hmgs_reports rp ON rp.question_id = r.question_id AND rp.resolved = 0
-          WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
+          WHERE r.user_id = ? AND r.next_review <= ? AND v.verified = 1
+            AND rp.question_id IS NULL`
       )
-      .bind(now)
+      .bind(userId, now)
       .first<{ n: number }>(),
   ]);
 
@@ -192,6 +209,7 @@ export async function fetchStudyStats(db: D1Database): Promise<StudyStats> {
  */
 export async function fetchPlanProgress(
   db: D1Database,
+  userId: string,
   plan: StoredPlan
 ): Promise<{ planned: number; done: number }> {
   const planned = plan.ai_output.weeks.reduce(
@@ -199,41 +217,55 @@ export async function fetchPlanProgress(
     0
   );
   const row = await db
-    .prepare(`SELECT COUNT(*) AS n FROM study_task_completions WHERE plan_id = ?`)
-    .bind(plan.id)
+    .prepare(
+      `SELECT COUNT(*) AS n FROM study_task_completions
+        WHERE plan_id = ? AND user_id = ?`
+    )
+    .bind(plan.id, userId)
     .first<{ n: number }>();
   return { planned, done: row?.n ?? 0 };
 }
 
+/**
+ * Görev tikini yazar/siler.
+ *
+ * task_uuid plan içinde üretilen bir UUID, yani zaten çakışmıyor. user_id yine
+ * de her iki dalda ölçüte giriyor: silme tarafında olmasaydı, elinde bir uuid
+ * olan biri başkasının tikini kaldırabilirdi.
+ */
 export async function setCompletion(
   db: D1Database,
-  args: { task_uuid: string; plan_id: string; completed: boolean }
+  args: { task_uuid: string; plan_id: string; user_id: string; completed: boolean }
 ): Promise<void> {
   if (args.completed) {
     await db
       .prepare(
-        `INSERT OR REPLACE INTO study_task_completions (task_uuid, plan_id, completed_at)
-         VALUES (?, ?, ?)`
+        `INSERT OR REPLACE INTO study_task_completions (task_uuid, plan_id, completed_at, user_id)
+         VALUES (?, ?, ?, ?)`
       )
-      .bind(args.task_uuid, args.plan_id, Date.now())
+      .bind(args.task_uuid, args.plan_id, Date.now(), args.user_id)
       .run();
   } else {
     await db
-      .prepare(`DELETE FROM study_task_completions WHERE task_uuid = ?`)
-      .bind(args.task_uuid)
+      .prepare(
+        `DELETE FROM study_task_completions WHERE task_uuid = ? AND user_id = ?`
+      )
+      .bind(args.task_uuid, args.user_id)
       .run();
   }
 }
 
 export async function fetchCompletions(
   db: D1Database,
+  userId: string,
   planId: string
 ): Promise<Record<string, number>> {
   const rows = await db
     .prepare(
-      `SELECT task_uuid, completed_at FROM study_task_completions WHERE plan_id = ?`
+      `SELECT task_uuid, completed_at FROM study_task_completions
+        WHERE plan_id = ? AND user_id = ?`
     )
-    .bind(planId)
+    .bind(planId, userId)
     .all<{ task_uuid: string; completed_at: number }>();
   const map: Record<string, number> = {};
   for (const r of rows.results) map[r.task_uuid] = r.completed_at;

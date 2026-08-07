@@ -12,6 +12,7 @@ import { apportion } from "../lib/apportion";
 import { shuffleOptions } from "../lib/shuffle-options";
 import { isNearDuplicate } from "../lib/near-duplicate";
 import { verifyBatch, type QuestionToCheck } from "../lib/hmgs-verify";
+import { crossCheck, CROSS_MODEL } from "../lib/hmgs-cross";
 import { schedule } from "../lib/srs";
 
 type Bindings = {
@@ -19,9 +20,37 @@ type Bindings = {
   VECTORIZE: VectorizeIndex;
   DB?: D1Database;
   DEEPSEEK_API_KEY?: string;
+  // İkinci hakem (çapraz denetim) farklı model ailesinden çalışıyor; kendi
+  // anahtarı gerekiyor. index.ts'te zaten tanımlı, burada da görünmesi lazım.
+  GEMINI_KEY?: string;
 };
 
-export const hmgs = new Hono<{ Bindings: Bindings }>();
+/**
+ * İsteğin sahibi — index.ts'teki kimlik middleware'i yazıyor.
+ *
+ * NE KULLANICIYA AİT, NE PAYLAŞILAN (bu dosyanın en önemli ayrımı):
+ *
+ *   PAYLAŞILAN — kullanıcıya göre FİLTRELENMEZ: /subjects, /stats, /exam,
+ *   /generate, /verify, /verify-stats, /classify, /topic, /topics. Soru
+ *   bankası, makine denetimi ve konu anlatımları üretmesi para harcayan ortak
+ *   varlıklar; herkes aynı havuzdan çalışır.
+ *
+ *   KULLANICIYA AİT — user_id ile filtrelenir: /submit, /performance, /exams,
+ *   /exams/:id, /review, /review/grade. Bunlar "bu kişi ne yaptı" kaydı.
+ *
+ *   KARMA — /report, /reports, /reports/resolve. Bildirimi KİM yaptığı
+ *   kullanıcıya ait bilgi ve kaydediliyor; ETKİSİ paylaşılan havuza. Bir
+ *   kullanıcının hatalı dediği soru HERKESİN denemesinden ve tekrar
+ *   kuyruğundan düşer, sahibinin karar ekranı da bütün bildirimleri görür.
+ *   Gerekçe: soru gerçekten hatalıysa, hatası kime denk geldiğine bağlı
+ *   değildir — kullanıcıya bölünmüş bir moderasyon kuyruğu, aynı hatalı
+ *   soruyu diğer kullanıcıya sormaya devam ederdi.
+ */
+type Variables = {
+  userId: string;
+};
+
+export const hmgs = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 /** Resmî dağılım — UI kaç soru/hangi alan bilsin diye. */
 hmgs.get("/subjects", (c) =>
@@ -210,14 +239,24 @@ hmgs.get("/exam", async (c) => {
     // dediyse onu sormak çalışmayı bozar. verified=1 ise yalnızca onaylılar.
     // Kullanıcının "hatalı" diye bildirdiği ve sahibinin henüz karara bağlamadığı
     // soru da aynı sebeple gelmez: şüpheli soruyu sormaya devam etmenin faydası yok.
+    // İKİNCİ HAKEM SÜZGECİ — `x.question_id IS NULL OR x.verdict = 'correct'`.
+    //
+    // Koşul "kaydı VAR ve correct DEĞİL ise düş" biçiminde. "Kaydı yok ise düş"
+    // OLAMAZ: hmgs_cross_checks boş başlıyor ve çapraz denetim parti parti
+    // ilerliyor; öyle yazılsaydı ilk deneme çekilişinde bankanın tamamı elenir,
+    // uygulama soru bulamazdı. Yani henüz çapraz denetimden GEÇMEMİŞ soru
+    // havuzda kalır — süzgeç yalnızca ikinci hakemin fiilen itiraz ettiği
+    // soruları düşürür.
     const rows = await c.env.DB.prepare(
       `SELECT q.id, q.subject, q.question, q.options, q.correct_answer,
               q.explanation, q.source_pdf, q.source_page, v.verified
          FROM hmgs_questions q
          LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
          LEFT JOIN hmgs_reports rp ON rp.question_id = q.id AND rp.resolved = 0
+         LEFT JOIN hmgs_cross_checks x ON x.question_id = q.id
         WHERE q.subject = ?
           AND (v.verified IS NULL OR v.verified >= 0)
+          AND (x.question_id IS NULL OR x.verdict = 'correct')
           AND rp.question_id IS NULL
           ${onlyVerified ? "AND v.verified = 1" : ""}
           ${onlySubtopic ? "AND q.subtopic = ?" : ""}
@@ -297,10 +336,11 @@ hmgs.post("/submit", async (c) => {
     return c.json({ error: "exam_id ve answers gerekli" }, 400);
   }
 
+  const userId = c.get("userId");
   const now = Date.now();
   const stmt = c.env.DB.prepare(
-    `INSERT INTO hmgs_attempts (id, question_id, subject, selected_answer, is_correct, exam_id, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?)`
+    `INSERT INTO hmgs_attempts (id, question_id, subject, selected_answer, is_correct, exam_id, created_at, user_id)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
   );
   await c.env.DB.batch(
     answers.map((a) =>
@@ -311,24 +351,30 @@ hmgs.post("/submit", async (c) => {
         a.selected === null || a.selected === undefined ? null : Number(a.selected),
         a.correct ? 1 : 0,
         examId,
-        now
+        now,
+        userId
       )
     )
   );
 
   // Bilinmeyen soru tekrar kuyruğuna girer. Boş bırakılan da dahil: boş,
   // "biliyordum ama işaretlemedim"den çok "bilmiyordum" demek.
+  //
+  // ÇAKIŞMA ANAHTARI (question_id, user_id): tekrar kuyruğu kişiye ait.
+  // Yalnızca question_id olsaydı, aynı soruyu yanlışlayan ikinci kullanıcı
+  // birincinin FSRS durumunu ezerdi (010-users.sql tabloyu bu yüzden yeniden
+  // kurdu).
   const missed = answers.filter((a) => !a.correct);
   if (missed.length > 0) {
     const enq = c.env.DB.prepare(
-      `INSERT INTO hmgs_review (question_id, subject, next_review, added_at)
-       VALUES (?, ?, ?, ?)
-       ON CONFLICT(question_id) DO UPDATE SET
+      `INSERT INTO hmgs_review (question_id, user_id, subject, next_review, added_at)
+       VALUES (?, ?, ?, ?, ?)
+       ON CONFLICT(question_id, user_id) DO UPDATE SET
          next_review = excluded.next_review,
          lapses = lapses + 1`
     );
     await c.env.DB.batch(
-      missed.map((a) => enq.bind(String(a.question_id), String(a.subject), now, now))
+      missed.map((a) => enq.bind(String(a.question_id), userId, String(a.subject), now, now))
     );
   }
 
@@ -354,15 +400,20 @@ hmgs.post("/submit", async (c) => {
 hmgs.get("/performance", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
+  // Panelin TAMAMI kullanıcıya ait. Filtre olmadan uygulamayı yazan kişinin
+  // 3 test denemesi (30 cevap, %7 doğruluk) asıl kullanıcının genel doğruluğunu
+  // ve "en zayıf alanların" listesini bozuyordu — bu değişikliğin sebebi bu.
+  const userId = c.get("userId");
+
   const [exams, subjects] = await Promise.all([
     c.env.DB.prepare(
       `SELECT exam_id, MIN(created_at) AS at, COUNT(*) AS n, SUM(is_correct) AS dogru
-         FROM hmgs_attempts GROUP BY exam_id ORDER BY at DESC LIMIT 30`
-    ).all<{ exam_id: string; at: number; n: number; dogru: number }>(),
+         FROM hmgs_attempts WHERE user_id = ? GROUP BY exam_id ORDER BY at DESC LIMIT 30`
+    ).bind(userId).all<{ exam_id: string; at: number; n: number; dogru: number }>(),
     c.env.DB.prepare(
       `SELECT subject, COUNT(*) AS n, SUM(is_correct) AS dogru
-         FROM hmgs_attempts GROUP BY subject`
-    ).all<{ subject: string; n: number; dogru: number }>(),
+         FROM hmgs_attempts WHERE user_id = ? GROUP BY subject`
+    ).bind(userId).all<{ subject: string; n: number; dogru: number }>(),
   ]);
 
   // Alan-altı zayıflık. "Borçlar'da zayıfsın" eyleme dönüşmüyor — Borçlar'ın
@@ -372,9 +423,9 @@ hmgs.get("/performance", async (c) => {
   const subs = await c.env.DB.prepare(
     `SELECT q.subject, q.subtopic, COUNT(*) AS n, SUM(a.is_correct) AS dogru
        FROM hmgs_attempts a JOIN hmgs_questions q ON q.id = a.question_id
-      WHERE q.subtopic IS NOT NULL
+      WHERE a.user_id = ? AND q.subtopic IS NOT NULL
       GROUP BY q.subject, q.subtopic`
-  ).all<{ subject: string; subtopic: string; n: number; dogru: number }>();
+  ).bind(userId).all<{ subject: string; subtopic: string; n: number; dogru: number }>();
 
   const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
   const bySubject = subjects.results
@@ -400,13 +451,16 @@ hmgs.get("/performance", async (c) => {
 
   const due = await c.env.DB.prepare(
     // Sayaç, soruları GETİREN sorguyla aynı ölçütü kullanmalı; yoksa
-    // "22 soru tekrar bekliyor" deyip 20 soru gelir.
+    // "22 soru tekrar bekliyor" deyip 20 soru gelir. Kuyruk kullanıcıya ait,
+    // eleme ölçütleri (denetim + bildirim) paylaşılan havuza ait.
     `SELECT COUNT(*) AS n
        FROM hmgs_review r
        JOIN hmgs_verdicts v ON v.question_id = r.question_id
        LEFT JOIN hmgs_reports rp ON rp.question_id = r.question_id AND rp.resolved = 0
-      WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
-  ).bind(Date.now()).first<{ n: number }>();
+       LEFT JOIN hmgs_cross_checks x ON x.question_id = r.question_id
+      WHERE r.user_id = ? AND r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL
+        AND (x.question_id IS NULL OR x.verdict = 'correct')`
+  ).bind(userId, Date.now()).first<{ n: number }>();
 
   // Alt konu eşiği alandan DÜŞÜK (3): bir alt konu bir denemede 1-2 soru
   // görüyor, 5 eşiği tutulursa kırılım aylarca boş kalır. Az veriyi de
@@ -462,10 +516,11 @@ hmgs.get("/exams", async (c) => {
             SUM(is_correct) AS dogru,
             SUM(CASE WHEN selected_answer IS NULL THEN 1 ELSE 0 END) AS bos
        FROM hmgs_attempts
+      WHERE user_id = ?
       GROUP BY exam_id
       ORDER BY at DESC
       LIMIT ?`
-  ).bind(limit).all<{ exam_id: string; at: number; n: number; dogru: number; bos: number }>();
+  ).bind(c.get("userId"), limit).all<{ exam_id: string; at: number; n: number; dogru: number; bos: number }>();
 
   return c.json({
     pass_score: HMGS_PASS_SCORE,
@@ -513,14 +568,18 @@ hmgs.get("/exams/:examId", async (c) => {
   // rowid = ekleme sırası; /submit sorular hangi sırayla sunulduysa o sırayla
   // batch'liyor, yani denemedeki soru sırası buradan geliyor. UUID id'ye göre
   // sıralamak rastgele bir sıra verirdi.
+  //
+  // user_id ölçütü sadece filtre değil, yetki kontrolü: exam_id tahmin
+  // edilemez ama URL'de duruyor. Başkasının denemesi 404 döner — "var ama
+  // senin değil" demek, olmadığını söylemekten fazlasını sızdırır.
   const rows = await c.env.DB.prepare(
     `SELECT a.question_id, a.subject, a.is_correct, a.selected_answer, a.created_at,
             q.id AS qid, q.question, q.options, q.correct_answer, q.explanation, q.subtopic, q.source_pdf, q.source_page
        FROM hmgs_attempts a
        LEFT JOIN hmgs_questions q ON q.id = a.question_id
-      WHERE a.exam_id = ?
+      WHERE a.exam_id = ? AND a.user_id = ?
       ORDER BY a.rowid`
-  ).bind(examId).all<{
+  ).bind(examId, c.get("userId")).all<{
     question_id: string;
     subject: string;
     is_correct: number;
@@ -605,16 +664,25 @@ hmgs.get("/review", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
   const limit = Math.min(Math.max(Number(c.req.query("count") ?? 20), 1), 50);
+  // Kuyruk KULLANICIYA ait (r.user_id): kimin neyi yanlışladığı kişisel.
+  // Soru, denetim ve bildirim tarafı PAYLAŞILAN havuza ait — bu yüzden
+  // yalnızca hmgs_review kullanıcıya göre daralıyor.
+  const userId = c.get("userId");
+  // İkinci hakem süzgeci /exam ile aynı mantıkta: LEFT JOIN + "kaydı yoksa
+  // geçer". Çapraz denetimden henüz geçmemiş soru tekrar kuyruğunda kalmalı,
+  // yoksa tablo dolana kadar kuyruk boş görünür.
   const rows = await c.env.DB.prepare(
     `SELECT q.id, q.subject, q.question, q.options, q.correct_answer, q.explanation,
             r.reps, r.lapses, r.next_review
        FROM hmgs_review r JOIN hmgs_questions q ON q.id = r.question_id
        LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
        LEFT JOIN hmgs_reports rp ON rp.question_id = q.id AND rp.resolved = 0
-      WHERE r.next_review <= ? AND v.verified = 1
+       LEFT JOIN hmgs_cross_checks x ON x.question_id = q.id
+      WHERE r.user_id = ? AND r.next_review <= ? AND v.verified = 1
+        AND (x.question_id IS NULL OR x.verdict = 'correct')
         AND rp.question_id IS NULL
       ORDER BY r.next_review LIMIT ?`
-  ).bind(Date.now(), limit).all<any>();
+  ).bind(userId, Date.now(), limit).all<any>();
 
   const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
   const questions = rows.results.map((r) => {
@@ -640,13 +708,16 @@ hmgs.get("/review", async (c) => {
 
   const total = await c.env.DB.prepare(
     // Sayaç, soruları GETİREN sorguyla aynı ölçütü kullanmalı; yoksa
-    // "22 soru tekrar bekliyor" deyip 20 soru gelir.
+    // "22 soru tekrar bekliyor" deyip 20 soru gelir. Kuyruk kullanıcıya ait,
+    // eleme ölçütleri (denetim + bildirim) paylaşılan havuza ait.
     `SELECT COUNT(*) AS n
        FROM hmgs_review r
        JOIN hmgs_verdicts v ON v.question_id = r.question_id
        LEFT JOIN hmgs_reports rp ON rp.question_id = r.question_id AND rp.resolved = 0
-      WHERE r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL`
-  ).bind(Date.now()).first<{ n: number }>();
+       LEFT JOIN hmgs_cross_checks x ON x.question_id = r.question_id
+      WHERE r.user_id = ? AND r.next_review <= ? AND v.verified = 1 AND rp.question_id IS NULL
+        AND (x.question_id IS NULL OR x.verdict = 'correct')`
+  ).bind(userId, Date.now()).first<{ n: number }>();
 
   return c.json({ questions, due_total: total?.n ?? 0 });
 });
@@ -668,11 +739,16 @@ hmgs.post("/review/grade", async (c) => {
     return c.json({ error: "question_id ve grade (0-3) gerekli" }, 400);
   }
 
+  // Okuma da yazma da (question_id, user_id) üzerinden: FSRS durumu kişiye
+  // ait. Sadece question_id ile güncellemek, aynı soruyu çalışan diğer
+  // kullanıcının aralığını da kaydırırdı.
+  const userId = c.get("userId");
+
   const row = await c.env.DB.prepare(
     `SELECT stability, difficulty, elapsed_days, scheduled_days, reps, lapses,
             fsrs_state, last_review
-       FROM hmgs_review WHERE question_id = ?`
-  ).bind(id).first<any>();
+       FROM hmgs_review WHERE question_id = ? AND user_id = ?`
+  ).bind(id, userId).first<any>();
   if (!row) return c.json({ error: "soru tekrar kuyruğunda değil" }, 404);
 
   const next = schedule(row, grade);
@@ -681,11 +757,11 @@ hmgs.post("/review/grade", async (c) => {
     `UPDATE hmgs_review SET
        stability = ?, difficulty = ?, elapsed_days = ?, scheduled_days = ?,
        reps = ?, lapses = ?, fsrs_state = ?, next_review = ?, last_review = ?
-     WHERE question_id = ?`
+     WHERE question_id = ? AND user_id = ?`
   ).bind(
     next.stability, next.difficulty, next.elapsed_days, next.scheduled_days,
     next.reps, next.lapses, next.fsrs_state, next.next_review, next.last_review,
-    id
+    id, userId
   ).run();
 
   return c.json({
@@ -729,14 +805,18 @@ hmgs.post("/report", async (c) => {
   // resolved sıfırlanır: kullanıcı hâlâ itiraz ediyorsa soru yine havuzdan düşmeli.
   // Boş gerekçe eskisini EZMEZ — ilk bildirimdeki açıklama sahibinin elindeki
   // tek bilgi olabilir.
+  // user_id "son bildiren kim" bilgisidir, sahiplik değil: çakışma anahtarı
+  // hâlâ yalnızca question_id. Kullanıcı başına ayrı bildirim satırı, sahibine
+  // aynı soru için iki kez karar verdirirdi — soru ya hatalıdır ya değildir.
   await c.env.DB.prepare(
-    `INSERT INTO hmgs_reports (id, question_id, subject, reason, created_at, resolved)
-     VALUES (?, ?, ?, ?, ?, 0)
+    `INSERT INTO hmgs_reports (id, question_id, subject, reason, created_at, resolved, user_id)
+     VALUES (?, ?, ?, ?, ?, 0, ?)
      ON CONFLICT(question_id) DO UPDATE SET
        reason = COALESCE(NULLIF(excluded.reason, ''), reason),
        created_at = excluded.created_at,
+       user_id = excluded.user_id,
        resolved = 0`
-  ).bind(crypto.randomUUID(), id, q.subject, reason, Date.now()).run();
+  ).bind(crypto.randomUUID(), id, q.subject, reason, Date.now(), c.get("userId")).run();
 
   return c.json({ ok: true, question_id: id });
 });
@@ -746,12 +826,20 @@ hmgs.post("/report", async (c) => {
  *
  * Soru metni, şıklar, doğru cevap, açıklama ve varsa makine denetiminin gerekçesi
  * birlikte döner: karar vermek için başka bir sorgu gerekmesin.
+ *
+ * KULLANICIYA GÖRE FİLTRELENMİYOR — bilerek. Bu ekran paylaşılan soru
+ * bankasının moderasyon kuyruğu: 007-hmgs-reports.sql'in yazdığı gibi, gerçek
+ * geri bildirim sınava hazırlanan kullanıcıdan gelir ve karar veren kişi
+ * uygulamanın sahibidir. Kuyruk kullanıcıya bölünseydi sahibi başkasının
+ * bildirdiği hatalı soruyu hiç göremez, o soru herkese sorulmaya devam ederdi.
+ * Bildirimin KİMDEN geldiği yine de dönüyor (`reported_by`): aynı kullanıcıdan
+ * gelen bir dizi bildirim, tek tek bakıldığında görünmeyen bir örüntü olabilir.
  */
 hmgs.get("/reports", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
   const rows = await c.env.DB.prepare(
-    `SELECT r.id, r.question_id, r.subject, r.reason, r.created_at,
+    `SELECT r.id, r.question_id, r.subject, r.reason, r.created_at, r.user_id,
             q.question, q.options, q.correct_answer, q.explanation,
             q.source_pdf, q.source_page,
             v.verified, v.verdict, v.reason AS verdict_reason
@@ -772,6 +860,7 @@ hmgs.get("/reports", async (c) => {
       subject_name: name.get(r.subject) ?? r.subject,
       reason: r.reason ?? "",
       reported_at: r.created_at,
+      reported_by: r.user_id ?? null,
       question: r.question,
       // Şıklar bankadaki sırayla — kullanıcı karıştırılmış hâlini gördü ama
       // sahibinin kaynakla karşılaştıracağı sıra bu.
@@ -792,7 +881,17 @@ hmgs.get("/reports", async (c) => {
   return c.json({ reports, total: reports.length });
 });
 
-/** Bildirimi kapat: soruyu sil ya da tut. */
+/**
+ * Bildirimi kapat: soruyu sil ya da tut.
+ *
+ * KULLANICIYA GÖRE FİLTRELENMİYOR — /reports ile aynı gerekçe. Karar
+ * paylaşılan havuza veriliyor: silinen soru herkesin bankasından, tutulan soru
+ * herkesin havuzuna geri gider. Kullanıcıya bölünmüş bir "çözüldü" işareti,
+ * aynı hatalı sorunun başka kullanıcıya sorulmaya devam etmesi demekti.
+ *
+ * `delete` dalındaki hmgs_review temizliği de bilerek kullanıcısız: soru
+ * bankadan gidiyorsa kimsenin tekrar kuyruğunda kalmamalı.
+ */
 hmgs.post("/reports/resolve", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
@@ -815,6 +914,7 @@ hmgs.post("/reports/resolve", async (c) => {
     await c.env.DB.batch([
       c.env.DB.prepare(`DELETE FROM hmgs_questions WHERE id = ?`).bind(id),
       c.env.DB.prepare(`DELETE FROM hmgs_verdicts WHERE question_id = ?`).bind(id),
+      c.env.DB.prepare(`DELETE FROM hmgs_cross_checks WHERE question_id = ?`).bind(id),
       c.env.DB.prepare(`DELETE FROM hmgs_review WHERE question_id = ?`).bind(id),
       c.env.DB.prepare(`DELETE FROM hmgs_reports WHERE question_id = ?`).bind(id),
     ]);
@@ -1062,6 +1162,183 @@ hmgs.get("/verify-stats", async (c) => {
     if (key === "unchecked") unchecked += r.n;
   }
   return c.json({ total, correct, unchecked, by_subject: by });
+});
+
+/**
+ * ÇAPRAZ DENETİM — onaylı soruları farklı model ailesinden ikinci hakeme okutur.
+ *
+ * Yalnızca birinci hakemin `correct` dediği sorulara bakar: amaç bankayı
+ * baştan denetlemek değil, ONAYIN kendisini sınamak. Üretici ve birinci hakem
+ * aynı aileden (DeepSeek) olduğu için onay, paylaşılan bir kör noktadan
+ * geçmiş olabilir.
+ *
+ * İkinci hakem `correct` demezse soru sınav havuzundan düşer (/exam, /review).
+ * Bu kasıtlı olarak katı: şüpheli soruyu sormanın maliyeti (kullanıcı doğruyu
+ * işaretleyip yanlış sayılır, güven gider) soruyu havuzda tutmanın faydasından
+ * büyük. Karar hmgs_verdicts'e YAZILMAZ; iki hakemin kararı ayrı durmalı ki
+ * /cross-stats anlaşmazlığı ölçebilsin.
+ */
+hmgs.post("/cross-check", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+  if (!c.env.GEMINI_KEY) return c.json({ error: "GEMINI_KEY yok" }, 503);
+
+  let body: { subject?: string; limit?: number };
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "invalid JSON" }, 400);
+  }
+
+  const subject = getSubject(String(body.subject ?? ""));
+  if (!subject) return c.json({ error: "geçersiz subject" }, 400);
+
+  // /verify ile aynı sınır: parti büyüdükçe hakem her soruya daha az bakıyor,
+  // asıl aradığımız kusur (çeldirici de doğru) tam da dikkat isteyen tür.
+  const limit = Math.min(Math.max(Number(body.limit ?? 5), 1), 8);
+
+  // Seçim: birinci hakem onaylamış AND ikinci hakem HİÇ bakmamış.
+  // `before` benzeri zaman koruması gerekmiyor — kayıt bir kez yazılınca soru
+  // seçimden kalıcı olarak düşer, tur kendini bitirir.
+  const rows = await c.env.DB.prepare(
+    `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation,
+            q.subtopic, q.source_pdf, q.source_page
+       FROM hmgs_questions q
+       JOIN hmgs_verdicts v ON v.question_id = q.id
+       LEFT JOIN hmgs_cross_checks x ON x.question_id = q.id
+      WHERE q.subject = ? AND v.verdict = 'correct' AND x.question_id IS NULL
+      LIMIT ?`
+  ).bind(subject.id, limit).all<any>();
+
+  if (rows.results.length === 0) {
+    return c.json({
+      ok: true, subject: subject.id, checked: 0, agreed: 0, disagreed: 0, remaining: 0,
+    });
+  }
+
+  const questions: QuestionToCheck[] = rows.results.map((r) => ({
+    id: r.id,
+    question: r.question,
+    options: JSON.parse(r.options),
+    correctAnswer: r.correct_answer,
+    explanation: r.explanation,
+    subtopic: r.subtopic ?? null,
+    source_pdf: r.source_pdf ?? null,
+    source_page: r.source_page ?? null,
+  }));
+
+  const verdicts = await crossCheck(
+    { AI: c.env.AI, VECTORIZE: c.env.VECTORIZE, DB: c.env.DB, GEMINI_KEY: c.env.GEMINI_KEY },
+    subject,
+    questions
+  );
+
+  // Boş sonuç KAYDEDİLMEZ. Aksi hâlde ağ/parse hatası tüm partiyi havuzdan
+  // düşürürdü — sessiz veri kaybının en kötü türü.
+  if (verdicts.length === 0) {
+    return c.json({ error: "çapraz denetim sonucu alınamadı", subject: subject.id, checked: 0 }, 502);
+  }
+
+  const now = Date.now();
+  const stmt = c.env.DB.prepare(
+    `INSERT OR REPLACE INTO hmgs_cross_checks (question_id, verdict, reason, model, checked_at)
+     VALUES (?, ?, ?, ?, ?)`
+  );
+  await c.env.DB.batch(
+    verdicts.map((v) => stmt.bind(v.id, v.verdict, v.reason, CROSS_MODEL, now))
+  );
+
+  const agreed = verdicts.filter((v) => v.verdict === "correct").length;
+
+  const left = await c.env.DB.prepare(
+    `SELECT COUNT(*) AS n
+       FROM hmgs_questions q
+       JOIN hmgs_verdicts v ON v.question_id = q.id
+       LEFT JOIN hmgs_cross_checks x ON x.question_id = q.id
+      WHERE q.subject = ? AND v.verdict = 'correct' AND x.question_id IS NULL`
+  ).bind(subject.id).first<{ n: number }>();
+
+  return c.json({
+    ok: true,
+    subject: subject.id,
+    checked: verdicts.length,
+    agreed,
+    disagreed: verdicts.length - agreed,
+    remaining: left?.n ?? 0,
+    verdicts,
+  });
+});
+
+/**
+ * Çapraz denetim özeti — bu katmanın değerini gösteren tek ölçüm.
+ *
+ * Anlaşma oranı yüksekse ikinci hakem para yakıyor demektir (ya da onay gerçekten
+ * sağlam). Düşükse iki modelin kör noktaları ayrı ve katman iş görüyor. Alan
+ * bazlı kırılım şart: anlaşmazlık tek bir alanda toplanıyorsa sorun modelde
+ * değil o alanın kaynak kapsamındadır.
+ */
+hmgs.get("/cross-stats", async (c) => {
+  if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
+
+  const rows = await c.env.DB.prepare(
+    `SELECT q.subject, x.verdict, COUNT(*) AS n
+       FROM hmgs_cross_checks x
+       JOIN hmgs_questions q ON q.id = x.question_id
+      GROUP BY q.subject, x.verdict`
+  ).all<{ subject: string; verdict: string; n: number }>();
+
+  // Payda: birinci hakemin onayladığı toplam. Kapsamı (kaç onaylı soru henüz
+  // ikinci hakeme gitmedi) bilmeden anlaşmazlık oranı yanıltıcı olur.
+  const onayli = await c.env.DB.prepare(
+    `SELECT q.subject, COUNT(*) AS n
+       FROM hmgs_questions q
+       JOIN hmgs_verdicts v ON v.question_id = q.id
+      WHERE v.verdict = 'correct'
+      GROUP BY q.subject`
+  ).all<{ subject: string; n: number }>();
+
+  const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
+  const onayliMap = new Map(onayli.results.map((r) => [r.subject, r.n]));
+
+  const by: Record<string, { name: string; approved: number; checked: number; agreed: number; verdicts: Record<string, number> }> = {};
+  let checked = 0, agreed = 0;
+
+  for (const r of rows.results) {
+    const s = (by[r.subject] ??= {
+      name: name.get(r.subject) ?? r.subject,
+      approved: onayliMap.get(r.subject) ?? 0,
+      checked: 0,
+      agreed: 0,
+      verdicts: {},
+    });
+    s.verdicts[r.verdict] = r.n;
+    s.checked += r.n;
+    checked += r.n;
+    if (r.verdict === "correct") {
+      s.agreed += r.n;
+      agreed += r.n;
+    }
+  }
+
+  const approved = [...onayliMap.values()].reduce((a, n) => a + n, 0);
+  const pct = (a: number, b: number) => (b > 0 ? Math.round((a / b) * 100) : 0);
+
+  return c.json({
+    model: CROSS_MODEL,
+    approved,                              // birinci hakemin onayladığı toplam
+    checked,                               // bunlardan kaçı çapraz denetlendi
+    pending: approved - checked,
+    agreed,                                // ikinci hakem de "correct" dedi
+    disagreed: checked - agreed,
+    agreement_rate: pct(agreed, checked),
+    disagreement_rate: pct(checked - agreed, checked),
+    coverage_rate: pct(checked, approved),
+    by_subject: Object.entries(by).map(([id, s]) => ({
+      id,
+      ...s,
+      disagreement_rate: pct(s.checked - s.agreed, s.checked),
+      coverage_rate: pct(s.checked, s.approved),
+    })).sort((a, b) => b.disagreement_rate - a.disagreement_rate),
+  });
 });
 
 /**

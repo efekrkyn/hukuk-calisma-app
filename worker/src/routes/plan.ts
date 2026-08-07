@@ -30,7 +30,18 @@ type Bindings = {
   DEEPSEEK_API_KEY?: string;
 };
 
-export const plan = new Hono<{ Bindings: Bindings }>();
+/**
+ * İsteğin sahibi — index.ts'teki kimlik middleware'i yazıyor.
+ *
+ * Bu dosyadaki DÖRT uç da kullanıcıya ait: program kişinin sınav tarihine,
+ * müsait günlerine ve kendi zayıf alanlarına göre üretiliyor. Paylaşılan
+ * hiçbir şey yok — plan-store.ts'teki her fonksiyon bu yüzden userId istiyor.
+ */
+type Variables = {
+  userId: string;
+};
+
+export const plan = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 /** Üretim modeli — projenin geri kalanıyla aynı (denetim tarafı reasoner). */
 const MODEL_ID = "deepseek-chat";
@@ -58,10 +69,11 @@ plan.post("/generate", async (c) => {
     return c.json({ error: "sınav tarihi bugünden sonra olmalı" }, 400);
   }
 
-  const stats = await fetchStudyStats(c.env.DB);
+  const userId = c.get("userId");
+  const stats = await fetchStudyStats(c.env.DB, userId);
 
-  const existing = await getActivePlan(c.env.DB);
-  const previous = existing ? await fetchPlanProgress(c.env.DB, existing) : null;
+  const existing = await getActivePlan(c.env.DB, userId);
+  const previous = existing ? await fetchPlanProgress(c.env.DB, userId, existing) : null;
 
   // Sınav uzaksa bile plan penceresi PLAN_WEEKS ile sınırlı; kalan süre daha
   // kısaysa takvim sınav gününde biter.
@@ -107,6 +119,7 @@ plan.post("/generate", async (c) => {
   const id = crypto.randomUUID();
   await insertPlan(c.env.DB, {
     id,
+    userId,
     form_input: form,
     ai_output: clean.output,
     ai_model: MODEL_ID,
@@ -132,12 +145,14 @@ plan.post("/task-toggle", async (c) => {
     return c.json({ error: "task_uuid (string) + completed (bool) required" }, 400);
   }
 
-  const active = await getActivePlan(c.env.DB);
+  const userId = c.get("userId");
+  const active = await getActivePlan(c.env.DB, userId);
   if (!active) return c.json({ error: "no active plan" }, 404);
 
   await setCompletion(c.env.DB, {
     task_uuid: body.task_uuid,
     plan_id: active.id,
+    user_id: userId,
     completed: body.completed,
   });
 
@@ -162,7 +177,8 @@ plan.post("/add-task", async (c) => {
   const task = canonicalTask(taskParsed.data);
   if (!task) return c.json({ error: "görevin alanı HMGS alanlarından biri değil" }, 400);
 
-  const active = await getActivePlan(c.env.DB);
+  const userId = c.get("userId");
+  const active = await getActivePlan(c.env.DB, userId);
   if (!active) return c.json({ error: "no active plan" }, 404);
 
   const planData: AiOutput = active.ai_output;
@@ -199,8 +215,13 @@ plan.post("/add-task", async (c) => {
   }
 
   try {
-    await c.env.DB.prepare(`UPDATE study_plans SET ai_output = ? WHERE id = ?`)
-      .bind(JSON.stringify(planData), active.id)
+    // user_id ölçütte: plan zaten bu kullanıcının aktif planı ama yazma
+    // sorgusunun sahiplik kontrolü kendi WHERE'inde olmalı, okumadan
+    // devralınan bir varsayımda değil.
+    await c.env.DB.prepare(
+      `UPDATE study_plans SET ai_output = ? WHERE id = ? AND user_id = ?`
+    )
+      .bind(JSON.stringify(planData), active.id, userId)
       .run();
   } catch (e) {
     console.error("Failed to update plan:", e);
@@ -211,9 +232,10 @@ plan.post("/add-task", async (c) => {
 });
 
 plan.get("/active", async (c) => {
-  const active = await getActivePlan(c.env.DB);
+  const userId = c.get("userId");
+  const active = await getActivePlan(c.env.DB, userId);
   if (!active) return c.json({ plan: null, completions: {} });
 
-  const completions = await fetchCompletions(c.env.DB, active.id);
+  const completions = await fetchCompletions(c.env.DB, userId, active.id);
   return c.json({ plan: active, completions });
 });
