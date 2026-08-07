@@ -113,7 +113,58 @@ export type QuestionToCheck = {
   /** Doktrin konusu mu, hangi korpustan doğrulanacağını belirler. Sütun
    *  sonradan eklendi; eski satırlarda null olabilir. */
   subtopic?: string | null;
+  /** Sorunun ÜRETİLDİĞİ parça. Doğrulamanın en güçlü ipucu: soru bu
+   *  metinden yazıldıysa cevabı da bu metinde. */
+  source_pdf?: string | null;
+  source_page?: number | null;
 };
+
+/**
+ * Soruların üretildiği kaynak parçaları doğrudan çeker.
+ *
+ * Retrieval, denetimde 80 parça getiriyor; doktrin korpusu 17.101 parça,
+ * yani %0.5'lik bir örneklem. Soru bir parçadan üretilip o parça geri
+ * gelmeyince hakem haklı olarak "kaynak metinde yok" diyor — kaynaksız
+ * kalan 68 sorunun 62'si (%91) bu türdendi ve hepsinin kaynağı KAYITLI.
+ *
+ * Madde numarası üzerinden çalışan fetchCorpusArticles doktrinde işe
+ * yaramıyor: doktrin sorusunda madde atfı yok. Kaynak parça ise her soruda
+ * var, üretim sırasında yazılıyor.
+ */
+async function fetchSourceChunks(
+  db: D1Database,
+  questions: QuestionToCheck[]
+): Promise<string> {
+  const eslek = new Map<string, number>();
+  for (const q of questions) {
+    if (q.source_pdf && q.source_page != null) {
+      eslek.set(q.source_pdf, q.source_page);
+    }
+  }
+  if (eslek.size === 0) return "";
+
+  const out: string[] = [];
+  for (const [pdf, page] of [...eslek].slice(0, MAX_LOOKUPS)) {
+    try {
+      // Komşu sayfalar da alınıyor: bir kavram sayfa sınırında bölünmüş
+      // olabiliyor ve tek sayfa cümlenin yarısını getiriyor.
+      const rows = await db
+        .prepare(
+          `SELECT text, page_start FROM fts_chunks
+            WHERE pdf = ? AND page_start BETWEEN ? AND ?
+            ORDER BY page_start LIMIT 6`
+        )
+        .bind(pdf, page - 1, page + 1)
+        .all<{ text: string; page_start: number }>();
+      for (const r of rows.results) {
+        out.push(`### ${pdf} (s.${r.page_start}) — sorunun yazıldığı kaynak\n${r.text}`);
+      }
+    } catch (e) {
+      console.error(`kaynak parça çekilemedi (${pdf} s.${page}):`, e);
+    }
+  }
+  return out.join("\n\n");
+}
 
 export type Verdict = {
   id: string;
@@ -275,14 +326,19 @@ export async function verifyBatch(
     ? await fetchExternalLaws(halaEksik, questions[0].question)
     : "";
 
+  // Sorunun yazıldığı parça — madde numarası olmayan doktrin soruları için
+  // tek güvenilir bağ. Retrieval 17 bin parçadan 80'ini getiriyor, kaynak
+  // parçanın gelme şansı düşük; kayıtlı olanı doğrudan çekiyoruz.
+  const fromSource = env.DB ? await fetchSourceChunks(env.DB, questions) : "";
+
   const provider = new DeepSeekProvider(env.DEEPSEEK_API_KEY, "deepseek-reasoner");
   let raw = "";
   for await (const tok of provider.streamChat(
     // Korpustan hedefli çekilen maddeler de EK_MEVZUAT'a giriyor: retrieval'ın
     // kaçırdığı madde burada, hakemin göreceği yerde olmalı.
     `<KANUN>\n${law}\n</KANUN>` +
-      (fromCorpus || external
-        ? `\n\n<EK_MEVZUAT>\n${[fromCorpus, external].filter(Boolean).join("\n\n")}\n</EK_MEVZUAT>`
+      (fromCorpus || external || fromSource
+        ? `\n\n<EK_MEVZUAT>\n${[fromSource, fromCorpus, external].filter(Boolean).join("\n\n")}\n</EK_MEVZUAT>`
         : "") +
       `\n\n<SORULAR>\n${body}\n</SORULAR>`,
     SYSTEM

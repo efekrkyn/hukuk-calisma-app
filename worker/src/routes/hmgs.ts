@@ -515,7 +515,7 @@ hmgs.get("/exams/:examId", async (c) => {
   // sıralamak rastgele bir sıra verirdi.
   const rows = await c.env.DB.prepare(
     `SELECT a.question_id, a.subject, a.is_correct, a.selected_answer, a.created_at,
-            q.id AS qid, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
+            q.id AS qid, q.question, q.options, q.correct_answer, q.explanation, q.subtopic, q.source_pdf, q.source_page
        FROM hmgs_attempts a
        LEFT JOIN hmgs_questions q ON q.id = a.question_id
       WHERE a.exam_id = ?
@@ -868,17 +868,17 @@ hmgs.post("/verify", async (c) => {
     // verified 0 kaldığı için tekrar seçilir. Döngü kendini bitiremez ve
     // aynı sorulara sonsuza dek para harcanır — ölçüldü, kaynaksız sayısı
     // iki ayrı ölçümde 113'te çakılı kalırken işler dönmeye devam ediyordu.
-    unsupported: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
+    unsupported: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic, q.source_pdf, q.source_page
                     FROM hmgs_questions q
                     JOIN hmgs_verdicts v ON v.question_id = q.id
                    WHERE q.subject = ? AND v.verified = 0 AND v.checked_at < ?
                    LIMIT ?`,
-    verified: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
+    verified: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic, q.source_pdf, q.source_page
                  FROM hmgs_questions q
                  JOIN hmgs_verdicts v ON v.question_id = q.id
                 WHERE q.subject = ? AND v.verdict = 'correct' AND v.checked_at < ?
                 LIMIT ?`,
-    new: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
+    new: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic, q.source_pdf, q.source_page
             FROM hmgs_questions q
             LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
            WHERE q.subject = ? AND v.question_id IS NULL
@@ -908,6 +908,10 @@ hmgs.post("/verify", async (c) => {
     // Doktrin konusu kanunda düzenlenmemiş; denetleyici hangi korpustan
     // doğrulayacağını buna bakarak seçiyor.
     subtopic: r.subtopic ?? null,
+    // Sorunun yazıldığı parça: doktrin sorusunda madde atfı yok,
+    // doğrulamanın tek güvenilir bağı bu.
+    source_pdf: r.source_pdf ?? null,
+    source_page: r.source_page ?? null,
   }));
 
   const verdicts = await verifyBatch(
