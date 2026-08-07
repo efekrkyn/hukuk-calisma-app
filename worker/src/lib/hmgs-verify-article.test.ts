@@ -1,32 +1,27 @@
-import { describe, expect, it } from "vitest";
-import { hasArticle } from "./hmgs-verify";
+/** `npx tsx src/lib/hmgs-verify-article.test.ts` */
+import assert from "node:assert/strict";
+import { hasArticle } from "./hmgs-verify.js";
 
-describe("hasArticle", () => {
-  it("maddeyi metinde bulur", () => {
-    expect(hasArticle("Kanunun bağlayıcılığı Madde 6- (1) Tanımlar...", "6")).toBe(true);
-    expect(hasArticle("TCK m.265'e göre direnme suçu", "265")).toBe(true);
-    expect(hasArticle("MADDE 384- Çekişmesiz yargıda yetki", "384")).toBe(true);
-  });
+// maddeyi metinde bulmalı
+assert.equal(hasArticle("Kanunun bağlayıcılığı Madde 6- (1) Tanımlar...", "6"), true);
+assert.equal(hasArticle("TCK m.265'e göre direnme suçu", "265"), true);
+assert.equal(hasArticle("MADDE 384- Çekişmesiz yargıda yetki", "384"), true);
 
-  // Asıl kritik durum: bu ayrım tutmazsa düzeltmenin tamamı boşa gider,
-  // "Madde 60" görüp "Madde 6 zaten var" denir ve eksik madde çekilmez.
-  it("daha uzun madde numarasını yanlışlıkla eşleştirmez", () => {
-    expect(hasArticle("Madde 60- Tanıklıktan çekinme", "6")).toBe(false);
-    expect(hasArticle("m.265/2 yargı görevi yapan", "26")).toBe(false);
-    expect(hasArticle("Madde 1229- Konişmento", "122")).toBe(false);
-  });
+// ASIL KRİTİK DURUM: bu ayrım tutmazsa madde-düzeyi düzeltmenin tamamı boşa
+// gider — "Madde 60" görülüp "Madde 6 zaten var" denir ve eksik madde
+// çekilmez.
+assert.equal(hasArticle("Madde 60- Tanıklıktan çekinme", "6"), false);
+assert.equal(hasArticle("m.265/2 yargı görevi yapan", "26"), false);
+assert.equal(hasArticle("Madde 1229- Konişmento", "122"), false);
 
-  it("fıkralı atıfta madde numarasını yakalar", () => {
-    expect(hasArticle("Madde 195/1-a-1 hâkimiyet", "195")).toBe(true);
-  });
+// fıkralı atıfta madde numarası yakalanmalı
+assert.equal(hasArticle("Madde 195/1-a-1 hâkimiyet", "195"), true);
 
-  // Madde bilgisi olmayan atıf doğrulanamaz; "yok" deyip her seferinde
-  // dışarı çıkmak gereksiz ağ çağrısı üretirdi.
-  it("madde bilgisi yoksa var sayar", () => {
-    expect(hasArticle("herhangi bir metin", null)).toBe(true);
-  });
+// Madde bilgisi olmayan atıf doğrulanamaz; "yok" deyip her seferinde dışarı
+// çıkmak gereksiz ağ çağrısı üretirdi.
+assert.equal(hasArticle("herhangi bir metin", null), true);
 
-  it("boş metinde bulamaz", () => {
-    expect(hasArticle("", "6")).toBe(false);
-  });
-});
+// boş metinde bulunmamalı
+assert.equal(hasArticle("", "6"), false);
+
+console.log("hasArticle: tüm kontroller geçti");

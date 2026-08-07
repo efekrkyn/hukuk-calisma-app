@@ -7,7 +7,7 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "test": "echo 'tests deferred to Sprint 1 (vitest-pool-workers needs real D1 binding)' && exit 0"
+    "test": "for f in $(find src -name '*.test.ts' | sort); do echo \"→ $f\"; npx tsx \"$f\" || exit 1; done"
   },
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
