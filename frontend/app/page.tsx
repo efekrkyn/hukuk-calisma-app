@@ -19,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { TodayCard } from "@/components/TodayCard";
 import { PerformanceCard } from "@/components/PerformanceCard";
+import { ExamCountdown } from "@/components/ExamCountdown";
 import ThemeToggle from "@/components/ThemeToggle";
 
 type SubjectStat = {
@@ -78,6 +79,7 @@ export default function Home() {
           </div>
           <p className="text-sm text-muted-foreground">
             Hukuk Mesleklerine Giriş Sınavı — 120 soru, 20 alan, geçme notu 70.
+            <ExamCountdown />
           </p>
         </header>
 
