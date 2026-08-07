@@ -110,6 +110,9 @@ export type QuestionToCheck = {
   options: string[];
   correctAnswer: number;
   explanation: string;
+  /** Doktrin konusu mu, hangi korpustan doğrulanacağını belirler. Sütun
+   *  sonradan eklendi; eski satırlarda null olabilir. */
+  subtopic?: string | null;
 };
 
 export type Verdict = {
@@ -192,7 +195,25 @@ export async function verifyBatch(
 ): Promise<Verdict[]> {
   if (questions.length === 0) return [];
   const course = subject.ragCourse ?? "kanunlar";
-  if (subject.lawFiles.length === 0 && !subject.ragCourse) return [];
+  // Doktrin konusu olan alan, kanun dosyası olmasa da denetlenebilir.
+  if (subject.lawFiles.length === 0 && !subject.ragCourse && !subject.doctrineSubtopics?.length) {
+    return [];
+  }
+
+  // DOKTRİN KONULARI KANUNDA YOK.
+  //
+  // Üretici doktrin alt konusunu "hmgs_ozet" korpusundan besliyor
+  // (hmgs-generator.ts), denetleyici ise hep "kanunlar"da arıyordu. Kanunda
+  // düzenlenmemiş bir konuyu kanun metnine karşı doğrulamak imkânsız; bu
+  // sorular ne yapılırsa yapılsın "unsupported" çıkıyordu. Ölçüldü: İdare'de
+  // yeniden denetlenen 66 sorunun 63'ü bu sebeple takılı kaldı.
+  //
+  // Alt konu sütunu sonradan eklendiği için artık sorunun doktrinden gelip
+  // gelmediği biliniyor. Parti karışık olabildiğinden iki korpustan da
+  // çekip birleştiriyoruz — ayrı LLM çağrısı eklemek maliyeti ikiye katlardı.
+  const docSubs = subject.doctrineSubtopics ?? [];
+  const doktrinVar =
+    docSubs.length > 0 && questions.some((q) => q.subtopic && docSubs.includes(q.subtopic));
 
   // Kanun metnini soruların kendi içeriğine göre çek — konu başlığına göre
   // değil, yoksa alakasız maddeler gelir ve her şey "unsupported" çıkar.
@@ -205,9 +226,17 @@ export async function verifyBatch(
   const all = await retrieve(
     env.VECTORIZE, env.DB, query, qVec, env.AI, course, 80
   );
-  const chunks = subject.lawFiles.length
+  const lawChunks = subject.lawFiles.length
     ? all.filter((c) => subject.lawFiles.some((f) => c.pdf.includes(f)))
     : all;
+
+  // Doktrin parçaları dosya çapasına takılmaz — makale korpusunda kanun
+  // dosyası yok, lawFiles filtresi hepsini elerdi.
+  const docChunks = doktrinVar
+    ? await retrieve(env.VECTORIZE, env.DB, query, qVec, env.AI, "hmgs_ozet", 30)
+    : [];
+
+  const chunks = [...lawChunks, ...docChunks];
   if (chunks.length === 0) return [];
 
   const law = chunks

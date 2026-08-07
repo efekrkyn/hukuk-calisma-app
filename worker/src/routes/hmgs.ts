@@ -698,17 +698,17 @@ hmgs.post("/verify", async (c) => {
     // verified 0 kaldığı için tekrar seçilir. Döngü kendini bitiremez ve
     // aynı sorulara sonsuza dek para harcanır — ölçüldü, kaynaksız sayısı
     // iki ayrı ölçümde 113'te çakılı kalırken işler dönmeye devam ediyordu.
-    unsupported: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+    unsupported: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
                     FROM hmgs_questions q
                     JOIN hmgs_verdicts v ON v.question_id = q.id
                    WHERE q.subject = ? AND v.verified = 0 AND v.checked_at < ?
                    LIMIT ?`,
-    verified: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+    verified: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
                  FROM hmgs_questions q
                  JOIN hmgs_verdicts v ON v.question_id = q.id
                 WHERE q.subject = ? AND v.verdict = 'correct' AND v.checked_at < ?
                 LIMIT ?`,
-    new: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation
+    new: `SELECT q.id, q.question, q.options, q.correct_answer, q.explanation, q.subtopic
             FROM hmgs_questions q
             LEFT JOIN hmgs_verdicts v ON v.question_id = q.id
            WHERE q.subject = ? AND v.question_id IS NULL
@@ -735,6 +735,9 @@ hmgs.post("/verify", async (c) => {
     options: JSON.parse(r.options),
     correctAnswer: r.correct_answer,
     explanation: r.explanation,
+    // Doktrin konusu kanunda düzenlenmemiş; denetleyici hangi korpustan
+    // doğrulayacağını buna bakarak seçiyor.
+    subtopic: r.subtopic ?? null,
   }));
 
   const verdicts = await verifyBatch(
