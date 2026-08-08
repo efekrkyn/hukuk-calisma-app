@@ -26,14 +26,18 @@ const newsreader = Newsreader({
   display: "swap",
 });
 
+// Başlık ve açıklama finaller döneminden kalmaydı ("Hukuk Çalışma",
+// "kişisel hukuk sınav hazırlık platformu"); manifest HMGS'ye çekilmişti
+// ama sekme başlığı ve ana ekran adı eskide kalmıştı.
 export const metadata: Metadata = {
-  title: "Hukuk Çalışma",
-  description: "Kişisel hukuk sınav hazırlık platformu",
+  title: "HMGS Hazırlık",
+  description:
+    "Hukuk Mesleklerine Giriş Sınavı — deneme, konu anlatımı, aralıklı tekrar",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Hukuk",
+    title: "HMGS",
   },
 };
 
