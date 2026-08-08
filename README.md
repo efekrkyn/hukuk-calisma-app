@@ -1,63 +1,75 @@
-# Hukuk Çalışma Uygulaması
+# HMGS Hazırlık
 
-Tek kullanıcı (Efe), 4 ay (Mayıs–Eylül 2026), hukuk finalleri + HMGS sınavı için kişisel hazırlık PWA'sı.
+Hukuk Mesleklerine Giriş Sınavı'na hazırlık PWA'sı. İki kullanıcılı, kişisel
+kullanım için. **Sınav: 27 Eylül 2026** — 120 soru, 155 dakika, 22 alan,
+geçme notu 70.
 
-## Stack
-- **Frontend:** Next.js 16 + Tailwind 4 + shadcn/ui + PWA (Vercel)
-- **Backend:** Cloudflare Worker + Hono
-- **Storage:** Cloudflare R2 (PDF) + D1 (state)
-- **AI:** Gemini Flash → Anthropic Haiku fallback (Sprint 1'de)
-
-## Canlı URL'ler
-| Servis | URL |
-|--------|-----|
+| | |
+|---|---|
+| Frontend | https://hukuk-efe.vercel.app |
 | Worker | https://hukuk-worker.efearas06.workers.dev |
-| Frontend | (Sprint 0.5'te Vercel'e deploy) |
 
-## Hızlı Başlangıç
+## Ne yapıyor
+
+- **Deneme sınavı** — gerçek format (120 soru / 155 dk) ya da 20 soruluk kısa
+  tur; resmî alan dağılımına göre soru seçiyor.
+- **Soru bankası** — 3.467 soru, kanun metninden üretilip kaynağına karşı
+  denetlenmiş. Kalitesi ve sınırları için `docs/DEVIR.md` §4.
+- **Yanlışlarım** — yanlış cevaplananlar FSRS ile aralıklı tekrar kuyruğuna
+  düşüyor.
+- **Konu anlatımı** — 22 alan, 160 önceden üretilmiş konu anlatımı.
+- **Çalışma planı** — alan ağırlığını ölçülen zayıflıkla çarpıp saat dağıtıyor.
+- **AI asistan** — kanun metni üzerinde RAG + web araması, sayfa bağlamını
+  biliyor.
+- **Mevzuat / emsal karar araması** — canlı MCP sunucuları üzerinden.
+- **Hata bildirimi** — kullanıcı hatalı soruyu bildiriyor, sahibi
+  `/bildirimler` sayfasından sil/tut kararı veriyor.
+
+## Yığın
+
+Next.js 16 · Tailwind 4 · PWA (Vercel) — Cloudflare Worker (Hono) · D1 ·
+Vectorize · R2 · Workers AI — DeepSeek (üretim + denetim) · Gemini
+(çapraz doğrulama) · Tavily (web arama)
+
+## Başlangıç
 
 ```bash
 pnpm install
-pnpm dev          # frontend (:3000) + worker (:8787) paralel
+cp frontend/.env.example frontend/.env.local     # değerleri Efe'den al
+cp worker/.dev.vars.example worker/.dev.vars
+pnpm dev                                          # frontend :3000, worker :8787
+```
+
+```bash
+pnpm test     # worker testleri (16 dosya)
+pnpm build    # frontend build + worker typecheck
+```
+
+## Dağıtım
+
+İkisi ayrı; `git push` hiçbirini tetiklemiyor.
+
+```bash
+pnpm --filter ./worker deploy     # Cloudflare
+pnpm deploy:frontend              # Vercel (npx vercel deploy --prod)
 ```
 
 ## Yapı
 
 ```
 uygulama/
-├── frontend/       # Next.js PWA
-├── worker/         # Cloudflare Worker (Hono)
-├── scripts/        # PDF upload, embedding pipeline
-├── spec/           # Tasarım dokümanları
-├── plans/          # İmplementasyon planları
-├── data/           # Generated content (questions, embeddings) — gitignored
-└── docs/           # Operasyon dokümanları
+├── frontend/   Next.js PWA — sayfalar app/, ortak bileşenler components/
+├── worker/     API ve iş mantığı — uçlar src/routes/, mantık src/lib/,
+│               şema src/db/migrations/
+├── scripts/    PDF yükleme ve gömme araçları (tek seferlik)
+├── data/       Üretilmiş içerik (59 MB)
+└── docs/       DEVIR.md · DEPLOY.md · DEVELOPMENT.md
 ```
 
-## Sprint 0 Durumu (2026-05-25 itibariyle)
+## Nereden okumaya başlanır
 
-✅ Monorepo iskeleti (pnpm workspaces)
-✅ Next.js 16 + Tailwind 4 + shadcn/ui + PWA
-✅ Hono Worker, deploy edildi `hukuk-worker.efearas06.workers.dev`
-✅ R2 bucket `hukuk-pdf`: 103 PDF, 587 MB
-✅ D1 database `hukuk-db` (EEUR), 6 tablo
-✅ Frontend ↔ Worker bridge (api.ts)
-✅ Embedding pipeline iskeleti (scripts/embed-pdfs.ts)
-⏳ Auth (Sprint 0.5)
-⏳ Vercel deploy (Sprint 0.5)
-⏳ Vitest (Sprint 1'de)
-
-## Sonraki Sprintler
-
-- **Sprint 0.5:** Auth (JWT cookie) + Vercel deploy
-- **Sprint 1:** Modül 3 — PDF Reader + AI Chat (finals için kritik)
-- **Sprint 2:** Modül 5 — Pratik Olay Çözücü
-- **Sprint 3:** Modül 2 — Flashcard
-- **Sprint 4-5:** Modül 1 — Quiz Engine + HMGS Mock
-- **Sprint 6:** Modül 4 — Dashboard + Plan
-
-## Dokümanlar
-- [Tasarım](spec/2026-05-25-design.md)
-- [Sprint 0 planı](plans/2026-05-25-foundation-plan.md)
-- [Geliştirme](docs/DEVELOPMENT.md)
-- [Deploy](docs/DEPLOY.md)
+1. **`AGENTS.md`** — çalışma kuralları ve dokunulmaması gerekenler.
+2. **`docs/DEVIR.md`** — mimari, verinin hâli, verilmiş kararlar ve gerekçeleri,
+   bilinen eksikler.
+3. **`worker/src/routes/hmgs.ts`** — dosya başındaki yorum soru akışının
+   tamamını anlatıyor.

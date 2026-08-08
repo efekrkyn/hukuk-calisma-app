@@ -9,7 +9,7 @@
     "dev:worker": "pnpm --filter ./worker dev",
     "build": "pnpm --filter ./frontend build && pnpm --filter ./worker typecheck",
     "test": "pnpm --filter ./worker test",
-    "deploy:frontend": "pnpm --filter ./frontend deploy",
+    "deploy:frontend": "cd frontend && npx vercel deploy --prod --yes",
     "deploy:worker": "pnpm --filter ./worker deploy"
   },
   "dependencies": {

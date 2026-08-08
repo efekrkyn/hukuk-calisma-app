@@ -1,112 +1,104 @@
 # Geliştirme
 
+Son güncelleme: 8 Ağustos 2026.
+
 ## Gereksinimler
+
 - Node 22+ (test edildi: v24.15)
 - pnpm 10+
-- Cloudflare hesabı (D1 + R2 + Workers — hepsi free tier)
+- Cloudflare hesabı (D1 + R2 + Vectorize + Workers)
+- Vercel hesabı (frontend)
 
 ## Kurulum
 
 ```bash
-git clone <repo>
-cd uygulama
+git clone https://github.com/efekrkyn/hukuk-calisma-app.git
+cd hukuk-calisma-app/uygulama
 pnpm install
-```
-
-`scripts/.env` yarat (örnek):
-```bash
-R2_ENDPOINT=https://<ACCOUNT_ID>.r2.cloudflarestorage.com
-R2_ACCESS_KEY_ID=<...>
-R2_SECRET_ACCESS_KEY=<...>
-R2_BUCKET=hukuk-pdf
-SOURCE_DIR=/Users/efekarakoyun/hukukçalışma/resources/dersler
-OPENAI_API_KEY=<...>      # Sprint 1'de embeddings için
-```
-
-`frontend/.env.local`:
-```bash
-NEXT_PUBLIC_WORKER_URL=https://hukuk-worker.efearas06.workers.dev   # veya http://localhost:8787
+cp frontend/.env.example frontend/.env.local
+cp worker/.dev.vars.example worker/.dev.vars
+# değerleri Efe'den al — açıklamaları docs/DEVIR.md §6'da
+pnpm test        # 16/16 geçmeli, kurulumun doğru olduğunu bu doğrular
 ```
 
 ## Çalıştırma
 
-### Her ikisini paralel
 ```bash
-pnpm dev
+pnpm dev            # ikisi paralel: :3000 ve :8787
+pnpm dev:frontend   # yalnız frontend
+pnpm dev:worker     # yalnız worker
 ```
 
-### Sadece frontend
-```bash
-pnpm dev:frontend
-# → http://localhost:3000
-```
+**Yerel worker'ın verisi yoktur.** Miniflare yerel bir mock kullanıyor; R2 boş,
+D1 boş görünür. Gerçek veriyle çalışmak için `frontend/.env.local` içinde
+`NEXT_PUBLIC_WORKER_URL`'i boş bırak ya da canlı worker adresini yaz — o zaman
+yerel arayüz canlı veriye bağlanır.
 
-### Sadece worker
-```bash
-pnpm dev:worker
-# → http://localhost:8787 (Miniflare local R2 mock — boş)
-```
-
-> Local worker R2'yi boş görür çünkü Miniflare lokal mock kullanır. Production R2 için `NEXT_PUBLIC_WORKER_URL=https://hukuk-worker.efearas06.workers.dev` ile çalış.
-
-## D1 Operasyonları
-
-### Migration (schema değiştiğinde)
-```bash
-cd worker
-npx wrangler d1 execute hukuk-db --local --file=db/schema.sql
-npx wrangler d1 execute hukuk-db --remote --file=db/schema.sql
-```
-
-### Tabloları gör
-```bash
-npx wrangler d1 execute hukuk-db --remote --command "SELECT name FROM sqlite_master WHERE type='table';"
-```
-
-### Query
-```bash
-npx wrangler d1 execute hukuk-db --remote --command "SELECT COUNT(*) FROM quiz_attempts;"
-```
-
-## R2 Operasyonları
-
-### Tüm PDF'leri yükle (idempotent — atlanır)
-```bash
-cd scripts
-pnpm upload-pdfs
-```
-
-### Bucket içeriği listele
-```bash
-pnpm list-pdfs
-```
-
-### Embedding üret (Sprint 1)
-```bash
-# OPENAI_API_KEY gerek
-pnpm embed-pdfs                # tüm dersler
-pnpm embed-pdfs borclar_ozel   # sadece bir ders
-```
-
-## Worker Deploy
-
-```bash
-pnpm --filter ./worker deploy
-# → https://hukuk-worker.efearas06.workers.dev
-```
+**Giriş gerekiyor.** `proxy.ts` `/login` dışındaki her yolu oturum çerezine
+bağlıyor; oturum olmadan her sayfa `/login`'e 307 döner. Yerelde de gerçek
+parolayla giriş yapman gerekir — kimlik doğrulamayı atlayan bir geliştirme
+kapısı bilerek yok.
 
 ## Test
-Vitest setup Sprint 1'e ertelendi (vitest-pool-workers 0.16 D1 binding placeholder ile çakışıyor).
 
-## Faydalı Komutlar
+`node:assert/strict` + `npx tsx`. **Vitest kurulu değil** (vitest-pool-workers
+D1 binding'iyle çakıştığı için hiç kurulmadı); kurmaya çalışma.
 
 ```bash
-# Worker logları (canlı)
-cd worker && npx wrangler tail
-
-# D1 console
-cd worker && npx wrangler d1 execute hukuk-db --remote
-
-# Bundle boyutu
-cd worker && npx wrangler deploy --dry-run
+pnpm test                          # hepsi
+npx tsx worker/src/lib/srs.test.ts # tek dosya
 ```
+
+Yeni test `worker/src/**/*.test.ts` adıyla yazılır, betik onu kendiliğinden
+bulur. Frontend'de test altyapısı yok.
+
+## D1
+
+```bash
+cd worker
+npx wrangler d1 execute hukuk-db --remote --command "SELECT COUNT(*) FROM hmgs_questions"
+npx wrangler d1 execute hukuk-db --remote --command "SELECT name FROM sqlite_master WHERE type='table'"
+```
+
+Uzun ya da tırnak içeren sorgular için `--command` yerine `--file` kullan;
+kabuk tırnakları bozuyor.
+
+Şema değişikliği **her zaman** `db/migrations/NNN-ad.sql` dosyası olarak
+yazılır, sonra uygulanır. Elle `ALTER TABLE` çalıştırma — bir sonraki kişi
+şemanın nereden geldiğini bulamaz.
+
+Silmeden önce aynı `WHERE` ile `SELECT COUNT(*)` çek. Yedek yok.
+
+## R2 ve gömme (embedding)
+
+Tek seferlik işler; `scripts/.env` gerekiyor.
+
+```bash
+cd scripts
+pnpm upload-pdfs                # idempotent, var olanı atlar
+pnpm list-pdfs
+pnpm embed-pdfs                 # tüm kaynaklar
+pnpm embed-pdfs borclar_ozel    # tek ders
+```
+
+Gömme modeli `@cf/baai/bge-m3` (1024 boyut, cosine). Vectorize indeksi
+yeniden kurulacaksa aynı boyutla yaratılmalı.
+
+## Faydalı
+
+```bash
+cd worker && npx wrangler tail              # canlı worker logları
+cd worker && npx wrangler deploy --dry-run  # bundle boyutu
+cd worker && npx wrangler secret list       # hangi sırlar tanımlı
+cd frontend && npx vercel ls                # dağıtım durumu
+```
+
+## Kod üslubu
+
+Yorumlar Türkçe ve **"neden"** anlatıyor, "ne" değil. Kodun ne yaptığı zaten
+kodda yazıyor; bir sonraki kişinin bilemeyeceği şey neden öyle yapıldığı.
+Özellikle bir eşiği, bir sınırı ya da alışılmadık görünen bir kararı
+değiştirecek olan kişi, gerekçesini orada bulmalı.
+
+Kullanıcıya görünen her metin Türkçe. Hata mesajları da: `HTTP 429` değil,
+"Saatlik sınıra takıldın, 45 dakika sonra dene".

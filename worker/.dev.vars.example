@@ -1,0 +1,22 @@
+# Worker — yerel geliştirme değişkenleri.
+# Bu dosyayı `.dev.vars` olarak kopyala ve değerleri Efe'den al.
+# `.dev.vars` gitignore'da; oraya yazdığın değerler depoya girmez.
+#
+# ÜRETİMDE bu dosya kullanılmaz. Canlıdaki değerler Cloudflare'de secret olarak
+# durur:  npx wrangler secret put ADMIN_SECRET
+# Mevcutları görmek için:  npx wrangler secret list
+
+# JWT imzalama anahtarı VE kullanıcı adsız girişin parolası.
+# frontend/.env.local içindeki ADMIN_SECRET ile BİREBİR AYNI olmak zorunda —
+# farklı olursa giriş yapılır ama her istek 401 döner.
+ADMIN_SECRET=
+
+# Soru üretimi (deepseek-chat) ve denetimi (deepseek-reasoner). platform.deepseek.com
+DEEPSEEK_API_KEY=
+
+# Bağımsız ikinci denetim (gemini-2.5-flash). aistudio.google.com
+# Ücretsiz kotada ~50 istek/tur sonra 429 döner.
+GEMINI_KEY=
+
+# Asistanın web araması. tavily.com — yoksa yalnızca web arama özelliği çalışmaz.
+TAVILY_API_KEY=

@@ -38,6 +38,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# Şablon hariç: içinde değer yok, yalnızca hangi anahtarların gerektiğini
+# söylüyor. Devralan kişinin ilk bakacağı dosya bu.
+!.env.example
 
 # vercel
 .vercel

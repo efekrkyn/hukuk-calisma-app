@@ -1,87 +1,106 @@
-# Deploy
+# Dağıtım
 
-## Mevcut Production Durumu
+Son güncelleme: 8 Ağustos 2026.
 
-| Servis | URL | Durum |
-|--------|-----|-------|
-| Worker | `https://hukuk-worker.efearas06.workers.dev` | ✅ Canlı |
-| R2 bucket | `hukuk-pdf` | ✅ 103 PDF, 587 MB |
-| D1 database | `hukuk-db` @ EEUR | ✅ 6 tablo (boş) |
-| Frontend | (yok) | ⏳ Vercel'e deploy bekliyor |
+## Canlı durum
 
-## İlk Kurulum (yapıldı, referans için)
+| Servis | Adres | Durum |
+|---|---|---|
+| Frontend | https://hukuk-efe.vercel.app | Canlı (Vercel projesi: `hukuk-efe`) |
+| Worker | https://hukuk-worker.efearas06.workers.dev | Canlı |
+| D1 | `hukuk-db` (`9c7cb485-…`) | 25 tablo, ~176 MB |
+| R2 | `hukuk-pdf` | Kaynak PDF'ler |
+| Vectorize | `hukuk-vectors` | 45.429 parça |
 
-1. Cloudflare hesabı + R2 bucket `hukuk-pdf` (dashboard'dan)
-2. `cd worker && npx wrangler login`
-3. `npx wrangler d1 create hukuk-db` → `database_id`'i `wrangler.toml`'a yaz
-4. `npx wrangler d1 execute hukuk-db --remote --file=db/schema.sql`
-5. R2 API token (Object Read & Write, hukuk-pdf scope) → `scripts/.env`
-6. `cd scripts && pnpm upload-pdfs` (590 MB, ~10 dk)
-7. workers.dev subdomain seç (one-time)
-8. `cd worker && pnpm deploy`
+## Her güncellemede
 
-## Worker Deploy (her güncellemede)
+Frontend ve worker **ayrı** dağıtılır ve `git push` hiçbirini tetiklemez.
+En sık yapılan hata worker'ı unutmak: arayüz yeni uçları çağırır, 404 alır.
 
 ```bash
-cd /Users/efekarakoyun/hukukçalışma/uygulama
+# Worker
 pnpm --filter ./worker deploy
+
+# Frontend
+pnpm deploy:frontend
 ```
 
-Output: deploy ID + URL. SSL cert ilk deploy'dan sonra 1-5 dk içinde aktif olur.
+Dağıtım sonrası doğrulama:
 
-## Worker Secrets (Sprint 1+ için)
+```bash
+curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-worker.efearas06.workers.dev/health
+curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-efe.vercel.app/login
+```
+
+`/health` 200, `/login` 200 dönmeli. Korumalı bir uç (`/hmgs/reports`) 401
+dönmeli — 200 dönüyorsa kimlik doğrulama devre dışı kalmış demektir.
+
+Vercel dağıtımının bittiğini görmek için:
+
+```bash
+cd frontend && npx vercel ls
+```
+
+En üstteki satır `● Ready` ve `Production` olmalı.
+
+## Sırlar
+
+Adlar ve ne işe yaradıkları `docs/DEVIR.md` §6'da. Değer yazma:
 
 ```bash
 cd worker
-npx wrangler secret put AUTH_SECRET     # openssl rand -hex 32
-npx wrangler secret put APP_PASSWORD    # giriş şifresi
-npx wrangler secret put GEMINI_API_KEY  # AI chat için
-npx wrangler secret put ANTHROPIC_API_KEY # fallback
+npx wrangler secret put ADMIN_SECRET        # openssl rand -hex 32
+npx wrangler secret put DEEPSEEK_API_KEY
+npx wrangler secret put GEMINI_KEY
+npx wrangler secret put TAVILY_API_KEY
+npx wrangler secret list                    # neyin tanımlı olduğunu gösterir
 ```
 
-## Frontend Deploy (Sprint 0.5 — Vercel)
+`ADMIN_SECRET` **hem worker'da hem Vercel'de** aynı olmak zorunda (frontend'in
+`proxy.ts`'i JWT'yi onunla doğruluyor). Yalnızca birini değiştirirsen herkes
+giriş yapar ama her istek 401 döner. Değiştirirsen dağıtılmış tüm oturumlar
+da düşer.
 
-```bash
-# İlk sefer
-cd frontend
-npx vercel
-# Prompts:
-# - Set up & deploy? Y
-# - Which scope? (kişisel)
-# - Link to existing project? N
-# - Project name: hukuk-efe
-# - Directory: ./
-# - Build settings: default (Next.js detect edilir)
-```
+Frontend değişkenleri: Vercel → `hukuk-efe` → Settings → Environment Variables.
 
-Vercel dashboard'a git → Settings → Environment Variables:
-- `NEXT_PUBLIC_WORKER_URL = https://hukuk-worker.efearas06.workers.dev`
+## Veritabanı
 
-Sonra:
-```bash
-npx vercel --prod
-```
+Şema değişikliği `worker/db/migrations/NNN-ad.sql` olarak dosyaya yazılır,
+sonra uygulanır:
 
-## D1 Backup
-
-D1 export:
 ```bash
 cd worker
+npx wrangler d1 execute hukuk-db --remote --file=db/migrations/013-yeni.sql
+```
+
+Yedek (**şu an düzenli yedek yok, tek nüsha**):
+
+```bash
 npx wrangler d1 export hukuk-db --remote --output=backup-$(date +%Y%m%d).sql
 ```
 
-Restore:
-```bash
-npx wrangler d1 execute hukuk-db --remote --file=backup-YYYYMMDD.sql
-```
+Geri yükleme aynı komutun `execute --file` hâli.
 
-## Maliyet Takibi
+Silme/güncelleme çalıştırmadan önce aynı `WHERE` ile `SELECT COUNT(*)` çek.
 
-- Worker requests: <100K/gün → free tier
-- R2 storage: 587 MB / 10 GB free → ~6%
-- R2 ops (Class A — yazma): tek seferlik 103 upload
-- R2 ops (Class B — okuma): kullanım kadarı, 10M/ay free
-- D1 storage: <50 MB / 5 GB free
-- D1 reads: <5M/ay free
+## İlk kurulum (yapıldı, referans)
 
-Cloudflare dashboard → Workers & Pages → Analytics ile takip et.
+1. Cloudflare hesabı, R2 bucket `hukuk-pdf`
+2. `cd worker && npx wrangler login`
+3. `npx wrangler d1 create hukuk-db` → `database_id`'yi `wrangler.toml`'a yaz
+4. `npx wrangler d1 execute hukuk-db --remote --file=db/schema.sql`,
+   sonra `db/migrations/` içindekiler sırayla
+5. `npx wrangler vectorize create hukuk-vectors --dimensions=1024 --metric=cosine`
+6. R2 API token (Object Read & Write, `hukuk-pdf` kapsamı) → `scripts/.env`
+7. `cd scripts && pnpm upload-pdfs`, sonra `pnpm embed-pdfs`
+8. `cd worker && pnpm deploy`
+9. `cd frontend && npx vercel` (proje adı `hukuk-efe`), sonra `npx vercel --prod`
+
+## Maliyet
+
+Hepsi ücretsiz kademede: Worker istekleri <100K/gün, R2 ~587 MB / 10 GB,
+D1 ~176 MB / 5 GB. Ücretli olan tek şey LLM çağrıları (DeepSeek). Soru üretimi
+durduğu için asıl gider kalemi de kapandı; geriye asistan ve konu anlatımı
+kaldı — ikisi de hız sınırlı (`docs/DEVIR.md` §5).
+
+Takip: Cloudflare → Workers & Pages → Analytics.
