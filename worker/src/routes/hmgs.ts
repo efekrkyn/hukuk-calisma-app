@@ -370,7 +370,25 @@ hmgs.post("/submit", async (c) => {
   // Yalnızca question_id olsaydı, aynı soruyu yanlışlayan ikinci kullanıcı
   // birincinin FSRS durumunu ezerdi (010-users.sql tabloyu bu yüzden yeniden
   // kurdu).
-  const missed = answers.filter((a) => !a.correct);
+  // BOŞ CEVAP HER ZAMAN KUYRUĞA GİRMEZ.
+  //
+  // İlk kural "boş = bilmiyordum" idi. Süre yetmediğinde doğru, ama denemeyi
+  // AÇIP BIRAKINCA değil: ölçüldü, 120 soruluk iki deneme hiç cevaplanmadan
+  // teslim edildi ve kuyruk 22'den 256'ya fırladı. Hiç uğraşılmamış soru
+  // "bilinmiyor" kanıtı değil.
+  //
+  // Ayrım cevaplama oranından: yarıdan azı cevaplanmışsa deneme terk
+  // edilmiş sayılıyor ve yalnızca YANLIŞLAR kuyruğa giriyor. Yanlış cevap
+  // her hâlükârda bilgi taşır — uğraşılmış ve tutturulamamış.
+  const answered = answers.filter(
+    (a) => a.selected !== null && a.selected !== undefined
+  ).length;
+  const engaged = answers.length > 0 && answered / answers.length >= 0.5;
+  const missed = answers.filter((a) => {
+    if (a.correct) return false;
+    const bos = a.selected === null || a.selected === undefined;
+    return bos ? engaged : true;
+  });
   if (missed.length > 0) {
     const enq = c.env.DB.prepare(
       `INSERT INTO hmgs_review (question_id, user_id, subject, next_review, added_at)
