@@ -14,6 +14,7 @@ import { isNearDuplicate } from "../lib/near-duplicate";
 import { verifyBatch, type QuestionToCheck } from "../lib/hmgs-verify";
 import { crossCheck, CROSS_MODEL } from "../lib/hmgs-cross";
 import { schedule } from "../lib/srs";
+import { checkRate, rateBody, BUCKETS } from "../lib/rate-limit";
 
 type Bindings = {
   AI: Ai;
@@ -93,6 +94,11 @@ hmgs.get("/stats", async (c) => {
 
 /** Bir alan için özgün soru üretip bankaya yazar. */
 hmgs.post("/generate", async (c) => {
+  // Para harcayan uç — kullanıcı başına saatlik sınır. Kaçak bir
+  // döngü faturayı şişirmesin (bkz. lib/rate-limit.ts).
+  const rl = await checkRate(c.env.DB, String(c.get("userId") ?? "default"), BUCKETS.uretim);
+  if (!rl.ok) return c.json(rateBody(BUCKETS.uretim, rl), 429);
+
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
   if (!c.env.DEEPSEEK_API_KEY) {
     return c.json({ error: "DEEPSEEK_API_KEY tanımlı değil" }, 503);
@@ -932,6 +938,11 @@ hmgs.post("/reports/resolve", async (c) => {
 
 /** Bir alandaki denetlenmemiş soruları kanun metnine karşı denetler. */
 hmgs.post("/verify", async (c) => {
+  // Para harcayan uç — kullanıcı başına saatlik sınır. Kaçak bir
+  // döngü faturayı şişirmesin (bkz. lib/rate-limit.ts).
+  const rl = await checkRate(c.env.DB, String(c.get("userId") ?? "default"), BUCKETS.denetim);
+  if (!rl.ok) return c.json(rateBody(BUCKETS.denetim, rl), 429);
+
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
   if (!c.env.DEEPSEEK_API_KEY) return c.json({ error: "DEEPSEEK_API_KEY yok" }, 503);
 
@@ -1092,6 +1103,11 @@ hmgs.post("/verify", async (c) => {
  * subtopic sütunu sonradan eklendi; ondan önceki ~3000 soruda bilgi yok.
  */
 hmgs.post("/classify", async (c) => {
+  // Para harcayan uç — kullanıcı başına saatlik sınır. Kaçak bir
+  // döngü faturayı şişirmesin (bkz. lib/rate-limit.ts).
+  const rl = await checkRate(c.env.DB, String(c.get("userId") ?? "default"), BUCKETS.denetim);
+  if (!rl.ok) return c.json(rateBody(BUCKETS.denetim, rl), 429);
+
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
   if (!c.env.DEEPSEEK_API_KEY) return c.json({ error: "DEEPSEEK_API_KEY yok" }, 503);
 
@@ -1179,6 +1195,11 @@ hmgs.get("/verify-stats", async (c) => {
  * /cross-stats anlaşmazlığı ölçebilsin.
  */
 hmgs.post("/cross-check", async (c) => {
+  // Para harcayan uç — kullanıcı başına saatlik sınır. Kaçak bir
+  // döngü faturayı şişirmesin (bkz. lib/rate-limit.ts).
+  const rl = await checkRate(c.env.DB, String(c.get("userId") ?? "default"), BUCKETS.denetim);
+  if (!rl.ok) return c.json(rateBody(BUCKETS.denetim, rl), 429);
+
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
   if (!c.env.GEMINI_KEY) return c.json({ error: "GEMINI_KEY yok" }, 503);
 
@@ -1373,6 +1394,11 @@ function allSubtopics(s: { subtopics?: string[]; doctrineSubtopics?: string[] })
  * (burada önbelleğe) alanla ilgisiz kayıt açar.
  */
 hmgs.post("/topic", async (c) => {
+  // Para harcayan uç — kullanıcı başına saatlik sınır. Kaçak bir
+  // döngü faturayı şişirmesin (bkz. lib/rate-limit.ts).
+  const rl = await checkRate(c.env.DB, String(c.get("userId") ?? "default"), BUCKETS.anlatim);
+  if (!rl.ok) return c.json(rateBody(BUCKETS.anlatim, rl), 429);
+
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
   let body: { subject?: string; subtopic?: string; refresh?: boolean };

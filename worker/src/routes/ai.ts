@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { checkRate, rateBody, BUCKETS } from "../lib/rate-limit";
 import { embedQuery, retrieve, buildSystemPrompt } from "../lib/rag";
 import { DeepSeekProvider } from "../lib/ai-provider";
 import { gradeSolution } from "../lib/practice-grader";
@@ -12,9 +13,16 @@ type Bindings = {
   DB?: D1Database;
 };
 
-export const ai = new Hono<{ Bindings: Bindings }>();
+/** Global middleware oturumu çözüp kullanıcı kimliğini buraya koyuyor. */
+type Variables = { userId: string };
+
+export const ai = new Hono<{ Bindings: Bindings; Variables: Variables }>();
 
 ai.post("/chat", async (c) => {
+  // Asistan her mesajda para harcıyor; saatlik sınır kaçak tüketimi keser.
+  const rl = await checkRate(c.env.DB, String(c.get("userId") ?? "default"), BUCKETS.asistan);
+  if (!rl.ok) return c.json(rateBody(BUCKETS.asistan, rl), 429);
+
   let body: {
     question: string;
     selected_text?: string;
