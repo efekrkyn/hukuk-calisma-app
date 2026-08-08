@@ -478,7 +478,13 @@ export default function HmgsClient({
               <span>Soru {currentIndex + 1} / {questions.length}</span>
               <div className="flex items-center gap-2">
                 <span className="px-2 py-0.5 bg-primary/10 text-primary rounded-full text-xs">{courseName}</span>
-                <button onClick={toggleFlag} className={`p-1 rounded ${ans.flagged ? "text-yellow-500" : "text-muted-foreground/50 hover:text-yellow-500"}`}>
+                <button
+          type="button"
+          // Ekran okuyucuda "düğme" diye okunuyordu; sınav sırasında
+          // hangi eylem olduğu anlaşılmıyordu.
+          aria-label={ans.flagged ? "Soru işaretini kaldır" : "Soruyu işaretle"}
+          aria-pressed={ans.flagged}
+          onClick={toggleFlag} className={`p-1 rounded ${ans.flagged ? "text-yellow-500" : "text-muted-foreground/50 hover:text-yellow-500"}`}>
                   <Star className="w-4 h-4" fill={ans.flagged ? "currentColor" : "none"} />
                 </button>
               </div>

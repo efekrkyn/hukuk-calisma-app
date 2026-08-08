@@ -67,6 +67,7 @@ export function PdfViewer({ url, initialPage = 1, onSelection }: Props) {
         <div className="flex items-center gap-2">
           <input
             type="text"
+          aria-label="Belge içinde ara"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onBlur={() => {

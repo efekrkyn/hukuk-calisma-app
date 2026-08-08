@@ -160,7 +160,7 @@ export default function NotlarimPage() {
                     <CardTitle className="text-lg text-gradient">{note.title}</CardTitle>
                     <p className="text-xs text-muted-foreground mt-0.5">{note.createdAt}</p>
                   </div>
-                  <button onClick={() => removeNote(note.id)} className="text-muted-foreground/50 hover:text-destructive transition-colors p-1">
+                  <button aria-label="Notu sil" onClick={() => removeNote(note.id)} className="text-muted-foreground/50 hover:text-destructive transition-colors p-1">
                     <Trash2 className="w-4 h-4" />
                   </button>
                 </div>

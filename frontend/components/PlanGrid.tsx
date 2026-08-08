@@ -193,6 +193,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
                   <label className="text-xs font-semibold mb-1 block">Başlangıç</label>
                   <input 
                     type="time" 
+                    aria-label="Görev başlangıç saati"
                     value={addStart} 
                     onChange={e => setAddStart(e.target.value)} 
                     className="w-full text-sm border p-2 rounded-md bg-transparent"
@@ -201,7 +202,8 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
                 <div className="flex-1">
                   <label className="text-xs font-semibold mb-1 block">Bitiş</label>
                   <input 
-                    type="time" 
+                    type="time"
+                    aria-label="Görev bitiş saati" 
                     value={addEnd} 
                     onChange={e => setAddEnd(e.target.value)} 
                     className="w-full text-sm border p-2 rounded-md bg-transparent"

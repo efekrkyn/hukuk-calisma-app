@@ -55,6 +55,9 @@ export function TaskCell({ task, completed, onToggle }: Props) {
       <div className="flex items-start gap-3">
         <input
           type="checkbox"
+          // Ekran okuyucuda adsız bir kutu "onay kutusu" diye okunuyordu;
+          // hangi görev olduğu anlaşılmıyor.
+          aria-label={`${task.topic} görevini tamamlandı olarak işaretle`}
           checked={completed}
           onChange={handleToggle}
           disabled={pending}

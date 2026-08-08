@@ -103,6 +103,7 @@ export default function ReaderLanding() {
           {/* Upload Button */}
           <input 
             type="file" 
+            aria-label="Yüklenecek PDF dosyasını seç"
             accept="application/pdf" 
             className="hidden" 
             ref={fileInputRef} 

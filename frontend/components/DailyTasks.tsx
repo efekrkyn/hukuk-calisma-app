@@ -97,6 +97,7 @@ export default function DailyTasks() {
               </span>
 
               <button
+                aria-label="Görevi sil"
                 onClick={() => removeTask(task.id)}
                 className="opacity-0 group-hover:opacity-100 text-muted-foreground hover:text-destructive transition-all"
               >
