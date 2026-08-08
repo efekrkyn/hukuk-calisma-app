@@ -435,9 +435,20 @@ hmgs.get("/performance", async (c) => {
          FROM hmgs_attempts WHERE user_id = ? GROUP BY exam_id ORDER BY at DESC LIMIT 30`
     ).bind(userId).all<{ exam_id: string; at: number; n: number; dogru: number }>(),
     c.env.DB.prepare(
+      // TERK EDİLMİŞ DENEME İSTATİSTİĞE GİRMEZ. Açılıp hiç cevaplanmadan
+      // süresi dolan deneme de kayda geçiyor (doğru davranış), ama 120 boş
+      // cevabı "genel doğruluk"a katmak sayıyı anlamsızlaştırıyor: iki terk
+      // edilmiş deneme oranı %7'den %1'e düşürmüştü. Hiç uğraşılmamış soru
+      // bilgi taşımıyor. Aynı ilke tekrar kuyruğunda da uygulanıyor.
       `SELECT subject, COUNT(*) AS n, SUM(is_correct) AS dogru
-         FROM hmgs_attempts WHERE user_id = ? GROUP BY subject`
-    ).bind(userId).all<{ subject: string; n: number; dogru: number }>(),
+         FROM hmgs_attempts a WHERE user_id = ?
+      AND a.exam_id IN (
+            SELECT exam_id FROM hmgs_attempts
+             WHERE user_id = ? GROUP BY exam_id
+            HAVING SUM(selected_answer IS NOT NULL) > 0
+          )
+        GROUP BY subject`
+    ).bind(userId, userId).all<{ subject: string; n: number; dogru: number }>(),
   ]);
 
   // Alan-altı zayıflık. "Borçlar'da zayıfsın" eyleme dönüşmüyor — Borçlar'ın
@@ -448,8 +459,13 @@ hmgs.get("/performance", async (c) => {
     `SELECT q.subject, q.subtopic, COUNT(*) AS n, SUM(a.is_correct) AS dogru
        FROM hmgs_attempts a JOIN hmgs_questions q ON q.id = a.question_id
       WHERE a.user_id = ? AND q.subtopic IS NOT NULL
+      AND a.exam_id IN (
+            SELECT exam_id FROM hmgs_attempts
+             WHERE user_id = ? GROUP BY exam_id
+            HAVING SUM(selected_answer IS NOT NULL) > 0
+          )
       GROUP BY q.subject, q.subtopic`
-  ).bind(userId).all<{ subject: string; subtopic: string; n: number; dogru: number }>();
+  ).bind(userId, userId).all<{ subject: string; subtopic: string; n: number; dogru: number }>();
 
   const name = new Map(HMGS_SUBJECTS.map((s) => [s.id, s.name]));
   const bySubject = subjects.results

@@ -188,18 +188,35 @@ export default function DenemelerimClient() {
                 </span>
               </span>
 
+              {/* Hiç cevaplanmamış deneme "%0 kaldı" olarak gösterilmemeli:
+                  başarısızlık gibi duruyor, oysa açılıp bırakılmış. Sınav
+                  süresi dolunca boş cevaplar da kaydediliyor, bu kayıt
+                  gerçek ama not değil. */}
               <span className="text-right shrink-0">
-                <span
-                  className={
-                    "block text-xl font-black nums-tabular " +
-                    (e.passed ? "text-green-500" : "text-foreground")
-                  }
-                >
-                  %{e.score}
-                </span>
-                <span className="block text-[11px] text-muted-foreground">
-                  {e.passed ? "geçti" : "kaldı"}
-                </span>
+                {e.blank === e.total ? (
+                  <>
+                    <span className="block text-sm font-semibold text-muted-foreground">
+                      —
+                    </span>
+                    <span className="block text-[11px] text-muted-foreground">
+                      çözülmedi
+                    </span>
+                  </>
+                ) : (
+                  <>
+                    <span
+                      className={
+                        "block text-xl font-black nums-tabular " +
+                        (e.passed ? "text-green-500" : "text-foreground")
+                      }
+                    >
+                      %{e.score}
+                    </span>
+                    <span className="block text-[11px] text-muted-foreground">
+                      {e.passed ? "geçti" : "kaldı"}
+                    </span>
+                  </>
+                )}
               </span>
             </motion.button>
 
