@@ -77,9 +77,13 @@ düşüyor, `/tekrar` sayfası onu çıkarıyor.
 
 **D1 yedekleri.** `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de
 `hukuk-db` veritabanını özel `hukuk-d1-backups` R2 bucket'ına aktarır,
-geri indirip bit düzeyinde doğrular. Bucket yaşam döngüsü kopyaları 35 gün
-saklar. Her dışa aktarım sürerken diğer D1 istekleri engellenir; workflow bu
-nedenle düşük kullanımlı bir saatte çalışır.
+geri indirip bit düzeyinde doğrular. Cloudflare tam export'u FTS5 sanal
+tablolarını desteklemediği için hedefli export normal tabloları ve
+`fts_chunks_content` gölge içeriğini tek snapshot'ta alır; arşivdeki
+`fts-restore.sql` aranabilir indeksi yeniden kurar.
+Bucket yaşam döngüsü kopyaları 35 gün saklar. Her dışa aktarım sürerken diğer
+D1 istekleri engellenir; workflow bu nedenle düşük kullanımlı bir saatte
+çalışır.
 
 **Soru bankası kapandı.** 8 Ağustos 2026'da yeni soru üretmeme kararı verildi.
 `/hmgs/generate` uç noktası duruyor ama kullanılmayacak. Denetim (`/verify`),
@@ -185,8 +189,9 @@ Her dizinde `.env.example` var; kopyalayıp değerleri Efe'den al.
    uyarıları ve gerçek ekranda tema kontrolü hiç bakılmadı. Statik tarama
    yapıldı (4 kontrast hatası bulunup düzeltildi) ama bu tarayıcı testinin
    yerini tutmaz.
-3. **Otomatik dağıtım yok.** `git push` Vercel'i tetiklemiyor; frontend elle
-   dağıtılıyor. Vercel'in GitHub entegrasyonu bağlanırsa bu kalkar.
+3. **Worker dağıtımı hâlâ elle.** Frontend `main` push'larında Vercel'e otomatik
+   gider; Worker için test + yedek ön koşullu gate, dal koruması açıldıktan
+   sonra kurulacak.
 4. **Otomatik test yalnızca worker'da.** Frontend'de hiç test yok; React test
    altyapısı da kurulu değil.
 5. **`data/` dizini 59 MB** ve kısmen depoda. Büyük üretilmiş dosyalar

@@ -35,16 +35,17 @@ pnpm test                    # worker testleri (16 dosya)
 pnpm build                   # frontend build + worker typecheck
 ```
 
-Dağıtım — ikisi ayrı, biri diğerini tetiklemez:
+Dağıtım — frontend ve worker birbirinden bağımsızdır:
 
 ```bash
-pnpm --filter ./worker deploy                    # Cloudflare
-cd frontend && npx vercel deploy --prod --yes    # Vercel
+pnpm --filter ./worker deploy     # Cloudflare; şimdilik elle
+pnpm deploy:frontend              # Vercel için yalnız acil/elle geri dönüş yolu
 ```
 
-`git push` Vercel'de otomatik dağıtım **tetiklemiyor**; frontend'i elle
-dağıtman gerekiyor. Worker'ı dağıtmayı unutmak en sık yapılan hata: frontend'i
-dağıtıp worker'ı unutursan arayüz yeni uçları çağırır ve 404 alır.
+Vercel Git entegrasyonu `main` push'larını production'a, diğer dal/PR
+push'larını preview'a dağıtır. Worker hâlâ otomatik değildir. Frontend yeni bir
+Worker davranışına bağlıysa geriye uyumlu Worker'ı merge'den önce elle dağıt;
+aksi halde arayüz yeni uçları çağırırken 404 alır.
 
 ## Testler
 
@@ -83,8 +84,11 @@ commit'leme ya da log'lama.
 
 D1 canlı veritabanı her gün 01:17 UTC'de `.github/workflows/d1-backup.yml`
 ile özel `hukuk-d1-backups` R2 bucket'ına yedeklenir; 35 günlük yaşam
-döngüsü eski kopyaları siler. Dışa aktarım sürerken D1 sorguları engellenir;
-elle yedek gerekiyorsa aynı workflow'u Actions'tan tetikle.
+döngüsü eski kopyaları siler. D1 tam export'u FTS5 sanal tablosunu
+desteklemediği için arşiv normal tabloları, `fts_chunks_content` gölge
+içeriğini ve `worker/db/fts-restore.sql` dosyasını birlikte taşır. Dışa aktarım
+sürerken D1 sorguları engellenir; elle yedek gerekiyorsa aynı workflow'u
+Actions'tan tetikle.
 
 `DELETE`/`UPDATE` çalıştırmadan önce aynı `WHERE` ile `SELECT COUNT(*)`
 çek ve sayıyı gör. Şema değişikliği

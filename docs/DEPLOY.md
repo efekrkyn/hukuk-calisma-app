@@ -15,16 +15,21 @@ Son güncelleme: 9 Ağustos 2026.
 
 ## Her güncellemede
 
-Frontend ve worker **ayrı** dağıtılır ve `git push` hiçbirini tetiklemez.
-En sık yapılan hata worker'ı unutmak: arayüz yeni uçları çağırır, 404 alır.
+Frontend ve worker **ayrı** dağıtılır. Vercel Git entegrasyonu `main`
+push'larını production'a, dal/PR push'larını preview'a otomatik dağıtır.
+Worker şimdilik elle dağıtılır; en sık yapılan hata onu unutmaktır.
 
 ```bash
 # Worker
 pnpm --filter ./worker deploy
 
-# Frontend
+# Frontend — yalnız otomatik Git akışı kullanılamıyorsa
 pnpm deploy:frontend
 ```
+
+Frontend yeni bir Worker davranışına bağlıysa geriye uyumlu Worker'ı
+frontend merge'ünden önce dağıt. Vercel ve Worker arasında dağıtım sırası
+garantisi yoktur.
 
 Dağıtım sonrası doğrulama:
 
@@ -75,17 +80,22 @@ npx wrangler d1 execute hukuk-db --remote --file=db/migrations/013-yeni.sql
 ```
 
 `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de D1'i runner'ın geçici
-dizinine aktarır, özel `hukuk-d1-backups` R2 bucket'ına yükler ve geri
-indirip bit düzeyinde doğrular. R2 yaşam döngüsü yedekleri 35 gün saklar;
-ham SQL GitHub artifact'ına veya cache'e girmez.
+dizinine aktarır, özel `hukuk-d1-backups` R2 bucket'ına `.tar.gz` olarak yükler
+ve geri indirip bit düzeyinde doğrular. D1 tam export'u FTS5 sanal tablolarını
+desteklemediği için arşiv iki dosyadan oluşur: normal tablolarla FTS ham
+içeriğini aynı snapshot'ta taşıyan `database.sql` ve aranabilir indeksi yeniden
+kuran `fts-restore.sql`. R2 yaşam döngüsü yedekleri 35 gün saklar; ham SQL
+GitHub artifact'ına veya cache'e girmez.
 
 Elle yedek için GitHub Actions'ta **Günlük D1 yedeği → Run workflow**
 kullan. Workflow'un repository secret'ları `CLOUDFLARE_API_TOKEN` ve
 `CLOUDFLARE_ACCOUNT_ID` olmalıdır. Her dışa aktarım sürerken D1 sorguları
 engellenir; bu nedenle elle koşuyu düşük kullanım saatinde başlat.
 
-Geri yükleme, doğrulanmış R2 nesnesiyle `wrangler d1 execute --file`
-üzerinden ayrıca ve elle yapılır.
+Geri yükleme ayrıca ve elle, boş bir hedefte sırasıyla `database.sql` ve
+`fts-restore.sql` uygulanarak yapılır. Canlı D1'in üzerine doğrudan uygulanmaz;
+önce geçici SQLite/D1 üzerinde satır sayıları, FTS araması ve
+`PRAGMA quick_check` doğrulanır.
 
 Silme/güncelleme çalıştırmadan önce aynı `WHERE` ile `SELECT COUNT(*)` çek.
 

@@ -22,21 +22,30 @@ elle dağıtılmaya devam eder.
 - GitHub Actions işi her gün 01:17 UTC'de ve elle tetiklendiğinde çalışır.
   Saat başından kaçınılması, GitHub'ın yoğun saatlerde zamanlanmış işleri
   geciktirebilmesi içindir.
-- İş, repodaki sabit Wrangler sürümünü kullanarak şu dışa aktarmayı geçici
-  runner dizinine yapar:
+- İş, repodaki sabit Wrangler sürümünü kullanır. Cloudflare D1 tam export'u
+  FTS5 sanal tablolarını desteklemediği için tek tam dışa aktarım kullanılamaz.
+  `pragma_table_list` ile bulunan normal uygulama tabloları ve
+  `fts_chunks_content` gölge tablosu aynı hedefli export'a verilir.
 
   ```sh
-  npx wrangler d1 export hukuk-db --remote --output=backup-$(date +%Y%m%d).sql
+  npx wrangler d1 export hukuk-db --remote \
+    --table=<normal tablo> ... --table=fts_chunks_content
   ```
+
+- Yedek `database.sql` ve repoda test edilen `worker/db/fts-restore.sql`
+  dosyalarını tek `.tar.gz` arşivinde taşır.
+  Geri yüklemede gölge içerik gerçek FTS5 tablosuna eklenir ve indeks yeniden
+  kurulur. Canlı `fts_chunks` ile gölge içerik satır sayıları uyuşmazsa iş
+  export'a başlamadan başarısız olur.
 
 - Ham SQL hiçbir zaman checkout dizinine, cache'e veya GitHub artifact'ına
   yazılmaz. Public depoda artifact kullanmak veri sızıntısı riski doğurur.
-- Export tamamlanınca dosyanın boş olmadığı doğrulanır ve özel
+- Export tamamlanınca iki dosyanın ve arşivin boş olmadığı doğrulanır ve özel
   `hukuk-d1-backups` R2 bucket'ına zaman damgalı bir anahtarla yüklenir.
 - Yüklenen nesne yeniden geçici dizine indirilir ve yerel dosyayla `cmp`
   üzerinden bit düzeyinde karşılaştırılır. Export, upload veya doğrulamanın
   herhangi biri başarısızsa iş başarısız sayılır.
-- Geçici SQL dosyaları adım sonunda silinir; runner'ın kapanması ikinci
+- Geçici SQL ve arşiv dosyaları adım sonunda silinir; runner'ın kapanması ikinci
   temizlik katmanıdır.
 - Bucket public development URL veya custom domain almaz. 35 günlük lifecycle,
   bugünkü yaklaşık 176 MB D1 boyutunda günlük kopyaları yayımlanan 10 GB-month
@@ -79,10 +88,11 @@ bu tasarım Worker deploy'u veya migration'ı otomatikleştirmez.
 ## Doğrulama
 
 - Workflow YAML sözdizimi ve git diff kontrol edilir.
-- İlk export'un süresi, SQL boyutu, R2 anahtarı ve bit düzeyi doğrulama sonucu
+- İlk export'un süresi, arşiv boyutu, R2 anahtarı ve bit düzeyi doğrulama sonucu
   kaydedilir; SQL içeriği loglanmaz.
+- Arşiv geçici SQLite'a açılır; iki SQL sırasıyla uygulanır, normal ve FTS satır
+  sayıları ile `PRAGMA integrity_check` doğrulanır.
 - R2 bucket'ın private olduğu, lifecycle kuralı ve en az bir doğrulanmış nesne
   uzaktan listelenir.
 - Vercel API'de `rootDirectory: frontend` ve doğru GitHub `link` görülür.
 - Repo testleri ve build değişiklik sonrası bir kez çalıştırılır.
-

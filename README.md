@@ -47,11 +47,12 @@ pnpm build    # frontend build + worker typecheck
 
 ## Dağıtım
 
-İkisi ayrı; `git push` hiçbirini tetiklemiyor.
+İkisi ayrı: `main` push'u frontend'i Vercel'e otomatik dağıtır; Worker şimdilik
+elle dağıtılır.
 
 ```bash
 pnpm --filter ./worker deploy     # Cloudflare
-pnpm deploy:frontend              # Vercel (npx vercel deploy --prod)
+pnpm deploy:frontend              # Vercel için yalnız acil/elle geri dönüş
 ```
 
 ## Yapı

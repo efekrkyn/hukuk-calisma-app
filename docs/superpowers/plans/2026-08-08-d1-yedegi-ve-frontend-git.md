@@ -4,7 +4,7 @@
 
 **Goal:** D1'i günlük özel R2 yedeğiyle korumak ve mevcut frontend projesini GitHub push'larına bağlamak.
 
-**Architecture:** Tek bir yeniden kullanılabilir GitHub Actions workflow'u D1 export'unu geçici dizinde üretir, özel R2'ye yükler ve geri indirerek doğrular. Vercel tarafında mevcut projenin kökü `frontend` yapılır ve aynı GitHub reposuna bağlanır; Worker otomasyonu bu planın dışında kalır.
+**Architecture:** Tek bir yeniden kullanılabilir GitHub Actions workflow'u normal D1 tablolarını ve FTS5 gölge içeriğini geçici dizinde üretir, test edilen geri kurma SQL'iyle arşivler, özel R2'ye yükler ve geri indirerek doğrular. Vercel tarafında mevcut projenin kökü `frontend` yapılır ve aynı GitHub reposuna bağlanır; Worker otomasyonu bu planın dışında kalır.
 
 **Tech Stack:** GitHub Actions, pnpm 10.10.0, Wrangler 4.94.x, Cloudflare D1/R2, Vercel CLI 58.9.0.
 
@@ -14,26 +14,35 @@
 
 **Files:**
 - Create: `.github/workflows/d1-backup.yml`
+- Create: `worker/db/fts-restore.sql`
 - Modify: `.gitignore`
+- Modify: `worker/src/lib/rag.test.ts`
 - Modify: `docs/DEPLOY.md`
 - Modify: `docs/DEVIR.md`
 - Modify: `AGENTS.md`
 
-- [ ] **Step 1: Workflow'u geçici dizin, private R2 ve remote `cmp` doğrulamasıyla ekle**
+- [ ] **Step 1: FTS geri kurma SQL'ini çalıştırılabilir kontrolle ekle**
+
+  D1 tam export'u FTS5'i desteklemediği için `fts_chunks_content` verisini gerçek
+  FTS5 indeksine dönüştür. Mevcut `rag.test.ts` içinde geçici SQLite ile satır
+  ve `MATCH` sorgusunu doğrula; yeni test framework'ü ekleme.
+
+- [ ] **Step 2: Workflow'u geçici dizin, private R2 ve remote `cmp` doğrulamasıyla ekle**
 
   Workflow yalnız `schedule`, `workflow_dispatch` ve ileride gate için
   `workflow_call` tetikleyicilerini taşır. `permissions: contents: read`, sabit
   pnpm sürümü, pinned action SHA'ları, `cancel-in-progress: false` ve 45 dakikalık
-  timeout kullanır. Ham SQL artifact/cache yapılmaz.
+  timeout kullanır. Normal tablolar ile FTS gölge içeriği tek hedefli export'ta
+  alınır, geri kurma SQL'iyle `.tar.gz` yapılır. Ham SQL artifact/cache yapılmaz.
 
-- [ ] **Step 2: Yerel dump desenini ignore et ve operasyon belgelerini güncelle**
+- [ ] **Step 3: Yerel dump desenini ignore et ve operasyon belgelerini güncelle**
 
   `.gitignore` içine `backup-*.sql` ekle. `docs/DEPLOY.md`, `docs/DEVIR.md` ve
   `AGENTS.md` içinde "yedek yok" ile "git push frontend'i tetiklemez"
   ifadelerini yeni gerçekliğe göre düzelt; Worker'ın hâlâ manuel olduğunu açıkça
   koru.
 
-- [ ] **Step 3: Yapılandırmayı statik doğrula**
+- [ ] **Step 4: Yapılandırmayı statik doğrula**
 
   Run: `git diff --check`
 
@@ -43,12 +52,13 @@
 
   Expected: `ok`.
 
-- [ ] **Step 4: Tasarım ve workflow değişikliklerini commit et**
+- [ ] **Step 5: Tasarım ve workflow değişikliklerini commit et**
 
   ```sh
   git add docs/superpowers/specs/2026-08-08-d1-yedegi-ve-frontend-git-design.md \
     docs/superpowers/plans/2026-08-08-d1-yedegi-ve-frontend-git.md \
-    .github/workflows/d1-backup.yml .gitignore AGENTS.md docs/DEPLOY.md docs/DEVIR.md
+    .github/workflows/d1-backup.yml worker/db/fts-restore.sql worker/src/lib/rag.test.ts \
+    .gitignore AGENTS.md docs/DEPLOY.md docs/DEVIR.md
   git commit -m "ops: günlük D1 yedeğini hazırla"
   ```
 
@@ -68,11 +78,12 @@
 
   Expected: lifecycle kuralı oluşturma başarısı.
 
-- [ ] **Step 3: İlk export'u geçici dizinde çalıştır, R2'ye yükle ve geri indirerek karşılaştır**
+- [ ] **Step 3: İlk arşivi geçici dizinde üret, R2'ye yükle ve geri indirerek karşılaştır**
 
   Workflow'daki aynı komutlar yerel Wrangler OAuth oturumuyla çalıştırılır.
-  Süre ve dosya boyutu gösterilir; SQL içeriği gösterilmez. Başarılı `cmp`
-  çıkış kodu `0` olmalıdır.
+  Arşiv ayrıca geçici SQLite'a geri yüklenir. Süre ve dosya boyutu gösterilir;
+  SQL içeriği gösterilmez. Başarılı `cmp` ve `PRAGMA integrity_check` çıkışları
+  doğrulanmalıdır.
 
 - [ ] **Step 4: GitHub Actions sırlarını ayarlayıp workflow'u `main`e gönder**
 
