@@ -77,9 +77,28 @@ const WeekSchema = z.object({
   days: z.array(DaySchema),
 });
 
+/**
+ * Ayrıntılı plandan sonraki haftaların kaba dökümü.
+ *
+ * Modelden GELMEZ, kodda üretilir (bkz. buildOutlook) — bu yüzden şemada
+ * isteğe bağlı: model çıktısı doğrulanırken bu alan henüz yok, sonradan
+ * ekleniyor. Eski planlarda da yok, `/plan/active` onları da okuyabilmeli.
+ */
+const OutlookWeekSchema = z.object({
+  week_index: z.number().int().min(1),
+  start_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  end_date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+  focus: z.array(
+    z.object({ id: z.string(), name: z.string(), hours: z.number() })
+  ),
+  mock_exams: z.number().int().min(0),
+  phase: z.string(),
+});
+
 export const AiOutputSchema = z.object({
   summary: z.string().min(1),
   weeks: z.array(WeekSchema).min(1),
+  outlook: z.array(OutlookWeekSchema).optional(),
 });
 
 export type AiOutput = z.infer<typeof AiOutputSchema>;

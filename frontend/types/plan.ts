@@ -53,9 +53,26 @@ export type Week = {
   days: Day[];
 };
 
+/**
+ * Ayrıntılı plandan sonraki haftaların kaba dökümü.
+ *
+ * Modelden gelmiyor, worker'da deterministik üretiliyor: saat dağıtımı zaten
+ * alan ağırlığı × zayıflık ile hesaplanıyor. Eski planlarda yok, o yüzden
+ * isteğe bağlı.
+ */
+export type OutlookWeek = {
+  week_index: number;
+  start_date: string;
+  end_date: string;
+  focus: Array<{ id: string; name: string; hours: number }>;
+  mock_exams: number;
+  phase: string;
+};
+
 export type AiOutput = {
   summary: string;
   weeks: Week[];
+  outlook?: OutlookWeek[];
 };
 
 export type StoredPlan = {

@@ -309,3 +309,82 @@ ${OUTPUT_SHAPE}
 
 YANIT (SADECE JSON):`;
 }
+
+// ── Uzak haftalar: kaba bakış ────────────────────────────────────────────
+
+export type OutlookWeek = {
+  week_index: number;
+  start_date: string;
+  end_date: string;
+  /** Haftalık saatin alanlara dağılımı; 1 saatin altında pay alan alan yok. */
+  focus: Array<{ id: string; name: string; hours: number }>;
+  mock_exams: number;
+  phase: string;
+};
+
+/**
+ * Ayrıntılı plandan SONRAKİ haftalar için kaba bakış.
+ *
+ * NEDEN MODELE SORULMUYOR: saat dağıtımı zaten `subjectShares` ile KODDA
+ * hesaplanıyor (ağırlık × zayıflık). Aynı hesabı modele tekrarlatmak hem
+ * token harcar hem iki farklı sayı üretme riski taşır. Burada modelin
+ * ekleyeceği bir bilgi yok.
+ *
+ * NEDEN GÜN GÜN DEĞİL: 7 hafta sonrasının saat programını bugünden yapmak
+ * anlamsız — o zamana kadar zayıf alanlar değişecek ve plan zaten yeniden
+ * üretilecek. Uzak haftada işe yarayan tek bilgi "hangi alana ne kadar".
+ */
+export function buildOutlook(args: {
+  today: string;
+  examDate: string;
+  detailedWeeks: number;
+  dailyHours: number;
+  daysOff: string[];
+  shares: SubjectShare[];
+}): OutlookWeek[] {
+  const { today, examDate, detailedWeeks, dailyHours, daysOff, shares } = args;
+  const toplamGun = daysBetween(today, examDate);
+  const kalanGun = toplamGun - detailedWeeks * 7;
+  if (kalanGun <= 0) return [];
+
+  const calisilanGun = Math.max(7 - daysOff.length, 1);
+  const haftalikSaat = Math.round(dailyHours * calisilanGun);
+  const haftaSayisi = Math.ceil(kalanGun / 7);
+
+  const out: OutlookWeek[] = [];
+  for (let i = 0; i < haftaSayisi; i++) {
+    const basGun = detailedWeeks * 7 + i * 7;
+    const start = addDays(today, basGun);
+    // Son hafta sınav gününde biter, tam 7 gün olmayabilir.
+    const bitGun = Math.min(basGun + 6, toplamGun);
+    const end = addDays(today, bitGun);
+
+    // O haftanın ortasındaki kalan güne göre evre — sınav yaklaştıkça
+    // deneme sıklığı artıyor, faz eşikleri phaseFor'da.
+    const evre = phaseFor(toplamGun - basGun - 3);
+
+    const saatler = apportion(shares.map((s) => s.share), haftalikSaat);
+    const focus = shares
+      .map((s, idx) => ({ id: s.id, name: s.name, hours: saatler[idx] }))
+      // 0 saat alan alanı listelemek gürültü; o hafta ona sıra gelmiyor.
+      .filter((f) => f.hours > 0)
+      .sort((a, b) => b.hours - a.hours);
+
+    out.push({
+      week_index: detailedWeeks + i + 1,
+      start_date: start,
+      end_date: end,
+      focus,
+      mock_exams: evre.mockExams,
+      phase: evre.id,
+    });
+  }
+  return out;
+}
+
+/** ISO tarihe gün ekler. UTC üzerinden: yaz saati kaymasına takılmasın. */
+function addDays(iso: string, n: number): string {
+  const d = new Date(iso + "T00:00:00Z");
+  d.setUTCDate(d.getUTCDate() + n);
+  return d.toISOString().slice(0, 10);
+}

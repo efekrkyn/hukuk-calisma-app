@@ -1226,11 +1226,22 @@ hmgs.post("/cross-check", async (c) => {
     source_page: r.source_page ?? null,
   }));
 
-  const verdicts = await crossCheck(
-    { AI: c.env.AI, VECTORIZE: c.env.VECTORIZE, DB: c.env.DB, GEMINI_KEY: c.env.GEMINI_KEY },
-    subject,
-    questions
-  );
+  // Sağlayıcı hatası 500'e dönüşmemeli: çağıran "500" görüp neyin bozulduğunu
+  // bilemiyordu (kota mı, ağ mı, anahtar mı). Sebep 502 gövdesinde taşınıyor.
+  let verdicts;
+  try {
+    verdicts = await crossCheck(
+      { AI: c.env.AI, VECTORIZE: c.env.VECTORIZE, DB: c.env.DB, GEMINI_KEY: c.env.GEMINI_KEY },
+      subject,
+      questions
+    );
+  } catch (e) {
+    console.error("cross-check:", e);
+    return c.json(
+      { error: "çapraz denetim başarısız", detail: String(e).slice(0, 300), subject: subject.id, checked: 0 },
+      502
+    );
+  }
 
   // Boş sonuç KAYDEDİLMEZ. Aksi hâlde ağ/parse hatası tüm partiyi havuzdan
   // düşürürdü — sessiz veri kaybının en kötü türü.

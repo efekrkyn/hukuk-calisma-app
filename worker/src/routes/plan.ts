@@ -8,8 +8,10 @@ import {
 import {
   buildPlanPrompt,
   buildDays,
+  buildOutlook,
   daysBetween,
   istanbulToday,
+  subjectShares,
   PLAN_WEEKS,
 } from "../lib/plan-prompt";
 import { sanitizePlan, canonicalTask } from "../lib/plan-validate";
@@ -116,18 +118,34 @@ plan.post("/generate", async (c) => {
     );
   }
 
+  // Ayrıntılı plan 2 haftayla sınırlı (modelin çıktı sınırı daha uzununu
+  // JSON'un ortasında kesiyordu). Kalan haftalar için kaba bakış KODDA
+  // üretiliyor: saat dağıtımı zaten subjectShares ile hesaplanmış durumda,
+  // aynı hesabı modele tekrarlatmak token harcar ve iki farklı sayı üretme
+  // riski taşır.
+  const outlook = buildOutlook({
+    today,
+    examDate: form.exam_date,
+    detailedWeeks: weeks,
+    dailyHours: form.daily_hours,
+    daysOff: form.days_off,
+    shares: subjectShares(stats),
+  });
+
+  const cikti = { ...clean.output, outlook };
+
   const id = crypto.randomUUID();
   await insertPlan(c.env.DB, {
     id,
     userId,
     form_input: form,
-    ai_output: clean.output,
+    ai_output: cikti,
     ai_model: MODEL_ID,
   });
 
   return c.json({
     plan_id: id,
-    ai_output: clean.output,
+    ai_output: cikti,
     summary: clean.output.summary,
     dropped: clean.dropped,
     repaired: clean.repaired,

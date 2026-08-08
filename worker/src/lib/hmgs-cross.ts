@@ -260,13 +260,22 @@ export async function crossCheck(
   // maxOutputTokens'a dahil olduğu için o sınır da birlikte büyütülmeli.
   const provider = new GeminiProvider(env.GEMINI_KEY, CROSS_MODEL);
   let raw = "";
-  for await (const tok of provider.streamChat(
-    `<KANUN>\n${law}\n</KANUN>` +
-      (ek ? `\n\n<EK_KAYNAK>\n${ek}\n</EK_KAYNAK>` : "") +
-      `\n\n<SORULAR>\n${body}\n</SORULAR>`,
-    SYSTEM
-  )) {
-    raw += tok;
+  // Sağlayıcı çağrısı korumasızdı: Gemini kota/oran hatası verince istisna
+  // uca kadar çıkıp 500 oluyordu ve SEBEP hiçbir yere yazılmıyordu. Çağıran
+  // "500" görüp neyin bozulduğunu bilemiyordu. Hata yutulmuyor, sebebiyle
+  // birlikte yukarı taşınıyor; uç bunu 502 + detay olarak döndürüyor.
+  try {
+    for await (const tok of provider.streamChat(
+      `<KANUN>\n${law}\n</KANUN>` +
+        (ek ? `\n\n<EK_KAYNAK>\n${ek}\n</EK_KAYNAK>` : "") +
+        `\n\n<SORULAR>\n${body}\n</SORULAR>`,
+      SYSTEM
+    )) {
+      raw += tok;
+    }
+  } catch (e) {
+    console.error("cross-check sağlayıcı hatası:", e);
+    throw new Error(`Gemini çağrısı başarısız: ${String(e).slice(0, 300)}`);
   }
 
   const parsed = parseLlmJson<unknown[]>(raw);

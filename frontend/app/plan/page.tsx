@@ -5,6 +5,7 @@ import { Bot, Calendar, Rocket, Target, Timer, TriangleAlert } from "lucide-reac
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { PlanGrid } from "@/components/PlanGrid";
+import { PlanOutlook } from "@/components/PlanOutlook";
 import { getActivePlan } from "@/lib/plan-api";
 import type { ActivePlanResponse } from "@/types/plan";
 
@@ -139,6 +140,10 @@ export default function PlanPage() {
       </div>
 
       <PlanGrid weeks={plan.ai_output.weeks} completions={completions} />
+
+      {/* Ayrıntılı plan 2 haftayla sınırlı (modelin çıktı sınırı); kalan
+          haftalar burada kaba dökümle görünüyor. */}
+      <PlanOutlook outlook={plan.ai_output.outlook} />
       </div>
     </main>
   );
