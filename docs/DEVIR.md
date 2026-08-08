@@ -1,6 +1,6 @@
 # Devir Notu
 
-Son güncelleme: **8 Ağustos 2026**. Bu belge projeyi hiç görmemiş birinin
+Son güncelleme: **9 Ağustos 2026**. Bu belge projeyi hiç görmemiş birinin
 (insan ya da ajan) devralabilmesi için yazıldı: ne olduğu, nasıl çalıştığı,
 hangi kararların neden verildiği ve nelerin eksik kaldığı.
 
@@ -38,6 +38,7 @@ Tarayıcı (PWA)
                                  ├─ D1        hukuk-db     (durum + sorular)
                                  ├─ Vectorize hukuk-vectors (RAG)
                                  ├─ R2        hukuk-pdf    (kaynak PDF'ler)
+                                 ├─ R2        hukuk-d1-backups (D1 yedekleri)
                                  ├─ Workers AI @cf/baai/bge-m3 (gömme)
                                  ├─ DeepSeek  (üretim + denetim)
                                  ├─ Gemini    (çapraz doğrulama)
@@ -73,6 +74,12 @@ düşüyor, `/tekrar` sayfası onu çıkarıyor.
 | RAG metin parçası | 45.429 |
 | Kullanıcı | 2 (`default` = Efe, `irem`) |
 | Kayıtlı cevap | 270 |
+
+**D1 yedekleri.** `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de
+`hukuk-db` veritabanını özel `hukuk-d1-backups` R2 bucket'ına aktarır,
+geri indirip bit düzeyinde doğrular. Bucket yaşam döngüsü kopyaları 35 gün
+saklar. Her dışa aktarım sürerken diğer D1 istekleri engellenir; workflow bu
+nedenle düşük kullanımlı bir saatte çalışır.
 
 **Soru bankası kapandı.** 8 Ağustos 2026'da yeni soru üretmeme kararı verildi.
 `/hmgs/generate` uç noktası duruyor ama kullanılmayacak. Denetim (`/verify`),
@@ -156,6 +163,10 @@ Yerel geliştirmede aynı adlar `worker/.dev.vars` dosyasına yazılır.
 | `ADMIN_SECRET` | `proxy.ts`'in JWT doğrulaması — worker'daki ile **aynı** olmalı |
 | `NEXT_PUBLIC_WORKER_URL` | Worker adresi (varsayılan koda gömülü) |
 
+**GitHub Actions** (repository secrets): `CLOUDFLARE_API_TOKEN` D1 dışa
+aktarma ile yedek bucket'ında nesne okuma/yazma yetkisi; `CLOUDFLARE_ACCOUNT_ID`
+hesap kimliği için kullanılır. Değerleri workflow veya loglarda yer almaz.
+
 **Scripts** (`scripts/.env`, yalnızca tek seferlik PDF/gömme işleri için):
 `R2_ENDPOINT`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`, `R2_BUCKET`,
 `SOURCE_DIR`.
@@ -178,8 +189,7 @@ Her dizinde `.env.example` var; kopyalayıp değerleri Efe'den al.
    dağıtılıyor. Vercel'in GitHub entegrasyonu bağlanırsa bu kalkar.
 4. **Otomatik test yalnızca worker'da.** Frontend'de hiç test yok; React test
    altyapısı da kurulu değil.
-5. **D1'in yedeği yok.** Tek nüsha. Düzenli dışa aktarma kurulabilir.
-6. **`data/` dizini 59 MB** ve kısmen depoda. Büyük üretilmiş dosyalar
+5. **`data/` dizini 59 MB** ve kısmen depoda. Büyük üretilmiş dosyalar
    yeniden üretilebilir; istenirse temizlenebilir.
 
 ---

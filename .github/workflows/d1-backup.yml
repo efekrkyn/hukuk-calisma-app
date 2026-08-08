@@ -1,0 +1,75 @@
+name: Günlük D1 yedeği
+
+"on":
+  schedule:
+    # GitHub'ın saat başı yoğunluğuna takılmamak için 17. dakikada çalışır.
+    - cron: "17 1 * * *"
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      CLOUDFLARE_API_TOKEN:
+        required: true
+      CLOUDFLARE_ACCOUNT_ID:
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: d1-backup-hukuk-db
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    name: D1'i özel R2'ye yedekle
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    steps:
+      - name: Depoyu al
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 — hareketli etiket sonradan değişmesin diye SHA sabit.
+
+      - name: Node.js'i kur
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0 — çalışan action kodu değişmesin diye SHA sabit.
+        with:
+          node-version: 22
+
+      - name: pnpm'i kur
+        uses: pnpm/action-setup@ff378ebe6b225b0680b81c1ad4498ae0d1d3a5e3 # v6.0.10 — kurulum kodu sessizce değişmesin diye SHA sabit.
+        with:
+          version: 10.10.0
+          run_install: false
+
+      - name: Bağımlılıkları kur
+        run: pnpm install --frozen-lockfile
+
+      - name: Dışa aktar, yükle ve geri indirerek doğrula
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          temp_dir="$(mktemp -d "${RUNNER_TEMP}/d1-backup.XXXXXX")"
+          export_file="${temp_dir}/backup-$(date -u +%Y%m%d).sql"
+          downloaded_file="${temp_dir}/r2-verify.sql"
+          trap 'rm -f -- "$export_file" "$downloaded_file"; rmdir -- "$temp_dir"' EXIT
+
+          timestamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          object_path="hukuk-d1-backups/backups/${timestamp:0:4}/${timestamp:4:2}/hukuk-db-${timestamp}.sql"
+
+          pnpm --filter ./worker exec wrangler d1 export hukuk-db \
+            --remote \
+            --skip-confirmation \
+            --output="$export_file"
+          test -s "$export_file"
+
+          pnpm --filter ./worker exec wrangler r2 object put "$object_path" \
+            --remote \
+            --file="$export_file" \
+            --force
+
+          pnpm --filter ./worker exec wrangler r2 object get "$object_path" \
+            --remote \
+            --file="$downloaded_file"
+          cmp --silent "$export_file" "$downloaded_file"

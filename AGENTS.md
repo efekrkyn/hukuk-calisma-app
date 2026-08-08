@@ -81,8 +81,13 @@ commit'leme ya da log'lama.
 
 ## Veri işlemleri
 
-D1 canlı veritabanı **tek nüsha, yedeği yok**. `DELETE`/`UPDATE` çalıştırmadan
-önce aynı `WHERE` ile `SELECT COUNT(*)` çek ve sayıyı gör. Şema değişikliği
+D1 canlı veritabanı her gün 01:17 UTC'de `.github/workflows/d1-backup.yml`
+ile özel `hukuk-d1-backups` R2 bucket'ına yedeklenir; 35 günlük yaşam
+döngüsü eski kopyaları siler. Dışa aktarım sürerken D1 sorguları engellenir;
+elle yedek gerekiyorsa aynı workflow'u Actions'tan tetikle.
+
+`DELETE`/`UPDATE` çalıştırmadan önce aynı `WHERE` ile `SELECT COUNT(*)`
+çek ve sayıyı gör. Şema değişikliği
 `worker/db/migrations/NNN-ad.sql` olarak dosyaya yazılır, elle uygulanmaz.
 
 ```bash

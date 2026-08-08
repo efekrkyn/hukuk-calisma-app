@@ -35,6 +35,9 @@ Thumbs.db
 data/embeddings/
 data/*.bin
 
+# Veritabanı dışa aktarımları canlı kullanıcı verisi içerir
+backup-*.sql
+
 # PDFs (in R2, not in repo)
 *.pdf
 

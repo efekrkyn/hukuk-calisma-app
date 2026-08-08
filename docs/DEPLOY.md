@@ -1,6 +1,6 @@
 # Dağıtım
 
-Son güncelleme: 8 Ağustos 2026.
+Son güncelleme: 9 Ağustos 2026.
 
 ## Canlı durum
 
@@ -10,6 +10,7 @@ Son güncelleme: 8 Ağustos 2026.
 | Worker | https://hukuk-worker.efearas06.workers.dev | Canlı |
 | D1 | `hukuk-db` (`9c7cb485-…`) | 25 tablo, ~176 MB |
 | R2 | `hukuk-pdf` | Kaynak PDF'ler |
+| R2 | `hukuk-d1-backups` | Özel D1 yedekleri, 35 gün saklama |
 | Vectorize | `hukuk-vectors` | 45.429 parça |
 
 ## Her güncellemede
@@ -73,13 +74,18 @@ cd worker
 npx wrangler d1 execute hukuk-db --remote --file=db/migrations/013-yeni.sql
 ```
 
-Yedek (**şu an düzenli yedek yok, tek nüsha**):
+`.github/workflows/d1-backup.yml` her gün 01:17 UTC'de D1'i runner'ın geçici
+dizinine aktarır, özel `hukuk-d1-backups` R2 bucket'ına yükler ve geri
+indirip bit düzeyinde doğrular. R2 yaşam döngüsü yedekleri 35 gün saklar;
+ham SQL GitHub artifact'ına veya cache'e girmez.
 
-```bash
-npx wrangler d1 export hukuk-db --remote --output=backup-$(date +%Y%m%d).sql
-```
+Elle yedek için GitHub Actions'ta **Günlük D1 yedeği → Run workflow**
+kullan. Workflow'un repository secret'ları `CLOUDFLARE_API_TOKEN` ve
+`CLOUDFLARE_ACCOUNT_ID` olmalıdır. Her dışa aktarım sürerken D1 sorguları
+engellenir; bu nedenle elle koşuyu düşük kullanım saatinde başlat.
 
-Geri yükleme aynı komutun `execute --file` hâli.
+Geri yükleme, doğrulanmış R2 nesnesiyle `wrangler d1 execute --file`
+üzerinden ayrıca ve elle yapılır.
 
 Silme/güncelleme çalıştırmadan önce aynı `WHERE` ile `SELECT COUNT(*)` çek.
 
