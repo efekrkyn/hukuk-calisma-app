@@ -74,7 +74,15 @@ export function canonicalTask(task: Task): Task | null {
   switch (task.task_type) {
     case "soru":
       if (!subject) return null;
-      return { ...task, subject: subject.id, target_ref: `hmgs?subject=${subject.id}` };
+      // Başlık da modelden GÜVENİLMİYOR. Model buraya ham alan kimliği
+      // yazıyordu ve ekranda "anayasa_yargisi soru", "borclar soru" gibi
+      // çıkıyordu. Soru görevinde başlık tahmin edilebilir, kodda üretiliyor.
+      return {
+        ...task,
+        subject: subject.id,
+        topic: `${subject.name} soruları`,
+        target_ref: `hmgs?subject=${subject.id}`,
+      };
 
     case "konu": {
       if (!subject) return null;
@@ -89,10 +97,15 @@ export function canonicalTask(task: Task): Task | null {
     }
 
     case "tekrar":
-      return { ...task, subject: null, target_ref: "tekrar" };
+      return { ...task, subject: null, topic: "Yanlışlarım", target_ref: "tekrar" };
 
     case "deneme":
-      return { ...task, subject: null, target_ref: `hmgs?count=${HMGS_TOTAL_QUESTIONS}` };
+      return {
+        ...task,
+        subject: null,
+        topic: "Tam deneme",
+        target_ref: `hmgs?count=${HMGS_TOTAL_QUESTIONS}`,
+      };
 
     case "serbest":
       // Kullanıcının elle eklediği görev; hedefi yok, olmaması normal.
