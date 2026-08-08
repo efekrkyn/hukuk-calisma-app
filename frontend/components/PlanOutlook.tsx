@@ -74,10 +74,15 @@ export function PlanOutlook({ outlook }: { outlook?: OutlookWeek[] }) {
             ))}
           </div>
 
-          {h.mock_exams > 0 && (
-            <p className="text-[11px] text-muted-foreground pt-1">
-              {h.mock_exams} tam deneme (155 dk)
-            </p>
+          <p className="text-[11px] text-muted-foreground pt-1">
+            {h.study_hours != null && `${h.study_hours} saat alan çalışması`}
+            {h.study_hours != null && h.mock_exams > 0 && " · "}
+            {h.mock_exams > 0 && `${h.mock_exams} tam deneme (155 dk)`}
+          </p>
+          {/* Haftalar arasındaki asıl fark saatler değil işin TÜRÜ;
+              yazılmazsa altı hafta birebir aynı görünüyor. */}
+          {h.mix && (
+            <p className="text-[11px] text-muted-foreground/80">{h.mix}</p>
           )}
         </div>
       ))}

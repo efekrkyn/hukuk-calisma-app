@@ -67,6 +67,9 @@ export type OutlookWeek = {
   focus: Array<{ id: string; name: string; hours: number }>;
   mock_exams: number;
   phase: string;
+  /** Alan çalışmasına kalan saat (deneme süresi düşülmüş). */
+  study_hours?: number;
+  mix?: string;
 };
 
 export type AiOutput = {

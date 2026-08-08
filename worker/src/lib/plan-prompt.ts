@@ -320,6 +320,11 @@ export type OutlookWeek = {
   focus: Array<{ id: string; name: string; hours: number }>;
   mock_exams: number;
   phase: string;
+  /** Alan çalışmasına kalan saat (deneme süresi düşülmüş). */
+  study_hours: number;
+  /** O evrede işin türü nasıl dağılıyor — haftalar arasındaki asıl fark bu,
+   *  saatler değil. Gösterilmezse altı hafta birebir aynı görünüyor. */
+  mix: string;
 };
 
 /**
@@ -363,7 +368,13 @@ export function buildOutlook(args: {
     // deneme sıklığı artıyor, faz eşikleri phaseFor'da.
     const evre = phaseFor(toplamGun - basGun - 3);
 
-    const saatler = apportion(shares.map((s) => s.share), haftalikSaat);
+    // Deneme saatleri alan çalışmasından DÜŞÜLÜYOR. Tam deneme 155 dakika
+    // ve son düzlükte haftada 2 tane var: 5+ saat. Bunu görmezden gelmek
+    // haftalık bütçeyi şişirir ve plan tutmaz — kullanıcı denemeyi çözünce
+    // "konulara ayırdığım saat nereye gitti" der.
+    const denemeSaat = Math.round((evre.mockExams ?? 0) * (155 / 60) * 10) / 10;
+    const alanSaat = Math.max(haftalikSaat - Math.round(denemeSaat), 1);
+    const saatler = apportion(shares.map((s) => s.share), alanSaat);
     const focus = shares
       .map((s, idx) => ({ id: s.id, name: s.name, hours: saatler[idx] }))
       // 0 saat alan alanı listelemek gürültü; o hafta ona sıra gelmiyor.
@@ -377,6 +388,8 @@ export function buildOutlook(args: {
       focus,
       mock_exams: evre.mockExams,
       phase: evre.id,
+      study_hours: alanSaat,
+      mix: evre.mix,
     });
   }
   return out;
