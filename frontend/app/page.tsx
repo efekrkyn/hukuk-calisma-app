@@ -19,6 +19,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { buttonVariants } from "@/components/ui/button";
 import { TodayCard } from "@/components/TodayCard";
 import { PerformanceCard } from "@/components/PerformanceCard";
+import { FirstRun } from "@/components/FirstRun";
 import { ExamCountdown } from "@/components/ExamCountdown";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -47,16 +48,20 @@ const TOOLS = [
 export default function Home() {
   const [subjects, setSubjects] = useState<SubjectStat[] | null>(null);
   const [verify, setVerify] = useState<VerifyStats | null>(null);
+  // Hic deneme cozmemis kullaniciya sirayi gosterecegiz; null = henuz bilinmiyor.
+  const [examCount, setExamCount] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     Promise.all([
       fetch("/api/worker/hmgs/stats").then((r) => r.json()),
       fetch("/api/worker/hmgs/verify-stats").then((r) => r.json()),
+      fetch("/api/worker/hmgs/performance").then((r) => r.json()).catch(() => null),
     ])
-      .then(([s, v]) => {
+      .then(([s, v, p]) => {
         setSubjects(s.subjects ?? []);
         setVerify(v);
+        setExamCount(p?.overall?.exams ?? 0);
       })
       .catch((e) => setError(String(e)));
   }, []);
@@ -129,6 +134,10 @@ export default function Home() {
             </p>
           </div>
         </div>
+
+        {/* Yeni kullanicida performans karti gizleniyor; yerine ne yapacagini
+            soyleyen kart geliyor. Ikisi ayni anda gorunmez. */}
+        <FirstRun hidden={examCount === null || examCount > 0} />
 
         <PerformanceCard />
 
