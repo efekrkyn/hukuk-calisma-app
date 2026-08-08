@@ -158,7 +158,7 @@ export default function PlanSetupPage() {
                     onClick={() => toggleDayOff(d)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition-colors ${
                       on
-                        ? "bg-primary text-white border-primary"
+                        ? "bg-primary text-primary-foreground border-primary"
                         : "bg-card border-neutral-200 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/50"
                     }`}
                   >

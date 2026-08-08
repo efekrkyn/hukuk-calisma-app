@@ -11,7 +11,7 @@
  */
 
 import { useEffect, useState } from "react";
-import { Target } from "lucide-react";
+import { Flag, Target } from "lucide-react";
 import { motion } from "motion/react";
 import { spring, springSnappy } from "@/lib/motion";
 import Link from "next/link";
@@ -50,6 +50,10 @@ export default function Home() {
   const [verify, setVerify] = useState<VerifyStats | null>(null);
   // Hic deneme cozmemis kullaniciya sirayi gosterecegiz; null = henuz bilinmiyor.
   const [examCount, setExamCount] = useState<number | null>(null);
+  // Bekleyen hatalı soru bildirimi. Kuyruk çoğu zaman boş olduğu için
+  // araç listesinde kalıcı bir satır yerine yalnızca doluyken görünen bir
+  // uyarı: görünmeyen bildirim, bildirilmemiş bildirimle aynı şey.
+  const [reportCount, setReportCount] = useState(0);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -57,11 +61,13 @@ export default function Home() {
       fetch("/api/worker/hmgs/stats").then((r) => r.json()),
       fetch("/api/worker/hmgs/verify-stats").then((r) => r.json()),
       fetch("/api/worker/hmgs/performance").then((r) => r.json()).catch(() => null),
+      fetch("/api/worker/hmgs/reports").then((r) => r.json()).catch(() => null),
     ])
-      .then(([s, v, p]) => {
+      .then(([s, v, p, rep]) => {
         setSubjects(s.subjects ?? []);
         setVerify(v);
         setExamCount(p?.overall?.exams ?? 0);
+        setReportCount(rep?.total ?? 0);
       })
       .catch((e) => setError(String(e)));
   }, []);
@@ -92,6 +98,16 @@ export default function Home() {
           <div className="p-3 border border-red-500/40 bg-red-500/10 rounded-xl text-red-500 text-sm">
             Durum bilgisi alınamadı: {error}
           </div>
+        )}
+
+        {reportCount > 0 && (
+          <a
+            href="/bildirimler"
+            className="flex items-center gap-2 p-3 border border-amber-500/40 bg-amber-500/10 rounded-xl text-sm text-amber-800 dark:text-amber-300"
+          >
+            <Flag className="w-4 h-4 shrink-0" aria-hidden />
+            {reportCount} soru hatalı diye bildirildi — bakılmayı bekliyor →
+          </a>
         )}
 
         {/* Ana eylem */}

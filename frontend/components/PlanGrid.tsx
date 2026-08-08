@@ -96,7 +96,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
               onClick={() => setActiveWeek(i)}
               className={`px-4 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all duration-200 flex flex-col items-center gap-1 min-w-[90px] border ${
                 i === activeWeek
-                  ? "bg-primary text-white border-primary shadow-sm"
+                  ? "bg-primary text-primary-foreground border-primary shadow-sm"
                   : "bg-card text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900 border-neutral-200 dark:border-neutral-800"
               }`}
             >
@@ -221,7 +221,7 @@ export function PlanGrid({ weeks, completions: initial }: Props) {
               <button 
                 onClick={handleAddTask}
                 disabled={isSubmitting}
-                className="px-3 py-1.5 text-sm font-semibold rounded-md bg-primary text-white hover:bg-primary disabled:opacity-50"
+                className="px-3 py-1.5 text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:bg-primary disabled:opacity-50"
               >
                 {isSubmitting ? "Ekleniyor..." : "Ekle"}
               </button>

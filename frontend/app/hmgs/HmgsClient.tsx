@@ -380,7 +380,7 @@ export default function HmgsClient({
                 {ans.selected !== null && ans.selected !== q.correctAnswer && (
                   <p className="text-xs text-red-500">Senin cevabın: {String.fromCharCode(65 + ans.selected)} — {q.options[ans.selected]}</p>
                 )}
-                <p className="text-xs text-green-600">Doğru cevap: {String.fromCharCode(65 + q.correctAnswer)} — {q.options[q.correctAnswer]}</p>
+                <p className="text-xs text-green-600 dark:text-green-400">Doğru cevap: {String.fromCharCode(65 + q.correctAnswer)} — {q.options[q.correctAnswer]}</p>
                 <p className="text-xs text-muted-foreground">{q.explanation}</p>
                 {q.verified && (
                   <span className="inline-block text-[10px] font-medium px-1.5 py-0.5 rounded bg-green-500/15 text-green-600 dark:text-green-400 mr-2">
