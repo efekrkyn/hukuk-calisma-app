@@ -296,7 +296,7 @@ export default function GlobalAiAssistant() {
       console.error(e);
       setMessages(prev => {
         const arr = [...prev];
-        arr[arr.length - 1] = { ...arr[arr.length - 1], content: ` Hata: ${String(e)}` };
+        arr[arr.length - 1] = { ...arr[arr.length - 1], content: e instanceof Error ? e.message : ` Hata: ${String(e)}` };
         return arr;
       });
     } finally {

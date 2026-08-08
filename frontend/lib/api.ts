@@ -10,6 +10,25 @@ export class WorkerError extends Error {
   }
 }
 
+/**
+ * Başarısız bir yanıtı okunabilir bir cümleye çevirir.
+ *
+ * Worker hata gövdesini `{ error, detail }` olarak veriyor ve saatlik sınırda
+ * bu gövde "45 dakika sonra yeniden denenebilir" gibi işe yarar bir şey
+ * söylüyor. Çağıranlar bunu atıp "HTTP 429" ya da ham JSON gösteriyordu;
+ * kullanıcıya ne olduğunu anlatmayan bir hata, hatanın kendisi kadar kötü.
+ */
+export async function hataMetni(r: Response): Promise<string> {
+  const ham = await r.text().catch(() => "");
+  try {
+    const g = JSON.parse(ham) as { error?: string; detail?: string };
+    if (g.error) return [g.error, g.detail].filter(Boolean).join(" ");
+  } catch {
+    // JSON değilse ham metne düşülüyor.
+  }
+  return ham.slice(0, 200) || `Sunucu ${r.status}`;
+}
+
 export async function fetchWorker<T = unknown>(
   path: string,
   init?: RequestInit
@@ -138,8 +157,7 @@ export async function* streamChat(params: {
     body: JSON.stringify(params),
   });
   if (!r.ok || !r.body) {
-    const text = await r.text().catch(() => "");
-    throw new Error(`AI chat ${r.status}: ${text.slice(0, 200)}`);
+    throw new Error(await hataMetni(r));
   }
   const reader = r.body.getReader();
   const decoder = new TextDecoder();

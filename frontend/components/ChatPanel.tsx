@@ -151,7 +151,7 @@ export function ChatPanel({
     } catch (e) {
       setMessages((m) => {
         const a = [...m];
-        a[a.length - 1] = { role: "ai", content: `Bağlantı hatası: ${e}` };
+        a[a.length - 1] = { role: "ai", content: e instanceof Error ? e.message : `Bağlantı hatası: ${e}` };
         return a;
       });
     } finally {

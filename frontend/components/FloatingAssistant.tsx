@@ -17,6 +17,7 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Sparkles, X, Send, Trash2, Loader2 } from "lucide-react";
 import { usePageContext } from "@/lib/page-context";
+import { hataMetni } from "@/lib/api";
 
 type Msg = { role: "user" | "ai"; content: string };
 
@@ -108,7 +109,7 @@ export default function FloatingAssistant() {
           history: msgs.slice(-8).map((m) => ({ role: m.role, content: m.content })),
         }),
       });
-      if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
+      if (!res.ok || !res.body) throw new Error(await hataMetni(res));
 
       const reader = res.body.getReader();
       const dec = new TextDecoder();
@@ -140,7 +141,7 @@ export default function FloatingAssistant() {
     } catch (e) {
       setMsgs((m) => {
         const n = [...m];
-        n[n.length - 1] = { role: "ai", content: `Bağlantı hatası: ${String(e).slice(0, 120)}` };
+        n[n.length - 1] = { role: "ai", content: e instanceof Error ? e.message : `Bağlantı hatası: ${String(e).slice(0, 120)}` };
         return n;
       });
     } finally {
