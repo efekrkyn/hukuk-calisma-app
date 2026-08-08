@@ -61,12 +61,17 @@ export default function TekrarClient() {
 
   useEffect(() => {
     fetch("/api/worker/hmgs/review?count=20")
-      .then((r) => r.json())
+      .then((r) => {
+        // Aynı gerekçe: hata durumunda boş kuyruk "tekrar edecek bir şeyin
+        // yok" anlamına gelir ve kullanıcı çalışmayı bırakır.
+        if (!r.ok) throw new Error("Tekrar kuyruğu yüklenemedi.");
+        return r.json();
+      })
       .then((d) => {
         setQueue(d.questions ?? []);
         setDueTotal(d.due_total ?? 0);
       })
-      .catch((e) => setError(String(e)));
+      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, []);
 
   const grade = useCallback(

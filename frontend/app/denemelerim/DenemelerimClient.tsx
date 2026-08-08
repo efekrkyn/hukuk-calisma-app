@@ -101,12 +101,18 @@ export default function DenemelerimClient() {
 
   useEffect(() => {
     fetch("/api/worker/hmgs/exams")
-      .then((r) => r.json())
+      .then((r) => {
+        // Hata gövdesi de JSON: kontrol edilmezse d.exams undefined kalır ve
+        // ekran "hiç deneme çözmemişsin" der — sunucu hatasını başarısızlıkla
+        // karıştırmak, kullanıcıya yanlış bilgi vermektir.
+        if (!r.ok) throw new Error("Denemeler yüklenemedi.");
+        return r.json();
+      })
       .then((d) => {
         setExams(d.exams ?? []);
         if (d.pass_score) setPassScore(d.pass_score);
       })
-      .catch((e) => setError(String(e)));
+      .catch((e) => setError(e instanceof Error ? e.message : String(e)));
   }, []);
 
   const toggle = useCallback(
