@@ -151,6 +151,12 @@ export class DeepSeekProvider implements AIProvider {
       model: this.model,
       messages,
       stream: true,
+      // max_tokens GÖNDERİLMEZSE DeepSeek 4096 uyguluyor ve uzun çıktı JSON'un
+      // ORTASINDA kesiliyor — çağıran tarafta "geçersiz JSON" gibi görünen,
+      // aslında yarım kalmış bir yanıt. Plan üretimi (2 haftalık takvim, ~60
+      // görev) bu sınırı aşıyordu. 8192 modelin izin verdiği tavan; bir üst
+      // sınır, hedef değil — kısa yanıtlara maliyeti yok.
+      max_tokens: 8192,
     };
 
     const r = await fetch(url, {

@@ -93,13 +93,31 @@ plan.post("/generate", async (c) => {
 
   const json = parseLlmJson<unknown>(raw);
   if (json === null) {
-    return c.json({ error: "AI output not JSON", raw: raw.slice(0, 2000) }, 502);
+    // Ham çıktı LOG'a gidiyor, kullanıcıya DEĞİL: ekrana 2000 karakterlik
+    // yarım JSON basmak kullanıcıya hiçbir şey anlatmıyordu.
+    console.error("plan/generate ayrıştırılamadı, uzunluk:", raw.length, raw.slice(0, 500));
+    // Yarıda kesilmiş çıktı ile bozuk çıktı farklı sorunlar: ilki tekrar
+    // denemekle geçebilir, ikincisi geçmez. Ayırt edilebiliyorsa söylensin.
+    const kesik = raw.trimStart().startsWith("{") && !raw.trimEnd().endsWith("}");
+    return c.json(
+      {
+        error: kesik
+          ? "Plan üretilemedi: model çıktısı yarıda kesildi."
+          : "Plan üretilemedi: model geçerli bir plan döndürmedi.",
+        detail: "Tekrar dene; sürerse günlük saat sayısını biraz düşür.",
+      },
+      502
+    );
   }
 
   const v = AiOutputSchema.safeParse(json);
   if (!v.success) {
+    console.error("plan/generate şema hatası:", JSON.stringify(v.error.format()).slice(0, 800));
     return c.json(
-      { error: "AI output schema invalid", details: v.error.format(), raw: raw.slice(0, 2000) },
+      {
+        error: "Plan üretilemedi: model beklenen biçimde plan döndürmedi.",
+        detail: "Tekrar dene.",
+      },
       502
     );
   }

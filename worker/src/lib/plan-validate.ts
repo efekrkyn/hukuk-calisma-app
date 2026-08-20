@@ -146,7 +146,11 @@ export function sanitizePlan(output: AiOutput): SanitizeResult {
         if (refKey(fixed.target_ref) !== refKey(t.target_ref) || fixed.subject !== t.subject) {
           repaired++;
         }
-        tasks.push(fixed);
+        // uuid her zaman BURADA veriliyor, modelin yazdığı ne olursa olsun.
+        // Model gerçek rastgele değer üretmiyor; iki görev aynı uuid'yi
+        // alırsa `study_task_completions` ikisini tek görev sayar ve birini
+        // işaretlemek diğerini de işaretler.
+        tasks.push({ ...fixed, uuid: crypto.randomUUID() });
       }
       // weekday tarihten yeniden hesaplanıyor: takvim ızgarası günleri gün
       // adına göre sütuna yerleştiriyor, model "Salı"yı bir günü kaydırıp

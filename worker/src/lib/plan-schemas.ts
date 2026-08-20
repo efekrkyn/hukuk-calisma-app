@@ -49,7 +49,18 @@ export const TASK_TYPES = ["konu", "soru", "tekrar", "deneme", "serbest"] as con
 export type TaskType = (typeof TASK_TYPES)[number];
 
 export const TaskSchema = z.object({
-  uuid: z.string().min(8),
+  /**
+   * Görev kimliği — tamamlanma işareti (`study_task_completions.task_uuid`)
+   * buna bağlanıyor.
+   *
+   * MODELDEN İSTENMİYOR: her göreve 36 karakterlik uuid yazdırmak çıktının
+   * yaklaşık üçte birini yiyordu ve 2 haftalık plan DeepSeek'in çıktı sınırını
+   * aşıp JSON'un ortasında kesiliyordu. Üstelik model gerçek rastgele değer
+   * üretmiyor ("1b2c3d4e-5f6a-7b8c-9d0e-1f2a3b4c5d6e" gibi sayan örüntüler
+   * yazıyor); iki görev aynı uuid'yi alırsa birini işaretlemek diğerini de
+   * işaretlerdi. Değer sunucuda üretiliyor, model yazsa bile ezilir.
+   */
+  uuid: z.string().min(8).default(() => crypto.randomUUID()),
   time_start: z.string().regex(/^\d{2}:\d{2}$/),
   time_end: z.string().regex(/^\d{2}:\d{2}$/),
   /** HMGS alan id'si. tekrar/deneme/serbest görevlerinde null. */

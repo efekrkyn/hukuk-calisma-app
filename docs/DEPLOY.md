@@ -34,11 +34,25 @@ garantisi yoktur.
 Dağıtım sonrası doğrulama:
 
 ```bash
-curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-worker.efearas06.workers.dev/health
+curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-efe.vercel.app/api/worker/health
 curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-efe.vercel.app/login
 ```
 
-`/health` 200, `/login` 200 dönmeli. Korumalı bir uç (`/hmgs/reports`) 401
+`/health` 200, `/login` 200 dönmeli.
+
+**Worker'ı neden doğrudan değil, Vercel üzerinden yokluyoruz:** Türk Telekom
+Güvenli İnternet `*.workers.dev` adreslerini kesiyor — port 443'e TLS yerine
+düz HTTP 307 dönüyor (`Via: 1.0 middlebox`, hedef
+`guvenliinternet.turktelekom.com.tr`). Bu yüzden Türkiye'den
+`curl https://hukuk-worker.efearas06.workers.dev/health` "SSL wrong version
+number" ya da "tlsv1 alert protocol version" verir ve worker ölmüş gibi
+görünür. **Uygulama etkilenmez:** tarayıcı workers.dev'e hiç bağlanmıyor,
+`/api/worker/*` isteklerini Vercel sunucu tarafında yeniden yazıyor
+(`frontend/proxy.ts`). Engellenen tek şey senin doğrudan erişimin. Wrangler de
+etkilenmez, o `api.cloudflare.com` kullanıyor. Doğrudan erişim gerekiyorsa
+mobil veri ya da VPN yeterli.
+
+ Korumalı bir uç (`/hmgs/reports`) 401
 dönmeli — 200 dönüyorsa kimlik doğrulama devre dışı kalmış demektir.
 
 Vercel dağıtımının bittiğini görmek için:

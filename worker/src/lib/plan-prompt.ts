@@ -194,7 +194,8 @@ const RULES = `KURALLAR:
 10. Tam deneme 155 dakika sürer ve yorar: bu planda EN FAZLA <deneme_sayisi>
     tane, ayrı günlere, tercihen hafta sonuna.
 11. Tekrar kuyruğunda bekleyen soru varsa haftada en az 2 "tekrar" görevi koy.
-12. topic ve tip 3-5 kelimeyi geçmesin (JSON büyümesin). Her göreve v4 uuid.
+12. topic ve tip 3-5 kelimeyi geçmesin (JSON büyümesin).
+12a. "uuid" YAZMA — sunucu üretiyor. Yazarsan boşuna yer kaplar ve atılır.
 13. notes'taki kısıtlara uy.`;
 
 const OUTPUT_SHAPE = `ÇIKTI ŞEMASI:
@@ -211,7 +212,6 @@ const OUTPUT_SHAPE = `ÇIKTI ŞEMASI:
           "weekday": "Pazartesi",
           "tasks": [
             {
-              "uuid": "v4-uuid",
               "time_start": "09:00",
               "time_end": "10:00",
               "subject": "borclar",
@@ -221,7 +221,6 @@ const OUTPUT_SHAPE = `ÇIKTI ŞEMASI:
               "tip": "kesilme sebepleri"
             },
             {
-              "uuid": "v4-uuid",
               "time_start": "10:15",
               "time_end": "11:00",
               "subject": "borclar",
@@ -231,7 +230,6 @@ const OUTPUT_SHAPE = `ÇIKTI ŞEMASI:
               "tip": null
             },
             {
-              "uuid": "v4-uuid",
               "time_start": "11:15",
               "time_end": "11:40",
               "subject": null,

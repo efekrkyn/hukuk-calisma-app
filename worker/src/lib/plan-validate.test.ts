@@ -146,4 +146,29 @@ assert.equal(phaseFor(90).id, "temel");
 assert.equal(phaseFor(45).id, "pekiştirme");
 assert.equal(phaseFor(10).id, "sınav");
 
+// uuid modelden gelmez: sanitizePlan her göreve yenisini verir.
+// Modelin ürettiği uuid'ler örüntülü ve çakışabiliyordu; aynı uuid'yi taşıyan
+// iki görevden birini işaretlemek diğerini de işaretlerdi.
+{
+  const ayniUuid = { ...base, uuid: "cakisan-uuid-1", subject: "borclar", task_type: "soru" as const };
+  const plan: AiOutput = {
+    summary: "test",
+    weeks: [
+      {
+        week_index: 1,
+        start_date: "2026-08-20",
+        end_date: "2026-08-26",
+        days: [
+          { date: "2026-08-20", weekday: "Perşembe", tasks: [ayniUuid, { ...ayniUuid }] },
+        ],
+      },
+    ],
+  };
+  const { output } = sanitizePlan(plan);
+  const uuids = output.weeks[0].days[0].tasks.map((t) => t.uuid);
+  assert.equal(uuids.length, 2);
+  assert.notEqual(uuids[0], uuids[1], "çakışan uuid'ler ayrıştırılmadı");
+  assert.ok(!uuids.includes("cakisan-uuid-1"), "modelin uuid'si korunmuş");
+}
+
 console.log("plan-validate.test.ts OK");

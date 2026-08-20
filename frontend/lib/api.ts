@@ -5,7 +5,11 @@ const WORKER_URL =
 
 export class WorkerError extends Error {
   constructor(public status: number, public path: string, message?: string) {
-    super(`Worker ${path}: ${status} ${message ?? ""}`.trim());
+    // Mesaj DOĞRUDAN kullanıcıya gösteriliyor. Eskiden
+    // "Worker /plan/generate: 502 {\"error\":...}" biçimindeydi ve ekrana ham
+    // JSON dökülüyordu. Artık sunucunun yazdığı Türkçe cümle görünüyor;
+    // status ve path log ve programatik kullanım için özellik olarak duruyor.
+    super(message?.trim() || `Sunucuya ulaşılamadı (${status}).`);
     this.name = "WorkerError";
   }
 }
@@ -44,11 +48,7 @@ export async function fetchWorker<T = unknown>(
     headers,
   });
   if (!r.ok) {
-    let msg = "";
-    try {
-      msg = await r.text();
-    } catch {}
-    throw new WorkerError(r.status, path, msg);
+    throw new WorkerError(r.status, path, await hataMetni(r));
   }
   return r.json() as Promise<T>;
 }
