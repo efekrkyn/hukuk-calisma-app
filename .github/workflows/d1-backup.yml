@@ -54,6 +54,7 @@ jobs:
           schema_file="${temp_dir}/schema.json"
           table_list_file="${temp_dir}/tables.txt"
           count_file="${temp_dir}/fts-count.json"
+          ddl_file="${temp_dir}/fts-ddl.json"
           database_file="${temp_dir}/database.sql"
           restore_file="${temp_dir}/fts-restore.sql"
           restore_db="${temp_dir}/restore.sqlite"
@@ -74,7 +75,7 @@ jobs:
                 --force || true
             fi
 
-            rm -f -- "$schema_file" "$table_list_file" "$count_file" \
+            rm -f -- "$schema_file" "$table_list_file" "$count_file" "$ddl_file" \
               "$database_file" "$restore_file" \
               "$restore_db" "$archive_file" "$downloaded_file" || true
             rmdir -- "$temp_dir" || true
@@ -156,6 +157,38 @@ jobs:
 
           if (!row || row.__fts_rows <= 0 || row.__fts_rows !== row.__fts_content_rows) {
             throw new Error(`FTS satır sayıları uyuşmuyor: ${JSON.stringify(row)}`);
+          }
+          NODE
+
+          # fts-restore.sql, FTS şemasını ELLE taşıyor. Canlı şema bir migration
+          # ile değişirse (ör. yeni sütun) geri yükleme sessizce EKSİK bir indeks
+          # kurar: satır sayıları tutar, bütünlük "ok" der, kayıp hiçbir yerde
+          # görünmez — ve bu ancak gerçek bir felakette fark edilirdi. Bu yüzden
+          # canlı DDL ile dosyadaki DDL her koşuda karşılaştırılıyor.
+          pnpm --filter ./worker exec wrangler d1 execute hukuk-db \
+            --remote \
+            --json \
+            --command="SELECT sql FROM sqlite_master WHERE name = 'fts_chunks'" \
+            >"$ddl_file"
+
+          node - "$ddl_file" worker/db/fts-restore.sql <<'NODE'
+          const fs = require("node:fs");
+          const payload = JSON.parse(fs.readFileSync(process.argv[2], "utf8"));
+          const live = payload[0]?.success ? payload[0].results?.[0]?.sql : null;
+
+          if (!live) throw new Error("Canlı fts_chunks şeması okunamadı");
+
+          const restore = fs.readFileSync(process.argv[3], "utf8");
+          const declared = restore.match(/CREATE VIRTUAL TABLE[\s\S]*?\)\s*;/i);
+
+          if (!declared) throw new Error("fts-restore.sql içinde CREATE VIRTUAL TABLE yok");
+
+          const norm = (sql) => sql.replace(/;\s*$/, "").replace(/\s+/g, " ").trim();
+
+          if (norm(live) !== norm(declared[0])) {
+            throw new Error(
+              `fts_chunks şeması fts-restore.sql ile uyuşmuyor — dosyayı güncelle.\ncanlı:   ${norm(live)}\ndosyada: ${norm(declared[0])}`
+            );
           }
           NODE
 

@@ -58,7 +58,7 @@ dönmeli — 200 dönüyorsa kimlik doğrulama devre dışı kalmış demektir.
 Vercel dağıtımının bittiğini görmek için:
 
 ```bash
-cd frontend && npx vercel ls
+npx vercel ls
 ```
 
 En üstteki satır `● Ready` ve `Production` olmalı.
@@ -124,7 +124,10 @@ Silme/güncelleme çalıştırmadan önce aynı `WHERE` ile `SELECT COUNT(*)` ç
 6. R2 API token (Object Read & Write, `hukuk-pdf` kapsamı) → `scripts/.env`
 7. `cd scripts && pnpm upload-pdfs`, sonra `pnpm embed-pdfs`
 8. `cd worker && pnpm deploy`
-9. `cd frontend && npx vercel` (proje adı `hukuk-efe`), sonra `npx vercel --prod`
+9. Depo kökünden `npx vercel` (proje adı `hukuk-efe`), Root Directory `frontend`
+   seçilir. **Dikkat:** Root Directory `frontend` olduğu için dağıtım komutu
+   DEPO KÖKÜNDEN çalıştırılır; `frontend/` içinden çalıştırılırsa Vercel
+   `frontend/frontend` arar ve "Root Directory does not exist" ile patlar.
 
 ## Maliyet
 

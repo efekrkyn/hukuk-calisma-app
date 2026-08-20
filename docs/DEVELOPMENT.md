@@ -90,7 +90,7 @@ yeniden kurulacaksa aynı boyutla yaratılmalı.
 cd worker && npx wrangler tail              # canlı worker logları
 cd worker && npx wrangler deploy --dry-run  # bundle boyutu
 cd worker && npx wrangler secret list       # hangi sırlar tanımlı
-cd frontend && npx vercel ls                # dağıtım durumu
+npx vercel ls                               # dağıtım durumu
 ```
 
 ## Kod üslubu
