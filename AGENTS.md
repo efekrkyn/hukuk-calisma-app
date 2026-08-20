@@ -82,6 +82,13 @@ commit'leme ya da log'lama.
 
 ## Veri işlemleri
 
+> **DURUM (20.08.2026): YEDEK HENÜZ ÇALIŞMIYOR.** İlk iki koşu
+> `CLOUDFLARE_API_TOKEN`'ın D1 yetkisi olmadığı için hata verdi
+> (`code: 7403 — account is not authorized to access this service`).
+> Token'a `Account → D1 → Edit` ve `Account → Workers R2 Storage → Edit`
+> yetkileri verilip Account Resources doğru hesabı kapsayana kadar D1'in
+> yedeği YOKTUR. İlk yeşil koşuyu görmeden yedek var sayma.
+
 D1 canlı veritabanı her gün 01:17 UTC'de `.github/workflows/d1-backup.yml`
 ile özel `hukuk-d1-backups` R2 bucket'ına yedeklenir; 35 günlük yaşam
 döngüsü eski kopyaları siler. D1 tam export'u FTS5 sanal tablosunu

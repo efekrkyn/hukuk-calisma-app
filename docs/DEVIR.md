@@ -75,6 +75,13 @@ düşüyor, `/tekrar` sayfası onu çıkarıyor.
 | Kullanıcı | 2 (`default` = Efe, `irem`) |
 | Kayıtlı cevap | 270 |
 
+> **DURUM (20.08.2026): YEDEK HENÜZ ÇALIŞMIYOR.** İlk iki koşu
+> `CLOUDFLARE_API_TOKEN`'ın D1 yetkisi olmadığı için hata verdi
+> (`code: 7403 — account is not authorized to access this service`).
+> Token'a `Account → D1 → Edit` ve `Account → Workers R2 Storage → Edit`
+> yetkileri verilip Account Resources doğru hesabı kapsayana kadar D1'in
+> yedeği YOKTUR. İlk yeşil koşuyu görmeden yedek var sayma.
+
 **D1 yedekleri.** `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de
 `hukuk-db` veritabanını özel `hukuk-d1-backups` R2 bucket'ına aktarır,
 geri indirip bit düzeyinde doğrular. Cloudflare tam export'u FTS5 sanal
@@ -186,19 +193,24 @@ Her dizinde `.env.example` var; kopyalayıp değerleri Efe'den al.
 
 Öncelik sırasıyla:
 
-1. **Çapraz doğrulama 203 soruda kaldı** (bankanın %6'sı). Gemini ücretsiz
+1. **D1 yedeği hâlâ alınmıyor — en acil madde.** Workflow yazıldı, doğrulama
+   adımları sağlam (yerel geri yükleme + bit düzeyinde karşılaştırma), ama
+   `CLOUDFLARE_API_TOKEN`'ın D1 yetkisi olmadığı için iki koşu da 7403 verdi.
+   Yeşil bir koşu görülene kadar veritabanı **tek nüsha ve yedeksiz**.
+2. **Çapraz doğrulama 203 soruda kaldı** (bankanın %6'sı). Gemini ücretsiz
    kotası engel. Ücretli anahtar ya da uzun süreye yayılmış toplu iş gerekir.
-2. **Tarayıcıda çalışma-anı kontrolü yapılmadı.** Konsol hataları, hidrasyon
-   uyarıları ve gerçek ekranda tema kontrolü hiç bakılmadı. Statik tarama
-   yapıldı (4 kontrast hatası bulunup düzeltildi) ama bu tarayıcı testinin
-   yerini tutmaz.
-3. **Worker dağıtımı hâlâ elle.** Frontend `main` push'larında Vercel'e otomatik
-   gider; Worker için test + yedek ön koşullu gate, dal koruması açıldıktan
-   sonra kurulacak.
+3. **Worker dağıtımı hâlâ elle.** Frontend `main` push'larında Vercel'e
+   otomatik gidiyor; Worker için test + yedek ön koşullu gate, dal koruması
+   açıldıktan sonra kurulacak. Worker'ı dağıtmayı unutmak en sık yapılan hata.
 4. **Otomatik test yalnızca worker'da.** Frontend'de hiç test yok; React test
-   altyapısı da kurulu değil.
+   altyapısı da kurulu değil. Arayüz kontrolü elle ya da iOS Simulator ile
+   yapılıyor.
 5. **`data/` dizini 59 MB** ve kısmen depoda. Büyük üretilmiş dosyalar
    yeniden üretilebilir; istenirse temizlenebilir.
+
+Tarayıcı tarafı 20.08.2026'da iOS Simulator üzerinde elle gezilerek kontrol
+edildi (plan üretimi, form ön doldurma, koyu tema kontrastı, bildirim ekranı);
+otomatik bir arayüz testi hâlâ yok, 4. madde bunu kapsıyor.
 
 ---
 

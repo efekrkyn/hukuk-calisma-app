@@ -102,6 +102,13 @@ cd worker
 npx wrangler d1 execute hukuk-db --remote --file=db/migrations/013-yeni.sql
 ```
 
+> **DURUM (20.08.2026): YEDEK HENÜZ ÇALIŞMIYOR.** İlk iki koşu
+> `CLOUDFLARE_API_TOKEN`'ın D1 yetkisi olmadığı için hata verdi
+> (`code: 7403 — account is not authorized to access this service`).
+> Token'a `Account → D1 → Edit` ve `Account → Workers R2 Storage → Edit`
+> yetkileri verilip Account Resources doğru hesabı kapsayana kadar D1'in
+> yedeği YOKTUR. İlk yeşil koşuyu görmeden yedek var sayma.
+
 `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de D1'i runner'ın geçici
 dizinine aktarır, özel `hukuk-d1-backups` R2 bucket'ına `.tar.gz` olarak yükler
 ve geri indirip bit düzeyinde doğrular. D1 tam export'u FTS5 sanal tablolarını
