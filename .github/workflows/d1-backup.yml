@@ -76,6 +76,7 @@ jobs:
             fi
 
             rm -f -- "$schema_file" "$table_list_file" "$count_file" "$ddl_file" \
+              "$schema_file.err" "$count_file.err" "$ddl_file.err" \
               "$database_file" "$restore_file" \
               "$restore_db" "$archive_file" "$downloaded_file" || true
             rmdir -- "$temp_dir" || true
@@ -83,11 +84,25 @@ jobs:
           }
           trap cleanup EXIT
 
-          pnpm --filter ./worker exec wrangler d1 execute hukuk-db \
+          # Wrangler çağrılarının stdout'u dosyaya yönleniyor; hata mesajı da
+          # stdout'a düşerse dosyaya gidip KAYBOLUYOR. İlk koşuda tam bu oldu:
+          # iş 1,4 saniyede, tek satır çıktı vermeden patladı ve sebebi hiçbir
+          # yerde görünmedi. Sebebini söylemeyen bir yedek işi, yedek almayan
+          # bir yedek işi kadar kötüdür.
+          wr() {
+            local out="$1"; shift
+            if ! pnpm --filter ./worker exec wrangler "$@" >"$out" 2>"${out}.err"; then
+              echo "::error::wrangler başarısız: $*"
+              echo "--- stdout ---"; head -c 4000 "$out" || true
+              echo "--- stderr ---"; head -c 4000 "${out}.err" || true
+              exit 1
+            fi
+          }
+
+          wr "$schema_file" d1 execute hukuk-db \
             --remote \
             --json \
-            --command="SELECT name, type FROM pragma_table_list WHERE schema = 'main' ORDER BY name" \
-            >"$schema_file"
+            --command="SELECT name, type FROM pragma_table_list WHERE schema = 'main' ORDER BY name"
 
           node - "$schema_file" "$table_list_file" <<'NODE'
           const fs = require("node:fs");
@@ -144,11 +159,10 @@ jobs:
           count_query="SELECT ${count_expressions[*]}"
           IFS="$previous_ifs"
 
-          pnpm --filter ./worker exec wrangler d1 execute hukuk-db \
+          wr "$count_file" d1 execute hukuk-db \
             --remote \
             --json \
-            --command="$count_query" \
-            >"$count_file"
+            --command="$count_query"
 
           node - "$count_file" <<'NODE'
           const fs = require("node:fs");
@@ -165,11 +179,10 @@ jobs:
           # kurar: satır sayıları tutar, bütünlük "ok" der, kayıp hiçbir yerde
           # görünmez — ve bu ancak gerçek bir felakette fark edilirdi. Bu yüzden
           # canlı DDL ile dosyadaki DDL her koşuda karşılaştırılıyor.
-          pnpm --filter ./worker exec wrangler d1 execute hukuk-db \
+          wr "$ddl_file" d1 execute hukuk-db \
             --remote \
             --json \
-            --command="SELECT sql FROM sqlite_master WHERE name = 'fts_chunks'" \
-            >"$ddl_file"
+            --command="SELECT sql FROM sqlite_master WHERE name = 'fts_chunks'"
 
           node - "$ddl_file" worker/db/fts-restore.sql <<'NODE'
           const fs = require("node:fs");
@@ -194,12 +207,14 @@ jobs:
 
           # Wrangler export çıktısında kısa ömürlü imzalı indirme adresi bulunabildiği
           # için komut çıktısını CI günlüğüne taşımıyoruz.
+          # stdout susturuluyor (kısa ömürlü imzalı indirme adresi içerebiliyor),
+          # ama stderr ARTIK log'a gidiyor: hata sebebi görünmeden kalmasın.
           pnpm --filter ./worker exec wrangler d1 export hukuk-db \
             --remote \
             --skip-confirmation \
             --output="$database_file" \
             "${table_args[@]}" \
-            >/dev/null 2>&1
+            >/dev/null
 
           cp worker/db/fts-restore.sql "$restore_file"
           test -s "$database_file"
