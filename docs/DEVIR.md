@@ -66,7 +66,7 @@ düşüyor, `/tekrar` sayfası onu çıkarıyor.
 
 | Ne | Sayı |
 |---|---|
-| Soru | 3.467 |
+| Soru | 3.466 |
 | Makine denetiminden `correct` alan | 2.970 |
 | Denetlenmemiş | **0** |
 | İkinci modelle çapraz doğrulanan | 203 (%95 mutabakat) |
@@ -103,7 +103,10 @@ Sorular kanun metninden LLM ile üretiliyor. Üç katmanlı denetim var:
    koşturuldu, iki hakem %95 mutabık. Devamı Gemini ücretsiz kotasına takılı
    (~50 soru/tur).
 3. **Kullanıcı bildirimi** (`/bildirimler`). En değerlisi bu: sınava hazırlanan
-   kişi hatalı soruyu bildiriyor, karar veren sahibi.
+   kişi hatalı soruyu bildiriyor, karar veren sahibi. Kanal işliyor: ilk
+   bildirim (İdare Hukuku, İYUK m.34/2 — "bulunduğu YAHUT yeni bağlandığı
+   yer" iki şıkkı da geçerli kılıyordu) 20.08.2026'da doğrulanıp silindi.
+   Bildiren kişi, makine hakemi ve kanun metni aynı sonuca varmıştı.
 
 **Dürüst olmak gerekirse:** rozet insan onayı değil, ikinci bir modelin
 görüşü. Elle yapılan 50 soruluk örneklem denetiminde kusur oranı ~%20–25

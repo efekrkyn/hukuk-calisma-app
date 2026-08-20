@@ -13,7 +13,7 @@ geçme notu 70.
 
 - **Deneme sınavı** — gerçek format (120 soru / 155 dk) ya da 20 soruluk kısa
   tur; resmî alan dağılımına göre soru seçiyor.
-- **Soru bankası** — 3.467 soru, kanun metninden üretilip kaynağına karşı
+- **Soru bankası** — 3.466 soru, kanun metninden üretilip kaynağına karşı
   denetlenmiş. Kalitesi ve sınırları için `docs/DEVIR.md` §4.
 - **Yanlışlarım** — yanlış cevaplananlar FSRS ile aralıklı tekrar kuyruğuna
   düşüyor.

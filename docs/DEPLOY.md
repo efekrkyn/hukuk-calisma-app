@@ -49,7 +49,8 @@ curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-efe.vercel.app/api/worker
 curl -s -o /dev/null -w "%{http_code}\n" https://hukuk-efe.vercel.app/login
 ```
 
-`/health` 200, `/login` 200 dönmeli.
+`/health` 200, `/login` 200, korumalı bir uç (`/hmgs/reports`) 401 dönmeli —
+sonuncusu 200 dönüyorsa kimlik doğrulama devre dışı kalmış demektir.
 
 **Worker'ı neden doğrudan değil, Vercel üzerinden yokluyoruz:** Türk Telekom
 Güvenli İnternet `*.workers.dev` adreslerini kesiyor — port 443'e TLS yerine
@@ -62,9 +63,6 @@ görünür. **Uygulama etkilenmez:** tarayıcı workers.dev'e hiç bağlanmıyor
 (`frontend/proxy.ts`). Engellenen tek şey senin doğrudan erişimin. Wrangler de
 etkilenmez, o `api.cloudflare.com` kullanıyor. Doğrudan erişim gerekiyorsa
 mobil veri ya da VPN yeterli.
-
- Korumalı bir uç (`/hmgs/reports`) 401
-dönmeli — 200 dönüyorsa kimlik doğrulama devre dışı kalmış demektir.
 
 Vercel dağıtımının bittiğini görmek için:
 
