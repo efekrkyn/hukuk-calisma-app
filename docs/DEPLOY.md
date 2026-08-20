@@ -27,6 +27,17 @@ pnpm --filter ./worker deploy
 pnpm deploy:frontend
 ```
 
+`deploy:frontend` **depo kökünden** çalışır. Vercel projesinin Root Directory
+ayarı `frontend`; komutu `frontend/` içinden çalıştırırsan Vercel
+`frontend/frontend` arar ve "Root Directory does not exist" der. Kökte
+`.vercel/` bağlantısı da olmalı — yoksa Vercel sessizce YENİ bir proje yaratır
+(bir kez oldu; `uygulama` adlı proje sonradan silindi). `.vercel/` gitignore'da
+olduğu için taze bir klonda bir kereye mahsus:
+
+```bash
+npx vercel link   # kökte çalıştır, mevcut projeyi seç: hukuk-efe
+```
+
 Frontend yeni bir Worker davranışına bağlıysa geriye uyumlu Worker'ı
 frontend merge'ünden önce dağıt. Vercel ve Worker arasında dağıtım sırası
 garantisi yoktur.

@@ -12,7 +12,7 @@ hangi kararların neden verildiği ve nelerin eksik kaldığı.
 bir PWA. Efe Karakoyun yazdı. Ticari ürün değil, satılmıyor, iki kullanıcısı
 var.
 
-**Sınav:** 27 Eylül 2026 · 120 soru · 155 dakika · geçme notu 70 · 22 alan.
+**Sınav:** 27 Eylül 2026 · 120 soru · 155 dakika · geçme notu 70 · 20 alan.
 Bu sabitler `worker/src/lib/hmgs-subjects.ts` içinde
 (`HMGS_TOTAL_QUESTIONS`, `HMGS_PASS_SCORE`).
 

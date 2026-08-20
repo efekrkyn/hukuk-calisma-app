@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { Calendar, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -33,6 +33,36 @@ export default function PlanSetupPage() {
   const [breakMinutes, setBreakMinutes] = useState(15);
   const [daysOff, setDaysOff] = useState<Weekday[]>([]);
   const [notes, setNotes] = useState("");
+
+  /**
+   * Form, yürürlükteki planın cevaplarıyla açılır.
+   *
+   * Plan yenilemek tek seferlik bir kurulum değil — sınava kadar defalarca
+   * yapılıyor. Form her seferinde boş açılınca sınav tarihi, tatil günü ve
+   * çalışma penceresi baştan giriliyordu; tarihi yeniden girmeyi unutmak
+   * doğrudan "HMGS tarihini girin" hatasına düşürüyordu. Kullanıcının daha
+   * önce verdiği cevabı ona tekrar sormanın bir faydası yok.
+   *
+   * Plan yoksa (ilk kurulum) alanlar varsayılanlarıyla kalır.
+   */
+  useEffect(() => {
+    fetch("/api/worker/plan/active")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        const f = d?.plan?.form_input;
+        if (!f) return;
+        if (f.exam_date) setExamDate(f.exam_date);
+        if (f.daily_hours) setDailyHours(f.daily_hours);
+        if (f.study_window_start) setWindowStart(f.study_window_start);
+        if (f.study_window_end) setWindowEnd(f.study_window_end);
+        if (typeof f.break_minutes === "number") setBreakMinutes(f.break_minutes);
+        if (Array.isArray(f.days_off)) setDaysOff(f.days_off);
+        if (f.notes) setNotes(f.notes);
+      })
+      .catch(() => {
+        // Ön doldurma bir kolaylık; başarısız olursa form boş açılır, akış durmaz.
+      });
+  }, []);
 
   function toggleDayOff(d: Weekday) {
     setDaysOff((prev) => (prev.includes(d) ? prev.filter((x) => x !== d) : [...prev, d]));

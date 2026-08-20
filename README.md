@@ -1,7 +1,7 @@
 # HMGS Hazırlık
 
 Hukuk Mesleklerine Giriş Sınavı'na hazırlık PWA'sı. İki kullanıcılı, kişisel
-kullanım için. **Sınav: 27 Eylül 2026** — 120 soru, 155 dakika, 22 alan,
+kullanım için. **Sınav: 27 Eylül 2026** — 120 soru, 155 dakika, 20 alan,
 geçme notu 70.
 
 | | |
@@ -17,7 +17,7 @@ geçme notu 70.
   denetlenmiş. Kalitesi ve sınırları için `docs/DEVIR.md` §4.
 - **Yanlışlarım** — yanlış cevaplananlar FSRS ile aralıklı tekrar kuyruğuna
   düşüyor.
-- **Konu anlatımı** — 22 alan, 160 önceden üretilmiş konu anlatımı.
+- **Konu anlatımı** — 20 alan, 160 önceden üretilmiş konu anlatımı.
 - **Çalışma planı** — alan ağırlığını ölçülen zayıflıkla çarpıp saat dağıtıyor.
 - **AI asistan** — kanun metni üzerinde RAG + web araması, sayfa bağlamını
   biliyor.
