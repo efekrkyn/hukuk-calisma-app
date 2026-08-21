@@ -7,7 +7,7 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "test": "for f in $(find src -name '*.test.ts' | sort); do echo \"→ $f\"; npx tsx \"$f\" || exit 1; done"
+    "test": "for f in $(find src -name '*.test.ts' | sort); do echo \"→ $f\"; tsx \"$f\" || exit 1; done"
   },
   "packageManager": "pnpm@10.10.0",
   "dependencies": {
@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20260524.1",
+    "tsx": "^4.23.12",
     "typescript": "^5.9.3",
     "wrangler": "^4.94.0"
   }
