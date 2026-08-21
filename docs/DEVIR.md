@@ -123,6 +123,29 @@ görüşü. Elle yapılan 50 soruluk örneklem denetiminde kusur oranı ~%20–2
 gerçek denetim kanalı 3. maddedir. Devralan kişi bankanın hatasız olduğunu
 varsaymamalı.
 
+**Kusurların şekli — 21.08.2026'da ölçüldü.** Çapraz doğrulamanın ilk 340
+sorusunda 12 anlaşmazlık çıktı (%3,5). Dağılım tesadüfi değil:
+
+| Hüküm | Adet | Ne demek |
+|---|---|---|
+| `ambiguous` | 8 | İki şık da savunulabilir |
+| `unsupported` | 3 | Sorunun dayandığı hüküm kaynak metinde yok |
+| `wrong` | 1 | Cevap anahtarı yanlış |
+
+Üçte ikisi tek bir şekle sahip: **kanun bir seçenek listesi ya da istisna
+içerdiğinde, üretici tek doğru cevaplı soru yazıyor ve diğer seçeneği
+görmezden geliyor.** Örnekler: TTK m.446/1 iptal davası açabilecekleri
+sayıyor (birden çok şık doğru); TMK m.219/4 kişisel malların gelirini
+edinilmiş mal sayıyor ama m.221/2 eşlere aksini kararlaştırma imkânı
+veriyor (hem B hem C savunulabilir). Kullanıcının bildirdiği tek soru da
+aynı şekildeydi (İYUK m.34/2 "bulunduğu YAHUT yeni bağlandığı yer").
+
+Bu, `ambiguous` hükmünün neden eklendiğini doğruluyor ve bankayla çalışacak
+kişiye nereye bakacağını söylüyor: "yahut", "veya", "aksi kararlaştırılabilir",
+"şu hâller dışında" geçen maddelerden üretilmiş sorular en şüpheli olanlar.
+Örneklem küçük (12 vaka), oran değişebilir; şekil ise üç bağımsız kaynakta
+(makine hakemi, ikinci hakem, kullanıcı) aynı çıktı.
+
 **Ölçülen, tahmin edilmeyen eşikler** (değiştirmeden önce yeniden ölç):
 tekrar eleme benzerliği 0,5 · uzunluk kapısı 1,4 · senaryo oranı %79 ·
 yeniden denetimde başarısızlık %7.
