@@ -262,3 +262,17 @@ jobs:
             --file="$downloaded_file"
           cmp --silent "$archive_file" "$downloaded_file"
           backup_verified=true
+
+          # Başarılı koşu NEREYE yazdığını söylemeli. Geri yükleme gerektiğinde
+          # aranan ilk bilgi bu; koşunun yeşil olması tek başına yetmiyor.
+          echo "::notice::Yedek yazıldı: ${object_path} ($(du -h "$archive_file" | cut -f1))"
+          {
+            echo "### D1 yedeği alındı"
+            echo ""
+            echo "| | |"
+            echo "|---|---|"
+            echo "| Nesne | \`${object_path}\` |"
+            echo "| Boyut | $(du -h "$archive_file" | cut -f1) |"
+            echo "| Tablo | ${#app_tables[@]} |"
+            echo "| Doğrulama | boş SQLite'a geri yüklendi, R2'den indirilip bit düzeyinde karşılaştırıldı |"
+          } >>"$GITHUB_STEP_SUMMARY"
