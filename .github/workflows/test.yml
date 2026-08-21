@@ -1,0 +1,57 @@
+name: Testler
+
+# NEDEN VAR: `main`'e itilen hiçbir şey otomatik denetlenmiyordu. Frontend
+# Git entegrasyonuyla doğrudan production'a gittiği için, tip hatası ya da
+# kırık bir test yalnızca dağıtım patlayınca fark ediliyordu — ya da hiç.
+# Bu iş dağıtım YAPMAZ, sadece "bu commit sağlam mı" sorusunu cevaplar.
+"on":
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # Aynı dalda yeni push gelirse eskisini iptal et: bekleyen koşu bilgi vermiyor.
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Worker testleri + tip denetimi
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Depoyu al
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 — hareketli etiket sonradan değişmesin diye SHA sabit.
+
+      - name: Node.js'i kur
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0 — çalışan action kodu değişmesin diye SHA sabit.
+        with:
+          node-version: 22
+
+      - name: pnpm'i kur
+        uses: pnpm/action-setup@0977fd99725f1db4007ccb2928dbb4e90d06cc86 # v6.0.10 — kurulum kodu sessizce değişmesin diye commit SHA'sı sabit.
+        with:
+          version: 10.10.0
+          run_install: false
+
+      - name: Bağımlılıkları kur
+        run: pnpm install --frozen-lockfile
+
+      - name: Worker testleri
+        run: pnpm test
+
+      - name: Worker tip denetimi
+        run: pnpm --filter ./worker typecheck
+
+      # Frontend'de test yok (docs/DEVIR.md §7); tip denetimi ve derleme,
+      # elimizdeki tek otomatik arayüz kontrolü. Derlemenin kendisi de bir
+      # test: kırık import ya da geçersiz JSX burada yakalanır.
+      - name: Frontend tip denetimi
+        run: pnpm --filter ./frontend exec tsc --noEmit
+
+      - name: Frontend derlemesi
+        run: pnpm --filter ./frontend build
