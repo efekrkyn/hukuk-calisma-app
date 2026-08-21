@@ -198,6 +198,9 @@ hmgs.post("/generate", async (c) => {
 hmgs.get("/exam", async (c) => {
   if (!c.env.DB) return c.json({ error: "DB yok" }, 503);
 
+  // Taban 10: bundan kısa bir "deneme" ölçmüyor, tek bir şanslı/şanssız soru
+  // net oranını uçuruyor ve performans kartı anlamsızlaşıyor. İstemcideki
+  // MIN_EXAM_QUESTIONS ile aynı olmak zorunda.
   const size = Math.min(Math.max(Number(c.req.query("count") ?? HMGS_TOTAL_QUESTIONS), 10), HMGS_TOTAL_QUESTIONS);
 
   // VARSAYILAN: yalnızca denetlenmiş sorular. Eskiden tersiydi ve 120 soruluk

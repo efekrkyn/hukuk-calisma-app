@@ -39,11 +39,23 @@ const REAL_TOTAL_QUESTIONS = 120;
 const REAL_DURATION_SECONDS = 155 * 60;
 const SECONDS_PER_QUESTION = REAL_DURATION_SECONDS / REAL_TOTAL_QUESTIONS;
 
-/** Alan çalışmasında 10, kısa denemede 20, tam denemede 120. */
+/** Sunucunun `/hmgs/exam` ucundaki tabanıyla aynı olmak zorunda. */
+const MIN_EXAM_QUESTIONS = 10;
+
+/**
+ * Alan çalışmasında 10, kısa denemede 20, tam denemede 120.
+ *
+ * Alt sınır 10 çünkü SUNUCU da 10'da tabanlıyor (`/hmgs/exam`). Burada 5
+ * kabul edilirse `?count=5` istenip 10 soru dönüyor: istek sessizce
+ * yoksayılıyor. İki tarafın aynı sayıyı söylemesi, ileride buraya bağlantı
+ * yazacak kişinin sessizce yanılmasını engelliyor.
+ */
 function parseCount(raw: string | undefined, subject?: string): number {
   const n = Number(raw);
-  if (Number.isFinite(n) && n >= 5) return Math.min(Math.round(n), REAL_TOTAL_QUESTIONS);
-  return subject ? 10 : 20;
+  if (Number.isFinite(n) && n >= MIN_EXAM_QUESTIONS) {
+    return Math.min(Math.round(n), REAL_TOTAL_QUESTIONS);
+  }
+  return subject ? MIN_EXAM_QUESTIONS : 20;
 }
 
 /** Gezinme ızgarasındaki tek soru düğmesi — açık ve kapalı ızgara aynı
