@@ -82,20 +82,14 @@ commit'leme ya da log'lama.
 
 ## Veri işlemleri
 
-> **DURUM (20.08.2026): OTOMATİK YEDEK ÇALIŞMIYOR, ELLE ALINAN BİR YEDEK VAR.**
+> **DURUM (21.08.2026): OTOMATİK YEDEK ÇALIŞIYOR.** İlk yeşil koşu
+> 21.08.2026 08:01 UTC'de tamamlandı; üretilen arşiv bağımsız olarak
+> indirilip açıldı ve içeriği doğrulandı (3.466 soru, 45.429 FTS parçası,
+> `integrity_check = ok`, FTS araması çalışıyor).
 >
-> Workflow'un mantığı doğru — boru hattının tamamı (export → boş SQLite'a geri
-> yükleme → satır/bütünlük doğrulaması → R2 → geri indirip bit karşılaştırma)
-> yerel kimlikle baştan sona koşturuldu ve geçti. Sorun yalnızca
-> `CLOUDFLARE_API_TOKEN`: üç koşu da kimlik doğrulamada takıldı
-> (önce `7403 — not authorized`, sonra `10000 — Authentication error`).
->
-> Bu yüzden **20.08.2026 tarihli yedek elle alındı** ve R2'de duruyor:
-> `hukuk-d1-backups/backups/2026/08/hukuk-db-20260820T175127Z.tar.gz`
-> (21 MB; 17 tablo, FTS 45.429 satır, `integrity_check = ok`, indirilip bit
-> düzeyinde doğrulandı). Yani veritabanı artık yedeksiz değil — ama yedek
-> GÜNLÜK DEĞİL, tek seferlik. Token düzelene kadar veri o tarihe kadar
-> korunuyor, sonrası korunmuyor.
+> Önceki üç koşu `CLOUDFLARE_API_TOKEN` yüzünden başarısızdı (`7403`, sonra
+> `10000`); token yenilenince düzeldi. Ders: token doğruluğunu uzunluğuna
+> bakarak değil `user/tokens/verify` ucuyla teyit et.
 
 D1 canlı veritabanı her gün 01:17 UTC'de `.github/workflows/d1-backup.yml`
 ile özel `hukuk-d1-backups` R2 bucket'ına yedeklenir; 35 günlük yaşam

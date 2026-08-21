@@ -75,20 +75,14 @@ düşüyor, `/tekrar` sayfası onu çıkarıyor.
 | Kullanıcı | 2 (`default` = Efe, `irem`) |
 | Kayıtlı cevap | 270 |
 
-> **DURUM (20.08.2026): OTOMATİK YEDEK ÇALIŞMIYOR, ELLE ALINAN BİR YEDEK VAR.**
+> **DURUM (21.08.2026): OTOMATİK YEDEK ÇALIŞIYOR.** İlk yeşil koşu
+> 21.08.2026 08:01 UTC'de tamamlandı; üretilen arşiv bağımsız olarak
+> indirilip açıldı ve içeriği doğrulandı (3.466 soru, 45.429 FTS parçası,
+> `integrity_check = ok`, FTS araması çalışıyor).
 >
-> Workflow'un mantığı doğru — boru hattının tamamı (export → boş SQLite'a geri
-> yükleme → satır/bütünlük doğrulaması → R2 → geri indirip bit karşılaştırma)
-> yerel kimlikle baştan sona koşturuldu ve geçti. Sorun yalnızca
-> `CLOUDFLARE_API_TOKEN`: üç koşu da kimlik doğrulamada takıldı
-> (önce `7403 — not authorized`, sonra `10000 — Authentication error`).
->
-> Bu yüzden **20.08.2026 tarihli yedek elle alındı** ve R2'de duruyor:
-> `hukuk-d1-backups/backups/2026/08/hukuk-db-20260820T175127Z.tar.gz`
-> (21 MB; 17 tablo, FTS 45.429 satır, `integrity_check = ok`, indirilip bit
-> düzeyinde doğrulandı). Yani veritabanı artık yedeksiz değil — ama yedek
-> GÜNLÜK DEĞİL, tek seferlik. Token düzelene kadar veri o tarihe kadar
-> korunuyor, sonrası korunmuyor.
+> Önceki üç koşu `CLOUDFLARE_API_TOKEN` yüzünden başarısızdı (`7403`, sonra
+> `10000`); token yenilenince düzeldi. Ders: token doğruluğunu uzunluğuna
+> bakarak değil `user/tokens/verify` ucuyla teyit et.
 
 **D1 yedekleri.** `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de
 `hukuk-db` veritabanını özel `hukuk-d1-backups` R2 bucket'ına aktarır,
@@ -201,25 +195,20 @@ Her dizinde `.env.example` var; kopyalayıp değerleri Efe'den al.
 
 Öncelik sırasıyla:
 
-1. **Yedek otomatik değil — en acil madde.** 20.08.2026 tarihli tek bir yedek
-   elle alındı ve doğrulandı, ama günlük workflow `CLOUDFLARE_API_TOKEN`
-   yüzünden hiç yeşil koşmadı. Boru hattının kendisi sağlam (yerelde baştan
-   sona koşturuldu); eksik olan yalnızca çalışan bir token. O gün sonrası
-   üretilen veri korunmuyor.
-2. **Çapraz doğrulama 203 soruda kaldı** (bankanın %6'sı). Gemini ücretsiz
+1. **Çapraz doğrulama 203 soruda kaldı** (bankanın %6'sı). Gemini ücretsiz
    kotası engel. Ücretli anahtar ya da uzun süreye yayılmış toplu iş gerekir.
-3. **Worker dağıtımı hâlâ elle.** Frontend `main` push'larında Vercel'e
+2. **Worker dağıtımı hâlâ elle.** Frontend `main` push'larında Vercel'e
    otomatik gidiyor; Worker için test + yedek ön koşullu gate, dal koruması
    açıldıktan sonra kurulacak. Worker'ı dağıtmayı unutmak en sık yapılan hata.
-4. **Otomatik test yalnızca worker'da.** Frontend'de hiç test yok; React test
+3. **Otomatik test yalnızca worker'da.** Frontend'de hiç test yok; React test
    altyapısı da kurulu değil. Arayüz kontrolü elle ya da iOS Simulator ile
    yapılıyor.
-5. **`data/` dizini 59 MB** ve kısmen depoda. Büyük üretilmiş dosyalar
+4. **`data/` dizini 59 MB** ve kısmen depoda. Büyük üretilmiş dosyalar
    yeniden üretilebilir; istenirse temizlenebilir.
 
 Tarayıcı tarafı 20.08.2026'da iOS Simulator üzerinde elle gezilerek kontrol
 edildi (plan üretimi, form ön doldurma, koyu tema kontrastı, bildirim ekranı);
-otomatik bir arayüz testi hâlâ yok, 4. madde bunu kapsıyor.
+otomatik bir arayüz testi hâlâ yok, 3. madde bunu kapsıyor.
 
 ---
 
