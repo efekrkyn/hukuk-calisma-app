@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { streamChat, searchCaseLaw, type ChatSource } from "@/lib/api";
+import ChatMarkdown from "@/components/ChatMarkdown";
 import { ArrowRight, BookOpen, Globe, GraduationCap, HelpCircle, Lightbulb, Loader2, RefreshCw, Scale, ScrollText, Sparkles } from "lucide-react";
 
 type Msg = {
@@ -53,8 +54,8 @@ export function ChatPanel({
               {thinking}
             </div>
           </details>
-          <div className="whitespace-pre-wrap leading-relaxed text-[13.5px]">
-            {answer}
+          <div className="leading-relaxed text-[13.5px]">
+            <ChatMarkdown>{answer}</ChatMarkdown>
           </div>
         </div>
       );

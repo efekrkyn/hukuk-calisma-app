@@ -5,8 +5,7 @@ import { BarChart3, Bot, Brain, CheckCircle2, Copy, FileText, Globe, Info, Loade
 import { Button } from "@/components/ui/button";
 import { streamChat, getQuizStats, getFlashcardState, ChatSource, pdfUrl } from "@/lib/api";
 import { COURSES } from "@/lib/courses";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import ChatMarkdown from "@/components/ChatMarkdown";
 
 type Message = {
   role: "user" | "ai";
@@ -64,9 +63,7 @@ export default function GlobalAiAssistant() {
             </div>
           </details>
           {answer ? (
-            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-              {answer}
-            </ReactMarkdown>
+            <ChatMarkdown>{answer}</ChatMarkdown>
           ) : (
             <div className="flex items-center gap-2 text-muted-foreground">
               <Loader2 className="w-4 h-4 animate-spin" />
@@ -94,11 +91,10 @@ export default function GlobalAiAssistant() {
       );
     }
 
-    return (
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {content}
-      </ReactMarkdown>
-    );
+    // Haritasız ReactMarkdown, Tailwind preflight yüzünden listelerin madde
+    // imini ve girintisini kaybediyordu; diğer iki sohbet yüzeyiyle aynı
+    // bileşen kullanılıyor.
+    return <ChatMarkdown>{content}</ChatMarkdown>;
   };
 
   const messagesEndRef = useRef<HTMLDivElement>(null);

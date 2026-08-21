@@ -18,6 +18,7 @@ import { usePathname } from "next/navigation";
 import { Sparkles, X, Send, Trash2, Loader2 } from "lucide-react";
 import { usePageContext } from "@/lib/page-context";
 import { hataMetni } from "@/lib/api";
+import ChatMarkdown from "@/components/ChatMarkdown";
 
 type Msg = { role: "user" | "ai"; content: string };
 
@@ -247,7 +248,7 @@ export default function FloatingAssistant() {
                 <div key={i} className={m.role === "user" ? "text-right" : "text-left"}>
                   <div
                     className={
-                      "inline-block max-w-[85%] rounded-2xl px-3 py-2 text-sm whitespace-pre-wrap text-left " +
+                      "inline-block max-w-[85%] rounded-2xl px-3 py-2 text-sm text-left " +
                       (m.role === "user"
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted/60")
@@ -258,8 +259,12 @@ export default function FloatingAssistant() {
                         <Loader2 className="w-4 h-4 animate-spin" />
                         <span className="text-xs">düşünüyor…</span>
                       </span>
+                    ) : m.role === "ai" ? (
+                      <ChatMarkdown>{clean(m.content)}</ChatMarkdown>
                     ) : (
-                      clean(m.content)
+                      // Kullanicinin kendi yazdigi metin markdown olarak
+                      // yorumlanmaz: yazdigi yildiz yildiz kalmali.
+                      <span className="whitespace-pre-wrap">{m.content}</span>
                     )}
                   </div>
                 </div>

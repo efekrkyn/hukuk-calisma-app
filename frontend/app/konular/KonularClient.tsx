@@ -38,7 +38,8 @@ type TopicDoc = {
 /**
  * Markdown biçimlendirmesi.
  *
- * Projede `react-markdown` zaten kurulu (asistan kullanıyor) — kendi
+ * Projede `react-markdown` zaten kurulu (sohbet yüzeyleri de
+ * `ChatMarkdown` üzerinden kullanıyor) — kendi
  * dönüştürücümüzü yazmadık. Ama `prose` sınıfları burada işe yaramaz:
  * @tailwindcss/typography bağımlılığı yok, o sınıflar boşa düşüyor. O yüzden
  * her etiket tek tek biçimlendiriliyor.
