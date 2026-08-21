@@ -75,12 +75,20 @@ düşüyor, `/tekrar` sayfası onu çıkarıyor.
 | Kullanıcı | 2 (`default` = Efe, `irem`) |
 | Kayıtlı cevap | 270 |
 
-> **DURUM (20.08.2026): YEDEK HENÜZ ÇALIŞMIYOR.** İlk iki koşu
-> `CLOUDFLARE_API_TOKEN`'ın D1 yetkisi olmadığı için hata verdi
-> (`code: 7403 — account is not authorized to access this service`).
-> Token'a `Account → D1 → Edit` ve `Account → Workers R2 Storage → Edit`
-> yetkileri verilip Account Resources doğru hesabı kapsayana kadar D1'in
-> yedeği YOKTUR. İlk yeşil koşuyu görmeden yedek var sayma.
+> **DURUM (20.08.2026): OTOMATİK YEDEK ÇALIŞMIYOR, ELLE ALINAN BİR YEDEK VAR.**
+>
+> Workflow'un mantığı doğru — boru hattının tamamı (export → boş SQLite'a geri
+> yükleme → satır/bütünlük doğrulaması → R2 → geri indirip bit karşılaştırma)
+> yerel kimlikle baştan sona koşturuldu ve geçti. Sorun yalnızca
+> `CLOUDFLARE_API_TOKEN`: üç koşu da kimlik doğrulamada takıldı
+> (önce `7403 — not authorized`, sonra `10000 — Authentication error`).
+>
+> Bu yüzden **20.08.2026 tarihli yedek elle alındı** ve R2'de duruyor:
+> `hukuk-d1-backups/backups/2026/08/hukuk-db-20260820T175127Z.tar.gz`
+> (21 MB; 17 tablo, FTS 45.429 satır, `integrity_check = ok`, indirilip bit
+> düzeyinde doğrulandı). Yani veritabanı artık yedeksiz değil — ama yedek
+> GÜNLÜK DEĞİL, tek seferlik. Token düzelene kadar veri o tarihe kadar
+> korunuyor, sonrası korunmuyor.
 
 **D1 yedekleri.** `.github/workflows/d1-backup.yml` her gün 01:17 UTC'de
 `hukuk-db` veritabanını özel `hukuk-d1-backups` R2 bucket'ına aktarır,
@@ -193,10 +201,11 @@ Her dizinde `.env.example` var; kopyalayıp değerleri Efe'den al.
 
 Öncelik sırasıyla:
 
-1. **D1 yedeği hâlâ alınmıyor — en acil madde.** Workflow yazıldı, doğrulama
-   adımları sağlam (yerel geri yükleme + bit düzeyinde karşılaştırma), ama
-   `CLOUDFLARE_API_TOKEN`'ın D1 yetkisi olmadığı için iki koşu da 7403 verdi.
-   Yeşil bir koşu görülene kadar veritabanı **tek nüsha ve yedeksiz**.
+1. **Yedek otomatik değil — en acil madde.** 20.08.2026 tarihli tek bir yedek
+   elle alındı ve doğrulandı, ama günlük workflow `CLOUDFLARE_API_TOKEN`
+   yüzünden hiç yeşil koşmadı. Boru hattının kendisi sağlam (yerelde baştan
+   sona koşturuldu); eksik olan yalnızca çalışan bir token. O gün sonrası
+   üretilen veri korunmuyor.
 2. **Çapraz doğrulama 203 soruda kaldı** (bankanın %6'sı). Gemini ücretsiz
    kotası engel. Ücretli anahtar ya da uzun süreye yayılmış toplu iş gerekir.
 3. **Worker dağıtımı hâlâ elle.** Frontend `main` push'larında Vercel'e
